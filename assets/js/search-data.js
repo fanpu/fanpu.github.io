@@ -1045,6 +1045,11 @@ ninja.data = [{
           description: "",
           section: "Summaries",handler: () => {
               window.location.href = "/summaries/2024-11-04-ragas-automated-evaluation-of-retrieval-augmented-generation/";
+            },},{id: "summaries-bge-m3-embedding-multi-lingual-multi-functionality-multi-granularity-text-embeddings-through-self-knowledge-distillation",
+          title: 'BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation',
+          description: "",
+          section: "Summaries",handler: () => {
+              window.location.href = "/summaries/2025-01-06-bge-m3-embedding-multi-lingual-multi-functionality-multi-granularity-text-embeddings-through-self-knowledge-distillation/";
             },},{
         id: 'social-email',
         title: 'email',
