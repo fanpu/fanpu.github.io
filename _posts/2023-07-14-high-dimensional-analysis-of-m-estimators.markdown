@@ -34,6 +34,7 @@ description: >
     result, followed by a walkthrough of the proof itself.
 published: true
 ---
+
 $$
     \newcommand{\rcal}{\mathcal{R}}
     \newcommand{\lcal}{\mathcal{L}}
@@ -93,14 +94,15 @@ In this section, we develop some of the necessary background and notation to bui
 
 $$M$$-estimators ($$M$$ for "maximum likelihood-type") are solutions that minimize the sum of loss functions $$\rho$$:
 \begin{align}
-    \that \in \argmin_\theta \sum_{i=1}^n \rho(x_i, \theta).
+\that \in \argmin*\theta \sum*{i=1}^n \rho(x_i, \theta).
 \end{align}
 
 If we add a regularization term $$\rcal$$ to penalize complexity of the model, scaled by weights $$\lambda$$, the method is known as a regularized $$M$$-estimator:
 \begin{align}
-    \that \in \argmin_\theta \sum_{i=1}^n \rho(x_i, \theta) + \lambda \rcal(\theta).
+\that \in \argmin*\theta \sum*{i=1}^n \rho(x_i, \theta) + \lambda \rcal(\theta).
 \end{align}
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="example"
   name="Lasso Program"
@@ -117,6 +119,7 @@ If we add a regularization term $$\rcal$$ to penalize complexity of the model, s
 
 ## Dual Norms
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="definition"
   name="Dual Norms"
@@ -131,6 +134,7 @@ If we add a regularization term $$\rcal$$ to penalize complexity of the model, s
   "
 %}
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="example"
   name="\(\ell_1\) and \(\ell_\infty\) norms are dual norms"
@@ -138,14 +142,14 @@ If we add a regularization term $$\rcal$$ to penalize complexity of the model, s
   We will show that the dual of the \( \ell_1 \) norm is the \( \ell_\infty \) norm.
 
 Well, to see that \( \rs(v) \leq \| v \|_\infty \), observe that
-        \begin{align*}
-            \rs(v)
-             & = \sup_{\| u \|_1 \leq 1} \dotprod{u}{v}                                        \\
-             & = \sup_{\| u \|_1 \leq 1} \sum_{k=1}^p | u_k | | v_k |                          \\
-             & \leq \sup_{\| u \|_1 \leq 1} \left( \sum_{k=1}^p | u_k | \right) \| v \|_\infty \\
-             & = | v |_\infty   \tag{since \( \| u \|_1 \leq 1 \) }.
-        \end{align*}
-        For the opposite direction,
+\begin{align\*}
+\rs(v)
+& = \sup_{\| u \|_1 \leq 1} \dotprod{u}{v} \\
+& = \sup_{\| u \|_1 \leq 1} \sum_{k=1}^p | u*k | | v_k | \\
+& \leq \sup*{\| u \|_1 \leq 1} \left( \sum_{k=1}^p | u*k | \right) \| v \|*\infty \\
+& = | v |\_\infty \tag{since \( \| u \|\_1 \leq 1 \) }.
+\end{align\*}
+For the opposite direction,
 
         \begin{align*}
             \sup_{\| u \|_1 \leq 1} \dotprod{u}{v}
@@ -157,18 +161,19 @@ Well, to see that \( \rs(v) \leq \| v \|_\infty \), observe that
         \end{align*}
         hence we have equality.
 
-  "
+"
 %}
 
 ## Subspace Compatibility Constant
 
 The subspace compatibility constant measures how much the regularizer $$\rcal$$ can change
-with respect to the error norm  $$\| \cdot \|$$ restricted to the subspace $$\mcal$$.
+with respect to the error norm $$\| \cdot \|$$ restricted to the subspace $$\mcal$$.
 This concept will show up later in showing that the restricted strong convexity
 condition will hold with certain parameters.
 
 The subspace compatibility constant is defined as follows:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="definition"
   name="Subspace Compatibility Constant"
@@ -180,6 +185,7 @@ The subspace compatibility constant is defined as follows:
         \varPsi (\mcal) \coloneqq \sup_{u \in \mcal \setminus \left\{ 0 \right\}} \frac{\rcal(u)}{\| u \|}.
     $$
     "
+
 %}
 
 It can be thought of as the Lipschitz constant of the regularizer with respect to the error norm
@@ -187,16 +193,17 @@ restricted to values in $$\mcal$$,
 by considering the point where it can vary the most.
 
 ## Projections
+
 Define the projection operator
 \begin{align}
-    \Pi_{\mcal}(u) \coloneqq \argmin_{v \in \mcal} \| u - v \|
+\Pi*{\mcal}(u) \coloneqq \argmin*{v \in \mcal} \| u - v \|
 \end{align}
 to be the projection of $$u$$ onto the subspace $$\mcal$$.
 For notational brevity, we will use the shorthand $$u_{\mcal} = \Pi_{\mcal}(u)$$.
 
 One property of the projection operator is that it is non-expansive, meaning that
 \begin{align}
-    \| \Pi(u) - \Pi(v) \| \leq \| u - v \| \label{eq:non-expansive}
+\| \Pi(u) - \Pi(v) \| \leq \| u - v \| \label{eq:non-expansive}
 \end{align}
 for some error norm $$\| \cdot \|$$. In other words, it has Lipschitz constant 1.
 
@@ -205,7 +212,7 @@ for some error norm $$\| \cdot \|$$. In other words, it has Lipschitz constant 1
 In our setup, we define the following quantities:
 
 - $$Z_1^n \coloneqq \left\{ Z_1, \cdots, Z_n \right\}$$ $$n$$ i.i.d observations
-        drawn from distribution $$\mathbb{P}$$ with some parameter $$\theta^*$$,
+  drawn from distribution $$\mathbb{P}$$ with some parameter $$\theta^*$$,
 - $$\mathcal{L}: \mathbb{R}^p \times \mathcal{Z}^n \to \mathbb{R}$$ a convex and differentiable loss function, such that $$\mathcal{L}(\theta; Z_1^n)$$ returns the loss of $$\theta$$ on observations $$Z_1^n$$,
 - $$\lambda_n > 0$$: a user-defined regularization penalty,
 - $$\mathcal{R} : \mathbb{R}^p \to \mathbb{R}_+$$ a norm-based regularizer.
@@ -220,11 +227,13 @@ $$
 $$
 
 and we are interested in deriving bounds on
+
 $$
 \begin{align}
     \| \thatlambda - \theta^* \|
 \end{align}
 $$
+
 for some error norm $$\| \cdot \|$$ induced by an inner product $$\langle \cdot, \cdot \rangle$$ in $$\mathbb{R}^p$$.
 
 # Decomposability of the Regularizer $$\mathcal{R}$$
@@ -248,6 +257,7 @@ of low-rank matrices and nuclear norms where it could be possible that $$\mcal$$
 
 Now we can introduce the property of decomposability:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="definition"
   name="Regularizer Decomposability"
@@ -260,12 +270,13 @@ Now we can introduce the property of decomposability:
     $$
 
     for all \( \theta \in \mcal \) and \( \gamma \in \mocalp \).
-  "
+
+"
 %}
 
 Since $$\rcal$$ is a norm-based regularizer, by the triangle inequality property of norms we know that always
 \begin{align}
-    \rcal(\theta + \gamma) \leq \rcal(\theta) + \rcal(\gamma),
+\rcal(\theta + \gamma) \leq \rcal(\theta) + \rcal(\gamma),
 \end{align}
 and hence this is a stronger condition which requires tightness in the
 inequality when we are specifically considering elements in the closure of the
@@ -280,6 +291,7 @@ $$\theta^*$$.
 There are many natural contexts that admit regularizers which are decomposable with respect to subspaces,
 and the following example highlights one such case.
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="example"
   name="\( s \)-sparse Vectors"
@@ -309,15 +321,16 @@ and the following example highlights one such case.
     \begin{align*}
         \| \theta + \gamma \|_1 = \| \theta_S + \gamma_{S^c} \|_1 = \| \theta_S \|_1 + \| \gamma_{S^c} \| = \| \theta \|_1 + \| \gamma \|_1
     \end{align*}
-    \] 
+    \]
 
     by the Pythagorean theorem.
-  "
+
+"
 %}
 
 ## Role of Decomposability
 
-{% include figure.liquid 
+{% include figure.liquid
     path="/assets/img/posts/high-dimensional-analysis-of-m-estimators/c_illust.webp"
     width="500px"
     class="z-depth-1"
@@ -325,14 +338,14 @@ and the following example highlights one such case.
     caption="
         A visualization of \( \ctriplet \).  The shaded area represents the set
         \( \ctriplet \), i.e all values of \( \theta \) that satisfies the inequality of
-        the set in Lemma 1. 
+        the set in Lemma 1.
     "
 %}
 
 Decomposability is important because it allows us to bound the error of the estimator.
 This is given in the following result, which is known as Lemma 1 in [(Negahban et al., 2009)](https://arxiv.org/abs/1010.2731):
 
-
+<!-- prettier-ignore -->
 {% include theorem.md
   type="lemma"
   name="Lemma 1 in 
@@ -361,7 +374,8 @@ This is given in the following result, which is known as Lemma 1 in [(Negahban e
         \right\}.
     \end{align*}
     $$
-  "
+
+"
 %}
 
 Recall from the [Projections Section](#projections) that
@@ -408,7 +422,7 @@ like what is shown in [Figure 1(b)](#fig-1).
 
 # Restricted Strong Convexity (RSC) of the Loss Function
 
-{% include figure.liquid 
+{% include figure.liquid
     path="/assets/img/posts/high-dimensional-analysis-of-m-estimators/curvature.webp"
     width="500px"
     class="z-depth-1"
@@ -461,6 +475,7 @@ a neighborhood of $$\ts$$. This is because we are enforcing a lower bound on its
 
 This leads us to the definition of restricted strong convexity:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="definition"
   name="Restricted Strong Convexity"
@@ -479,19 +494,21 @@ guarantees us that the error term will only lie in that set.
 
 In many statistical models, restricted strong convexity holds with $$\tl = 0$$, however, it is required in more general settings, such as generalized linear models.
 
-# Proof of Theorem 1 
+# Proof of Theorem 1
+
 We can now state and prove the main result of the paper.
 This will hold under the decomposability of the regularizer (G1), and the
 restricted strong convexity of the loss function (G2).
 
 - **(G1)**
-        The regularizer $$\rcal$$ is a norm and is decomposable
-        with respect to the subspace pair $$(\mcal, \mocalp)$$, where $$\mcal \sse \mocalp$$.
+  The regularizer $$\rcal$$ is a norm and is decomposable
+  with respect to the subspace pair $$(\mcal, \mocalp)$$, where $$\mcal \sse \mocalp$$.
 
 - **(G2)**
-        The loss function $$\lcal$$ is convex and differentiable, and satisfies restricted strong convexity
-        with curvature $$\kl$$ and tolerance $$\tl$$.
+  The loss function $$\lcal$$ is convex and differentiable, and satisfies restricted strong convexity
+  with curvature $$\kl$$ and tolerance $$\tl$$.
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="theorem"
   name="Bounds for General Models"
@@ -512,6 +529,7 @@ restricted strong convexity of the loss function (G2).
 
 We will rely on the following lemmas that will be stated without proof due to space constraints:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="lemma"
   name="Deviation Inequalities"
@@ -530,6 +548,7 @@ We will rely on the following lemmas that will be stated without proof due to sp
   "
 %}
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="lemma"
   num="4 in (Negahban et al., 2009)"
@@ -541,8 +560,8 @@ We will rely on the following lemmas that will be stated without proof due to sp
 
 Note that this was similar to our previous analysis on restricted strong
 convexity where we only really need to consider error terms restricted to
-$$ \ctriplet $$ due to [Lemma 1](#lemma-1).  Therefore, it suffices to show
-$$ \fcal(\Delta) > 0 $$ to obtain a bound on $$ \| \hd \| = \| \thatlambda - \ts\| $$, 
+$$ \ctriplet $$ due to [Lemma 1](#lemma-1). Therefore, it suffices to show
+$$ \fcal(\Delta) > 0 $$ to obtain a bound on $$ \| \hd \| = \| \thatlambda - \ts\| $$,
 which completes the proof of Theorem 1.
 
 Define $$\fcal : \mathbb{R}^p \to \mathbb{R}$$ by
@@ -586,101 +605,125 @@ $$
 $$
 
 We lower bound the first term as
-$$\langle  \nabla \lcal (\ts), \Delta \rangle \geq - \frac{\lambda_n}{2}
-    \rcal(\Delta)$$:
 
 $$
+\langle  \nabla \lcal (\ts), \Delta \rangle \geq - \frac{\lambda_n}{2}
+    \rcal(\Delta)$$:
+
+
+$$
+
 \begin{align}
-    | \langle  \nabla \lcal (\ts), \Delta \rangle |
-    \leq                                             & \rs(\nabla \lcal(\ts)) \rcal(\Delta) & \text{(Cauchy-Schwarz using dual norms \( \rcal \) and \( \rs \))} \\
-    \leq                                             & \frac{\lambda_n}{2} \rcal(\Delta) & \text{Theorem 1 assumption: \( \lambda_n \geq 2 \rs (\nabla \lcal(\ts)) \))},
+| \langle \nabla \lcal (\ts), \Delta \rangle |
+\leq & \rs(\nabla \lcal(\ts)) \rcal(\Delta) & \text{(Cauchy-Schwarz using dual norms \( \rcal \) and \( \rs \))} \\
+\leq & \frac{\lambda_n}{2} \rcal(\Delta) & \text{Theorem 1 assumption: \( \lambda_n \geq 2 \rs (\nabla \lcal(\ts)) \))},
 \end{align}
+
 $$
 
 and hence,
 
+
 $$
+
 \begin{align}
-    \langle  \nabla \lcal (\ts), \Delta \rangle \geq & - \frac{\lambda_n}{2}
-    \rcal(\Delta).
+\langle \nabla \lcal (\ts), \Delta \rangle \geq & - \frac{\lambda_n}{2}
+\rcal(\Delta).
 \end{align}
+
 $$
 
 So applying to (\ref{thm-deriv:1}),
 
+
 $$
+
 \begin{align}
-    \fcal(\Delta)
-    \geq & \kl \| \Delta \|^2 - \tl^2(\ts) + \lambda_n \left\{
-    \rcal(\Delta_{\mocalp}) - \rcal(\Delta_{\mocal}) - 2 \rcal(\ts_{\mcal^{\perp}})
-    \right\} - \frac{\lambda_n}{2} \rcal(\Delta)                                                                                                                                       \\
-    \geq & \kl \| \Delta \|^2 - \tl^2(\ts) + \lambda_n \left\{
-    \rcal(\Delta_{\mocalp}) - \rcal(\Delta_{\mocal}) - 2 \rcal(\ts_{\mcal^{\perp}})
-    \right\} - \frac{\lambda_n}{2} (\rcal(\Delta_{\mocalp}) + \rcal(\Delta_{\mocal})) \\
-    & \qquad \text{(Triangle inequality: \( \rcal(\Delta) \leq \rcal(\Delta_{\mocalp}) + \rcal(\Delta_{\mocal}) \))} \\
-    =    & \kl \| \Delta \|^2 - \tl^2(\ts) + \lambda_n \left\{
-    \frac{1}{2}\rcal(\Delta_{\mocalp}) -
-    \frac{3}{2}\rcal(\Delta_{\mocal}) - 2 \rcal(\ts_{\mcal^{\perp}})
-    \right\} \\
-    & \qquad \text{(Moving terms in)} \\
-    \geq & \kl \| \Delta \|^2 - \tl^2(\ts) + \lambda_n \left\{
-    -
-    \frac{3}{2}\rcal(\Delta_{\mocal}) - 2 \rcal(\ts_{\mcal^{\perp}})
-    \right\} \\
-    & \qquad \text{(Norms always non-negative)} \\
-    = & \kl \| \Delta \|^2 - \tl^2(\ts) - \frac{\lambda_n }{2} \left\{
-    3 \rcal(\Delta_{\mocal}) + 4 \rcal(\ts_{\mcal^{\perp}})
-    \right\} \label{eq:r-delta-lb} .
+\fcal(\Delta)
+\geq & \kl \| \Delta \|^2 - \tl^2(\ts) + \lambda*n \left\{
+\rcal(\Delta*{\mocalp}) - \rcal(\Delta*{\mocal}) - 2 \rcal(\ts*{\mcal^{\perp}})
+\right\} - \frac{\lambda*n}{2} \rcal(\Delta) \\
+\geq & \kl \| \Delta \|^2 - \tl^2(\ts) + \lambda_n \left\{
+\rcal(\Delta*{\mocalp}) - \rcal(\Delta*{\mocal}) - 2 \rcal(\ts*{\mcal^{\perp}})
+\right\} - \frac{\lambda*n}{2} (\rcal(\Delta*{\mocalp}) + \rcal(\Delta*{\mocal})) \\
+& \qquad \text{(Triangle inequality: \( \rcal(\Delta) \leq \rcal(\Delta*{\mocalp}) + \rcal(\Delta*{\mocal}) \))} \\
+= & \kl \| \Delta \|^2 - \tl^2(\ts) + \lambda_n \left\{
+\frac{1}{2}\rcal(\Delta*{\mocalp}) -
+\frac{3}{2}\rcal(\Delta*{\mocal}) - 2 \rcal(\ts*{\mcal^{\perp}})
+\right\} \\
+& \qquad \text{(Moving terms in)} \\
+\geq & \kl \| \Delta \|^2 - \tl^2(\ts) + \lambda*n \left\{ -
+\frac{3}{2}\rcal(\Delta*{\mocal}) - 2 \rcal(\ts*{\mcal^{\perp}})
+\right\} \\
+& \qquad \text{(Norms always non-negative)} \\
+= & \kl \| \Delta \|^2 - \tl^2(\ts) - \frac{\lambda_n }{2} \left\{
+3 \rcal(\Delta*{\mocal}) + 4 \rcal(\ts\_{\mcal^{\perp}})
+\right\} \label{eq:r-delta-lb} .
 \end{align}
+
 $$
 
 To bound the term $$\rcal(\Delta_{\mocal})$$,
 recall the definition of subspace compatibility:
 
+
 $$
+
 \begin{align}
-    \varPsi (\mcal) \coloneqq \sup_{u \in \mcal \setminus \left\{ 0 \right\}} \frac{\rcal(u)}{\| u \|}, \label{eq:r-delta-ub}
+\varPsi (\mcal) \coloneqq \sup\_{u \in \mcal \setminus \left\{ 0 \right\}} \frac{\rcal(u)}{\| u \|}, \label{eq:r-delta-ub}
 \end{align}
+
 $$
 
 and hence
 
+
 $$
+
 \begin{align}
-    \rcal(\Delta_{\mocal}) \leq \varPsi(\mocal) \| \Delta_{\mocal} \|.
+\rcal(\Delta*{\mocal}) \leq \varPsi(\mocal) \| \Delta*{\mocal} \|.
 \end{align}
+
 $$
 
 To upper bound $$\| \Delta_{\mocal} \|$$, we have
 
+
 $$
+
 \begin{align}
-    \| \Delta_{\mocal} \|
-        & = \| \Pi_{\mocal} (\Delta) - \Pi_{\mocal}(0) \| & \text{(Since \(0 \in \mocal \), \( \Pi_{\mocal}(0) = 0 \)) }     \\
-        & \leq \| \Delta - 0 \| & \text{(Projection operator is non-expansive, see Equation \ref{eq:non-expansive})} \\
-        & = \| \Delta \|,
+\| \Delta*{\mocal} \|
+& = \| \Pi*{\mocal} (\Delta) - \Pi*{\mocal}(0) \| & \text{(Since \(0 \in \mocal \), \( \Pi*{\mocal}(0) = 0 \)) } \\
+& \leq \| \Delta - 0 \| & \text{(Projection operator is non-expansive, see Equation \ref{eq:non-expansive})} \\
+& = \| \Delta \|,
 \end{align}
+
 $$
 
 which substituting into Equation (\ref{eq:r-delta-ub}) gives
 
+
 $$
+
 \begin{align}
-    \rcal(\Delta_{\mocal}) \leq \varPsi(\mocal) \| \Delta \|.
+\rcal(\Delta\_{\mocal}) \leq \varPsi(\mocal) \| \Delta \|.
 \end{align}
+
 $$
 
 Now we can use this result to lower bound
 Equation \ref{eq:r-delta-lb}:
 
+
 $$
+
 \begin{align}
-    \fcal (\Delta)
-    \geq & \kl \| \Delta \|^2 - \tl^2(\ts) - \frac{\lambda_n }{2} \left\{
-    3 \varPsi(\mocal) \| \Delta \|
-    + 4 \rcal(\ts_{\mcal^{\perp}})
-    \right\}. \label{eq:strict-psd}
+\fcal (\Delta)
+\geq & \kl \| \Delta \|^2 - \tl^2(\ts) - \frac{\lambda*n }{2} \left\{
+3 \varPsi(\mocal) \| \Delta \| + 4 \rcal(\ts*{\mcal^{\perp}})
+\right\}. \label{eq:strict-psd}
 \end{align}
+
 $$
 
 The RHS of the inequality in Equation \ref{eq:strict-psd} has a strictly
@@ -688,51 +731,62 @@ positive definite quadratic form in $$\| \Delta \|$$, and hence by taking
 $$\| \Delta \| $$ large, it will be strictly positive.
 To find such a sufficiently large $$\| \Delta \|$$, write
 
+
 $$
+
 \begin{align}
-    a & = \kl,                                                     \\
-    b & = \frac{3\lambda_n}{2} \varPsi (\mocal),                  \\
-    c & = \tau_{\lcal}^2 (\ts) + 2 \lambda_n \rcal(\ts_{\mcalp}), \\
+a & = \kl, \\
+b & = \frac{3\lambda*n}{2} \varPsi (\mocal), \\
+c & = \tau*{\lcal}^2 (\ts) + 2 \lambda*n \rcal(\ts*{\mcalp}), \\
 \end{align}
+
 $$
 
 such that we have
 
+
 $$
+
 \begin{align}
-    \fcal (\Delta)
-        & \geq a \| \Delta \|^2 - b \| \Delta \| - c.
+\fcal (\Delta)
+& \geq a \| \Delta \|^2 - b \| \Delta \| - c.
 \end{align}
+
 $$
 
 Then the square of the rightmost intercept is given by the squared quadratic formula
 
+
 $$
+
 \begin{align}
-    \| \Delta \|^2
-        & = \left( \frac{-(-b) + \sqrt{b^2 - 4a(-c)}}{2a} \right)^2                                                 \\
-        & = \left( \frac{b + \sqrt{b^2 + 4ac}}{2a} \right)^2                                                 \\
-        & \leq \left( \frac{\sqrt{b^2 + 4ac}}{a} \right)^2 & \text{($b \leq \sqrt{b^2 + 4ac}$)}                                              \label{eq:coarse-bound}  \\
-        & = \frac{b^2 + 4ac}{a^2}                                                 \\
-        & = \frac{9 \lambda_n^2 \varPsi^2 (\mocal)}{4 \kl^2}
-    + \frac{ 4 \tau_{\lcal}^2 (\ts) + 8 \lambda_n \rcal(\ts_{\mcalp}) }{\kl}. & \text{(Substituting in \(a, b, c\))} \\
+\| \Delta \|^2
+& = \left( \frac{-(-b) + \sqrt{b^2 - 4a(-c)}}{2a} \right)^2 \\
+& = \left( \frac{b + \sqrt{b^2 + 4ac}}{2a} \right)^2 \\
+& \leq \left( \frac{\sqrt{b^2 + 4ac}}{a} \right)^2 & \text{($b \leq \sqrt{b^2 + 4ac}$)} \label{eq:coarse-bound} \\
+& = \frac{b^2 + 4ac}{a^2} \\
+& = \frac{9 \lambda*n^2 \varPsi^2 (\mocal)}{4 \kl^2} + \frac{ 4 \tau*{\lcal}^2 (\ts) + 8 \lambda*n \rcal(\ts*{\mcalp}) }{\kl}. & \text{(Substituting in \(a, b, c\))} \\
 \end{align}
+
 $$
 
 In [(Negahban et al., 2009)](https://arxiv.org/abs/1010.2731), they were able to show an upper bound of
 
+
 $$
+
 \begin{align}
-    \| \Delta \|^2
-        & \leq \frac{9 \lambda_n^2 \varPsi^2 (\mocal)}{\kl^2} +
-    \frac{\lambda_n}{\kl} \left\{
-    2\tau_{\lcal}^2 (\ts) + 4 \rcal(\ts_{\mcalp})
-    \right\}, \label{eq:ub}
+\| \Delta \|^2
+& \leq \frac{9 \lambda*n^2 \varPsi^2 (\mocal)}{\kl^2} +
+\frac{\lambda_n}{\kl} \left\{
+2\tau*{\lcal}^2 (\ts) + 4 \rcal(\ts\_{\mcalp})
+\right\}, \label{eq:ub}
 \end{align}
+
 $$
 
 but I did not manage to figure out how they managed to produce a $$\lambda_n$$
-term beside the $$\tl^2(\ts)$$ term. All other differences are just 
+term beside the $$\tl^2(\ts)$$ term. All other differences are just
 constant factors. It may be due to an overly coarse
 bound on my end applied in Equation \ref{eq:coarse-bound}, but it
 is unclear to me how the $$\lambda_n$$ term can be applied on only
@@ -741,11 +795,13 @@ the $$\tl^2(\ts)$$ term without affecting the $$\rcal(\ts_{\mcalp})$$ term.
 With Equation \ref{eq:ub}, we can hence apply Lemma 4 in [(Negahban et al., 2009)](https://arxiv.org/abs/1010.2731)
 to obtain the desired result that
 
+
 $$
+
 \begin{align}
-    \| \thatlambda - \ts \|^2 \leq 9 \frac{\lambda_n^2}{\kl^2} \Psi^2(\mocal)
-    + \frac{\lambda_n}{\kl} \left( 2 \tl^2 (\ts) + 4 \rcal (\ts_{\mcal^{\perp}}) \right).
+\| \thatlambda - \ts \|^2 \leq 9 \frac{\lambda*n^2}{\kl^2} \Psi^2(\mocal) + \frac{\lambda_n}{\kl} \left( 2 \tl^2 (\ts) + 4 \rcal (\ts*{\mcal^{\perp}}) \right).
 \end{align}
+
 $$
 
 This concludes the proof.
@@ -781,6 +837,8 @@ framework for high-dimensional analysis of m-estimators with decomposable
 regularizers](https://proceedings.neurips.cc/paper_files/paper/2009/file/dc58e3a306451c9d670adcd37004f48f-Paper.pdf).
 In Bengio, Y., Schuurmans, D., Lafferty, J., Williams, C., and Culotta, A.
 (eds.), Advances in Neural Information Processing Systems, volume 22. Curran
-Associates, Inc., 2009. 
+Associates, Inc., 2009.
 URL https://proceedings.neurips.cc/paper_files/paper/2009/file/dc58e3a306451c9d670adcd37004f48f-Paper.pdf.
 
+
+$$

@@ -33,10 +33,10 @@ deriving theoretical bounds.
 ### The Central Limit Theorem
 
 The Central Limit states that the mean of an appropriately transformed random variable
-converges in distribution to a standard normal. We first need to introduce the 
+converges in distribution to a standard normal. We first need to introduce the
 definition of convergence of probability distributions:
 
-
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="definition"
   name="Convergence in Distribution"
@@ -44,11 +44,11 @@ definition of convergence of probability distributions:
   Let \( F_{X_n} \) and \( F_{X} \) denotes the cumulative density functions (CDF) of 
   \( X_n \) and \( X \) respectively.
 
-  A sequence \( X_n \) converges to \( X \) in distribution if
-  $$ \lim_{n \to \infty } F_{X_n}(t) = F_X (t)$$
-  
-  for all points \( t \) where \( F_X \) is continuous.
-  "
+A sequence \( X*n \) converges to \( X \) in distribution if
+$$ \lim*{n \to \infty } F\_{X_n}(t) = F_X (t)$$
+
+for all points \( t \) where \( F_X \) is continuous.
+"
 %}
 
 Note that the requirement that it only holds for points of continuity is not superfluous, as there
@@ -57,6 +57,7 @@ can be distributions that converge but disagree in value at points of discontinu
 
 The Central Limit Theorem can then be stated in the following form (there are many other equivalent statements):
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="theorem"
   name="Central Limit Theorem"
@@ -64,53 +65,56 @@ The Central Limit Theorem can then be stated in the following form (there are ma
   Let \( X_1, X_2, \dots, X_n \) be a sequence of independent random variables with mean \( \mu \) and variance \( \sigma^2 \).
   Assume that the moment generating function \( \mathbb{E} \left[ \exp(t X_i) \right] \) is finite for \( t \) in a neighborhood around zero.
   Let \( \overline{X}_n = \frac{1}{n} \sum\limits_{i=1}^n X_i \). Let
-  
-  $$ Z_n = \frac{\sqrt{n} \left( \overline{X}_n - \mu \right)}{\sigma}. $$
-  
-  Then \( Z_n \) converges in distribution to \( Z \sim N(0, 1) \).
-  "
+
+$$ Z_n = \frac{\sqrt{n} \left( \overline{X}\_n - \mu \right)}{\sigma}. $$
+
+Then \( Z_n \) converges in distribution to \( Z \sim N(0, 1) \).
+"
 %}
 
 ### Proof of the Central Limit Theorem
 
-There are several ways of proving the Central Limit Theorem. 
+There are several ways of proving the Central Limit Theorem.
 The proof that we will explore today relies on the methods of moments.
 An alternative measure-theoretic version of the proof relies on Lévy's
 Continuity Theorem, and makes use of convolutions and Fourier transforms.
 
 Our goal is to show that $$ Z_n $$ converges in distribution to $$ Z \sim N(0,
-1) $$. To do so, we will show that all the moments of $$ Z_n $$ converges to
-the respective moments of $$ Z $$. 
+
+1. $$. To do so, we will show that all the moments of $$ Z_n $$ converges to
+   the respective moments of $$ Z $$.
 
 #### Moment Generating Functions
+
 The moments of a random variable can be obtained from its moment-generating function (MGF),
 defined as follows:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="definition"
   name="Moment Generating Function"
   statement="
   The moment generating function of a random variable \( X \) is given by
-  
-  $$ M_X(t) = \mathbb{E} \left[ e^{tX} \right].$$
-  "
+
+$$ M_X(t) = \mathbb{E} \left[ e^{tX} \right].$$
+"
 %}
 
 It is called a moment generating function since the $$k$$th moment of $$X$$,
 i.e $$\mathbb{E} \left[X^k \right] $$, can be obtained by taking the
 $$k$$th derivative of its moment-generating function (MGF) at 0:
 
-$$ \mathbb{E} \left[X^k \right]  = M^{(k)}(0). $$
+$$ \mathbb{E} \left[X^k \right] = M^{(k)}(0). $$
 
 This is not too hard to see by induction on the fact that
-$$M_X^k(t) = \mathbb{E} \left[ X^k e^{tX} \right]$$. The base case is trivial. 
+$$M_X^k(t) = \mathbb{E} \left[ X^k e^{tX} \right]$$. The base case is trivial.
 For the inductive case,
 
 $$
 \begin{align*}
-    M_X^{(k)}(t) & = \frac{d^k}{dt^k} \mathbb{E} \left[ e^{tX} \right] \\ 
+    M_X^{(k)}(t) & = \frac{d^k}{dt^k} \mathbb{E} \left[ e^{tX} \right] \\
                & = \frac{d}{dt} \mathbb{E} \left[ X^{k-1} e^{tX} \right] & \text{(by IH)}\\
-               & = \frac{d}{dt} \int f(x) x^{k-1} e^{tx} \; dx \\ 
+               & = \frac{d}{dt} \int f(x) x^{k-1} e^{tx} \; dx \\
                & = \int \frac{d}{dt} f(x) x^{k-1} e^{tx} \; dx \\
                & = \int f(x) x^{k} e^{tx} \; dx \\
                & = \mathbb{E} \left[ X^{k} e^{tX} \right].
@@ -119,11 +123,12 @@ $$
 
 Substituting $$t=0$$ gives us the desired result.
 
-
 #### Normal Distribution is Determined by its Moments
+
 Distributions are determined uniquely by its moments under certain conditions. This is made precise
 in the following theorem:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="theorem"
   name="Sufficient Condition for Distribution to be Determined by Moments"
@@ -146,8 +151,10 @@ and our mean and standard deviation are both finite, then all our moments genera
 recurrence must also be finite. So our standard normal is determined by its moments.
 
 #### Method of Moments
+
 Now cue the theorem that ties things together:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="theorem"
   name="Method of Moments"
@@ -162,11 +169,12 @@ Now cue the theorem that ties things together:
 In words, it states that if the $$k$$th moment of $$X_n$$ is finite and converges to the $$k$$th moment
 of $$X$$ in the limit of $$n$$, then $$X_n$$ converges to $$X$$.
 
-This is great, since now we just have to show that all the moments of 
+This is great, since now we just have to show that all the moments of
 $$Z_n = \frac{\sqrt{n} \left( \overline{X}_n - \mu \right)}{\sigma}$$ converges to
 the moments of the standard normal $$Z$$.
 
 ### Moment Generating Function of $$Z$$
+
 Let's first find the moment generating function of $$Z$$:
 
 $$
@@ -183,16 +191,15 @@ $$
 $$
 
 where the second last step comes from the fact that
-$$\frac{1}{\sqrt{2 \pi}} e^{-\frac{1}{2}(x - t)^2 }$$ is a probability distribution of a Gaussian with mean $$t$$ and variance 1, 
+$$\frac{1}{\sqrt{2 \pi}} e^{-\frac{1}{2}(x - t)^2 }$$ is a probability distribution of a Gaussian with mean $$t$$ and variance 1,
 and therefore the integral integrates to 1.
-
 
 ### Moment Generating Function of $$Z_n$$
 
-Now we find the moment generating function of $$Z_n$$. 
+Now we find the moment generating function of $$Z_n$$.
 To simplify notation, define
-$$ A_i = \frac{X_i - \mu}{\sigma}$$,
-and see that we can write $$Z_n = \frac{1}{\sqrt{n}} \sum\limits_{i=1}^n A_i$$, since
+$$ A*i = \frac{X_i - \mu}{\sigma}$$,
+and see that we can write $$Z_n = \frac{1}{\sqrt{n}} \sum\limits*{i=1}^n A_i$$, since
 
 $$
 \begin{align*}
@@ -220,8 +227,8 @@ $$
 
 Let's analyze each individual term $$M_{A_i}(t / \sqrt{n})$$ by performing a Taylor expansion around 0.
 Recall that the Taylor expansion of a function $$f(x)$$ about a point $$a$$ is
-given by 
-$$ f(x)= \sum\limits_{n=0}^\infty \frac{f^{(n)(a)}}{n!}(x-a)^n.$$. We will expand up to the
+given by
+$$ f(x)= \sum\limits\_{n=0}^\infty \frac{f^{(n)(a)}}{n!}(x-a)^n.$$. We will expand up to the
 second order term, which requires us to find the first three moments of the MGF.
 
 These are:
@@ -264,8 +271,9 @@ $$
 which shows that it converges to the MGF of $$Z$$, as desired. Hooray!
 
 ### An Uncomfortable Feeling
+
 However, there is one thing in this proof that might have bothered you.
-Our result came from making use of the Taylor approximation and taking limits, 
+Our result came from making use of the Taylor approximation and taking limits,
 but there is no bound on how large $$n$$ must be for the distributions to converge
 up to a maximum amount of error. This makes it unsuitable for much theoretical analysis,
 since usually we would like to know that $$n$$ does not have to be too large
@@ -273,10 +281,11 @@ for us to obtain a sufficiently good approximation to the standard normal.
 
 ### The Useful Form of the Central Limit Theorem: The Berry-Esseen Theorem
 
-The Berry-Esseen theorem solves this limitation by also providing explicit error bounds. 
+The Berry-Esseen theorem solves this limitation by also providing explicit error bounds.
 This was proved independently by Andrew Berry and Carl-Gustav Esseen in the 40s,
 and the statement goes as follows:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="theorem"
   name="Berry-Esseen"
@@ -287,20 +296,20 @@ and the statement goes as follows:
 
     Write \( \sigma_i^2 = \mathbf{Var} [ X_i] = \mathbb{E}[X_i^2] - \mathbb{E}[X_i]^2 = \mathbb{E}[X_i^2] \).
 
-    Assume \( \sum\limits_{i=1}^n \sigma_i^2 = 1 \). 
+    Assume \( \sum\limits_{i=1}^n \sigma_i^2 = 1 \).
 
     Let \( S = \sum\limits_{i=1}^n X_i \). Then \( \forall u \in \mathbb{R}\),
-    
+
     $$
         \lvert \Pr \left[ S \leq u \right] - \Pr \left[ Z \leq u \right] \rvert
         \leq \mbox{const} \cdot \beta,
     $$
 
     where the exact constant depends on the proof, with the best known constant
-    being \(.5600\) proven by Shevtsova in 2010, and 
+    being \(.5600\) proven by Shevtsova in 2010, and
     \(\beta = \sum\limits_{i=1}^n \mathbb{E} \left[ \lvert X_i \rvert^3 \right]\).
 
-  "
+"
 %}
 
 In words, the theorem says that the difference between the CDF of the sum of
@@ -315,10 +324,11 @@ relative error is actually very large, and therefore is not as helpful.
 
 I hope this article has been helpful!
 
-*I would like to express my thanks to my friend [Albert Gao](https://adbforlife.github.io/)
-for reviewing this article and for providing valuable suggestions*.
+_I would like to express my thanks to my friend [Albert Gao](https://adbforlife.github.io/)
+for reviewing this article and for providing valuable suggestions_.
 
 ### References
-- Rosenthal, J. S. (2016). A first look at rigorous probability theory. World Scientific. 
+
+- Rosenthal, J. S. (2016). A first look at rigorous probability theory. World Scientific.
 - Larry Wasserman, CMU 36-705 Intermediate Statistics Lecture Notes. URL: [https://www.stat.cmu.edu/~larry/=stat705/](https://www.stat.cmu.edu/~larry/=stat705/)
 - Ryan O'Donnell, CMU 15-751 A Theorist's Toolkit. URL: [https://www.youtube.com/watch?v=Ig5TuZauhW4](https://www.youtube.com/watch?v=Ig5TuZauhW4)

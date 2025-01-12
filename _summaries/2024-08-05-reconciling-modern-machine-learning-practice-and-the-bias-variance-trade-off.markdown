@@ -23,12 +23,12 @@ lower than the minima from the under-parameterized regime.
 
 They postulated the reason why this was not observed earlier was due to the following:
 
-* It requires a parametric function class that can scale to arbitrary complexity, but 
-classical statistics usually works with a small, fixed set of features
-* Regularization is often performed, which can prevent interpolation and hence mask the interpolation peak
-* Computational benefits of kernel methods only hold when the number of datapoints is
-larger than model capacity, hence this over-parameterized regime was overlooked
-* Early stopping is commonly employed and also prevents observing this phenomenon
+- It requires a parametric function class that can scale to arbitrary complexity, but
+  classical statistics usually works with a small, fixed set of features
+- Regularization is often performed, which can prevent interpolation and hence mask the interpolation peak
+- Computational benefits of kernel methods only hold when the number of datapoints is
+  larger than model capacity, hence this over-parameterized regime was overlooked
+- Early stopping is commonly employed and also prevents observing this phenomenon
 
 #### 2. Observations on NNs with RFFs, Decision Trees, and Ensemble Methods
 
@@ -70,18 +70,19 @@ norm with interpolation).
 
 This was considered in the ideal noiseless case:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="theorem"
   statement="
   Fix any \( h^* \in \mathcal{H}_{\infty} \). Let \( \left(x_1, y_1\right), \ldots,\left(x_n, y_n\right) \) be independent and identically distributed random variables, where \( x_i \) is drawn uniformly at random from a compact cube \( { }^2 \Omega \subset \mathbb{R}^d \), and \( y_i=h^*\left(x_i\right) \) for all \( i \). There exists absolute constants \( A, B>0 \) such that, for any interpolating \( h \in \mathcal{H}_{\infty} \) (i.e., \( h\left(x_i\right)=y_i \) for all \( i \), so that with high probability
 
-$$ \sup _{x \in \Omega}\left|h(x)-h^*(x)\right|<A e^{-B(n / \log n)^{1 / d}}\left(\left\|h^*\right\|_{\mathcal{H}_{\infty}}+\|h\|_{\mathcal{H}_{\infty}}\right) \text {. } $$
+$$ \sup _{x \in \Omega}\left|h(x)-h^*(x)\right|<A e^{-B(n / \log n)^{1 / d}}\left(\left\|h^*\right\|_{\mathcal{H}_{\infty}}+\|h\|_{\mathcal{H}\_{\infty}}\right) \text {. } $$
 "
 %}
 
 In words, this means that in the worst case over all points in the data distribution, we can ensure that
 the difference between the ground-truth labeling function
-$$h^*$$ and some $$h$$ that we learn which interpolates 
+$$h^*$$ and some $$h$$ that we learn which interpolates
 through the train points to be small, where it is proportionate to the norms of both $$h^*$$ and $$h$$.
 (But to be honest, the easiest way of really driving down this bound would be
 getting more datapoints and increasing $$n$$).

@@ -17,7 +17,7 @@ description: >
     and discover its delightfully deep algorithmic and philosophical implications.
 ---
 
-The graph minor theorem, also known as the Robertson–Seymour theorem, is generally regarded as the most important result in graph theory. 
+The graph minor theorem, also known as the Robertson–Seymour theorem, is generally regarded as the most important result in graph theory.
 In this post we introduce the graph minor theorem, provide the necessary background,
 and discover its delightfully deep algorithmic and philosophical implications.
 
@@ -28,7 +28,7 @@ Intuitively, we can think of a smaller graph \(H\) as a minor of a graph \(G\)
 if it can describe some substructure of \(G\). More formally:
 </div>
 
-
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="definition"
   name="Graph Minors"
@@ -43,29 +43,32 @@ edge connected by two vertices \(u\) and \(v\), and combine them to form a
 new vertex \(w\) that still preserves the old adjacencies but eliminates
 duplicate edges.
 
-{% include figure.liquid 
-  path="assets/img/posts/edge_contraction.webp" 
+{% include figure.liquid
+  path="assets/img/posts/edge_contraction.webp"
   width="300px"
-  class="z-depth-1" 
+  class="z-depth-1"
   caption="Edge contraction between \(u\) and \(v\) to obtain \(w\)"
 %}
 
 ## Quasi-Orders and Well-Quasi Orders
+
 A quasi-order is a relation that is reflexive and transitive.
 We build on this to define a well-quasi-order:
 
-{% include theorem.md 
+<!-- prettier-ignore -->
+{% include theorem.md
   type="definition"
   name="Well-quasi-order"
   statement="
-    A well-quasi-order is a quasi-order such that in any infinite sequence \(x_0, x_1, \cdots\) of elements, there exists a good pair in the sequence. 
-    A good pair \(x_i, x_j\) is one where \(i < j\) and \(x_i \leq x_j\). 
+    A well-quasi-order is a quasi-order such that in any infinite sequence \(x_0, x_1, \cdots\) of elements, there exists a good pair in the sequence.
+    A good pair \(x_i, x_j\) is one where \(i < j\) and \(x_i \leq x_j\).
   "
 %}
 
 A very useful implication of a well-quasi-order that is not hard to show is the following:
 
-{% include theorem.md 
+<!-- prettier-ignore -->
+{% include theorem.md
   type="lemma"
   statement="
     A well-quasi-order cannot form any infinite decreasing sequences or
@@ -76,10 +79,12 @@ A very useful implication of a well-quasi-order that is not hard to show is the 
 We will make use of the fact that it cannot have infinite anti-chains later.
 
 ## The Graph Minor Theorem
-In 1960, Kruskal had already proved that finite trees are well-quasi-ordered by the topological minor relation (instead of allowing edge contractions, a topological minor allows edge subdivision). 
+
+In 1960, Kruskal had already proved that finite trees are well-quasi-ordered by the topological minor relation (instead of allowing edge contractions, a topological minor allows edge subdivision).
 In contrast, proving the graph minor theorem was a Herculean effort that took over 20 years (1983-2004), involving over 500 pages. It says the following:
 
-{% include theorem.md 
+<!-- prettier-ignore -->
+{% include theorem.md
   type="theorem"
   name="Graph Minor Theorem"
   statement="
@@ -89,7 +94,8 @@ In contrast, proving the graph minor theorem was a Herculean effort that took ov
 
 At first glance, the statement may not seem very impressive. However, we get a lot of mileage out of it if we consider its implications on minor-closed properties:
 
-{% include theorem.md 
+<!-- prettier-ignore -->
+{% include theorem.md
   type="definition"
   name="Minor-closed"
   statement="
@@ -101,7 +107,7 @@ Many interesting graph properties are minor-closed, such as planarity (whether a
 
 Now consider any minor-closed property $$ \mathcal{P} $$ that we are interested in.
 We can define the (possibly infinite) set $$\mathsf{Forb(\mathcal{P})} $$ to contain all graphs without property $$\mathcal{P}$$. We can think of these as all the bad graphs
-where if a graph $$G$$ contained any of them as a minor, then we are sad as $$G$$ will not have property $$\mathcal{P}$$. 
+where if a graph $$G$$ contained any of them as a minor, then we are sad as $$G$$ will not have property $$\mathcal{P}$$.
 
 Furthermore, we can further reduce the characterization of this bad set by only
 considering keeping the smallest representative of each chain (i.e pairwise
@@ -118,9 +124,10 @@ us if it has $$\mathcal{P}$$, we can simply check if any of the entries in the d
 $$ G $$ does have the property, and if not, we gently pat them on the back and ask them to come back with another graph tomorrow.
 
 One may still worry that testing if one graph is a minor of another may be prohibitively slow,
-but in fact Robertson and Seymour also showed in 1995 that this could be done efficiently in cubic time! So now you are all ready to go to build your new SaaS Y Combinator startup that helps companies and governments all over the world test whether a graph NFT that they paid a lot of money for actually satisfies a property $$ \mathcal{P} $$, but wait a moment, your chief database engineer objects. She asks about where we can find the appropriate $$\mathcal{K}_\mathcal{P} $$ to load into the company's shiny new Hadoop clusters. You scratch your head for five minutes before realizing that this is an open problem (for most $$\mathcal{P} $$), and sadly come to the realization that you just pulled off the investor fraud of the century.
+but in fact Robertson and Seymour also showed in 1995 that this could be done efficiently in cubic time! So now you are all ready to go to build your new SaaS Y Combinator startup that helps companies and governments all over the world test whether a graph NFT that they paid a lot of money for actually satisfies a property $$ \mathcal{P} $$, but wait a moment, your chief database engineer objects. She asks about where we can find the appropriate $$\mathcal{K}\_\mathcal{P} $$ to load into the company's shiny new Hadoop clusters. You scratch your head for five minutes before realizing that this is an open problem (for most $$\mathcal{P} $$), and sadly come to the realization that you just pulled off the investor fraud of the century.
 
 To close off this post, I leave you with a final story about the remarkable implications of the graph minor theorem. Previously, it was unknown whether the problem of determining if a graph in 3D space can be embedded such that it is knotless is decidable (linkless embedding). However, the graph minor theorem not only showed that it was decidable, it gave a polynomial time algorithm for doing so!
 
 ## References
-- Reinhard Diestel. *Graph Theory*. Springer, 2018.
+
+- Reinhard Diestel. _Graph Theory_. Springer, 2018.
