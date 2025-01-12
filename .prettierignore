@@ -12,3 +12,5 @@ _sass/tabler-icons/*.scss
 _scripts/search.liquid.js
 _summaries/2024-08-05-reconciling-modern-machine-learning-practice-and-the-bias-variance-trade-off.markdown
 _posts/*.markdown
+assets/js/*.js
+assets/css/*.css
