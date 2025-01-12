@@ -12,12 +12,13 @@ novel ideas, but rather to push the limits of the current known architecture
 and see what results can be achieved.
 
 #### 1. Text-to-Text Transfer Transformer (T5)
+
 The **T**ext-**t**o-**T**ext **T**ransfer **T**ransformer (T5) model
 has an encoder-decoder architecture. The author takes the view
 that all problems can be viewed as a text-to-text problem, and
 therefore this architecture can generalize to all NLP tasks.
 
-{% include figure.liquid 
+{% include figure.liquid
     path="/assets/img/summaries/t5-text-to-text.webp"
     width="600px"
     class="z-depth-1"
@@ -34,11 +35,12 @@ produces one output token at a time, and then concatenates this output to the
 input and repeats the process until the end of sequence token is output.
 
 #### 2. Prefix LM
+
 While the best-performing T5 variant has an encoder-decoder architecture (which
 is the standard architecture T5 would refer to), the authors also experimented with
 and performed comparisons against the language model and prefix LM architectures.
 
-{% include figure.liquid 
+{% include figure.liquid
     path="/assets/img/summaries/t5-arch.webp"
     width="600px"
     class="z-depth-1"
@@ -61,16 +63,17 @@ can attend to every other token in the input.
 The following table shows the results of comparisons between the three architectures,
 with the encoder-decoder performing the best, and the language model the worst.
 
-{% include figure.liquid 
+{% include figure.liquid
     path="/assets/img/summaries/t5-comparison.webp"
     width="600px"
     class="z-depth-1"
 %}
 
 #### 3. Colossal Clean Crawled Corpus
+
 The Common Crawl is a dataset of text data scraped from the web, with around
 20TB of data extracted each month. However, most of the text scraped is not
-natural language, and is instead web boilerplate code, error messages, gibberish, etc. 
+natural language, and is instead web boilerplate code, error messages, gibberish, etc.
 
 The authors cleaned up the Common Crawl to obtain the **C**olossal **C**lean
 **C**rawled **C**orpus (C4), by using the following heuristics:
@@ -83,18 +86,20 @@ The authors cleaned up the Common Crawl to obtain the **C**olossal **C**lean
 - Discarding any pages with "lorem ipsum" text
 - Removing pages containing a curly bracket `{`, as it usually indicates code
 - Deduplicating the data by removing any three-sentence span that occurs
-in the dataset more than once, to just having it show up once
+  in the dataset more than once, to just having it show up once
 
 The T5 transformer was then trained on C4 for $$2^{19} = 524,288$$ steps with a max sequence length of 512,
 and a batch size of 128 sequences.
 
 ### Most Glaring Deficiency
+
 The method used to clean the C4 corpus feels somewhat arbitrary and perhaps still very much incomplete.
 Due to the importance of data in the performance of the model, it would have also been helpful to
 have trained on the Common Crawl as well to perform an ablation study on whether C4 resulted in better
 performance.
 
 ### Conclusions for Future Work
+
 The text-to-text approach for modeling language tasks is a promising avenue to
 generalize task-specific architectures, and could become a future default
 approach due to its simplicity and generalizability.

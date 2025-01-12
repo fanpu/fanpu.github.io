@@ -8,10 +8,11 @@ bib_id: 2304.03442v2
 ### ~~Three~~ Four Important Things
 
 #### 1. Smallville
+
 The paper aims to investigate whether LLM-powered (specifically ChatGPT)
 generative agents can behave in a believable human-like behavior in a sandboxed
-game that they call Smallville.  In this simulation, 25 agents are each given
-distinct personalities and backgrounds.  Two of them are given special
+game that they call Smallville. In this simulation, 25 agents are each given
+distinct personalities and backgrounds. Two of them are given special
 directives, which are initially private only to themselves:
 
 1. Isabella Rodriguez is tasked with organizing a Valentine's Day party
@@ -47,15 +48,16 @@ the Moreno family somewhat well — the husband Tom
 Moreno and the wife Jane Moreno.
 ```
 
-#### 2. Memory and Retrieval, 
+#### 2. Memory and Retrieval,
+
 Memory and retrieval is important to the believability of an agent's interaction, as they
 should be able to remember interactions and information from the past. All events pertaining
-to an agent is stored to the memory stream of the agent.  However, due to the
+to an agent is stored to the memory stream of the agent. However, due to the
 limited context window of ChatGPT, and the distracting nature of having too many irrelevant
 events, it is infeasible to simply input the entire memory stream as part of the prompt
 when determining how the agent should respond.
 
-{% include figure.liquid 
+{% include figure.liquid
     path="/assets/img/summaries/simulacra-memory-stream.webp"
     width="600px"
     class="z-depth-1"
@@ -63,7 +65,7 @@ when determining how the agent should respond.
 
 Instead, the authors use the following approach to retrieve salient memories, summarized in the figure below:
 
-{% include figure.liquid 
+{% include figure.liquid
     path="/assets/img/summaries/simulacra-retrieval.webp"
     width="600px"
     class="z-depth-1"
@@ -86,18 +88,20 @@ Rating: <fill in>
 
 The score is then given by the following:
 
-$$\text{score} =
-\alpha_{\text{recency}} \cdot \text{recency} + 
-\alpha_{\text{importance}} \cdot \text{importance} + 
+$$
+\text{score} =
+\alpha_{\text{recency}} \cdot \text{recency} +
+\alpha_{\text{importance}} \cdot \text{importance} +
 \alpha_{\text{relevance}} \cdot \text{relevance},
 $$
 
 where in the paper all scaling parameters $$\alpha$$ are set to 1.
 
 #### 3. Reflection
+
 For the agents to exhibit higher-level cognitive abilities and to synthesize their experiences,
 the authors program agents to go into a reflection state once the importance
-scores of the latest events cross a certain threshold (150 in the paper). 
+scores of the latest events cross a certain threshold (150 in the paper).
 
 The reflection state results in a LLM call like the following:
 
@@ -116,7 +120,8 @@ the above statements? (example format: insight
 The new insight is then added to the memory stream of the agent.
 
 #### 4. Planning and Reacting
-The authors also add a planning and reacting component to the agents.  The first
+
+The authors also add a planning and reacting component to the agents. The first
 is necessary so that agents don't repeat their actions over the course of a day
 (i.e have lunch 3 times a day), and the second is necessary to exhibit
 believable social behavior.
@@ -164,18 +169,20 @@ what would be an appropriate reaction?
 ```
 
 ### Most Glaring Deficiency
+
 It would be interesting to study the behavior of agents when
 they have conflicting goals, as ensuring that pathological behavior
 does not result is a key goal of [cooperative artificial intelligence](http://www.cs.cmu.edu/~conitzer/FOCALAAAI23.pdf).
-The sycophantic nature of language models has been well-documented, and therefore 
+The sycophantic nature of language models has been well-documented, and therefore
 understanding how conflict resolution would be undertaken will be illuminating.
 
 ### Conclusions for Future Work
+
 This paper demonstrates the presence of emergent social behavior of generative
 agents based on LLMs, and is a convincing demonstration that this could be a
 viable technology for applications such as games and tools for interpersonal
 communication.
 
-It also shows how usage of the reasoning capabilities of LLMs can be used to 
+It also shows how usage of the reasoning capabilities of LLMs can be used to
 solve some problems that we currently don't have good algorithmic approaches
 for, such as determining the importance of events during memory retrieval.

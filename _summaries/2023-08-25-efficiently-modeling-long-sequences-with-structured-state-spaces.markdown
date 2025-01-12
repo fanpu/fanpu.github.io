@@ -9,6 +9,7 @@ published: true
 ### Three Important Things
 
 #### 1. The Problem with Discrete-time State Sequence Models (SSMs)
+
 The paper investigates improving upon the state-of-the-art performance on
 sequential tasks that involve very long sequences. The current state-of-the-art
 is based on Transformers models, but these suffer from severe computational
@@ -20,12 +21,12 @@ One possible approach to doing this is known as the State Space Model (SSM). Thi
 1. There are four matrices to be learned: $$\bA, \bB, \bC, \bD$$.
 2. Let $$u(t)$$ be a 1D input signal at time $$t$$.
 3. We model the output signal using the following equation:
-$$
-    \begin{align}
-        x'(t) &= \bA x(t) + \bB u(t) \\
-        y(t)  &= \bC x(t) + \bD u(t) \\
-    \end{align}
-$$
+   $$
+       \begin{align}
+           x'(t) &= \bA x(t) + \bB u(t) \\
+           y(t)  &= \bC x(t) + \bD u(t) \\
+       \end{align}
+   $$
 
 Note that $$x'(t)$$ is written as such to denote it as the new value of $$x$$,
 which is constantly being updated every time step. You can think of $$x(t)$$ as
@@ -54,7 +55,7 @@ $$
 However, this still suffers from the limitation that the recurrent updates are
 sequentially applied, resulting in runtime as long as the sequence length which is
 not parallelizable.
- 
+
 Instead, the authors show that when you unroll the recurrent steps,
 notice you get something like the following:
 
@@ -92,8 +93,8 @@ $$
 
 If we could compute this $$\oK$$ efficiently, then we are done, but alas this is not the case.
 
-
 #### 2. HiPPO Matrix
+
 The HiPPO matrix was introduced in their prior paper [HiPPO: Recurrent Memory
 with Optimal Polynomial Projections](https://arxiv.org/abs/2008.07669), but is
 worth mentioning here as well due to its importance in subsequent analysis.
@@ -112,9 +113,10 @@ $$
 $$
 
 #### 3. Structured State Space sequence model (S4)
+
 To compute $$\oK$$ efficiently, the authors introduced the Structured State Space sequence model (S4),
 which is the main contribution of the paper.
-It is also worth mentioning that they 
+It is also worth mentioning that they
 
 The main bottleneck of computing the kernel $$\oK$$ is the need to iteratively compute $$\oA^k$$.
 One possible might be to consider the conjugation of $$\bA$$ by some matrix
@@ -139,7 +141,7 @@ low-rank matrix. A matrix is [normal](https://en.wikipedia.org/wiki/Normal_matri
 
 $$\bA^* \bA = \bA \bA^*. $$
 
-{% include figure.liquid 
+{% include figure.liquid
     path="/assets/img/summaries/s4.webp"
     width="600px"
     class="z-depth-1"
@@ -157,6 +159,7 @@ They then showed that this setup results in state-of-the-art performance on many
 tasks with long-range dependencies, outperforming Transformers and its variants.
 
 ### Most Glaring Deficiency
+
 In many ways, the S4 model feels reminiscent of a RNN, except it uses a HiPPO
 matrix for updating its hidden state, which gives rise to opportunities for
 speedups which is the main focus of this paper.
@@ -172,6 +175,7 @@ HiPPO paper, but it would make the paper even better if they included some
 hypotheses on why it works well.
 
 ### Conclusions for Future Work
+
 This paper showed that state space sequence models can be a viable technique for
 capturing long-range dependencies in sequential data, by employing a variety of
 tricks. This technique could inspire future applications that require such

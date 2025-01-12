@@ -8,21 +8,22 @@ bib_id: 2008.03790v1
 ### Three Important Things
 
 #### 1. Start-end Regression Model
+
 The authors introduce two types of architectures
 for wake word (WW) detection. The first is the
-start-end regression model, where the input signal 
+start-end regression model, where the input signal
 is passed through several stacked convolution and pooling layers,
 before forking off into two different outputs, as illustrated
 in the diagram below.
 
-{% include figure.liquid 
+{% include figure.liquid
     path="/assets/img/summaries/ww-start-end-regression.webp"
     width="600px"
     class="z-depth-1"
 %}
 
 The first set of outputs is the probability that a wake word exists,
-and the second set of outputs is the start and end offsets 
+and the second set of outputs is the start and end offsets
 of the wake word, normalized such that $$[0,1]$$ represents
 the window of the input.
 
@@ -40,7 +41,7 @@ it detects three things:
 2. End of the WW
 3. Main detector of the WW (centrally aligned)
 
-{% include figure.liquid 
+{% include figure.liquid
     path="/assets/img/summaries/ww-multi-aligned.webp"
     width="600px"
     class="z-depth-1"
@@ -53,15 +54,18 @@ of where the start and end of the wake word is detected.
 This architecture was found to perform the best in WW detection.
 
 #### 3. Pseudo-Ground Truth Labels for Training and Evaluation
+
 Due to the difficulty of annotating WW endpoint labels, the authors used the
 then state-of-the-art acoustic model + Hidden Markov Model keyword spotter
 (AM+HMM KWS) to label the data as pseudo-ground truth labels.
 
 ### Most Glaring Deficiency
+
 The labels used are not ground truth labels but rather pseudo-ground truth
 labels, which may affect the reliability of the results obtained.
 
 ### Conclusions for Future Work
+
 Instead of just detecting for a particular feature in inputs,
 we could decompose it into detecting different parts of the feature.
 In the case of sequential data, we could break it up into start,
