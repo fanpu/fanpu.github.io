@@ -1,14 +1,14 @@
 <table class="table table-hover table-fixed">
-    <thead>
-        <tr>
-            <th>Course Name</th>
-        </tr>
-    </thead>
+  <thead>
+    <tr>
+      <th>Course Name</th>
+    </tr>
+  </thead>
 
   <tbody>
-{% for course in include.courses %}
-  {% capture course-item %}{% include cmu_course_item.liquid course=course %}{% endcapture %}
-  {{ course-item }}
-{% endfor %}
+    {% for course in include.courses %}
+      {% capture course-item %}{% include cmu_course_item.liquid course=course %}{% endcapture %}
+      {{ course-item }}
+    {% endfor %}
   </tbody>
 </table>

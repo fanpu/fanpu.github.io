@@ -1,1 +1,14 @@
-<div class="embed-container"><iframe {% if include.playlist_id %} src="https://www.youtube.com/embed/videoseries?list={{ include.playlist_id }}" {% else %} src="https://www.youtube.com/embed/{{ include.id }}" {% endif %} width="700" height="480" frameborder="0" allowfullscreen="true"> </iframe> </div>
+<div class="embed-container">
+  <iframe
+    {% if include.playlist_id %}
+      src="https://www.youtube.com/embed/videoseries?list={{ include.playlist_id }}"
+    {% else %}
+      src="https://www.youtube.com/embed/{{ include.id }}"
+    {% endif %}
+    width="700"
+    height="480"
+    frameborder="0"
+    allowfullscreen="true"
+  >
+  </iframe>
+</div>

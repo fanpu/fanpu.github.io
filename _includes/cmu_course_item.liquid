@@ -1,53 +1,61 @@
 <tr>
-    <td>
-        <b>
-            {% if course.url %}
-                <a href="{{ course.url }}">{{ course.name }}</a>
-            {% else %}
-                {{ course.name }}
-            {% endif %}
-        </b>
-             ({{ course.semester }})
-        <br>
-        {% if course.instructors %}
-            {% if course.instructors.size > 1 %}
-                Instructors: 
-            {% else %}
-                Instructor: 
-            {% endif %}
-            {% for instructor in course.instructors %}
-                <b><a href="{{ instructor.website }}">{{ instructor.name }}</a></b>
-                {% if forloop.last != true %}, {% endif %}
-            {% endfor %}
-            <br>
-        {% endif %}
-        {% if course.prerequisites %}
-        Recommended Pre-requisites:
-            {% for prereq-course in course.prerequisites %}
-                {{ prereq-course }}
-                {% if forloop.last != true %}, {% endif %}
-            {% endfor %}
-            <br>
-        {% endif %}
-        {% for tag in course.tags %}
-            <span class="badge rounded-pill {{ tag }}"> </span>
-        {% endfor %}
-        <br>
-        <br>
-        {% if course.youtube_playlist_id %}
-            <div class="embed-container">
-                <iframe {% if course.youtube_playlist_id %}
-                    src="https://www.youtube.com/embed/videoseries?list={{ course.youtube_playlist_id }}"{% endif %} width="700" height="480"
-                    frameborder="0" allowfullscreen="true">
-                </iframe>
-            </div>
-        {% elsif course.panopto_link %}
-            <a href="{{ course.panopto_link }}">Public Panopto Lecture Videos Link</a>
-        {% elsif course.youtube_channel_link %}
-            <a href="{{ course.youtube_channel_link }}">Link to Youtube Channel</a>
-        {% endif %}
-        {{ course.video_note }}
-        <br>
-        {{ course.description }}
-    </td>
+  <td>
+    <b>
+      {% if course.url %}
+        <a href="{{ course.url }}">{{ course.name }}</a>
+      {% else %}
+        {{ course.name }}
+      {% endif %}
+    </b>
+    ({{ course.semester }})
+    <br>
+    {% if course.instructors %}
+      {% if course.instructors.size > 1 %}
+        Instructors:
+      {% else %}
+        Instructor:
+      {% endif %}
+      {% for instructor in course.instructors %}
+        <b
+          ><a href="{{ instructor.website }}">{{ instructor.name }}</a></b
+        >
+        {% if forloop.last != true %}, {% endif %}
+      {% endfor %}
+      <br>
+    {% endif %}
+    {% if course.prerequisites %}
+      Recommended Pre-requisites:
+      {% for prereq-course in course.prerequisites %}
+        {{ prereq-course }}
+        {% if forloop.last != true %}, {% endif %}
+      {% endfor %}
+      <br>
+    {% endif %}
+    {% for tag in course.tags %}
+      <span class="badge rounded-pill {{ tag }}"> </span>
+    {% endfor %}
+    <br>
+    <br>
+    {% if course.youtube_playlist_id %}
+      <div class="embed-container">
+        <iframe
+          {% if course.youtube_playlist_id %}
+            src="https://www.youtube.com/embed/videoseries?list={{ course.youtube_playlist_id }}"
+          {% endif %}
+          width="700"
+          height="480"
+          frameborder="0"
+          allowfullscreen="true"
+        >
+        </iframe>
+      </div>
+    {% elsif course.panopto_link %}
+      <a href="{{ course.panopto_link }}">Public Panopto Lecture Videos Link</a>
+    {% elsif course.youtube_channel_link %}
+      <a href="{{ course.youtube_channel_link }}">Link to Youtube Channel</a>
+    {% endif %}
+    {{ course.video_note }}
+    <br>
+    {{ course.description }}
+  </td>
 </tr>
