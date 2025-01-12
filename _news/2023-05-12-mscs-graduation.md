@@ -1,8 +1,8 @@
 ---
 layout: post
 title: >
-    I earned my 
-    Master of Science in Computer Science degree from Carnegie Mellon University!
+  I earned my 
+  Master of Science in Computer Science degree from Carnegie Mellon University!
 date: 2023-05-12
 inline: false
 giscus_comments: true

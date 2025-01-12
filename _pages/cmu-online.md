@@ -9,6 +9,7 @@ toc:
   sidebar: left
 giscus_comments: true
 ---
+
 Education and knowledge should be accessible to anyone who is willing to learn.
 There are many great course offerings from the top-ranked Computer Science
 program in Carnegie Mellon University whose lectures are available on the public
@@ -53,13 +54,14 @@ take. In particular, courses from the following departments in the School of
 Computer Science are not present: Computational Biology, Human-Computer
 Interaction, Institute for Software Research.
 
-*The contents on this page is personally curated and does not reflects the views of CMU or SCS, and is also not endorsed by either parties.*
+_The contents on this page is personally curated and does not reflects the views of CMU or SCS, and is also not endorsed by either parties._
 
 ---
 
 ### Machine Learning
+
 The machine learning courses in this section generally assumes working knowledge
-of probability, statistics, calculus, and linear algebra. 
+of probability, statistics, calculus, and linear algebra.
 10-701 Introduction to Machine Learning or 10-715 Advanced Introduction to
 Machine Learning are the recommended pre-requisites
 for most of these courses if you do not have taken any prior machine learning classes.
@@ -70,6 +72,7 @@ Both of these introductory courses are also available in the table below.
 ---
 
 ### Computer Systems
+
 15-213 Introduction to Computer Systems is a required course for all CS majors in CMU,
 and is the pre-requisite for all subsequent systems classes. It is a good place to start
 if you are new to computer systems. In most other universities, this class is usually
@@ -80,6 +83,7 @@ referred to as an operating systems class.
 ---
 
 ### Computer Science Theory
+
 15-251 Great Ideas in Theoretical Computer Science is the introductory CS theory
 class taken by CS majors in their first year, and would be a good place to start
 if you are new to CS theory. All subsequent theory classes assumes knowledge from
@@ -90,13 +94,14 @@ if you are new to CS theory. All subsequent theory classes assumes knowledge fro
 ---
 
 ### Programming Language Theory
+
 Unfortunately, there are not a lot of publicly available programming language
 (PL) theory lectures. However, [Robert Harper](http://www.cs.cmu.edu/~rwh/) and
 [Jan Hoffmann](https://www.cs.cmu.edu/~janh/), staples of the PL scene in CMU,
 both frequently give lectures for the [Oregon Programming Languages Summer
 School](https://www.cs.uoregon.edu/research/summerschool/) that are much smaller
 in scope than what is covered in a comparable full-semester course in CMU, but
-still goes through many key ideas nonetheless.  Therefore, I have also decided
+still goes through many key ideas nonetheless. Therefore, I have also decided
 to include these resources than not have anything, which would be a shame as
 CMU is a powerhouse in PL after all.
 
@@ -114,15 +119,19 @@ available lectures.
 ---
 
 ### Computer Graphics
+
 {% include cmu_course_table.liquid courses=site.data.cmu_online.graphics_courses %}
 
 ---
 
 ### Robotics
+
 {% include cmu_course_table.liquid courses=site.data.cmu_online.robotics_courses %}
 
 ---
+
 ### Mathematics and Statistics
+
 In general, the math department does not record any of their lectures, so
 this portion is pretty dry. However, it was worth having it just
 to include [Po-Shen Loh](https://www.poshenloh.com/)'s lectures.

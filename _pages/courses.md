@@ -17,9 +17,9 @@ COVID-19 pandemic. Do also check out the [CMU Online page]( {% link
 _pages/cmu-online.md %} ) for a curation of courses whose lectures
 and course content are publicly available.
 
-Course background: I graduated with a [B.S in Computer Science](http://coursecatalog.web.cmu.edu/schools-colleges/schoolofcomputerscience/undergraduatecomputerscience/#bscurriculumtextcontainer) (2018-2022) with two concentrations: 
+Course background: I graduated with a [B.S in Computer Science](http://coursecatalog.web.cmu.edu/schools-colleges/schoolofcomputerscience/undergraduatecomputerscience/#bscurriculumtextcontainer) (2018-2022) with two concentrations:
 [Algorithms and Complexity](http://coursecatalog.web.cmu.edu/schools-colleges/schoolofcomputerscience/scsconcentrations/#algorithmsandcomplexitytext) and [Computer Systems](http://coursecatalog.web.cmu.edu/schools-colleges/schoolofcomputerscience/scsconcentrations/#computersystemstextcontainer),
-and a minor in [Mathematical Sciences](http://coursecatalog.web.cmu.edu/schools-colleges/melloncollegeofscience/departmentofmathematicalsciences/#minorstext). 
+and a minor in [Mathematical Sciences](http://coursecatalog.web.cmu.edu/schools-colleges/melloncollegeofscience/departmentofmathematicalsciences/#minorstext).
 I then did a [M.S in Computer Science](https://csd.cmu.edu/academics/masters/ms-in-computer-science) (2022-2023),
 with a mostly ML, theory, and stats-heavy courseload.
 
@@ -41,10 +41,10 @@ Other similar CMU course review pages, in randomized order each time this site i
 
 Do email me if you would also like your course review page to also be included here.
 
-*This page was recently updated on 07/20/2023 as I work on finishing my course reviews for the Spring 2023 semester.*
+_This page was recently updated on 07/20/2023 as I work on finishing my course reviews for the Spring 2023 semester._
 
-~~*This page was recently updated on 11/9/2022 to help students decide the classes
-they may want to take ahead of course registration week.*~~
+~~_This page was recently updated on 11/9/2022 to help students decide the classes
+they may want to take ahead of course registration week._~~
 
 ## Categories
 
@@ -52,7 +52,7 @@ For ease of navigation, I've also categorized the classes that I've taken into
 the areas that they fall under, so you can just access the ones that
 you might be interested in directly.
 
-### Computer Science Theory & Algorithms                                          
+### Computer Science Theory & Algorithms
 
 | Computer Science Theory & Algorithms                                          |
 | ----------------------------------------------------------------------------- |
@@ -67,6 +67,7 @@ you might be interested in directly.
 | [15-354 Computation and Discrete Math](#course15354)                          |
 | [15-210 Parallel and Sequential Data Structures and Algorithms](#course15210) |
 | [15-251 Great Ideas in Theoretical Computer Science](#course15251)            |
+
 {: .table .table-bordered .table-hover .table-sm }
 
 <br>
@@ -85,6 +86,7 @@ you might be interested in directly.
 | [10-701 Introduction to Machine Learning](#course10701)                     |
 | [15-784 Foundations of Cooperative AI](#course15784)                        |
 | [16-385 Computer Vision](#course16385)                                      |
+
 {: .table .table-bordered .table-hover .table-sm }
 
 <br>
@@ -103,6 +105,7 @@ you might be interested in directly.
 | [15-440 Distributed Systems](#course15440)                                |
 | [15-330 Introduction to Computer Security](#course15330)                  |
 | [15-213 Introduction to Computer Systems](#course15213)                   |
+
 {: .table .table-bordered .table-hover .table-sm }
 
 <br>
@@ -116,6 +119,7 @@ you might be interested in directly.
 | [15-317 Constructive Logic](#course15317)                             |
 | [15-150 Principles of Functional Programming](#course15150)           |
 | [98-317 StuCo: Type Theory (Hype for Types)](#course98317)            |
+
 {: .table .table-bordered .table-hover .table-sm }
 
 <br>
@@ -136,6 +140,7 @@ you might be interested in directly.
 | [21-122 Integration and Approximation](#course21122)                 |
 | [21-120 Differential and Integral Calculus](#course21120)            |
 | [15-151 Mathematical Foundations for Computer Science](#course15151) |
+
 {: .table .table-bordered .table-hover .table-sm }
 
 <br>
@@ -152,6 +157,7 @@ you might be interested in directly.
 | [15-604 Immigration Course](#course15604)                          |
 | [07-128 First Year Immigration Course](#course07128)               |
 | [07-131 Great Practical Ideas in Computer Science](#course07131)   |
+
 {: .table .table-bordered .table-hover .table-sm }
 
 <br>
@@ -172,6 +178,7 @@ you might be interested in directly.
 | [98-242 StuCo: Introduction to Esoteric Programming Languages](#course98242)          |
 | [98-212 StuCo: Competitive Computer Security](#course98212)                           |
 | [98-349 StuCo: Design and Analysis of Logic Puzzle Games](#course98349)               |
+
 {: .table .table-bordered .table-hover .table-sm }
 
 ---
@@ -194,51 +201,51 @@ you might be interested in directly.
   content covered, I'll try to summarize them here.
 
   1. Statistical decision theory: this was mostly a quick recap,
-  since it was covered in the pre-requisite class 36-705. 
-  If you did not take 36-705, it'll be helpful to learn/review
-  Bayesian estimators, and Bayesian and minimax risk as it'll
-  be used throughout the course.
+     since it was covered in the pre-requisite class 36-705.
+     If you did not take 36-705, it'll be helpful to learn/review
+     Bayesian estimators, and Bayesian and minimax risk as it'll
+     be used throughout the course.
   2. Nonparametric Bayesian methods: the Dirichlet process for CDF estimation,
-  Dirichlet process mixture for density estimation, 
-  and the Gaussian process for estimating a regression function
+     Dirichlet process mixture for density estimation,
+     and the Gaussian process for estimating a regression function
   3. Nonparametric Density Estimation: histograms, kernel density estimators,
-  series estimators. A key result is how the kernel estimator is minimax-optimal
-  over many classes of loss functions and function spaces.
+     series estimators. A key result is how the kernel estimator is minimax-optimal
+     over many classes of loss functions and function spaces.
   4. Nonparametric Regression: partition estimators, spline estimators,
-  basis/dictionary series estimators, k-NN regression,
-  smoothing kernel regression estimators, Reproducing Kernel Hilbert Space (RKHS)/Mercer kernel regression estimators, wavelets
+     basis/dictionary series estimators, k-NN regression,
+     smoothing kernel regression estimators, Reproducing Kernel Hilbert Space (RKHS)/Mercer kernel regression estimators, wavelets
   5. Nonparametric Classification: contrasting
-  classification error between parametric vs nonparametric models, 
-  minimax rates of convergence for classification vs regression
-  for different function classes of distributions
+     classification error between parametric vs nonparametric models,
+     minimax rates of convergence for classification vs regression
+     for different function classes of distributions
   6. Nonparametric Greedy & Boosting: Orthogonal Greedy Algorithm,
-  Greedy Coordinate Descent (i.e boosting), Adaboost,
-  functional gradient descent
+     Greedy Coordinate Descent (i.e boosting), Adaboost,
+     functional gradient descent
   7. Optimal Transport: Monge assignments and the Kantorovich relaxation to
-  motivate Wasserstein distance, the Kantorovich dual, integral probability
-  metrics, applications to statistical estimation and Wasserstein GAN
+     motivate Wasserstein distance, the Kantorovich dual, integral probability
+     metrics, applications to statistical estimation and Wasserstein GAN
   8. Deep Density Estimation: variational auto-encoders, normalizing flows, autoregressive flows, destructive distribution learning
   9. Deep Representation Learning and Kernels: RKHS kernel regression, RKHS in
-  relation to representation learning, random features, randomly wired DNNs and
-  its relation to Gaussian Processes
+     relation to representation learning, random features, randomly wired DNNs and
+     its relation to Gaussian Processes
   10. Dimensionality Reduction & Manifolds: PCA, multi-dimensional scaling
-  (MDS), kernel PCA, local linear embeddings (LLE), Laplacian eigenmaps,
-  diffusion maps, Johnson-Lindenstrauss Lemma and random projections
+      (MDS), kernel PCA, local linear embeddings (LLE), Laplacian eigenmaps,
+      diffusion maps, Johnson-Lindenstrauss Lemma and random projections
   11. Clustering: k-means as vector quantization, mixture models and local non-identifiability,
-  level set clustering, hierarchical clustering, spectral clustering
-  12. Learning & Games: online learning, Follow the Leader (FTL), Follow the Regularized Leader (FTRL), 
-  regret bounds for FTRL on convex and non-convex action domains and loss functions, two-player games and Nash equilibrium
+      level set clustering, hierarchical clustering, spectral clustering
+  12. Learning & Games: online learning, Follow the Leader (FTL), Follow the Regularized Leader (FTRL),
+      regret bounds for FTRL on convex and non-convex action domains and loss functions, two-player games and Nash equilibrium
   13. Causality: adjusting for confounding, causal graphs and structural equations
   14. Random Forests and Kernels: Bagging, layered nearest neighbor (LNN), kernel-based view of random forests
 
-  Pradeep is a great lecturer and he takes great effort to answer every student's questions in detail. 
+  Pradeep is a great lecturer and he takes great effort to answer every student's questions in detail.
   However, while I often find myself being able to follow the current micro-level derivations and explanations,
   I often feel somewhat lost about how it fits in with the bigger picture and its relation with other techniques,
-  possibly due to a lack of prior exposure to many of these topics. 
+  possibly due to a lack of prior exposure to many of these topics.
 
   There is significant variance in the difficulty of homework problems in a
   single homework, which I thought made the scoring of the homework problems
-  somewhat nonsensical as the points were more or less evenly distributed.  I
+  somewhat nonsensical as the points were more or less evenly distributed. I
   recall there were a couple of problems that demanded a fair bit of thought and
   insight but had relatively short solutions, and therefore only netted a
   moderate amount of points compared to the effort required.
@@ -249,15 +256,15 @@ you might be interested in directly.
 
   One thing that happened this semester (and also apparently for prior semesters
   according to some people that I spoke to) was the steep drop in attendance as the semester
-  went on.  During the first lecture, there were barely enough seats for everyone
+  went on. During the first lecture, there were barely enough seats for everyone
   and some people had to stand, but by the mid-way point the average attendance was
   just around 5 people. However, when it came to the midterms, the classroom filled up again
   and I even heard the instructor for the previous class remark how she didn't
-  realize we had so many students in this class as she was leaving. 
-  
+  realize we had so many students in this class as she was leaving.
+
   This was probably not such a bad thing for the people who did come to lectures, since
   it meant more personalized attention from the instructor, more opportunities
-  to ask your own questions, and a better view of the board. 
+  to ask your own questions, and a better view of the board.
 
   I initially thought this phenomenon was because the other students (who were
   mostly MLD Ph.Ds and MSML/MSDS students) were already very knowledgeable and didn't see the need to
@@ -292,7 +299,7 @@ you might be interested in directly.
   for solving some of the problems that I have never seen or had to use before
   in any of my previous CS or math classes, but which may (?) be standard fare in
   statistical literature, that may have contributed to my difficulty.
-  Fortunately, I still managed to solve *almost* all the homework problems.
+  Fortunately, I still managed to solve _almost_ all the homework problems.
 
   Each student also had to scribe a lecture, which is then posted on Canvas as
   reference for all other students. There is also a project on deeply understanding a
@@ -305,7 +312,7 @@ you might be interested in directly.
   covering and packing, Gaussian and Rademacher complexity, chaining and
   Dudley's entropy integral bound, comparison inequalities (Slepian and
   Sudakov-Fernique) and lower bounds, high-dimensional and sparse PCA,
-  Davis-Kahan theorem, LASSO in relation to prediction/support recovery/debiasing, 
+  Davis-Kahan theorem, LASSO in relation to prediction/support recovery/debiasing,
   covariance matrix estimation, non-parametric least squares, minimax lower
   bounds (Le Cam's method and Fano's method), Gaussian sequence model minimax rates.
 
@@ -319,6 +326,7 @@ you might be interested in directly.
   I initially did not notice this course, as I thought ABCDE meant just the basics.
   However, what the course is actually about is a journey through various
   methods in statistical machine learning, viewed from the following lens:
+
   - **A**lgorithm design principles,
   - **B**ias-variance trade-off,
   - **C**omputational and memory considerations, **C**alibration, **C**onformal prediction,
@@ -327,10 +335,10 @@ you might be interested in directly.
 
   Aaditya is really clear, and he will re-iterate the important
   points many times throughout the class, sometimes too many times in my opinion,
-  which was fine but it would also be good to learn more content instead.  I
+  which was fine but it would also be good to learn more content instead. I
   also heard from some other students that he is one of the best lecturers in
   the stats department.
-  
+
   Most of the class is on non-parametric methods, covering
   techniques like nearest neighbor methods, distribution-free predictive inference,
   calibration, decision trees, bagging, random forests, stacking, boosting,
@@ -342,10 +350,10 @@ you might be interested in directly.
   with no data science and practical machine learning background. This was
   especially from the many discussions on which techniques were suitable for
   which contexts, according to the ABCDE methodology.
-  
+
   A lot of the topics in this course were familiar to other students who came
   from a traditional stats background, and I feel like you might get bored in
-  this class if you already have a pretty solid stats foundation. Otherwise, 
+  this class if you already have a pretty solid stats foundation. Otherwise,
   there is a lot you'll learn.
 
   The midterms and homework were both relatively chill. Homework included both
@@ -367,7 +375,7 @@ you might be interested in directly.
   initially in the more constructive concepts, but they soon began to differ
   greatly due to the heavy use of non-constructive methods
   in the proofs of set theory.
-  
+
   The most interesting topic for me was the development of trees and Baire
   spaces, which led to the study of games and determinacy,
   with the consequence that sets which are determined have certain nice
@@ -387,7 +395,7 @@ you might be interested in directly.
 - 17-604 &nbsp; **Communications for Software Leaders II**, [Dominick (Nick) Frollini](https://www.linkedin.com/in/frollini/)
   {: .course-item #course17604 }
 
-  The highlight of this follow-up class to 
+  The highlight of this follow-up class to
   [17-603 Communication for Software Leaders I](#course17603) are the mock
   negotiation in-class exercises that we had to prepare and role-play for.
   Prior to each mock negotiation, we were provided with case
@@ -443,16 +451,16 @@ I also continued staying in an advisory role for
 a terrific job. This being my last semester, I will dearly miss the team when I
 graduate.
 
-I did booth with [SSA](https://cmussa.org/) again this year, and contributed mainly 
+I did booth with [SSA](https://cmussa.org/) again this year, and contributed mainly
 to the mechanical team and design teams. We built a Blitz booth themed after Singapore's
-[Gardens by the Bay](https://www.gardensbythebay.com.sg/) and came in runner's up, after 
+[Gardens by the Bay](https://www.gardensbythebay.com.sg/) and came in runner's up, after
 a well-deserved win by [JSA](https://www.cmujsa.com/).
 
 Academically, this semester was rather risky for me because I did not have the necessary
 prerequisites for over half of my classes. I was missing
 [36-705 Intermediate Statistics](https://www.stat.cmu.edu/~larry/=stat705/)
-for [10-716](#course10716), [36-708](#course36708), [36-709](#course36709), 
-and missing [21-720 Measure Theory and Integration](https://www.math.cmu.edu/~gautam/sj/teaching/2022-23/720-measure/) for [21-640]. 
+for [10-716](#course10716), [36-708](#course36708), [36-709](#course36709),
+and missing [21-720 Measure Theory and Integration](https://www.math.cmu.edu/~gautam/sj/teaching/2022-23/720-measure/) for [21-640].
 It was also a difficult and tiring process to get into [36-709](#course36709) as
 the class was a required stats Ph.D. course that was generally very full, and
 they had no reservations for CS majors. I ended up reading through some of the
@@ -586,7 +594,7 @@ time.
   than the papers that those techniques were based on.
 
   There are usually 2-4 papers that are compulsory readings assigned to be read
-  before every lecture.  Unfortunately I was a bad student and did not read them
+  before every lecture. Unfortunately I was a bad student and did not read them
   beforehand, and so after the middle of the semester once the content went
   beyond any standard textbooks, I found it pretty hard to focus and understand
   what is going on in the class, and got very little out of lecture. Eventually
@@ -655,6 +663,7 @@ significant course projects on your schedule to avoid such a situation.
 ---
 
 ### Summer 2022
+
 I decided to do another return internship with [Jane
 Street](https://www.janestreet.com/), as I had a great experience with them the
 previous year. Highlights of the internship included a two-week exchange at
@@ -663,7 +672,7 @@ who are now either studying or working in the UK.
 
 However, in hindsight I feel that it would have been better to diversify my
 internship experiences and try interning at a significantly different company
-(such as a ML-focused company).  This is because internships are a relatively
+(such as a ML-focused company). This is because internships are a relatively
 low-cost 3-month investment for you to figure out what your interests are and to
 learn about the problems faced by different industries. Since the internship
 structure does not vary significantly between yeras, I ended up
@@ -829,8 +838,8 @@ on the grounds of increasing my early career exposure to different types of comp
   and duet performances reversed. The class was very enjoyable (though somewhat
   slow-paced at times) and the workload is low. You get to perform skits like
   monologues, improv, and duets in front of the class, as well as watch your
-  fellow classmates perform and give feedback. 
-  
+  fellow classmates perform and give feedback.
+
   The class made me acutely more aware of things like body language, stage
   presence, and voice projection. It gave me the observational lens required to
   better critique plays and acting by others, and increased self-awareness of
@@ -851,19 +860,19 @@ things we did together were truly memorable.
 
 I worked on Spring Carnival [booth](https://www.springcarnival.org/booth.shtml)
 with [SSA](https://cmussa.org/), and we built a blitz booth with a Changi
-Airport theme.  This was the first time booth has been held since the start of
+Airport theme. This was the first time booth has been held since the start of
 the pandemic in 2020, and we lost a lot of technical know-how and tribal
 knowledge about booth building from our seniors who also used to work on booth,
 but have graduated since. I mainly worked on the mechanical team, doing tasks
 like cutting wood, screwing frames together, and construction of the booth.
 It was a really fun experience and I managed to get to know many of my juniors
-in SSA much better. To put the cherry on top, our booth came in first place in our 
+in SSA much better. To put the cherry on top, our booth came in first place in our
 Blitz category!
 
 On the academic side of things, I tried to make it more manageable by
 watching the lectures for 10-725 and 16-385 asynchronously, which helped to
 reduce the in-person fatigue levels.
-Well actually, I was forced to watch it asynchronously as otherwise I had 
+Well actually, I was forced to watch it asynchronously as otherwise I had
 no time to eat lunch at all, having back-to-back classes from 10am till 4.30pm daily.
 
 However, there were still several pretty crazy weeks, especially when midterms
@@ -1002,6 +1011,7 @@ Units: 75
 ---
 
 ### Summer 2021
+
 I spent my summer as a Linux engineer intern in [Jane Street](https://www.janestreet.com/)
 to work on exciting systems-level problems, and had a lot of fun exploring NYC
 with other interns. I learned the following summer that the VM manager that I wrote
@@ -1285,6 +1295,7 @@ I dropped 15-312 Foundations of Programming Languages in the middle of the semes
 ---
 
 ### Summer 2020
+
 Due to the COVID-19 pandemic, I ended up doing my internship with [The Company
 Formerly Called Facebook](https://about.meta.com/) on the [Tupperware
 Scheduler
@@ -1475,7 +1486,7 @@ was taught by a good professor.
 ### Summer 2019
 
 I spent a wonderful summer interning at [Asana](https://asana.com/) in San Francisco as a Software
-Engineering intern on the Infrastructure Management Team.  My mentor and I
+Engineering intern on the Infrastructure Management Team. My mentor and I
 became great friends, and we still regularly keep in touch many years on.
 
 I ended up visiting many of the great national parks in California on weekend
@@ -1485,6 +1496,7 @@ Tahoe](https://visitlaketahoe.com/), [Mt. Lassen](https://www.nps.gov/lavo/index
 [Muir Woods](https://www.nps.gov/muwo/index.htm). It was a fun time!
 
 ---
+
 ### Spring 2019
 
 {: .first-course-item #course15251 }
