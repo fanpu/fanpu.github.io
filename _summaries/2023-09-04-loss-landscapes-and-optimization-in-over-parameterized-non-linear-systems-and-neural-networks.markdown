@@ -14,7 +14,7 @@ less than the number of (independent) constraints imposed on the network, and th
 unable to achieve 0 loss, defined as the mean-squared error on the given training data.
 
 On the other hand, over-parameterized models have more parameters than constraints,
-and can therefore achieve 0 training loss. 
+and can therefore achieve 0 training loss.
 
 Empirically, it has been observed that even though the optimization problem in
 over-parameterized models is highly non-convex, it still almost always manage to
@@ -29,14 +29,14 @@ and does not provide us with the machinery to answer this question:
 > "Convexity is not the right framework for analysis of over-parameterized systems, even locally."
 
 Instead, they introduce the PL$$^*$$ condition which is
-a variant of the 
+a variant of the
 Polyak-Łojasiewicz condition, and show that networks that
 satisfy the PL$$^*$$ condition can converge to a global minimum.
 
 First, let's look at the fundamental differences in the loss landscape of under-parameterized
 versus over-parameterized models:
 
-{% include figure.liquid 
+{% include figure.liquid
     path="/assets/img/summaries/loss-landscape-models.webp"
     width="600px"
     class="z-depth-1"
@@ -57,18 +57,18 @@ this shows that we cannot use it for analyzing the success of over-parameterized
 #### 2. PL$$^*$$ Condition for Analyzing Over-Parameterized Systems
 
 We say that any function $$f$$ with $$L$$-Lipschitz first derivatives satisfies
-the Polyak-Łojasiewicz (PL) condition if for some $$\mu > 0$$, we have 
+the Polyak-Łojasiewicz (PL) condition if for some $$\mu > 0$$, we have
 
 $$\left\| \nabla f(w) \right\|^2 \geq \mu (f(w) - f^*), \qquad \forall w,$$
 
 where $$f^* = \argmin_{w \in \R^d} f(w)$$ is the minimizer.
 
-[Polyak showed in 1963](https://www.sciencedirect.com/science/article/pii/0041555363903823) 
+[Polyak showed in 1963](https://www.sciencedirect.com/science/article/pii/0041555363903823)
 that functions that satisfy the PL condition converge exponentially fast under
 gradient descent.
 
 The authors introduce a modified variant called the PL$$^*$$ condition, with the main difference
-being our assumption that over-parameterized models can achieve 0 training loss and hence 
+being our assumption that over-parameterized models can achieve 0 training loss and hence
 $$f^*=0$$, and that we only require the condition to hold in some subset $$\mathcal{S}$$ in the parameter space.
 Using a more suggestive $$\mathcal{L}$$ notation to denote the loss, this gives:
 
@@ -78,12 +78,12 @@ The main result of the paper shows that satisfying the PL$$^*$$ condition in a
 ball guarantees the existence of solutions and fast convergence of both gradient
 descent and stochastic gradient descent, reproduced below (feel free to skip it):
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="theorem"
   name="Local PL\(^*\) condition implies existence of a solution + fast convergence"
   statement="
   Suppose the system \( \mathcal{F} \) is \( L_{\mathcal{F}} \)-Lipschitz continuous and \( \beta_{\mathcal{F}} \)-smooth. If the square loss \( \mathcal{L}(\mathbf{w}) \) satisfies the \( \mu \)-PL \( L^* \) condition in the ball \( B\left(\mathbf{w}_0, R\right):=\left\{\mathbf{w} \in \mathbb{R}^m:\left\|\mathbf{w}-\mathbf{w}_0\right\| \leq R\right\} \) with \( R=\frac{2 L_{\mathcal{F}}\left\|\mathcal{F}\left(\mathbf{w}_0\right)-\mathbf{y}\right\|}{\mu} \). Then we have the following:
-  
 
 <ol>
     <li>
@@ -96,6 +96,7 @@ descent and stochastic gradient descent, reproduced below (feel free to skip it)
 
         where the condition number \(\kappa_{\mathcal{F}}\left(B\left(\mathbf{w}_0, R\right)\right)=\frac{1}{\eta \mu}\).
     </li>
+
 </ol>
   "
 %}
@@ -103,16 +104,18 @@ descent and stochastic gradient descent, reproduced below (feel free to skip it)
 This theorem was also extended to stochastic gradient descent in the paper.
 
 #### 3. Satisfying the PL$$^*$$ Condition
+
 From the main theorem, systems that satisfy the PL$$^*$$ condition have nice
 properties like the existence of a globally minimal solution, and fast
 convergence to this solution. However, when does this condition hold?
 
-The authors showed that wide neural networks satisfy the PL$$^*$$ condition. 
+The authors showed that wide neural networks satisfy the PL$$^*$$ condition.
 In this paper, neural networks are the standard stacked layers with fully
 connected layers and a bias term, and a twice-differentiable activation
 function, with $$m$$ defined as the minimum width of neurons on any layer. Then
 neural networks with sufficiently large $$m$$ will satisfy the PL$$^*$$ condition, made precise with their result:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="theorem"
   name="Wide neural networks satisfy PL* condition"
@@ -124,7 +127,8 @@ neural networks with sufficiently large $$m$$ will satisfy the PL$$^*$$ conditio
     $$
 
     then \( \mu-P L^* \) condition holds the square loss function in the ball \( B\left(\mathbf{w}_0, R\right) \).
-  "
+
+"
 %}
 
 The fact that the width of the network results in the PL$$^*$$ condition is not
@@ -133,6 +137,7 @@ tangent kernels on infinite-width neural networks exhibit training dynamics that
 can be approximated by linear models.
 
 ### Most Glaring Deficiency
+
 Due to my limited knowledge in this area, I am not really able to comment on
 deficiencies in their theoretical approach. However, I feel like their loss
 diagrams used to motivate why convexity is insufficient in over-parameterized
@@ -142,10 +147,11 @@ visualize any high-dimensional over-parameterized models, so more explanation on
 this front would have been useful.
 
 ### Conclusions for Future Work
+
 This work provides more theoretical foundations on why over-parameterized models
 have been so successful, even though counter-intuitively we might suspect that
 they run the risk of over-fitting.
 
-Future work could investigate alternative or weaker criteria for implying 
-the PL$$^*$$ condition, and also possible alternative conditions 
+Future work could investigate alternative or weaker criteria for implying
+the PL$$^*$$ condition, and also possible alternative conditions
 that can also result in fast convergence to a global minima in gradient descent.
