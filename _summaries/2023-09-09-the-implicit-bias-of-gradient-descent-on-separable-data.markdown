@@ -10,7 +10,7 @@ bib_id: 1710.10345v5
 #### 1. Gradient Descent On Separable Data Has Implicit Bias Towards Max-Margin SVM
 
 Why is it that over-parameterized models fitted on training data via gradient
-descent actually generalizes well instead of overfitting? In this work, the
+descent actually generalizes well instead of overfitting?  In this work, the
 authors make headway towards answering this question by showing that
 the solution found by gradient descent on linearly separable data actually
 has an implicit bias towards the $$L_2$$ max-margin SVM solution, meaning that it will
@@ -19,7 +19,7 @@ eventually converge to that solution (even as validation loss may be increasing)
 As a brief recap of max-margin (also known as hard) SVM, consider the linearly
 separable dataset given in the figure below:
 
-{% include figure.liquid
+{% include figure.liquid 
     path="/assets/img/summaries/implicit-bias-svm.webp"
     width="600px"
     class="z-depth-1"
@@ -49,7 +49,6 @@ has a tight exponential tail (i.e it decays exactly exponentially fast beyond so
 
 Using these assumptions, they showed the following result:
 
-<!-- prettier-ignore -->
 {% include theorem.md 
   type="theorem"
   name="Implicit Bias of Gradient Descent Towards Max-Margin SVM Solution"
@@ -59,7 +58,7 @@ Using these assumptions, they showed the following result:
     starting point \( \mathrm{w}(0) \), the gradient descent iterates \( \mathbf{w}(t) \) will behave as:
 
     \[
-        \mathbf{w}(t)=\hat{\mathbf{w}} \log t+\boldsymbol{\rho}(t),
+        \mathbf{w}(t)=\hat{\mathbf{w}} \log t+\boldsymbol{\rho}(t), 
     \]
 
     where \( \hat{\mathbf{w}} \) is the \( L_2 \) max margin vector (the solution to the hard margin SVM):
@@ -70,16 +69,15 @@ Using these assumptions, they showed the following result:
 
     and the residual grows at most as \( \|\rho(t)\|=O(\log \log (t)) \), and so
 
-    \[
+    \[ 
         \lim _{t \rightarrow \infty} \frac{\mathbf{w}(t)}{\|\mathbf{w}(t)\|}=\frac{\hat{\mathbf{w}}}{\|\hat{\mathbf{w}}\|} \text {. }
     \]
 
     Furthermore, for almost all data sets (all except measure zero), the residual \( \rho(t) \) is bounded.
     "
-
 %}
 
-Let's analyze what the theorem says.
+Let's analyze what the theorem says. 
 
 First, we see that as the number of time steps increases,
 the magnitude of the weights $$\bw(t)$$ will tend towards infinity, and it
@@ -119,22 +117,20 @@ $$
     \left(-\mathbf{w}(t)^{\top} \mathbf{x}_n\right) \mathbf{x}_n,       \\
 \end{align}
 $$
-
 and hence for this to go to zero, we require that
 $$-\bw(t)^\top \bx_n$$ be driven to infinity,
 which means that the magnitude of $$\bw(t)$$
 will also go to infinity as only our weights change.
 
-If we assume that $$\bw(t)$$ converges to some limit
+If we assume that $$\bw(t)$$ converges to some limit 
 $$\bw_{\infty}$$ (this can be proven but we won't do it here), then we can decompose it as
 
 $$\bw(t) = g(t) \bw_{\infty} + \rho(t)$$
 
-for some function $$g(t)$$ that captures
+for some function $$g(t)$$ that captures 
 growth along $$\bw_{\infty}$$, and residue term $$\rho(t)$$.
 
 Then we can re-write our gradient as
-
 $$
 \begin{align}
     -\nabla \mathcal{L}(\mathbf{w})
@@ -149,11 +145,11 @@ our $$n$$ datapoints $$\bx_1, \cdots, \bx_n$$, only those with the smallest valu
 will meaningfully contribute to the gradient,
 and the contributions of the other terms with much
 larger values are negligible since we are taking
-the negative of these values in the exponent.
+the negative of these values in the exponent. 
 
 But then this means that the gradient update is effectively only dominated by
 contributions from some of these points - essentially the support vectors of the
-problem, like in SVM.
+problem, like in SVM. 
 
 Then as we continue performing gradient updates
 such that $$\| \bw(t) \| \to \infty$$, it is now
@@ -165,7 +161,7 @@ $$
 \begin{align}
                             & \hat{\bw} = \sum_{n=1}^N \alpha_n \bx_n \\
     \text{such that} \qquad &
-    \forall n\left(\alpha_n \geq 0 \text { and } \hat{\mathbf{w}}^{\top} \mathbf{x}_n=1\right) \text{ OR }\left(\alpha_n=0 \text { and } \hat{\mathbf{w}}^{\top} \mathbf{x}_n>1\right)
+    \forall n\left(\alpha_n \geq 0 \text { and } \hat{\mathbf{w}}^{\top} \mathbf{x}_n=1\right) \text{ OR }\left(\alpha_n=0 \text { and } \hat{\mathbf{w}}^{\top} \mathbf{x}_n>1\right) 
 \end{align}
 $$
 
@@ -173,12 +169,11 @@ and hence allows us to conclude that indeed
 $$\frac{\mathbf{w}}{\|\mathbf{w}\|}$$ converges to $$\hat{\bw}$$.
 
 #### 3. Empirical Evidence on Non-Separable Data
-
 The authors showed that empirical
-results on synthetic data supported their
+results on synthetic data supported their 
 theoretical findings:
 
-{% include figure.liquid
+{% include figure.liquid 
     path="/assets/img/summaries/implicit-bias-separable.webp"
     width="600px"
     class="z-depth-1"
@@ -193,7 +188,7 @@ investigated the loss and error curves on
 non-linearly separable CIFAR10 dataset, and
 saw that it observed the same trends:
 
-{% include figure.liquid
+{% include figure.liquid 
     path="/assets/img/summaries/implicit-bias-non-separable.webp"
     width="600px"
     class="z-depth-1"
@@ -203,18 +198,16 @@ This is exciting, as it provides evidence that it may be possible to extend this
 theory to deep neural networks as well.
 
 ### Most Glaring Deficiency
-
 The result assumes the existence of some $$\bw_*$$ that is capable of linearly
 separating the data, which is used in the proof that the weight iterates will
 have its magnitude eventually tend towards infinity, i.e
-$$\| \bw(t) \| \to \infty$$.
+$$\| \bw(t) \| \to \infty$$. 
 
 It would be great if it is possible to show this without relying on this strong
 assumption as it is quite unrealistic as most real-world datasets are not
 linearly separable.
 
 ### Conclusions for Future Work
-
 Even when the training loss is zero or plateaus, it can be worthwhile to
 continue training. We should also look at the 0-1 error on the validation set
 instead of the validation loss, as it is possible that even though the

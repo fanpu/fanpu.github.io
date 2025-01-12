@@ -18,13 +18,13 @@ In Bayesian inference, a common task is to approximate the posterior of a
 distribution, given some observations. This can be framed as trying to learn
 about the latent variable of the distribution, where latent variables are
 variables that cannot be directly observed, but can be inferred indirectly from
-observation of other quantities.
+observation of other quantities. 
 
 For example, we might notice some symptoms in a patient, and try to deduce what
 the underlying disease could be. Then our prior density $$p(\mbox{Disease})$$
 is what we think the probability of each disease is, and our posterior
 distribution after observing the symptoms is $$p(\mbox{Disease} \mid
-\mbox{Symptoms})$$.
+\mbox{Symptoms})$$. 
 
 It is easy to sample from the joint density of latent variables and observations in Bayesian networks
 by an application of the definition of conditional probability:
@@ -44,7 +44,7 @@ $$
 where in the second line we had to marginalize over all possible diseases. The summation
 term is called the partition function, and also referred to as the evidence. Computing
 the partition function exactly is often computationally intractable as there can be an
-exponential number of configurations.
+exponential number of configurations. 
 
 For instance, consider an Ising model, where we have $$n$$ nodes $$\bx = x_1, \dots,
 x_n$$, and each node takes on a binary value $$x_i \in \left\{ \pm 1
@@ -60,7 +60,7 @@ $$
 $$
 
 with the partition function $$\mathcal{Z}(\theta)$$ that ensures that the probability
-distribution sums to 1 given by
+distribution sums to 1 given by 
 
 $$
 \begin{align*}
@@ -68,7 +68,7 @@ $$
 \end{align*}
 $$
 
-Computing $$\mathcal{Z}(\theta)$$ is therefore the main problem here since
+Computing $$\mathcal{Z}(\theta)$$ is therefore the main problem here since 
 the number of configurations of $$\bx$$ is exponential in $$n$$.
 Indeed, computing partition functions is proven to be
 $$\#\mathsf{P}$$-hard in general (this is stricly harder than being $$\mathsf{NP}$$-hard, which to our
@@ -82,15 +82,13 @@ is called Markov chain Monte Carlo (MCMC), which makes use of Markov chains to
 sample from a stationary distribution to approximate the posterior.
 
 ### Variational Inference
-
 The main idea of variational inference is to estimate the partition function
 by minimizing the distance between our distribution $$P$$
-and some easier to compute distribution $$Q$$, by modifying the
+and some easier to compute distribution $$Q$$, by modifying the 
 
 The name variational inference comes from the calculus of variations, which uses
 small perturbations to find maxima/minimas of functionals.
 
-<!-- prettier-ignore -->
 {% include theorem.md 
   type="theorem"
   name="Gibbs Variational Principle"
@@ -100,7 +98,12 @@ small perturbations to find maxima/minimas of functionals.
   "
 %}
 
-Consider a latent-variable model, which means
+
+
+
+
+
+Consider a latent-variable model, which means 
 
 In this post, we will see how we can apply variational methods to perform inference
 and learning in latent variable models.
