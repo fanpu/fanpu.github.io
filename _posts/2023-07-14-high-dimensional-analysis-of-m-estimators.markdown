@@ -101,6 +101,7 @@ If we add a regularization term $$\rcal$$ to penalize complexity of the model, s
     \that \in \argmin_\theta \sum_{i=1}^n \rho(x_i, \theta) + \lambda \rcal(\theta).
 \end{align}
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="example"
   name="Lasso Program"
@@ -117,6 +118,7 @@ If we add a regularization term $$\rcal$$ to penalize complexity of the model, s
 
 ## Dual Norms
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="definition"
   name="Dual Norms"
@@ -131,6 +133,7 @@ If we add a regularization term $$\rcal$$ to penalize complexity of the model, s
   "
 %}
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="example"
   name="\(\ell_1\) and \(\ell_\infty\) norms are dual norms"
@@ -169,6 +172,7 @@ condition will hold with certain parameters.
 
 The subspace compatibility constant is defined as follows:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="definition"
   name="Subspace Compatibility Constant"
@@ -248,6 +252,7 @@ of low-rank matrices and nuclear norms where it could be possible that $$\mcal$$
 
 Now we can introduce the property of decomposability:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="definition"
   name="Regularizer Decomposability"
@@ -280,6 +285,7 @@ $$\theta^*$$.
 There are many natural contexts that admit regularizers which are decomposable with respect to subspaces,
 and the following example highlights one such case.
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="example"
   name="\( s \)-sparse Vectors"
@@ -333,6 +339,7 @@ Decomposability is important because it allows us to bound the error of the esti
 This is given in the following result, which is known as Lemma 1 in [(Negahban et al., 2009)](https://arxiv.org/abs/1010.2731):
 
 
+<!-- prettier-ignore -->
 {% include theorem.md
   type="lemma"
   name="Lemma 1 in 
@@ -461,6 +468,7 @@ a neighborhood of $$\ts$$. This is because we are enforcing a lower bound on its
 
 This leads us to the definition of restricted strong convexity:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="definition"
   name="Restricted Strong Convexity"
@@ -492,6 +500,7 @@ restricted strong convexity of the loss function (G2).
         The loss function $$\lcal$$ is convex and differentiable, and satisfies restricted strong convexity
         with curvature $$\kl$$ and tolerance $$\tl$$.
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="theorem"
   name="Bounds for General Models"
@@ -512,6 +521,7 @@ restricted strong convexity of the loss function (G2).
 
 We will rely on the following lemmas that will be stated without proof due to space constraints:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="lemma"
   name="Deviation Inequalities"
@@ -530,6 +540,7 @@ We will rely on the following lemmas that will be stated without proof due to sp
   "
 %}
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="lemma"
   num="4 in (Negahban et al., 2009)"

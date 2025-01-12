@@ -99,6 +99,7 @@ However, the authors take a different and much simpler approach by
 asking instead how large a neural network must be to memorize $$n$$ samples.
 This led to their main theoretical result in the paper:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="theorem"
   name="Neural Networks Of Size Linear To Sample Size Sufficient For Memorization"

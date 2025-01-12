@@ -70,6 +70,7 @@ norm with interpolation).
 
 This was considered in the ideal noiseless case:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="theorem"
   statement="

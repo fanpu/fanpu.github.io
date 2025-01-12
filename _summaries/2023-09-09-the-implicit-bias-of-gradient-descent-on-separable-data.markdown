@@ -49,6 +49,7 @@ has a tight exponential tail (i.e it decays exactly exponentially fast beyond so
 
 Using these assumptions, they showed the following result:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="theorem"
   name="Implicit Bias of Gradient Descent Towards Max-Margin SVM Solution"

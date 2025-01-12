@@ -79,6 +79,7 @@ ball guarantees the existence of solutions and fast convergence of both gradient
 descent and stochastic gradient descent, reproduced below (feel free to skip it):
 
 <!-- prettier-ignore -->
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="theorem"
   name="Local PL\(^*\) condition implies existence of a solution + fast convergence"
@@ -115,6 +116,7 @@ connected layers and a bias term, and a twice-differentiable activation
 function, with $$m$$ defined as the minimum width of neurons on any layer. Then
 neural networks with sufficiently large $$m$$ will satisfy the PL$$^*$$ condition, made precise with their result:
 
+<!-- prettier-ignore -->
 <!-- prettier-ignore -->
 {% include theorem.md 
   type="theorem"

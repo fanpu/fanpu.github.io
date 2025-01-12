@@ -29,6 +29,7 @@ if it can describe some substructure of \(G\). More formally:
 </div>
 
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="definition"
   name="Graph Minors"
@@ -54,6 +55,7 @@ duplicate edges.
 A quasi-order is a relation that is reflexive and transitive.
 We build on this to define a well-quasi-order:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="definition"
   name="Well-quasi-order"
@@ -65,6 +67,7 @@ We build on this to define a well-quasi-order:
 
 A very useful implication of a well-quasi-order that is not hard to show is the following:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="lemma"
   statement="
@@ -79,6 +82,7 @@ We will make use of the fact that it cannot have infinite anti-chains later.
 In 1960, Kruskal had already proved that finite trees are well-quasi-ordered by the topological minor relation (instead of allowing edge contractions, a topological minor allows edge subdivision). 
 In contrast, proving the graph minor theorem was a Herculean effort that took over 20 years (1983-2004), involving over 500 pages. It says the following:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="theorem"
   name="Graph Minor Theorem"
@@ -89,6 +93,7 @@ In contrast, proving the graph minor theorem was a Herculean effort that took ov
 
 At first glance, the statement may not seem very impressive. However, we get a lot of mileage out of it if we consider its implications on minor-closed properties:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="definition"
   name="Minor-closed"

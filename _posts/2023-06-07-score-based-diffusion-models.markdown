@@ -236,6 +236,7 @@ adversarial methods. This is achieved
 by learning the score of the probability density function,
 formally defined below:
 
+<!-- prettier-ignore -->
 {% include theorem.md 
   type="definition"
   name="Score Function"
