@@ -1,8 +1,17 @@
 $theorem-padding-top: 20px;
 $theorem-padding-bottom: 20px;
 
-.theorem, .lemma, .proposition, .corollary, .definition, .conjecture, .example {
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+.theorem,
+.lemma,
+.proposition,
+.corollary,
+.definition,
+.conjecture,
+.example {
+  box-shadow:
+    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12),
+    0 3px 1px -2px rgba(0, 0, 0, 0.2);
   position: relative;
   margin: 0.9765em 0;
   padding: 0 0.75rem;
@@ -12,10 +21,15 @@ $theorem-padding-bottom: 20px;
 }
 
 .theorem-contents {
-    padding: 0.75rem 0 0.75rem;
+  padding: 0.75rem 0 0.75rem;
 }
 
-.theorem .theorem-title, .lemma .theorem-title, .proposition .theorem-title, .corollary .theorem-title, .definition .theorem-title, .conjecture .theorem-title {
+.theorem .theorem-title,
+.lemma .theorem-title,
+.proposition .theorem-title,
+.corollary .theorem-title,
+.definition .theorem-title,
+.conjecture .theorem-title {
   margin: 0 -0.75rem;
   border-bottom: 0.1rem solid rgba(68, 138, 255, 0.1);
   background-color: rgba(0, 176, 255, 0.1);
@@ -27,7 +41,10 @@ $theorem-padding-bottom: 20px;
 }
 
 .definition {
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12),
+    0 3px 1px -2px rgba(0, 0, 0, 0.2);
   position: relative;
   margin: 0.9765em 0;
   padding: 0 0.75rem;
@@ -52,11 +69,14 @@ $theorem-padding-bottom: 20px;
 }
 
 .lemma {
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12),
+    0 3px 1px -2px rgba(0, 0, 0, 0.2);
   position: relative;
   margin: 0.9765em 0;
   padding: 0 0.75rem;
-  border-left: 0.25rem solid #E91E63;
+  border-left: 0.25rem solid #e91e63;
 
   border-radius: 0.125rem;
   overflow: auto;
@@ -68,18 +88,21 @@ $theorem-padding-bottom: 20px;
   font-weight: 700;
   display: block;
   font-size: 1em;
-  color:  #E91E63;
+  color: #e91e63;
 
   padding: 0.5rem 0 0.5rem 0.75rem;
 }
 .lemma .theorem-title::before {
   margin-right: 0.75rem;
   font-weight: 400;
-  color: #E91E63;
+  color: #e91e63;
 }
 
 .remark {
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12),
+    0 3px 1px -2px rgba(0, 0, 0, 0.2);
   position: relative;
   margin: 0.9765em 0;
   padding: 0 0.75rem;
@@ -103,9 +126,11 @@ $theorem-padding-bottom: 20px;
   color: #00b8d4;
 }
 
-
 .proof {
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12),
+    0 3px 1px -2px rgba(0, 0, 0, 0.2);
   position: relative;
   margin: 0.9765em 0;
   padding: 0 0.75rem;
@@ -130,7 +155,10 @@ $theorem-padding-bottom: 20px;
 }
 
 .algorithm {
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12),
+    0 3px 1px -2px rgba(0, 0, 0, 0.2);
   position: relative;
   margin: 0.9765em 0;
   padding: 0 0.75rem;
@@ -155,7 +183,10 @@ $theorem-padding-bottom: 20px;
 }
 
 .warning {
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12),
+    0 3px 1px -2px rgba(0, 0, 0, 0.2);
   position: relative;
   margin: 0.9765em 0;
   padding: 0 0.75rem;
@@ -180,11 +211,14 @@ $theorem-padding-bottom: 20px;
 }
 
 .example {
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12),
+    0 3px 1px -2px rgba(0, 0, 0, 0.2);
   position: relative;
   margin: 0.9765em 0;
   padding: 0 0.75rem;
-  border-left: 0.25rem solid #E91E63;
+  border-left: 0.25rem solid #e91e63;
 
   border-radius: 0.125rem;
   overflow: auto;
@@ -196,12 +230,12 @@ $theorem-padding-bottom: 20px;
   font-weight: 700;
   display: block;
   font-size: 1em;
-  color:  #E91E63;
+  color: #e91e63;
 
   padding: 0.5rem 0 0.5rem 0.75rem;
 }
 .example .theorem-title::before {
   margin-right: 0.75rem;
   font-weight: 400;
-  color: #E91E63;
+  color: #e91e63;
 }

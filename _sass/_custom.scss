@@ -1,23 +1,23 @@
 .center {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .section-nav {
-    background-color:  var(--global-bg-color);
-    margin: 5px 0;
-    padding: 10px 30px;
-    border: 1px solid #e8e8e8;
-    border-radius: 3px;
+  background-color: var(--global-bg-color);
+  margin: 5px 0;
+  padding: 10px 30px;
+  border: 1px solid #e8e8e8;
+  border-radius: 3px;
 }
 
 .first-course-item {
-    padding-top: 1.5rem;
+  padding-top: 1.5rem;
 }
 
 .course-item {
-    padding-top: 0rem;
+  padding-top: 0rem;
 }
 
 /* Nathan Lam
@@ -32,7 +32,9 @@
   max-width: 100%;
 }
 
-.embed-container iframe, .embed-container object, .embed-container embed {
+.embed-container iframe,
+.embed-container object,
+.embed-container embed {
   position: absolute;
   top: 0;
   left: 0;
@@ -41,97 +43,97 @@
 }
 
 .badge.computer-systems {
-    background-color: $blue-color;
+  background-color: $blue-color;
 }
 
 .badge.theory {
-    background-color: $red-color;
+  background-color: $red-color;
 }
 
 .badge.pl-theory {
-    background-color: $pink-color;
+  background-color: $pink-color;
 }
 
 .badge.machine-learning {
-    background-color: $pink-color;
+  background-color: $pink-color;
 }
 
 .badge.artificial-intelligence {
-    background-color: $pink-color-light;
+  background-color: $pink-color-light;
 }
 
 .badge.data-science {
-    background-color: $light-cyan-color;
+  background-color: $light-cyan-color;
 }
 
 .badge.graphics {
-    background-color: $green-color-lime;
+  background-color: $green-color-lime;
 }
 
 .badge.math {
-    background-color: $cyan-color;
+  background-color: $cyan-color;
 }
 
 .badge.statistics {
-    background-color: $grey-color;
+  background-color: $grey-color;
 }
 
 .badge.robotics {
-    background-color: $orange-color;
+  background-color: $orange-color;
 }
 
 .badge.undergraduate {
-    background-color: $green-color;
+  background-color: $green-color;
 }
 
 .badge.graduate {
-    background-color: $purple-color;
+  background-color: $purple-color;
 }
 
 .badge.computer-systems:after {
-    content: "Computer Systems";
+  content: "Computer Systems";
 }
 
 .badge.theory:after {
-    content: "Computer Science Theory";
+  content: "Computer Science Theory";
 }
 
 .badge.pl-theory:after {
-    content: "Programming Language Theory";
+  content: "Programming Language Theory";
 }
 
 .badge.machine-learning:after {
-    content: "Machine Learning";
+  content: "Machine Learning";
 }
 
 .badge.artificial-intelligence:after {
-    content: "Artificial Intelligence";
+  content: "Artificial Intelligence";
 }
 
 .badge.data-science:after {
-    content: "Data Science";
+  content: "Data Science";
 }
 
 .badge.graphics:after {
-    content: "Graphics";
+  content: "Graphics";
 }
 
 .badge.math:after {
-    content: "Mathematics";
+  content: "Mathematics";
 }
 
 .badge.statistics:after {
-    content: "Statistics";
+  content: "Statistics";
 }
 
 .badge.robotics:after {
-    content: "Robotics";
+  content: "Robotics";
 }
 
 .badge.undergraduate:after {
-    content: "Undergraduate";
+  content: "Undergraduate";
 }
 
 .badge.graduate:after {
-    content: "Graduate";
+  content: "Graduate";
 }
