@@ -33,11 +33,7 @@ statement.
 
 This gave them a new dataset of over 700k formal statements to work with.
 
-
-
 #### 2. Challenges in Auto-formalization
-
-
 
 #### 3. Baz
 
