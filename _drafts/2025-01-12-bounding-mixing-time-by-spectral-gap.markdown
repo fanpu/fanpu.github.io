@@ -11,63 +11,59 @@ toc:
   sidebar: left
 giscus_comments: true
 description: >
-hidden: true
+    A Markov chain that is aperiodic and irreducible will eventually converge to a
+    stationary distribution. This is widely used in many applications in machine
+    learning, such as in Markov Chain Monte Carlo (MCMC) methods,
+    where random walks on Markov chains are used to obtain a good estimate of the
+    log likelihood of the partition function of a model, which is hard to compute
+    directly as it is #P-hard (this is even harder than NP-hard).
+    However, one major issue is that it is unclear how many steps we should take
+    before we are guaranteed that the Markov chain has converged to the true
+    stationary distribution. In this post, we will see how the spectral gap
+    of the transition matrix of the Markov Chain relates to its mixing time.
 ---
 A Markov chain that is aperiodic and irreducible will eventually converge to a
 stationary distribution. This is widely used in many applications in machine
 learning, such as in Markov Chain Monte Carlo (MCMC) methods,
 where random walks on Markov chains are used to obtain a good estimate of the
 log likelihood of the partition function of a model, which is hard to compute
-directly as it is #P-hard (this is even harder than NP-hardness).
-However, one common issue is that it is unclear how many steps we should take
+directly as it is #P-hard (this is even harder than NP-hard).
+However, one major issue is that it is unclear how many steps we should take
 before we are guaranteed that the Markov chain has converged to the true
 stationary distribution. In this post, we will see how the spectral gap
-of the 
+of the transition matrix of the Markov Chain relates to its mixing time.
 
+# Mixing Times
 
-\begin{definition}[Total Variation Distance]
-    Let $\mathcal{D}_1, \mathcal{D}_2$ be distributions on $\Omega$.
-    Then
-    \begin{align}
-        \| \mathcal{D}_1 - \mathcal{D}_2 \|_{TV}
-        = & \frac{1}{2}
-        \sum\limits_{\omega \in \Omega} \Big| \mathcal{D}_1(\omega) -
-        \mathcal{D}_2(\omega) \Big|                              \\
-        = & \max_{A \subseteq \Omega} \sum\limits_{\omega \in A}
-        \mathcal{D}_1(\omega) - \sum\limits_{\omega \in A} \mathcal{D}_2(\omega).
-    \end{align}
-\end{definition}
+Our goal is to try to develop methods to understand how long it takes to
+approximate the stationary distribution $\pi$ of a Markov Chain. Our goal is to
+eventually show that the mixing time is in $O\left(\frac{\log (n)}{1 -
+\beta}\right)$, where $\beta$ is the second largest eigenvalue of the transition
+matrix of the Markov Chain.
 
-\lecture{4: Markov Chains, Random Walks, Applications (Part 2)}{September 27, 2022}{Lecturer: Pravesh K. Kothari}{Fan Pu Zeng}
-
-\section{Mixing Times}
-
-We now try to develop methods to understand how long it takes to approximate the
-stationary distribution $\pi$ of a Markov Chain. Our goal is to eventually show
-that the mixing time is in $O\left(\frac{\log (n)}{1 - \beta}\right)$, where
-$\beta$ is the second largest eigenvalue of the transition matrix of the Markov
-Chain.
-
-\section{Coupling}
+## Aside: Coupling
 Coupling is one general technique that allows us to bound how long it takes for
 a Markov Chain to converge to its stationary distribution based. It is based on
 having two copies of the original Markov Chain running simultaneously, with one
 being at stationarity, and showing how they can be made to coincide (i.e have
-bounded variation distance) after some time (known as the ``coupling time'').
+bounded variation distance) after some time (known as the *coupling time*).
 
-We will not discuss coupling in this class, but will instead develop how
-spectral gaps can be used, as this is more useful for future classes.
+We will not discuss coupling in this post, but will instead develop how
+spectral gaps can be used, as this is more useful for other concepts.
 
-\section{The ``Spectral Gap'' Method}
-The main idea of the ``Spectral Gap'' method is that the mixing time is bounded by the inverse of the spectral
+# The *Spectral Gap* Method
+The main idea of the *Spectral Gap* method is that the mixing time is bounded by the inverse of the spectral
 gap, which is the difference between the largest and second largest eigenvalues
 of the transition matrix.
 
 Before we can talk about one distribution approximating another, we need to
-first introduce what ``closeness'' between two distributions means
+first introduce what *closeness* between two distributions means
 The formulation that we will use is via the Total Variation Distance.
 
-\begin{definition}[Total Variation Distance]
+{% include theorem.md 
+  type="definition"
+  name="Total Variation Distance"
+  statement="
     Let $\mathcal{D}_1, \mathcal{D}_2$ be distributions on $\Omega$.
     Then
     \begin{align}
@@ -78,6 +74,10 @@ The formulation that we will use is via the Total Variation Distance.
         = & \max_{A \subseteq \Omega} \sum\limits_{\omega \in A}
         \mathcal{D}_1(\omega) - \sum\limits_{\omega \in A} \mathcal{D}_2(\omega).
     \end{align}
+  "
+%}
+
+\begin{definition}[Total Variation Distance]
 \end{definition}
 
 The equality between the two lines can be observed from the fact that
