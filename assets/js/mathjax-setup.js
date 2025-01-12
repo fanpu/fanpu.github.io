@@ -3,5 +3,6 @@ window.MathJax = {
   tex: {
     packages: { "[+]": ["mathtools", "ams"] },
     tags: "ams",
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
   },
 };
