@@ -14,3 +14,4 @@ _summaries/2024-08-05-reconciling-modern-machine-learning-practice-and-the-bias-
 _posts/*.markdown
 assets/js/*.js
 assets/css/*.css
+assets/js/distillpub/*.js
