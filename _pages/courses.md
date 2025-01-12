@@ -431,7 +431,7 @@ Risteski](https://www.andrew.cmu.edu/user/aristesk/) this semester.
 It was a fun experience and not as stressful as I had feared. Being
 able to lead 2 of the recitations was one of the highlights of my semester.
 I would like to thank [Andrej](https://www.andrew.cmu.edu/user/aristesk/) and my
-fellow TAs (especially [Jennifer](https://scholar.google.com/citations?user=Q5EDXpkAAAAJ&hl=en), whose
+fellow TAs (especially [Jennifer](https://scholar.google.com/citations?user=4i-T-5UAAAAJ), whose
 office hours slot was right before mine and always stayed overtime
 to help me with the queue) for making it so enjoyable. I am also
 grateful to all my students for their great questions and being able to mentor
