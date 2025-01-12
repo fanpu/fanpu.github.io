@@ -21,16 +21,16 @@ it can interpolate almost perfectly.
 They hypothesize the following, supported by empirical results:
 
 1. Under-parameterized regime: if EMC is sufficiently smaller than $$n$$, any perturbations
-of the training procedure that increases its effective complexity decreases test
-error
+   of the training procedure that increases its effective complexity decreases test
+   error
 
 2. Over-parameterized regime: if EMC is sufficiently larger than $$n$$, any perturbations
-of the training procedure that increases its effective complexity decreases test
-error
+   of the training procedure that increases its effective complexity decreases test
+   error
 
 3. Critically parameterized regime: if EMC is around $$n$$, then a perturbation
-of the training procedure that increases its effective complexity might decrease
-or *increase* test error
+   of the training procedure that increases its effective complexity might decrease
+   or _increase_ test error
 
 #### 2. Model-wise Double Descent
 
