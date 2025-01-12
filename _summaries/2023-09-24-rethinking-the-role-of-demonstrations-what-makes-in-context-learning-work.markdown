@@ -8,6 +8,7 @@ bib_id: 2202.12837v2
 ### Three Important Things
 
 #### 1. Ground Truth Labels Matter Little
+
 This paper aims to make headway in understanding why in-context learning works.
 In-context learning, also known as few-shot learning, is where a few examples
 of input-label pairs are supplied to the model as part of the prompt.
@@ -46,12 +47,14 @@ the input-label pairs, and instead uses its own priors during pretraining for
 the output.
 
 ### Most Glaring Deficiency
+
 As noted in the paper, a key limitation of this result is that the tasks evaluated
 on are all NLP tasks, where the model already has some strong priors from pretraining.
 It could be possible that having gold (i.e ground truth) labels becomes more important
 for more specialized tasks.
 
 ### Conclusions for Future Work
+
 Even if we only have unsupervised data, we can still benefit from few-shot
 learning by assigning these unsupervised samples some labels from the expected
 target distribution.

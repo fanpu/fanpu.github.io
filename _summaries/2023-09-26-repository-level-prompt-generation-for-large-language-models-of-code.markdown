@@ -8,6 +8,7 @@ bib_id: 2206.12839v3
 ### Three Important Things
 
 #### 1. Repo-Level Prompt Generator
+
 A limitation of code LLMs like Codex is that they perform poorly on
 large codebases as all the code cannot fit into the context window.
 
@@ -20,10 +21,11 @@ this prompt into a Codex model.
 In this paper, they call the place to infill generated code a "hole".
 
 RLPG works by generating prompt proposals, which is a combination
-of a *prompt source* and *prompt context type*.
+of a _prompt source_ and _prompt context type_.
 
 The prompt source identifies which file to get the relevant context from,
 with the following categories:
+
 1. Current file (with respect to the hole)
 2. Parent class
 3. Import files
@@ -37,6 +39,7 @@ with the following categories:
 
 Given a prompt source, the prompt context type determines what to extract from
 the prompt source, with the following categories:
+
 1. Post Lines (all lines in the current file from the end of the hole - this only applies to current file)
 2. Identifiers
 3. Type identifiers
@@ -65,12 +68,13 @@ hole position, determines which prompt proposal has the highest probability of
 success, where success means that Codex generates the exact same code as what
 was in the hole after being fed that prompt.
 
-They introduce two variants of PPCs: the *RLPG-H* and *RLPG-R* (it was unclear
+They introduce two variants of PPCs: the _RLPG-H_ and _RLPG-R_ (it was unclear
 to me what H and R stands for here).
 
 ##### RLPG-H
+
 In RLPG-H, they take the two lines before and two lines after the hole, feed it
-into the encoder $$F_\phi$$  and take the encoded `[CLS]` token as an encoded representation of the
+into the encoder $$F_\phi$$ and take the encoded `[CLS]` token as an encoded representation of the
 surrounding context, and then feed it through a two-layer neural network with
 final sigmoid activations as predictions:
 
@@ -83,9 +87,10 @@ Hence the idea is that the encoded representation of the context might serve
 to have useful features to predict which prompt proposal might work best.
 
 ##### RLPG-R
+
 In RLPG-R, they go a little further than RLPG-H and on top of obtaining
 the `[CLS]` token for the representation of the hole context $$H^h$$,
-it takes advantage of the attention mechanism by treating that as 
+it takes advantage of the attention mechanism by treating that as
 the query, and also encoding
 the produced prompt context as the keys and values:
 
@@ -111,7 +116,6 @@ on evaluation:
     width="600px"
     class="z-depth-1"
 %}
-
 
 #### 3. Performance of Prompt Proposals
 
@@ -147,6 +151,7 @@ might cause it to perform even better, like the kind of information a normal
 developer would want.
 
 ### Conclusions for Future Work
+
 When there is more information than context, prompt generation becomes key to
 selectively choose information that would be the most helpful to the task at
 hand for the LLM. We can utilize similar techniques as this paper to augment our

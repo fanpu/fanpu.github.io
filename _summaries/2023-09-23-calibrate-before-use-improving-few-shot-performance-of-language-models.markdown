@@ -40,9 +40,9 @@ labels.
   is more common towards the end of the few-shot examples. For instance, this
   can be observed in the "Balanced" regime.
 - Common Token Bias: Tokens that appear in the pre-training dataset also have a
-higher tendency of being output. This was observed for the LAMA fact
-retrieval dataset, where it tends to predict common tokens like "America"
-instead of rarer ground-truth tokens.
+  higher tendency of being output. This was observed for the LAMA fact
+  retrieval dataset, where it tends to predict common tokens like "America"
+  instead of rarer ground-truth tokens.
 
 #### 3. Contextual Calibration
 
@@ -88,4 +88,3 @@ Calibration is a relatively easy and non-intrusive way of improving
 the performance of few-shot learning; however there still remains
 a lot of future work to understand how exactly LLMs learn from few-shot
 examples and how this results in biases in its output.
-
