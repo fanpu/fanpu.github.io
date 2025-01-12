@@ -27,7 +27,7 @@ operate in the latent space of a pretrained variational encoder instead of image
 space for faster training) to generate the edited image. How they obtained the
 dataset is explained in the next section.
 Their training objective closely resembles that of the latent diffusion model,
-where $$\mathcal{E}$$ is the VAE encoder,  $$\epsilon_\theta$$ is the network
+where $$\mathcal{E}$$ is the VAE encoder, $$\epsilon_\theta$$ is the network
 to train which learns to predict the noise added to the latent $$z_t$$
 conditioned on the source image conditioning $$c_I$$ and text edit instruction
 $$c_T$$. The training objective is hence
@@ -57,12 +57,12 @@ asked it to generate a plausible editing instruction. They then
 asked it to determine what a reasonable output caption for the image
 after the edits might be, which results in an input-output caption pair.
 
-To generate the paired images, they used Stable Diffusion and 
+To generate the paired images, they used Stable Diffusion and
 asked it to generate images for both the input and output caption.
-However, just using vanilla Stable Diffusion could result in the two 
+However, just using vanilla Stable Diffusion could result in the two
 images having wildly different characteristics and styles, as
 the figure below shows.
-Instead, they make use of the Prompt-to-Prompt plugin, which 
+Instead, they make use of the Prompt-to-Prompt plugin, which
 ensures similarity between the two images that are generated.
 
 {% include figure.liquid
@@ -83,7 +83,7 @@ The overall data generation pipeline is thus summarized in the figure below:
 
 Classifier-free diffusion guidance is a method of guiding
 the diffusion process towards generating images with higher
-likelihood under some implicit classifier. 
+likelihood under some implicit classifier.
 
 In the usual context, we only have one conditional $$c$$.
 Then $$e_\theta(z_t, c)$$ denotes the predicted noise
@@ -129,7 +129,7 @@ training dataset comes from. Therefore, it is not a technique whose limitations
 can be easily addressed on its own. In a sense, the main contribution of the
 paper is UX-based by giving a new instruction-based interface for image editing,
 with the previous alternative being simply using Prompt-to-Prompt in Stable
-Diffusion and coming up with the caption yourself. 
+Diffusion and coming up with the caption yourself.
 
 ### Conclusions for Future Work
 

@@ -15,10 +15,10 @@ of image-to-image translation is that while we specify the edits that we want
 (i.e changing a dog in the scene to a cat), we do not specify what we want to
 preserve, which is implicit.
 
-They come up with a technique that they call `pix2pix-zero`, which 
+They come up with a technique that they call `pix2pix-zero`, which
 is training-free and prompt-free. Training-free means that it
-does not require any fine-tuning on existing diffusion models, 
-and prompt-free means that the user does not have to specify a prompt, 
+does not require any fine-tuning on existing diffusion models,
+and prompt-free means that the user does not have to specify a prompt,
 but simply only the desired changes from the source domain to the
 target domain, i.e cat -> dog.
 
@@ -31,8 +31,9 @@ Samples of their results:
 %}
 
 Their approach consists of two main contributions:
+
 1. An efficient, automatic editing direction discovery mechanism without input
-text prompting,
+   text prompting,
 2. Content preservation via cross-attention guidance.
 
 The two techniques are discussed in the following sections.
@@ -46,7 +47,7 @@ To do this, they used GPT-3 to generate two groups of a large number of diverse
 sentences: one containing the source text, and one containing the target text.
 They then took the average CLIP embeddings of each group, and took their
 difference as the edit direction to use.
-They denote this final edit direction $$\Delta c_{\mathrm{edit}}$$. 
+They denote this final edit direction $$\Delta c_{\mathrm{edit}}$$.
 They found that this approach of taking the mean CLIP embedding of many
 sentences containing the word instead of just the embedding of the word itself
 to be more robust.
@@ -64,7 +65,7 @@ needs to be performed once for each source-target edit pair.
 
 #### 3. Editing via Cross-Attention Guidance
 
-They base their image generation model off Stable Diffusion, 
+They base their image generation model off Stable Diffusion,
 which is a latent diffusion model. The Stable Diffusion
 generation process allows conditioning on an input text,
 which is converted into a text embedding $$c$$. This conditioning
@@ -104,7 +105,7 @@ that is quite different from the original source image:
 Instead, their key insight is that the cross-attention map generated from the
 embeddings $$c + \Delta c_{\mathrm{edit}}$$, denoted $$M_t^{\mathrm{edit}}$$,
 must be regularized towards the original cross-attention map from the original
-embedding $$c$$, denoted $$M_t^{\mathrm{ref}}$$. 
+embedding $$c$$, denoted $$M_t^{\mathrm{ref}}$$.
 
 By encouraging the
 cross-attention maps to be close, there is better control over the denoising
@@ -112,28 +113,28 @@ process to ensure that the final image stays faithful to the source.
 
 Their algorithm works as follows:
 
-1. 
-    Run the reverse diffusion process starting from noise conditioned
-    on the original text embedding $$c$$, and store the 
+1.  Run the reverse diffusion process starting from noise conditioned
+    on the original text embedding $$c$$, and store the
     reference cross-attention maps $$M_t^{\mathrm{ref}}$$ at each time step
-2. 
-    Now run the reverse diffusion process conditioned on
+2.  Now run the reverse diffusion process conditioned on
     $$c + \Delta c_{\mathrm{edit}}$$, but after getting the original attention mask
     $$M_t^{\mathrm{edit}}$$, we want to work towards reducing the cross-attention
     loss $$\mathcal{L}_{\mathrm{xa}}$$:
 
     $$\mathcal{L}_{\mathrm{xa}}=\left\|M_t^{\mathrm{edit}}-M_t^{\mathrm{ref}}\right\|_2$$
 
-    This is achieved by applying a single gradient step 
-    scaled by some step size 
+    This is achieved by applying a single gradient step
+    scaled by some step size
     $$\lambda_{\mathrm{xa}}$$ onto the current latent $$x_t$$
     so we now have a new latent that would result in slightly
     better cross-attention loss
 
-    $$x_t\prime = x_t -
-    \lambda_{\mathrm{xa}}\Delta x_t=\nabla_{x_t}\left(\left\|M_t^{\text {edit }}-M_t^{\text {ref }}\right\|_2\right),$$
+    $$
+    x_t\prime = x_t -
+    \lambda_{\mathrm{xa}}\Delta x_t=\nabla_{x_t}\left(\left\|M_t^{\text {edit }}-M_t^{\text {ref }}\right\|_2\right),
+    $$
 
-    and then using that to obtain the new noise prediction 
+    and then using that to obtain the new noise prediction
     $$\epsilon_\theta\left(x_t\prime, t, c_{\text {edit }}\right)$$,
     which is used to update the latent.
 

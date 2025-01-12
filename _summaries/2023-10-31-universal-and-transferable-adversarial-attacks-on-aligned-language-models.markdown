@@ -17,6 +17,7 @@ for such models to be misaligned, which begs the question of why do RLHF tuning
 in the first place.
 
 #### 1. Problem Formalization
+
 The attack is considered to succeed when the LLM affirmatively repeats the
 user's harmful request. In the figure below, the `!!!!` indicates the added suffix that
 the proposed attack will produce to increase the likelihood of the model responding affirmatively
@@ -34,14 +35,14 @@ of objecting.
 
 We can formally formulate this success criteria as an objective function:
 
-- Let $$x$$ be the tokens in the sequence, 
+- Let $$x$$ be the tokens in the sequence,
 - $$n$$ be the total length of the input which consists of the original prompt and the adversarial suffix tokens and so we can denote
-the full input as $$x_{1:n}$$,
+  the full input as $$x_{1:n}$$,
 - $$x^\star$$ be the tokens corresponding to the desired
-adversarial completion (i.e "Sure, here is how to build a bomb"), 
+  adversarial completion (i.e "Sure, here is how to build a bomb"),
 - $$H=\vert x^\star \vert $$ being the length of the desired completion,
 - $$\mathcal{I} \subset \{ 1, \dots, n \}$$ be the set of contiguous suffix integers denoting
-the indices of the adversarial suffix (so we modify the suffix $$x_{\mathcal{I}}$$).
+  the indices of the adversarial suffix (so we modify the suffix $$x_{\mathcal{I}}$$).
 
 Then formally we can define our loss function to minimize to be the negative log probability
 of $$H$$ being output, which corresponds to maximizing the probability of outputting $$H$$ after
@@ -73,23 +74,20 @@ inputs makes it an appealing option to try.
 
 The authors introduce the Greedy Coordinate Gradient (GCG) method, which works as follows:
 
-1. 
-    For each token $$i \in \mathcal{I}$$ in the set of indices that corresponds to our adversarial suffix, compute the gradient with respect to the $$i$$ token at the embedding of $$x_{1:n}$$:
+1.  For each token $$i \in \mathcal{I}$$ in the set of indices that corresponds to our adversarial suffix, compute the gradient with respect to the $$i$$ token at the embedding of $$x_{1:n}$$:
 
     $$\nabla_{e_{x_i}} \mathcal{L}\left(x_{1: n}\right) \in \mathbb{R}^{|V|}$$
 
-    We can take this gradient since the actual LLM uses embedding corresponding to the tokens 
+    We can take this gradient since the actual LLM uses embedding corresponding to the tokens
     instead of discrete token inputs, and hence the loss function is continuous.
 
-2. 
-    For each token $$i$$, take the top $$k$$ tokens with the most negative
+2.  For each token $$i$$, take the top $$k$$ tokens with the most negative
     gradient values (corresponds to minimizing the loss). How these top
     $$k$$ token substitutions are found efficiently was not mentioned,
     but one could imagine performing some nearest neighbor search of the embeddings
     around the original token embedding plus loss gradient.
 
-3. 
-    In total, the previous steps gives $$k |\mathcal{I}|$$ candidate tokens and their corresponding
+3.  In total, the previous steps gives $$k |\mathcal{I}|$$ candidate tokens and their corresponding
     positions. To increase the robustness of the model, instead of
     deterministically performing the substitution for the candidate that results
     in the greatest decrease in loss, instead they randomly select $$B \leq k |\mathcal{I}|$$ of the candidates and take the minimum among them.
@@ -120,31 +118,27 @@ varying contents and lengths.
 Concretely, suppose our goal is to optimize over all possible suffixes of length $$l$$,
 call this $$p_{1:l}$$, and we are handed prompts $$x_{1:n_1}^{(1)} \cdots x_{1:n_m}^{(m)}$$.
 
-
 To this end, the authors developed the Universal Prompt Optimization algorithm,
 which works as follows:
 
-1. 
-    We start by optimizing over the first $$m_c=1$$ prompt only.
+1.  We start by optimizing over the first $$m_c=1$$ prompt only.
     This is because they found that it was easier to start by just optimizing
     one prompt, and then tweaking it to work for more subsequent prompts,
     instead of optimizing it over all prompts jointly.
 
-2. 
-    For each coordinate $$i \in \{1, \dots, l \}$$ of the suffix,
+2.  For each coordinate $$i \in \{1, \dots, l \}$$ of the suffix,
     compute the top-$$k$$ substitutions, where top-$$k$$ here is ranked by
     maximizing the sum of the negative gradients across all the first $$m_c$$ prompts.
     Intuitively this means that the substitution should be good for all the first $$m_c$$ prompts
     we currently consider.
 
-3. 
-    For some $$B \leq kl$$ of samples to take, we take this number of samples from 
+3.  For some $$B \leq kl$$ of samples to take, we take this number of samples from
     all the $$kl$$ candidates, and then evaluate the sum of their loss if the substitution was performed over the first $$m_c$$ prompts. We perform the substitution
     for the coordinate token that results in the smallest loss.
 
 4.  If the substitution results in $$p_{1:l}$$ succeeding against the first $$m_c$$ prompts,
     then increment $$m_c$$, so in the next iteration we will optimize over an additional new prompt.
-    
+
     In any case, repeat from step 2 onwards until we have looped for $$T$$ iterations and exhausted
     our compute budget.
 
@@ -155,7 +149,6 @@ The full algorithm is given below:
     width="600px"
     class="z-depth-1"
 %}
-
 
 #### 4. Results
 
@@ -181,7 +174,7 @@ could also do somewhat well on other models, including proprietary ones:
 ### Most Glaring Deficiency
 
 While the authors noted many limitations of their results, such as how the
-success in the transfer attack of GPT-3.5 may have largely come from the 
+success in the transfer attack of GPT-3.5 may have largely come from the
 fact that Vicuna was trained on output from GPT-3.5, one aspect that was
 not investigated as much was the effectiveness of the attack in relation to model size.
 
@@ -189,7 +182,6 @@ Since the scaling of models results in many emergent properties including being 
 to identify falsehoods, it would have been a natural question to ask whether
 simply performing alignment tuning on larger models would naturally
 increase its resistance to adversarial prompts.
-
 
 ### Conclusions for Future Work
 

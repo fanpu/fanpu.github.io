@@ -27,7 +27,7 @@ due to being economically and socially marginalized.
 
 #### 2. Unfathomable Training Data
 
-The rate of growth of datasets used for training LLMs has also resulted in a 
+The rate of growth of datasets used for training LLMs has also resulted in a
 documentation debt, where existing corpuses are undocumented and too large to
 now be documented.
 
@@ -47,11 +47,11 @@ Finally, while it is important to ensure that language mdoels do not output toxi
 content, doing so could counterintuitively further marginalize disadvantaged communities.
 Developers of previous language models have made good-faith attempts to
 do this using methods including removing potentially toxic content from
-their training datasets. A popular way of doing this is using a 
-filter list, i.e 
+their training datasets. A popular way of doing this is using a
+filter list, i.e
 [List of Dirty Naughty Obscene and Otherwise Bad Words](https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/blob/master/en),
 and to remove any content that contains words in the list. However, this was
-found to marginalize LGBTQ communities where words like *twink* appeared
+found to marginalize LGBTQ communities where words like _twink_ appeared
 frequently in their discourse, but are often included in such lists.
 
 #### 3. Risks and Harms
@@ -71,14 +71,14 @@ from their training corpus, and learn biases that are present, especially from
 groups who are already in privileged positions in society.
 
 Furthermore, in spite of attempts at making LLMs more fair and equitable, such
-attempts will never be sufficiently comprehensive and complete.  Prevailing
+attempts will never be sufficiently comprehensive and complete. Prevailing
 views of diversity and inclusion largely draws from legally protected attributes
 in the US such as race and gender, but miss out on many other marginalized
 communities around the world that don't fit into this mould.
 
 On a reliability front, there are also concerns of LLMs producing wrong output
 that lead to real-world consequences, in particular for disadvantage communities.
-For instance, they cited the example of how 
+For instance, they cited the example of how
 [a Palestinian man was wrongly arrested](https://www.theguardian.com/technology/2017/oct/24/facebook-palestine-israel-translates-good-morning-attack-them-arrest)
 by the Israeli authorities when a post saying "good morning" in a dialect of
 Arabic resulted in Facebook translating it into "hurt them" in English, which
@@ -86,19 +86,17 @@ prompted the government to take action. A lack of representative training data f
 these languages with fewer number of speakers is likely to be a major reason for
 the mistranslation.
 
-
 ### Most Glaring Deficiency
 
 I found the paper overly qualitative with a lack of clear evidence or results to
 validate their points, and their arguments sometimes appeals to the pathos too
 much, which would be fine in normal writing but is probably insufficient for an
-academic paper. 
-
+academic paper.
 
 ### Conclusions for Future Work
 
 While there is not much in the way of technical contribution, this is still
-an influential paper in its own right, as it kicked off a lot of discussion 
+an influential paper in its own right, as it kicked off a lot of discussion
 regarding the ethics and morality of LLMs back when the paper was published in
 2021 before usage of LLMs truly took off.
 
@@ -110,4 +108,4 @@ To end off, quoting Birhane and Prabhu, based off a quote from Ruha
 Benjamin:
 
 > "Feeding AI systems on the world’s beauty, ugliness, and cruelty, but
-expecting it to reflect only the beauty is a fantasy."
+> expecting it to reflect only the beauty is a fantasy."
