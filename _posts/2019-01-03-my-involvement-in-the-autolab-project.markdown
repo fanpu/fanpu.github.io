@@ -1,6 +1,6 @@
 ---
 layout: post
-tags: [general, CMU, code]
+tags: [general, cmu, code]
 title: My Involvement in the Autolab Project
 cover_preview: autolab.webp
 class: post-template
