@@ -15,7 +15,7 @@ description:
     we crack the secret phase together!
 ---
 
-Welcome to the final part of cracking CMU's Bomblab with Angr. If you are new here, I would recommend starting with part 1 [here](breaking-cmu-bomblab-with-angr-for-fun-and-profit-part-1).
+Welcome to the final part of cracking CMU's Bomblab with Angr. If you are new here, I would recommend starting with part 1 [here](2020-07-30-breaking-cmu-bomblab-with-angr-for-fun-and-profit-part-1).
 
 ### Secret Phase
 We knew about the secret phase because we literally saw the string "Wow! You've defused the secret stage!" from Angr's output for Phase 1, because the string was located right after the compare string for Phase 1in memory. If we do `info func` in GDB, we indeed see a `secret_phase` and `fun7` function.
