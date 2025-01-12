@@ -27,9 +27,9 @@ the query likelihood model (QLM).
 #### 2. Extending to Multi-shot Settings
 
 The previous formulation is a zero-shot setting.
-To extend this to the multi-shot setting, they used 
-the Guided by Bad Questions template (see 
-[InPars: Data Augmentation for Information Retrieval using Large Language Models]({% link _summaries/2024-09-29-inpars-data-augmentation-for-information-retrieval-using-large-language-models.markdown %})). 
+To extend this to the multi-shot setting, they used
+the Guided by Bad Questions template (see
+[InPars: Data Augmentation for Information Retrieval using Large Language Models]({% link _summaries/2024-09-29-inpars-data-augmentation-for-information-retrieval-using-large-language-models.markdown %})).
 
 In this template, 3 documents are provided, each accompanied by a bad and good
 question that pertains to it. This allows the model to learn what a good
@@ -51,7 +51,7 @@ task was not reflected in its finetuning dataset.
 
 ### Most Glaring Deficiency
 
-Prompt format for the QLM was somewhat arbitrary.  It's also possible that the
+Prompt format for the QLM was somewhat arbitrary. It's also possible that the
 QLM may be sensitive to length, and there may be degenerate queries with low
 perplexity (i.e repeated phrases) but which are not actually relevant.
 

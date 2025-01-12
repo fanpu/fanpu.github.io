@@ -18,6 +18,7 @@ the valid short answers into a coherent long answer.
 For instance, the question `Who was the ruler of France in 1830` is ambiguous since there were two rulers.
 
 They use the following desiderata for a good long answer:
+
 - Completeness. The long answer should contain all valid short answers.
 - Comprehensiveness. The long answer should address source of initial ambiguity, and map the relationship between the provided short answers
 - Fluency. Should be coherent and fluent

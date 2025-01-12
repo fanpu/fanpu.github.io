@@ -35,7 +35,7 @@ They call their technique ITER-RETGEN. It works as follows:
 3. Get answer generation $$y_1$$
 4. Query new context given query and first geneartion, $$D_{y_1 \|\| q}$$
 5. Get answer generation $$y_2$$
-6. ...and so on, until we have all $$T$$ iterations. 
+6. ...and so on, until we have all $$T$$ iterations.
 7. Return $$y_T$$ as the final response
 
 #### 2. Evaluation Format
@@ -93,6 +93,6 @@ which could be explored.
 
 ### Conclusions for Future Work
 
-I suspect this paradigm works because it can be viewed as a form of 
+I suspect this paradigm works because it can be viewed as a form of
 advanced query re-writing, where the query now looks very similar to the target
 data due to inclusion of similarly relevant data chunks.
