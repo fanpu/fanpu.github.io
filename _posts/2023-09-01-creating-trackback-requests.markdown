@@ -41,7 +41,7 @@ It helps to increase the visibility and discoverability of your website.
 ## Use Case
 My use case was to send trackbacks to [arXiv](https://info.arxiv.org/help/trackback.html),
 so that specific arXiv papers will know that my blog post mentioned them, and readers
-can also check it out as an additional resource. In particular, each of my [paper summary](summaries) posts is based around a paper, and it would be nice if they could be linked from the respective arXiv paper abstract pages.
+can also check it out as an additional resource. In particular, each of my [paper summary]({% link _pages/summaries.md %}) posts is based around a paper, and it would be nice if they could be linked from the respective arXiv paper abstract pages.
 
 In arXiv, there is a blog link section that will track websites that made trackback
 requests for a given paper:

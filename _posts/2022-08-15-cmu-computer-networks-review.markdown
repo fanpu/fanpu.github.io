@@ -81,7 +81,7 @@ given in the graph above.
 #### Checkpoint 1: Adaptive Bitrate Proxy
 This is known as the "Netflix" project, where you have to write a web proxy for
 video streaming.  You will most likely re-use a lot of your code from the web
-server you wrote in [Project-1](project-1-a-web-server-called-liso) to save
+server you wrote in [Project-1](#project-1-a-web-server-called-liso) to save
 time. Browsers will connect to your web proxy and request video chunks, and your
 proxy will dynamically adjust the bitrate of the video chunks sent to clients
 depending on their network conditions. This requires you to perform network
@@ -280,7 +280,7 @@ help your career prospects, you can't go too wrong with this class.
 This post is written as part of a collection of posts to help shed light on some
 of CMU's less well-known classes that I found interesting and useful, in hopes
 of encouraging more people to consider taking them. Check out the [Course
-Reviews]( {% link _pages/courses.md %}) page for more.
+Reviews]({% link _pages/courses.md %}) page for more.
 
 
 I hope you found this post useful! Feel free to ask any questions in the
