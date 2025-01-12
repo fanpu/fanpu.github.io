@@ -102,7 +102,7 @@ We consider two main applications of MRL that can significantly speed things up.
    Impressively, MRL was able to get the same accuracy as fixed feature baselines while using
    a 14x smaller representation:
 
-    {% include figure_simple.liquid
+   {% include figure_simple.liquid
         path="/assets/img/summaries/mrl_classification.webp"
         width="300px"
         class="z-depth-1"

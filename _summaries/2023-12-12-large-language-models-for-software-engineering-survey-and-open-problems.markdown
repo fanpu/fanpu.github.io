@@ -9,7 +9,7 @@ bib_id: 2310.03533v4
 
 As a survey paper, it covered a lot of topics on how LLMs are being applied in
 software engineering that I didn't think was worthwhile to repeat for the sake
-of it.  Instead, I'll highlight the 3 most important sentiments/takeaways I
+of it. Instead, I'll highlight the 3 most important sentiments/takeaways I
 gained.
 
 #### 1. The Future of Coding
@@ -17,16 +17,16 @@ gained.
 The paper mentioned some pretty surprising statistics:
 
 > In 2021, OpenAI introduced CodeX, a fined-tuned descendant of GPT-3. CodeX is
-used by GitHub’s Copilot, which provides users of Visual Studio Code, Visual
-Studio, Neovim, and JetBrains with code completion. The new version of Copilot,
-GitHub Copilot X2 , is based on GPT-4. In February 2023, GitHub reported that,
-on average, 46% of the developers’ code was written by Copilot [25]. For Java
-only, that number is 62%. Thomas Dohmke, CEO of GitHub, said Copilot will write
-80% of code “sooner than later” in June 2023 [26]
+> used by GitHub’s Copilot, which provides users of Visual Studio Code, Visual
+> Studio, Neovim, and JetBrains with code completion. The new version of Copilot,
+> GitHub Copilot X2 , is based on GPT-4. In February 2023, GitHub reported that,
+> on average, 46% of the developers’ code was written by Copilot [25]. For Java
+> only, that number is 62%. Thomas Dohmke, CEO of GitHub, said Copilot will write
+> 80% of code “sooner than later” in June 2023 [26]
 
 I knew that coding assistant usage is getting popular, but had no idea it has
 already taken off to this point that in the near future most code will be
-AI-generated. 
+AI-generated.
 
 This was scary in some ways: the flywheel effect of code language models
 eventually being trained on its own outputs is much closer than I anticipated,
@@ -54,7 +54,7 @@ time.
 
 LLM hallucinations are traditionally cast in a negative light
 as a failure mode that needs to be "fixed" with better techniques
-and data. 
+and data.
 
 However, this paper provides an alternative view: LLMs by their
 nature are autoregressive machines that samples statistically probable
@@ -62,24 +62,27 @@ completions, and the fact that hallucinations happen is indicative
 of what it deems a 'plausible future' that we simply disagree with.
 
 This is down to two reasons:
+
 1. Our intention was misunderstood by the LLM, but if a
-LLM misunderstood the context around our code, couldn't this
-misunderstanding also be possible from humans? Maybe our code was
-poorly written and had misleading variable names?
+   LLM misunderstood the context around our code, couldn't this
+   misunderstanding also be possible from humans? Maybe our code was
+   poorly written and had misleading variable names?
 2. The hallucinated functions/variables may be things that the LLM needs, but
-could not find and hence it simply came up with them. Perhaps this is indicative
-that the code is fundamentally missing some useful constructs that should be
-added?
+   could not find and hence it simply came up with them. Perhaps this is indicative
+   that the code is fundamentally missing some useful constructs that should be
+   added?
 
 Based on this new perspective, we can view hallucinations as instead a
 constructive guiding step towards writing better code, such as to perform
 refactoring or creating new APIs that are needed to solve the task at hand.
 
 ### Most Glaring Deficiency
+
 Can't really criticize a survey paper much, I think they summarized the field
 well.
 
 ### Conclusions for Future Work
+
 A lot of exciting work is being done to apply LLMs to software engineering, ranging from code generation to code repair to debugging. There has been
 promising early signs of success, and the way we write software in the future
 could change dramatically.

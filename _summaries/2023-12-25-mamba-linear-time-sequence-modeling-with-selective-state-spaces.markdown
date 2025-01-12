@@ -31,7 +31,7 @@ work. We'll focus on [structured state space sequence (S4) models]({% link _summ
 S4 models are parameterized by $$\Delta$$, the discretization timestep,
 and learnt matrices $$\bA, \bB, \bC$$.
 
-As a system that evolves continuously with latent state $$h(t)$$, 
+As a system that evolves continuously with latent state $$h(t)$$,
 it can be formulated as the following differential equation:
 
 $$
@@ -71,8 +71,6 @@ $$
 \exp(\bX) = \sum_{k=0}^\infty \frac{1}{k!} \bX^k
 $$ -->
 
-
-
 <!-- State space models suffer from the same issues as recurrent models.
 However, the authors  -->
 
@@ -82,9 +80,6 @@ However, the authors  -->
     class="z-depth-1"
 %}
 
-
-
-
 #### 2. Hardware-Aware Algorithm
 
 Associative means that the grouping of operations
@@ -93,8 +88,6 @@ does not matter: $(A \times B) \times C = A \times (B \times C)$.
 Prefix sums are referred to as scan in the functional programming/parallel
 programming community.
 
-
- 
 #### 3. Baz
 
 ### Most Glaring Deficiency
