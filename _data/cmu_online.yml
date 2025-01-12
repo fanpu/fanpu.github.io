@@ -30,7 +30,7 @@ ml_courses:
       generative models for image generation.
     youtube_playlist_id: PLGzYMymX8amNyGPuJ35YWdq59eQ5jYCZ1
     semester: Fall 2022
-    instructors: 
+    instructors:
       - name: Zico Kolter
         website: https://zicokolter.com/
       - name: Tianqi Chen
@@ -57,7 +57,7 @@ ml_courses:
       choosing.
     youtube_playlist_id: PL8PYTP1V4I8D0UkqW2fEhgLrnlDW9QK7z
     semester: Fall 2022
-    instructors: 
+    instructors:
       - name: Graham Neubig
         website: http://phontron.com/
       - name: Robert E. Frederking
@@ -85,7 +85,7 @@ ml_courses:
       including variational inference and Markov Chain Monte Carlo methods.
     youtube_playlist_id: PLoZgVqqHOumTqxIhcdcpOAJOOimrRCGZn
     semester: Spring 2020
-    instructors: 
+    instructors:
       - name: Eric P. Xing
         website: https://www.cs.cmu.edu/~epxing/
     tags:
@@ -117,7 +117,7 @@ ml_courses:
       are not convex at all.
     panopto_link: https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx?folderID=35028909-68d2-46be-b0d8-af020148d304
     semester: Fall 2022
-    instructors: 
+    instructors:
       - name: Yuanzhi Li
         website: https://www.andrew.cmu.edu/user/yuanzhil/
     tags:
@@ -139,7 +139,7 @@ ml_courses:
       algorithms currently needed by people who do research in machine learning.
     youtube_playlist_id: PLsWN0V-b507g7dbQTUvFkKZEqdHR5Fh4P
     semester: Fall 2020
-    instructors: 
+    instructors:
       - name: Ziv Bar-Joseph
         website: https://www.cs.cmu.edu/~zivbj/
       - name: Eric P. Xing
@@ -172,7 +172,7 @@ ml_courses:
       theory, reinforcement learning and online learning, etc.
     youtube_playlist_id: PL4YhK0pT0ZhWBzSBkMGzpnPw6sf6Ma0IX
     semester: Fall 2015
-    instructors: 
+    instructors:
       - name: Barnabas Poczos
         website: http://www.cs.cmu.edu/~bapoczos/
       - name: Alex Smola
@@ -191,7 +191,7 @@ ml_courses:
       fast changing from an esoteric desirable to a mandatory prerequisite in many
       advanced academic settings, and a large advantage in the industrial job
       market.
-      
+
       In this course we will learn about the basics of deep neural networks, and
       their applications to various AI tasks. By the end of the course, it is
       expected that students will have significant familiarity with the subject,
@@ -200,7 +200,7 @@ ml_courses:
       extend their knowledge through further study.
     youtube_playlist_id: PLp-0K3kfddPwgBSCbDtT6NaVOd-gIHVMW
     semester: Spring 2023
-    instructors: 
+    instructors:
       - name: Bhiksha Raj
         website: http://mlsp.cs.cmu.edu/people/bhiksha/
       - name: Rita Singh
@@ -223,7 +223,7 @@ ml_courses:
       state representations.
     panopto_link: https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx?folderID=ee5794a2-cb54-4edc-836b-aefc01023243
     semester: Fall 2022
-    instructors: 
+    instructors:
       - name: Katerina Fragkiadaki
         website: https://www.cs.cmu.edu/~katef/
     tags:
@@ -247,7 +247,7 @@ ml_courses:
       We will also review recent papers describing state-of-the-art
       probabilistic models and computational algorithms for MMML and discuss the
       current and upcoming challenges.
-      
+
       The course will present the fundamental mathematical concepts in machine
       learning and deep learning relevant to the five main challenges in
       multimodal machine learning: (1) multimodal representation learning, (2)
@@ -260,7 +260,7 @@ ml_courses:
       retrieval.
     youtube_playlist_id: PLTLz0-WCKX616TjsrgPr2wFzKF54y-ZKc
     semester: Fall 2020
-    instructors: 
+    instructors:
       - name: Louis-Philippe Morency
         website: https://www.cs.cmu.edu/~morency/
     tags:
@@ -278,7 +278,7 @@ ml_courses:
       may be exorbitantly expensive when the dataset is too large for memory.
       Large datasets may also display qualitatively different behavior in terms
       of which learning methods produce the most accurate predictions.
-      
+
       This course is intended to provide a student practical knowledge of, and
       experience with, the issues involving large datasets. Among the issues
       considered are: scalable learning techniques, such as streaming machine
@@ -289,7 +289,7 @@ ml_courses:
       methods) communication complexity.
     youtube_playlist_id: PL4YhK0pT0ZhUoBI-V2AvitMrE133iAKs3
     semester: Fall 2016
-    instructors: 
+    instructors:
       - name: William Cohen
         website: http://www.cs.cmu.edu/~wcohen/
     tags:
@@ -320,7 +320,7 @@ ml_courses:
       needed to fully leverage the data.
     panopto_link: https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx?folderID=618ea253-ca45-4b14-9f1d-aab501543bd2
     semester: Fall 2019
-    instructors: 
+    instructors:
       - name: Zico Kolter
         website: https://zicokolter.com/
     tags:
@@ -332,7 +332,7 @@ ml_courses:
     description: >
     youtube_playlist_id: PLOxR6w3fIHWyOa1Guwjl-oNNfvZ4yQUuD
     semester: Spring 2014
-    instructors: 
+    instructors:
       - name: Zico Kolter
         website: http://zicokolter.com/
       - name: Zachary B. Rubinstein
@@ -368,7 +368,7 @@ systems_courses:
       networking technology and protocols, and supporting concurrent computation.
     youtube_playlist_id: PLQ5cMeVTtiJkUilq92Cw9D6RhAJhPJ_JX
     semester: Fall 2015
-    instructors: 
+    instructors:
       - name: Randal E. Bryant
         website: https://www.cs.cmu.edu/~bryant/
       - name: David R. O'Hallaron
@@ -393,7 +393,7 @@ systems_courses:
       programming skills.
     youtube_playlist_id: PLSE8ODhjZXjaKScG3l0nuOiDTTqpfnWFf
     semester: Fall 2022
-    instructors: 
+    instructors:
       - name: Andy Pavlo
         website: http://www.cs.cmu.edu/~pavlo/
     tags:
@@ -414,7 +414,7 @@ systems_courses:
       skills.
     youtube_playlist_id: PLSE8ODhjZXjYzlLMbX3cR0sxWnRM7CLFn
     semester: Spring 2023
-    instructors: 
+    instructors:
       - name: Andy Pavlo
         website: http://www.cs.cmu.edu/~pavlo/
     tags:
@@ -435,7 +435,7 @@ systems_courses:
       software design.
     panopto_link: https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx?folderID=f62c2297-de88-4e63-aff2-06641fa25e98
     semester: Spring 2016
-    instructors: 
+    instructors:
       - name: Kayvon Fatahalian
         website: http://graphics.stanford.edu/~kayvonf/
       - name: Randal E. Bryant
@@ -472,10 +472,10 @@ theory_courses:
       Examples are drawn from algorithms, complexity theory, game theory,
       probability theory, graph theory, automata theory, algebra, cryptography,
       and combinatorics. Assignments involve both mathematical proofs and
-      programming. 
+      programming.
     youtube_playlist_id: PLm3J0oaFux3aafQm568blS9blxtA_EWQv
     semester: Spring 2016
-    instructors: 
+    instructors:
       - name: Ryan O'Donnell
         website: https://www.cs.cmu.edu/~odonnell/
     tags:
@@ -495,7 +495,7 @@ theory_courses:
       Hypothesis, and fine-grained complexity.
     youtube_playlist_id: PLm3J0oaFux3YL5vLXpzOyJiLtqLp6dCW2
     semester: Spring 2017
-    instructors: 
+    instructors:
       - name: Ryan O'Donnell
         website: https://www.cs.cmu.edu/~odonnell/
     tags:
@@ -514,7 +514,7 @@ theory_courses:
       limitations and current practical developments.
     youtube_playlist_id: PLm3J0oaFux3YL5qLskC6xQ24JpMwOAeJz
     semester: Fall 2018
-    instructors: 
+    instructors:
       - name: Ryan O'Donnell
         website: https://www.cs.cmu.edu/~odonnell/
     tags:
@@ -535,7 +535,7 @@ theory_courses:
       content, proofs, and new techniques.
     panopto_link: https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx#folderID=%2253c58248-7fd4-4f71-8774-af85013a570a%22
     semester: Spring 2023
-    instructors: 
+    instructors:
       - name: Anupam Gupta
         website: http://www.cs.cmu.edu/~anupamg/
     tags:
@@ -557,7 +557,7 @@ theory_courses:
       contribute to cutting-edge research in computational complexity theory
     youtube_playlist_id: PLm3J0oaFux3b8Gg1DdaJOzYNsaXYLAOKH
     semester: Fall 2017
-    instructors: 
+    instructors:
       - name: Ryan O'Donnell
         website: https://www.cs.cmu.edu/~odonnell/
     tags:
@@ -586,7 +586,7 @@ theory_courses:
       their facility with LaTeX and their ability to write clear correct proofs.
     youtube_playlist_id: PLm3J0oaFux3ZYpFLwwrlv_EHH9wtH6pnX
     semester: Spring 2020
-    instructors: 
+    instructors:
       - name: Ryan O'Donnell
         website: https://www.cs.cmu.edu/~odonnell/
     tags:
@@ -594,7 +594,7 @@ theory_courses:
       - theory
 
   - name: >
-         15-859GG Proofs vs Algorithms: The Sum-of-Squares Method
+      15-859GG Proofs vs Algorithms: The Sum-of-Squares Method
     url: http://www.cs.cmu.edu/~praveshk/sosseminar/sosseminar.html
     description: >
       This seminar examines the sum-of-squares method with an emphasis on
@@ -608,7 +608,7 @@ theory_courses:
       Likelihood Ratio Method and Extended Formulations.
     youtube_playlist_id: PL3NB_Sd9CrX-6CeApf12demgpe2PO4k8c
     semester: Fall 2020
-    instructors: 
+    instructors:
       - name: Pravesh Kothari
         website: http://www.cs.cmu.edu/~praveshk/
     tags:
@@ -630,7 +630,7 @@ theory_courses:
       geometry, random graph theory, and probabilistic invariance principles.
     youtube_playlist_id: PLm3J0oaFux3YypJNaF6sRAf2zC1QzMuTA
     semester: Fall 2012
-    instructors: 
+    instructors:
       - name: Ryan O'Donnell
         website: https://www.cs.cmu.edu/~odonnell/
     tags:
@@ -669,7 +669,7 @@ pl_courses:
       of lectures given at OPLSS, instead of CMU due to the
       absence of recordings.
     semester: OPLSS Summer 2018
-    instructors: 
+    instructors:
       - name: Jan Hoffmann
         website: https://www.cs.cmu.edu/~janh
     tags:
@@ -696,7 +696,7 @@ pl_courses:
       operations. Altogether this means that a type is a weak ∞-groupoid.
     youtube_playlist_id: PL1-2D_rCQBarjdqnM21sOsx09CtFSVO6Z
     semester: Fall 2012
-    instructors: 
+    instructors:
       - name: Robert Harper
         website: http://www.cs.cmu.edu/~rwh/
     tags:
@@ -714,7 +714,7 @@ pl_courses:
       the form of substructural operational semantics.
     panopto_link: https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx#folderID=17bf4c63-e606-4029-b508-f94c7d121ca0
     semester: Spring 2012
-    instructors: 
+    instructors:
       - name: Frank Pfenning
         website: http://www.cs.cmu.edu/~fp/
     tags:
@@ -756,7 +756,7 @@ pl_courses:
       of lectures given at OPLSS, instead of CMU due to the
       absence of recordings.
     semester: OPLSS Summer 2019
-    instructors: 
+    instructors:
       - name: Jan Hoffmann
         website: https://www.cs.cmu.edu/~janh
     tags:
@@ -790,7 +790,7 @@ pl_courses:
       of lectures given at OPLSS, instead of CMU due to the
       absence of recordings.
     semester: OPLSS Summer 2018
-    instructors: 
+    instructors:
       - name: Robert Harper
         website: http://www.cs.cmu.edu/~rwh/
     tags:
@@ -821,7 +821,7 @@ graphics_courses:
         https://www.youtube.com/playlist?list=PL9_jI1bdZmz2emSh0UQ5iOdT2xRHFHL7E
       </a>
     semester: Fall 2020
-    instructors: 
+    instructors:
       - name: Keenan Crane
         website: https://www.cs.cmu.edu/~kmcrane/
     tags:
@@ -853,7 +853,7 @@ graphics_courses:
       of geodesic distance.
     youtube_playlist_id: PL9_jI1bdZmz0hIrNCMQW1YmZysAiIYSSS
     semester: Spring 2021
-    instructors: 
+    instructors:
       - name: Keenan Crane
         website: https://www.cs.cmu.edu/~kmcrane/
     tags:
@@ -879,7 +879,7 @@ robotics_courses:
       simulation methods to their own research.
     youtube_playlist_id: PLZnJoM76RM6ItAfZIxJYNKdaR_BobleLY
     semester: Fall 2022
-    instructors: 
+    instructors:
       - name: Zachary Manchester
         website: https://www.ri.cmu.edu/ri-faculty/zachary-manchester/
     tags:
@@ -899,7 +899,7 @@ robotics_courses:
       research.
     youtube_playlist_id: PLZnJoM76RM6Iaf59ICcU9-DzztGZvK_52
     semester: Spring 2022
-    instructors: 
+    instructors:
       - name: Zachary Manchester
         website: https://www.ri.cmu.edu/ri-faculty/zachary-manchester/
     tags:
@@ -948,8 +948,8 @@ math_courses:
     youtube_playlist_id: PLgTkKBA6LRqYuuQ-LboerRblBoD_q_eUM
     video_note: Note that videos in the playlist are in reverse chronological order.
     semester: Sping 2021
-    instructors: 
-      - name: Po-Shen Loh 
+    instructors:
+      - name: Po-Shen Loh
         website: https://www.poshenloh.com/
     tags:
       - undergraduate
@@ -979,8 +979,8 @@ math_courses:
     youtube_playlist_id: PLgTkKBA6LRqaGKITvQS1QuIBoEbOVwFTm
     video_note: Note that videos in the playlist are in reverse chronological order.
     semester: Spring 2022
-    instructors: 
-      - name: Po-Shen Loh 
+    instructors:
+      - name: Po-Shen Loh
         website: https://www.poshenloh.com/
     tags:
       - graduate
@@ -993,10 +993,10 @@ math_courses:
       include: probability inequalities, point and interval estimation, minimax
       theory, hypothesis testing, data reduction, convergence concepts, Bayesian
       inference, nonparametric statistics, bootstrap resampling, VC dimension,
-      prediction and model selection. 
+      prediction and model selection.
     youtube_playlist_id: PL_Ig1a5kxu55KBWM3Su6-K352gQJcmEZd
     semester: Fall 2016
-    instructors: 
+    instructors:
       - name: Larry Wasserman
         website: http://www.stat.cmu.edu/~larry
     tags:
