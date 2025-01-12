@@ -27,7 +27,7 @@ technique called rotary position embeddings (RoPE) which performs better
 and is used in almost all open-source large language models today (and believed
 to be used in proprietary models as well).
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/posts/positional_embeddings/rope_models.webp"
     width="500px"
     class="z-depth-1"

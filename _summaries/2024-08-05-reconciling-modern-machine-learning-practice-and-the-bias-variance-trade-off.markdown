@@ -15,7 +15,7 @@ incomplete, and that increasing model capacity beyond the interpolation
 threshold (i.e where training error goes to 0) can cause test loss to go even
 lower than the minima from the under-parameterized regime.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/bias_variance_tradeoff.webp"
     width="600px"
     class="z-depth-1"
@@ -49,7 +49,7 @@ Thus we can see that increasing $$N$$ makes the function class more expressive,
 and in fact when you take $$n \to \infty$$ this converges to the Reproducing
 Kernel Hilbert Space.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/bias_variance_tradeoff_rff.webp"
     width="600px"
     class="z-depth-1"

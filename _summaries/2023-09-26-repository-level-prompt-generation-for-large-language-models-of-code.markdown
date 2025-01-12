@@ -48,7 +48,7 @@ the prompt source, with the following categories:
 An overview of the RLPG framework is given below (I personally found this
 diagram more confusing than helpful, so skip it if you wish):
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/repo-level-codegen-overview.webp"
     width="600px"
     class="z-depth-1"
@@ -106,7 +106,7 @@ mechanism between the prompt and the hole context (and RLPG-H does not even have
 access to the prompt contents), but surprisingly RLPG-H performs slightly better
 on evaluation:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/repo-level-codegen-results.webp"
     width="600px"
     class="z-depth-1"
@@ -123,7 +123,7 @@ This indicates that it is worthwhile to add any sort of context and
 not worry too much about ordering.
 
 It is also interesting to note the prompt proposals that had the highest success rates
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/repo-level-codegen-success.webp"
     width="600px"
     class="z-depth-1"

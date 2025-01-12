@@ -19,7 +19,7 @@ computationally challenging.
 In prefix-tuning, they instead add a fixed-length prefix that applies to all layers
 of the Transformer, and optimize for this prefix:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/prefix_tuning_diag.webp"
     width="600px"
     class="z-depth-1"
@@ -63,7 +63,7 @@ and output $$y$$ (i.e $$[x; \text{INFIX}; y]$$),
 and showed that both performed significantly worse
 compared to prefix-tuning (first row):
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/prefix_tuning_embedding_comparison.webp"
     width="400px"
     class="z-depth-1"

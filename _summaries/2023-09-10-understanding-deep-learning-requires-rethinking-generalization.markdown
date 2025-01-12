@@ -47,7 +47,7 @@ The authors found that standard neural network architectures like Inception V3 o
 benchmark datasets like CIFAR10 could fit random assignment of training labels, and also
 other forms of corruption of the data:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/rethinking-generalization-fit-random.webp"
     width="600px"
     class="z-depth-1"
@@ -71,7 +71,7 @@ dropout, weight-decay, and batchnorm?
 Unfortunately, even with regularization the various popular architectures were still
 able to almost perfectly fit random labels:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/rethinking-generalization-explicit-reg.webp"
     width="600px"
     class="z-depth-1"

@@ -15,7 +15,7 @@ is passed through several stacked convolution and pooling layers,
 before forking off into two different outputs, as illustrated
 in the diagram below.
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/ww-start-end-regression.webp"
     width="600px"
     class="z-depth-1"
@@ -40,7 +40,7 @@ it detects three things:
 2. End of the WW
 3. Main detector of the WW (centrally aligned)
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/ww-multi-aligned.webp"
     width="600px"
     class="z-depth-1"

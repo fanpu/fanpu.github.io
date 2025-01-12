@@ -32,7 +32,7 @@ The paper uses this idea to introduce the Rewrite-Retrieve-Read
 paradigm, which performs a rewrite of the query before
 retrieving relevant documents, denoted in 2 different setups (b) and (c):
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/rewrite_retrieve_read_summary.webp"
     width="600px"
     class="z-depth-1"
@@ -75,7 +75,7 @@ is more involved and is explained in a subsequent section.
 There is proably no doubt that rewriting will improve performance,
 and the results does indeed confirm this is the case (compare Retrieve-then-read vs LLM rewriter):
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/rewrite_retrieve_read_results.webp"
     width="400px"
     class="z-depth-1"

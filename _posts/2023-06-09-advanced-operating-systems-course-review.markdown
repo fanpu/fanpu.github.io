@@ -80,14 +80,14 @@ Research](https://www.cs.cmu.edu/~15712/papers/hamming86.pdf) by Richard Hamming
 (of Hamming code fame), talks about how to become a great scientist. 
 The following two slides gives a good sense of the spirit of the paper:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/adv_os/slide_1.webp"
     width="400px"
     class="z-depth-1"
     caption="How to be a Great Scientist (1)"
 %}
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/adv_os/slide_2.webp"
     width="400px"
     class="z-depth-1"
@@ -349,7 +349,7 @@ segments of the network. We built a system called `DynPartition`,
 a reinforcement-learning based scheduler that uses Deep-Q Learning to learn
 the optimal way of performing this split.
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/adv_os/presentation.webp"
     width="400px"
     class="z-depth-1"

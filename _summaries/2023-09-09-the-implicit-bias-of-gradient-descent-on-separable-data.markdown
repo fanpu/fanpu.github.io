@@ -19,7 +19,7 @@ eventually converge to that solution (even as validation loss may be increasing)
 As a brief recap of max-margin (also known as hard) SVM, consider the linearly
 separable dataset given in the figure below:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/implicit-bias-svm.webp"
     width="600px"
     class="z-depth-1"
@@ -173,7 +173,7 @@ The authors showed that empirical
 results on synthetic data supported their 
 theoretical findings:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/implicit-bias-separable.webp"
     width="600px"
     class="z-depth-1"
@@ -188,7 +188,7 @@ investigated the loss and error curves on
 non-linearly separable CIFAR10 dataset, and
 saw that it observed the same trends:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/implicit-bias-non-separable.webp"
     width="600px"
     class="z-depth-1"

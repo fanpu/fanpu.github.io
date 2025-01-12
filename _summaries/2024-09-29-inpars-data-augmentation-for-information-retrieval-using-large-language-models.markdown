@@ -17,7 +17,7 @@ using the MS MARCO dataset. The MS MARCO dataset is a large dataset from
 anonymized Bing search queries that comprises 500k pairs of queries and
 relevant documents.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/inpars_prompt.webp"
     width="600px"
     class="z-depth-1"

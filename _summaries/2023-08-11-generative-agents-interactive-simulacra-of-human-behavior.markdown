@@ -55,7 +55,7 @@ limited context window of ChatGPT, and the distracting nature of having too many
 events, it is infeasible to simply input the entire memory stream as part of the prompt
 when determining how the agent should respond.
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/simulacra-memory-stream.webp"
     width="600px"
     class="z-depth-1"
@@ -63,7 +63,7 @@ when determining how the agent should respond.
 
 Instead, the authors use the following approach to retrieve salient memories, summarized in the figure below:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/simulacra-retrieval.webp"
     width="600px"
     class="z-depth-1"

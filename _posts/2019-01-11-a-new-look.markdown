@@ -26,7 +26,7 @@ interfaces back when I was working at [Saleswhale](https://saleswhale.com), I
 felt like I could definitely do much better.
 
 
-{% include figure.html path="/assets/img/posts/old_look.webp" width="100%"
+{% include figure.liquid path="/assets/img/posts/old_look.webp" width="100%"
 class="z-depth-1" caption="A screengrab of how the old blog looked." %}
 
 As you can see above, the original look was bland and did not make for a very pleasant reading experience, and its layout did not encourage retention. Since I had some time over the winter break, I decided to migrate its theme over to [jasper2](https://github.com/jekyller/jasper2), based on Ghost's default theme Casper v2.
@@ -51,7 +51,7 @@ Some readers may also know that my website is also ported on Carnegie Mellon's w
 
 Finally, I checked that Google Analytics and Disqus was working, and that everything was rendering properly. I also resized some of the larger images with ImageMagick in order to decrease load time and save bandwidth.
 
-{% include figure.html 
+{% include figure.liquid 
   path="/assets/img/posts/new_look.webp" 
   width="100%"
   class="z-depth-1" 

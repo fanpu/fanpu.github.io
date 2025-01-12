@@ -32,7 +32,7 @@ This motivates the need to use RL to impart this behavior, with the authors intr
 called SCoRe.
 
 Samples of SCoRe's 2-turn self correcting behavior:
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/score_self_correction.webp"
     width="600px"
     class="z-depth-1"
@@ -52,7 +52,7 @@ To fix behavior collapse, they used a 2-stage training process:
    model in the first turn, whilst maximizing reward by aiming to answer correctly and correct its mistakes in the second turn
 2. In the second stage of training, the model is allowed to maximize reward across both turns, but with an extra reward shaping term that also rewards progress between the first and second turn
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/score_overview.webp"
     width="600px"
     class="z-depth-1"
@@ -111,13 +111,13 @@ the correct answer on the first try.
 
 SoTA results:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/score_humaneval.webp"
     width="600px"
     class="z-depth-1"
 %}
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/score_math.webp"
     width="600px"
     class="z-depth-1"

@@ -11,7 +11,7 @@ bib_id: 2308.00352v3
 MetaGPT is a multi-agent system, where different agents have their own
 roles, standard operating procedures (SOP), and goals.
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/metagpt-overview.webp"
     width="600px"
     class="z-depth-1"
@@ -35,7 +35,7 @@ LLM outputs, and aligns with real-world quality standards of software engineerin
 Ablation studies showed that removing roles resulted in worse performance
 across various game development tasks.
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/metagpt-ablation.webp"
     width="600px"
     class="z-depth-1"

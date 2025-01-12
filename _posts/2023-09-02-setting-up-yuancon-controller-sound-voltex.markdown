@@ -37,7 +37,7 @@ and [Project SEKAI](https://projectsekai.fandom.com/wiki/Project_SEKAI_COLORFUL_
 When I visited Japan a few months ago in the summer, I discovered [Sound Voltex](https://p.eagate.573.jp/game/sdvx/sv/p/index.html), and instantly
 fell in love with its unique control system and beautiful flashy graphics:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/posts/sdvx/sdvx_and_me.webp"
     width="400px"
     class="z-depth-1"
@@ -212,7 +212,7 @@ Let's now setup our Yuancon controller!
 
     You should have something that looks similar to this:
 
-    {% include figure_simple.html 
+    {% include figure_simple.liquid 
         path="/assets/img/posts/sdvx/sdvx-settings.webp"
         width="600px"
         class="z-depth-1"

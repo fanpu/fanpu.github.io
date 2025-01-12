@@ -38,7 +38,7 @@ They found that performance in both cases was comparable, indicating that the
 features learnt using ERM are already good enough, and the main remaining
 bottleneck is in learning a good predictor that generalizes:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/dare_exp.webp"
     width="600px"
     class="z-depth-1"

@@ -40,7 +40,7 @@ The authors noted that the increasing sizes of the web crawls used for training
 large language models are directly responsible for small incremental sizes in
 improvements, due to overlaps between the crawled data and the test set.
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/gpt2-8-gram.webp"
     width="600px"
     class="z-depth-1"

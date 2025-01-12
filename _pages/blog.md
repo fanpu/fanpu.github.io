@@ -131,7 +131,7 @@ pagination:
       <div class="row">
         <div class="col-sm-6">
           <a href="{{ post.url | prepend: site.url }}">
-            {% include figure.html path=image_url width="100%"
+            {% include figure.liquid path=image_url width="100%"
             height="240px" class="preview z-depth-1 rounded" %}
           </a>
         </div>

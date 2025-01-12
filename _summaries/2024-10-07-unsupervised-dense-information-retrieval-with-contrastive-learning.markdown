@@ -65,7 +65,7 @@ $$\theta_k \leftarrow m \theta_k+(1-m) \theta_q$$
 It's pretty good against BM25 on unsupervised tasks, and both of them are generally much better than other unsupervised dense methods. It was surprising to me just how strong
 BM25 is as a baseline.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/contriever_results.webp"
     width="600px"
     class="z-depth-1"
@@ -76,7 +76,7 @@ I haven't had time to look into any of the other methods other than ColBERT.
 +CE means that they added a cross encoder for re-ranking, which helps with
 nDCG scores as it is position-sensitive.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/contriever_supervised_results.webp"
     width="600px"
     class="z-depth-1"

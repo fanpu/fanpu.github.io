@@ -37,7 +37,7 @@ or *increase* test error
 They first conducted a series of experiments to understand the double descent
 phenomenom as you scale up model size.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/double_descent_model_wise.webp"
     width="600px"
     class="z-depth-1"
@@ -58,7 +58,7 @@ data, making it sensitive to noise in the training data.
 
 They also looked at how double descent manifests as a function of training time:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/double_descent_epoch_wise.webp"
     width="600px"
     class="z-depth-1"
@@ -80,7 +80,7 @@ not directly implied by double descent.
 Here, they experimented with changing the number of training samples, which causes the model
 to go from an over-parameterized to under-parameterized regime:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/double_descent_sample.webp"
     width="600px"
     class="z-depth-1"

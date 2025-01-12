@@ -17,7 +17,7 @@ has an encoder-decoder architecture. The author takes the view
 that all problems can be viewed as a text-to-text problem, and
 therefore this architecture can generalize to all NLP tasks.
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/t5-text-to-text.webp"
     width="600px"
     class="z-depth-1"
@@ -38,7 +38,7 @@ While the best-performing T5 variant has an encoder-decoder architecture (which
 is the standard architecture T5 would refer to), the authors also experimented with
 and performed comparisons against the language model and prefix LM architectures.
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/t5-arch.webp"
     width="600px"
     class="z-depth-1"
@@ -61,7 +61,7 @@ can attend to every other token in the input.
 The following table shows the results of comparisons between the three architectures,
 with the encoder-decoder performing the best, and the language model the worst.
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/t5-comparison.webp"
     width="600px"
     class="z-depth-1"

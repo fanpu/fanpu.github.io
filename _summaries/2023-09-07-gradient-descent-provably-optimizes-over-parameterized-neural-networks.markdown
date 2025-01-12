@@ -69,7 +69,7 @@ and is close to its value at initialization.
 
 #### 3. Synthetic Data To Validate Theoretical Findings
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/gd-provably-optimizes-results.webp"
     width="600px"
     class="z-depth-1"

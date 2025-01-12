@@ -43,7 +43,7 @@ contain question generation tasks were worse than zero-shot non-instruction
 tuned QLMs, indicating that instruction tuning could be harmful if the desired
 task was not reflected in its finetuning dataset.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/query_likelihood_model_results.webp"
     width="600px"
     class="z-depth-1"

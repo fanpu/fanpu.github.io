@@ -59,7 +59,7 @@ of the proposed solutions, or the number of optimization steps is reached.
 
 Overall, the OPRO optimization loop looks like this:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/opro_architecture.webp"
     width="400px"
     class="z-depth-1"
@@ -91,7 +91,7 @@ proposed weight and bias coefficients are from the true values, and we note
 the unsurprising trend that starting from a poorer initialization resulted in more
 steps for convergence.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/opro_regression.webp"
     width="600px"
     class="z-depth-1"
@@ -100,7 +100,7 @@ steps for convergence.
 In TSP, the difficulty is varied by increasing the number of stops $$n$$,
 and the LLM fails to find the optimal solution for $$n > 10$$.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/opro_tsp.webp"
     width="600px"
     class="z-depth-1"
@@ -111,7 +111,7 @@ and the LLM fails to find the optimal solution for $$n > 10$$.
 The authors ran OPRO to optimize for prompts on GSM8K, and found that the top performing
 ones were different but semantically similar to the popular "Let's think step-by-step" 0-shot CoT prompt:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/opro_prompts.webp"
     width="600px"
     class="z-depth-1"
@@ -120,7 +120,7 @@ ones were different but semantically similar to the popular "Let's think step-by
 They also found that their optimized prompts outperforms "Let's think
 step-by-step" on the Big Bench Hard (BBH) dataset:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/opro_improvements.webp"
     width="400px"
     class="z-depth-1"

@@ -22,7 +22,7 @@ To avoid having to retrain them for different tasks, the authors came up with a
 traversal-style approach such that the same pre-trained Transformer model can be
 applied to all of them, given in the figure below.
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/gpt-traversal.webp"
     width="600px"
     class="z-depth-1"
@@ -54,7 +54,7 @@ function:
 
 $$L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda \times L_1(\mathcal{C}).$$
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/gpt-perf.webp"
     width="600px"
     class="z-depth-1"

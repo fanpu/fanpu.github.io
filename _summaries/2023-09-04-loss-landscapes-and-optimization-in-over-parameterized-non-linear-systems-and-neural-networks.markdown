@@ -36,7 +36,7 @@ satisfy the PL$$^*$$ condition can converge to a global minimum.
 First, let's look at the fundamental differences in the loss landscape of under-parameterized
 versus over-parameterized models:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/loss-landscape-models.webp"
     width="600px"
     class="z-depth-1"

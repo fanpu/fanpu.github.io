@@ -24,7 +24,7 @@ There are 3 main components in DSPy.
 1. Signature: the signature defines the input/outputs of a module, which represents one or many LLM calls.
    An example would be like `question -> answer`:
 
-   {% include figure_simple.html
+   {% include figure_simple.liquid
        path="/assets/img/summaries/dspy_signature.webp"
        width="600px"
        class="z-depth-1"
@@ -37,7 +37,7 @@ There are 3 main components in DSPy.
    In order to use a teleprompter, there must be an evaluation dataset and a metric to measure model
    performance (i.e exact match or F1).
 
-   {% include figure_simple.html
+   {% include figure_simple.liquid
        path="/assets/img/summaries/dspy_teleprompter.webp"
        width="600px"
        class="z-depth-1"
@@ -53,7 +53,7 @@ With this design, modules can be composed together and optimized by teleprompter
 They included a few examples of pseudocode of teleprompters in the appendix.
 Let's look at the one for `BootstrapFewShot`:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/dspy_teleprompter_example.webp"
     width="600px"
     class="z-depth-1"

@@ -65,7 +65,7 @@ Machine Learning are the recommended pre-requisites
 for most of these courses if you do not have taken any prior machine learning classes.
 Both of these introductory courses are also available in the table below.
 
-{% include cmu_course_table.html courses=site.data.cmu_online.ml_courses %}
+{% include cmu_course_table.liquid courses=site.data.cmu_online.ml_courses %}
 
 ---
 
@@ -75,7 +75,7 @@ and is the pre-requisite for all subsequent systems classes. It is a good place 
 if you are new to computer systems. In most other universities, this class is usually
 referred to as an operating systems class.
 
-{% include cmu_course_table.html courses=site.data.cmu_online.systems_courses %}
+{% include cmu_course_table.liquid courses=site.data.cmu_online.systems_courses %}
 
 ---
 
@@ -85,7 +85,7 @@ class taken by CS majors in their first year, and would be a good place to start
 if you are new to CS theory. All subsequent theory classes assumes knowledge from
 15-251.
 
-{% include cmu_course_table.html courses=site.data.cmu_online.theory_courses %}
+{% include cmu_course_table.liquid courses=site.data.cmu_online.theory_courses %}
 
 ---
 
@@ -109,17 +109,17 @@ of the PL track, and would be a good place to start. The other introductory PL
 class 15-317 Constructive Logic unfortunately does not have any publicly
 available lectures.
 
-{% include cmu_course_table.html courses=site.data.cmu_online.pl_courses %}
+{% include cmu_course_table.liquid courses=site.data.cmu_online.pl_courses %}
 
 ---
 
 ### Computer Graphics
-{% include cmu_course_table.html courses=site.data.cmu_online.graphics_courses %}
+{% include cmu_course_table.liquid courses=site.data.cmu_online.graphics_courses %}
 
 ---
 
 ### Robotics
-{% include cmu_course_table.html courses=site.data.cmu_online.robotics_courses %}
+{% include cmu_course_table.liquid courses=site.data.cmu_online.robotics_courses %}
 
 ---
 ### Mathematics and Statistics
@@ -128,4 +128,4 @@ this portion is pretty dry. However, it was worth having it just
 to include [Po-Shen Loh](https://www.poshenloh.com/)'s lectures.
 He coaches the USA IMO team and is well-loved by his students.
 
-{% include cmu_course_table.html courses=site.data.cmu_online.math_courses %}
+{% include cmu_course_table.liquid courses=site.data.cmu_online.math_courses %}

@@ -46,7 +46,7 @@ can also check it out as an additional resource. In particular, each of my [pape
 In arXiv, there is a blog link section that will track websites that made trackback
 requests for a given paper:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/trackback_post/trackback_blog_link.webp"
     width="600px"
     class="z-depth-1"

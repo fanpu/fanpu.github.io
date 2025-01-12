@@ -317,7 +317,7 @@ and the following example highlights one such case.
 
 ## Role of Decomposability
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/high-dimensional-analysis-of-m-estimators/c_illust.webp"
     width="500px"
     class="z-depth-1"
@@ -408,7 +408,7 @@ like what is shown in [Figure 1(b)](#fig-1).
 
 # Restricted Strong Convexity (RSC) of the Loss Function
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/high-dimensional-analysis-of-m-estimators/curvature.webp"
     width="500px"
     class="z-depth-1"

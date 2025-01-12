@@ -17,7 +17,7 @@ The paper shows empirically that language modeling loss $$L$$ is a predictable f
 
 when they are not bottlenecked by any of the other two parameters.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/scaling_laws_graph.webp"
     width="800px"
     class="z-depth-1"
@@ -30,7 +30,7 @@ In the graph below, we see that the curves corresponding to the $$10^9$$
 parameter model achieves a much smaller test loss compared to the $$10^3$$ parameter model
 at all regimes:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/scaling_laws_samples.webp"
     width="400px"
     class="z-depth-1"
@@ -48,7 +48,7 @@ increasing compute, which provides intuition on why it is preferable to
 over-parameterize the model further in order to stay within the non-flattening
 regime of decaying test loss:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/scaling_laws_optimal.webp"
     width="400px"
     class="z-depth-1"
@@ -69,7 +69,7 @@ We parameterize the Transformer architecture by the following hyperparameters:
 To jolt your memory of how these different components come together again,
 here's the original Transformer architecture from Vaswani et. al:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/scaling_laws_transformer_recap.webp"
     width="500px"
     class="z-depth-1"
@@ -89,7 +89,7 @@ $$d\_{\mathrm{model}}$$ controls the width of the Transformer, and makes
 sense to be the one modified since it can allow the most significant parameter.
 changes without changing its own value too significantly.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/scaling_laws_model_shape.webp"
     width="800px"
     class="z-depth-1"
@@ -118,7 +118,7 @@ machine architecture should not change asymptotic analysis significantly).
 
 It would be interesting to understand how the scaling laws of Transformers compare to the classical LSTM.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/scaling_laws_lstm.webp"
     width="800px"
     class="z-depth-1"
@@ -138,7 +138,7 @@ context to constrain the possibilities of the next token.
 The authors also verified that the scaling laws hold
 for different data distributions:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/scaling_laws_data.webp"
     width="500px"
     class="z-depth-1"

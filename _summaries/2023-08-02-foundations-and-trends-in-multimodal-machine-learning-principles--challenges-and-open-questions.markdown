@@ -10,7 +10,7 @@ bib_id: 2209.03430v2
 #### 1. A New Taxonomy For Multimodal Machine Learning Research
 The authors propose a new taxonomy for classifying multimodal machine learning research, categorized into 6 different categories given below:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/multimodal-taxonomy.webp"
     width="600px"
     class="z-depth-1"

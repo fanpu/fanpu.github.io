@@ -42,7 +42,7 @@ punctuation).
 
 Overall workflow:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/asqa_workflow.webp"
     width="600px"
     class="z-depth-1"

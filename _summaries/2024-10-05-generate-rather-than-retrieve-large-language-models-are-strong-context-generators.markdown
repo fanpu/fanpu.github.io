@@ -17,7 +17,7 @@ prompts and sampling random few-shot examples of question-document pairs to seed
 it. There's nothing really novel about the technique, but the surprising
 thing is that this actually works for popular Q&A datasets:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/genread_results.webp"
     width="600px"
     class="z-depth-1"

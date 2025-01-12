@@ -33,7 +33,7 @@ We will first describe how MRL is trained, and in the next section explain how
 it can utilized for adaptive retrieval and adaptive classification tasks that
 run much faster than fixed feature representations.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/mrl_architecture.webp"
     width="400px"
     class="z-depth-1"
@@ -82,7 +82,7 @@ which predictably performs slightly worse. SVD refers to dimensionality
 reduction using SVD, slim net are slimmable networks, and Rand. FS are randomly
 selected features from the highest capacity FF model.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/mrl_results.webp"
     width="600px"
     class="z-depth-1"
@@ -102,7 +102,7 @@ We consider two main applications of MRL that can significantly speed things up.
    Impressively, MRL was able to get the same accuracy as fixed feature baselines while using
    a 14x smaller representation:
 
-    {% include figure_simple.html
+    {% include figure_simple.liquid
         path="/assets/img/summaries/mrl_classification.webp"
         width="300px"
         class="z-depth-1"
@@ -117,7 +117,7 @@ We consider two main applications of MRL that can significantly speed things up.
    the number of embeddings whose label matches the label of the query label is
    taken.
 
-{% include figure_simple.html
+{% include figure_simple.liquid
     path="/assets/img/summaries/mrl_retrieval.webp"
     width="300px"
     class="z-depth-1"

@@ -16,7 +16,7 @@ original style and contents of the image that was not asked to be changed.
 
 Some of their results:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/instructpix2pix-results.webp"
     width="600px"
     class="z-depth-1"
@@ -65,7 +65,7 @@ the figure below shows.
 Instead, they make use of the Prompt-to-Prompt plugin, which 
 ensures similarity between the two images that are generated.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/instructpix2pix-prompt2prompt.webp"
     width="600px"
     class="z-depth-1"
@@ -73,7 +73,7 @@ ensures similarity between the two images that are generated.
 
 The overall data generation pipeline is thus summarized in the figure below:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/instructpix2pix-data.webp"
     width="600px"
     class="z-depth-1"
@@ -115,7 +115,7 @@ Controlling these two knobs hence allows us to balance how faithful
 the output is to the original source image versus the edit instructions,
 as the following figure shows:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/instructpix2pix-classifier-free-guidance.webp"
     width="600px"
     class="z-depth-1"

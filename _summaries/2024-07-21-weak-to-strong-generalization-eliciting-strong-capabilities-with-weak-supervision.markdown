@@ -59,7 +59,7 @@ to the fine-tuning data. In theory, this does not result in any leakage of prefe
 Not too unsurprisingly (due to precedence from scaling laws & emergence), naive finetuning allowed the strong
 student to outperform the weak teacher:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/weak_to_strong_results.webp"
     width="600px"
     class="z-depth-1"
@@ -77,7 +77,7 @@ A linear probe means fine-tuning a single-layer linear layer on top of the model
 and hence if it does well it means the concepts can be linearly 
 separated.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/weak_to_strong_linear_probe.webp"
     width="600px"
     class="z-depth-1"

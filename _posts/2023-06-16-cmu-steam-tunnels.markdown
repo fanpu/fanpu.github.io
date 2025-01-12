@@ -48,7 +48,7 @@ not touch any pipes as they will be extremely hot, and to not poke at any
 asbestos for obvious reasons.  He then unlocked an unmarked door, and let us
 into the tunnels proper:
 
-{% include figure.html 
+{% include figure.liquid 
   path="assets/img/posts/cmu_steam_tunnels/main_tunnel.webp" 
   width="400px"
   class="z-depth-1" 
@@ -60,7 +60,7 @@ began rising as we went further in. Some sections of the pipes were
 hissing and you could really feel the warmth emanating from them.
 At some point I was slightly afraid that a pipe beside me might burst.
 
-{% include figure.html 
+{% include figure.liquid 
   path="assets/img/posts/cmu_steam_tunnels/phone_box.webp" 
   width="400px"
   class="z-depth-1" 
@@ -70,7 +70,7 @@ At some point I was slightly afraid that a pipe beside me might burst.
 At some point, there was a fork where the tunnel on the left fork became very
 short and narrow. We took the right fork.
 
-{% include figure.html 
+{% include figure.liquid 
   path="assets/img/posts/cmu_steam_tunnels/side_tunnel.webp" 
   width="400px"
   class="z-depth-1" 
@@ -82,7 +82,7 @@ a section of the tunnel where we had to ascend a rusty ladder
 to reach a cavern, which was unlit. It was known as the
 CFA cavern as it is located right under the steps of CFA:
 
-{% include figure.html 
+{% include figure.liquid 
   path="assets/img/posts/cmu_steam_tunnels/cfa_cavern.webp" 
   width="400px"
   class="z-depth-1" 
@@ -102,7 +102,7 @@ than the steam tunnels right below it though.
 
 We then went back down into the tunnels, and continued on:
 
-{% include figure.html 
+{% include figure.liquid 
   path="assets/img/posts/cmu_steam_tunnels/another_tunnel.webp" 
   width="400px"
   class="z-depth-1" 
@@ -117,7 +117,7 @@ home country, of course I was not going to pass on
 this wonderful opportunity to defile the steam tunnels to
 my heart's content:
 
-{% include figure.html 
+{% include figure.liquid 
   path="assets/img/posts/cmu_steam_tunnels/graffiti.webp" 
   width="400px"
   class="z-depth-1" 
@@ -137,7 +137,7 @@ Services). There were all sorts of supplies and tools,
 and even spare doors for classrooms. It made me realize just how much
 maintenance it took to operate a campus.
 
-{% include figure.html 
+{% include figure.liquid 
   path="assets/img/posts/cmu_steam_tunnels/wean_9.webp" 
   width="400px"
   class="z-depth-1" 
@@ -148,7 +148,7 @@ We were finally brought to a door that led to the roof of Wean Hall, and had to
 adjust our eyes for a few seconds to the new blinding sunlight.
 It was beautiful!
 
-{% include figure.html 
+{% include figure.liquid 
   path="assets/img/posts/cmu_steam_tunnels/hammerschlag.webp" 
   width="400px"
   class="z-depth-1" 
@@ -159,7 +159,7 @@ Everyone got busy snapping photos, myself included. To my knowledge this is the
 only place on campus where you can take a side-by-side photo with the
 Hammerschlag radio tower:
 
-{% include figure.html 
+{% include figure.liquid 
   path="assets/img/posts/cmu_steam_tunnels/roof_photo.webp" 
   width="400px"
   class="z-depth-1" 
@@ -167,14 +167,14 @@ Hammerschlag radio tower:
   (W3VC) and contains both repeaters and transmitters."
 %}
 
-{% include figure.html 
+{% include figure.liquid 
   path="assets/img/posts/cmu_steam_tunnels/cic.webp" 
   width="400px"
   class="z-depth-1" 
   caption="An interesting view of CIC and Tepper"
 %}
 
-{% include figure.html 
+{% include figure.liquid 
   path="assets/img/posts/cmu_steam_tunnels/gates.webp" 
   width="400px"
   class="z-depth-1" 

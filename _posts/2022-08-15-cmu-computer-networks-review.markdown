@@ -51,7 +51,7 @@ up with our own TCP congestion control protocol that has to non-trivially
 improve on both throughput and Jain's Fairness Index (for fairness when multiple
 connections connect on the same link) as compared to TCP Reno.
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/tcp_reno_state_diagram.webp"
     width="400px"
     class="z-depth-1"
@@ -68,7 +68,7 @@ checkpoint solo. Since I had already written load balancers twice, once for
 15-319 Cloud Computing and once for 15-440 Distributed Systems, I also chose to
 do the same.
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/networks_p3.webp"
     width="400px"
     class="z-depth-1"
@@ -90,7 +90,7 @@ smoothing.  Finally, you will also investigate how the proxy performs with
 multiple clients in terms of link utilization, fairness, and smoothness in a
 Docker environment with simulated network conditions.
 
-{% include figure.html 
+{% include figure.liquid 
     path="assets/img/posts/big_buck_bunny.webp"
     width="400px"
     class="z-depth-1"

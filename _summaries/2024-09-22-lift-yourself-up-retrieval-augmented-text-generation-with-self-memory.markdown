@@ -37,7 +37,7 @@ To utilize this insight, they developed a system called `Selfmem`
 
 The framework looks like the following:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/selfmem_framework.webp"
     width="600px"
     class="z-depth-1"

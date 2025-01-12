@@ -16,7 +16,7 @@ The authors consider the problem of being able to control the generation of imag
 by taking in unique user-provided concepts as additional inputs that should influence
 the result, with results illustrated in the diagram below:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/textual-inversion-concepts.webp"
     width="600px"
     class="z-depth-1"
@@ -63,7 +63,7 @@ They performed qualitative analysis to evaluate their results, and found that
 it produced results that was closer to the original user-defined concepts
 than other state-of-the-art approaches.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/textual-inversion-qualitative.webp"
     width="600px"
     class="z-depth-1"

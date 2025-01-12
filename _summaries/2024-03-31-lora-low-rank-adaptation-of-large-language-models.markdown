@@ -26,7 +26,7 @@ with low-rank decomposition $$\Delta W = BA$$, where $$B \in \R^{d \times r}, A
 \in \R^{r \times k}$$, where $$r$$ is significantly smaller than $$d$$ and
 $$k$$. In this way, we only have to update $$r(d+k)$$ parameters instead.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/lora_diagram.webp"
     width="400px"
     class="z-depth-1"
@@ -54,7 +54,7 @@ In the paper, they compare LoRA with existing techniques for efficient fine-tuni
 Empirically, even with very low rank, LoRA performs competitively against full-parameter fine-tuning
 and even surpasses it:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/lora_results.webp"
     width="600px"
     class="z-depth-1"
@@ -95,7 +95,7 @@ and hence we normalize by that factor.
 
 Here are the results:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/lora_rank.webp"
     width="600px"
     class="z-depth-1"

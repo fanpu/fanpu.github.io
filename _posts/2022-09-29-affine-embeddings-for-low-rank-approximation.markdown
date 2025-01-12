@@ -122,7 +122,7 @@ Think of the rows of $$A$$ as points in $$\mathbb{R}^d$$.
 Think of $$SA$$ as taking a small number of linear combinations of $$A$$,
 where each row of $$S$$ is picking a random linear combination of all the rows of $$A$$, i.e points in $$\mathbb{R}^d$$:
 
-{% include figure.html 
+{% include figure.liquid 
   path="/assets/img/posts/low-rank-approx-intuition-matrix.webp" 
   width="200px"
   class="z-depth-0" 

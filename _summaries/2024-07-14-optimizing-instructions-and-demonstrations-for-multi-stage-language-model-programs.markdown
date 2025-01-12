@@ -46,7 +46,7 @@ They had a few variations of MIPRO, but the most important distinction is
 between whether they optimized instructions only (0-shot), demonstrations only
 (few-shot), or both.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/mipro_results.webp"
     width="600px"
     class="z-depth-1"

@@ -37,7 +37,7 @@ for each time step the pole does not fall down, the agent receives 1
 reward, and when the pole falls down the episode is terminated and
 the agent no longer receives any rewards:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/cartpole.gif"
     width="400px"
     class="z-depth-1"

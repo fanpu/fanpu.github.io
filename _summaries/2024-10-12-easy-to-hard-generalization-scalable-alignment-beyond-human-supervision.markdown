@@ -37,7 +37,7 @@ They use the following setups for generators:
 
 And the results:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/easy_to_hard_generator.webp"
     width="600px"
     class="z-depth-1"
@@ -69,7 +69,7 @@ The evaluator that can choose good solutions is deemed better.
 
 Let's first compare ORM/PRM/OPRM:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/easy_to_hard_rm_comparison.webp"
     width="600px"
     class="z-depth-1"
@@ -79,7 +79,7 @@ They found that ORM and PRM performs similarly, and OPRM outperforms the both of
 
 Now comparing across difficulty of tasks:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/easy_to_hard_evaluator.webp"
     width="600px"
     class="z-depth-1"
@@ -101,7 +101,7 @@ evaluators as reward models to train generators.
 A surprising thing is that models trained with PRM rewards on just the easy tasks could actually
 outperform a model trained on all tasks, but without access to a PRM:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/easy_to_hard_rl.webp"
     width="600px"
     class="z-depth-1"

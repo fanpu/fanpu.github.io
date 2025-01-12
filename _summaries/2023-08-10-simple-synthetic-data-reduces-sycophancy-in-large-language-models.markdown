@@ -13,7 +13,7 @@ Large language models exhibit the problem of sycophancy to varying degrees,
 where they will agree with the user even on factually wrong statements.
 An example from the paper is given below.
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/sycophancy.webp"
     width="600px"
     class="z-depth-1"

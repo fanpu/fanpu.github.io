@@ -27,7 +27,7 @@ the subject of the next few sections.
 The authors used a range of model sizes from 70M to 10B, and plotted the loss achieved
 against training tokens used (leftmost plot below):
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/chinchilla_model_size.webp"
     width="600px"
     class="z-depth-1"
@@ -47,7 +47,7 @@ In this approach, they fixed the total compute budget available at 9 different
 levels, and experimented with the final loss achieved by varying model sizes at
 each level.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/chinchilla_isoflops.webp"
     width="600px"
     class="z-depth-1"
@@ -113,7 +113,7 @@ By fitting the data to the functional, the authors recovered the coefficients
 
 $$L(N, D)=E+\frac{A}{N^{0.34}}+\frac{B}{D^{0.28}}.$$
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/chinchilla_contours.webp"
     width="600px"
     class="z-depth-1"

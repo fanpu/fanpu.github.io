@@ -84,7 +84,7 @@ the $$\hat{n}$$th token will go through interpolation.
 Visually, it looks like the following, where I believe there's an error
 with the diagram on the third row for RoPE:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/longrope_freq.webp"
     width="600px"
     class="z-depth-1"
@@ -138,7 +138,7 @@ search, to get a 2048k context-length model with extension ratio 512x.
 Here are some results, where it performs well on perplexity evals on the Proof-Pile even at very long context lengths, whereas both of the other 
 baselines blow up:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/longrope_pile.webp"
     width="600px"
     class="z-depth-1"

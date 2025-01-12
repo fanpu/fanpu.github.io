@@ -22,7 +22,7 @@ allowing us to still model high-quality images while operating in a much
 lower-dimensional space.
 
 Some of their results:
-{% include figure_simple.html
+{% include figure_simple.liquid
     path="/assets/img/summaries/sd_samples.webp"
     width="600px"
     class="z-depth-1"
@@ -47,7 +47,7 @@ The U-Net architecture consists of downsampling layers via max pooling operation
 one end, and upsampling layers on the other end, with intermediate layers connected
 by skip connections:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/sd_unet.webp"
     width="600px"
     class="z-depth-1"
@@ -90,7 +90,7 @@ use a BERT-tokenizer and use a transformer to encode the inputs
 2. Image super-resolution. This is done by conditioning on concatenated
 inputs of the low-resolution input image.
 
-    {% include figure_simple.html
+    {% include figure_simple.liquid
         path="/assets/img/summaries/sd_sr.webp"
         width="600px"
         class="z-depth-1"
@@ -99,7 +99,7 @@ inputs of the low-resolution input image.
 3. Image inpainting. This was also done by concatenating spatially-aligned
 inputs of the image to inpaint.
 
-    {% include figure_simple.html
+    {% include figure_simple.liquid
         path="/assets/img/summaries/sd_inpainting.webp"
         width="600px"
         class="z-depth-1"

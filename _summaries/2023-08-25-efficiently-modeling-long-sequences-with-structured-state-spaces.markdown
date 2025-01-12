@@ -139,7 +139,7 @@ low-rank matrix. A matrix is [normal](https://en.wikipedia.org/wiki/Normal_matri
 
 $$\bA^* \bA = \bA \bA^*. $$
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/s4.webp"
     width="600px"
     class="z-depth-1"

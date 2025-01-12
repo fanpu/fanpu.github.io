@@ -22,7 +22,7 @@ hallucinated the wrong height.
 During the second retrieval, it was able to retrieve the right context
 with the actual height, and can now craft the final answer.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/iter_ret_example.webp"
     width="600px"
     class="z-depth-1"
@@ -68,7 +68,7 @@ Answer? Output Yes or No:
 
 #### 3. Results
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/iter_ret_results.webp"
     width="600px"
     class="z-depth-1"

@@ -57,7 +57,7 @@ The two interesting algorithms implemented for SAT solving are DPLL and unit pro
 
 ### DPLL
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/screenshots/dpll_algo.webp"
     width="700px"
     class="z-depth-1"
@@ -81,7 +81,7 @@ To this end, we introduce the idea of watched literals introduced by Moskewicz e
 
 Another benefit of using watched literals is that during backtracking, our constraints can only be relaxed (i.e our variables can be unassigned but never assigned), and therefore we do not need to update them. 
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/screenshots/unit_propagation_algo.webp"
     width="700px"
     class="z-depth-1"
@@ -100,7 +100,7 @@ The SAT solving framework provides flexibility for changing the heuristics used 
 
 The results are given below:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/screenshots/sat_solver_heuristic_results.webp"
     width="400px"
     class="z-depth-1"

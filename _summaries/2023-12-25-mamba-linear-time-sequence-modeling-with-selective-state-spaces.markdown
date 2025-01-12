@@ -76,7 +76,7 @@ $$ -->
 <!-- State space models suffer from the same issues as recurrent models.
 However, the authors  -->
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/mamba_alg.webp"
     width="600px"
     class="z-depth-1"

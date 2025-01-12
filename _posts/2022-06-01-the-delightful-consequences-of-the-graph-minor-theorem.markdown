@@ -43,7 +43,7 @@ edge connected by two vertices \(u\) and \(v\), and combine them to form a
 new vertex \(w\) that still preserves the old adjacencies but eliminates
 duplicate edges.
 
-{% include figure.html 
+{% include figure.liquid 
   path="assets/img/posts/edge_contraction.webp" 
   width="300px"
   class="z-depth-1" 

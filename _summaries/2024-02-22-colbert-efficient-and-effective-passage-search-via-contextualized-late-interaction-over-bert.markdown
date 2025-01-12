@@ -15,7 +15,7 @@ queries and documents. This paper introduces ColBERT, which
 improves on BERT-based retrieval techniques by being computationally
 more efficient.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/colbert_approaches.webp"
     width="600px"
     class="z-depth-1"
@@ -48,7 +48,7 @@ and then compute the query embeddings online. They then take
 what they call the MaxSim operator (explained later) between the embeddings 
 from the query and document. This architecture is visualized below:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/colbert_architecture.webp"
     width="600px"
     class="z-depth-1"

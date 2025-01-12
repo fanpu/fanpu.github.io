@@ -24,7 +24,7 @@ target domain, i.e cat -> dog.
 
 Samples of their results:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/pix2pix-zero-results.webp"
     width="600px"
     class="z-depth-1"
@@ -53,7 +53,7 @@ to be more robust.
 
 The following diagram summarizes the process:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/pix2pix-zero-directions.webp"
     width="600px"
     class="z-depth-1"
@@ -95,7 +95,7 @@ $$c + \Delta c_{\mathrm{edit}}$$, but as the following
 figure shows in the last row, this results in a final generated image
 that is quite different from the original source image:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/pix2pix-zero-attention.webp"
     width="600px"
     class="z-depth-1"
@@ -139,7 +139,7 @@ Their algorithm works as follows:
 
 The full algorithm is given below:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/pix2pix-zero-alg.webp"
     width="600px"
     class="z-depth-1"
@@ -147,7 +147,7 @@ The full algorithm is given below:
 
 Finally, some nice visual comparisons of their results with other state-of-the-art techniques:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/pix2pix-zero-comparisons.webp"
     width="600px"
     class="z-depth-1"

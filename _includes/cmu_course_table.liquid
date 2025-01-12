@@ -7,7 +7,7 @@
 
   <tbody>
 {% for course in include.courses %}
-  {% capture course-item %}{% include cmu_course_item.html course=course %}{% endcapture %}
+  {% capture course-item %}{% include cmu_course_item.liquid course=course %}{% endcapture %}
   {{ course-item }}
 {% endfor %}
   </tbody>

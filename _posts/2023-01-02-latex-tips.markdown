@@ -104,7 +104,7 @@ with different sizes. Indeed, I came across the following formula in a
 paper recently, where the outer right square brackets was missing and the left one
 had the wrong size:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/latex-mistakes/paired_delim.webp"
     width="500px"
     class="z-depth-1"
@@ -202,7 +202,7 @@ For instance, when expressing types and terms in programming language theory,
 there is often a lot of nested syntactical structure, which could make it easy
 to make mistakes.  Consider the following proof:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/latex-mistakes/macros.webp"
     width="600px"
     class="z-depth-1"
@@ -259,7 +259,7 @@ will be less likely to miss an argument or forget to close a parenthesis.
 Expressions which are logically a single unit should stay on the same line, instead
 of being split apart mid-sentence. Cue the following bad example from another paper:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/latex-mistakes/nbsp.webp"
     width="300px"
     class="z-depth-1"
@@ -300,7 +300,7 @@ we get the following positive result where there is additional whitespace betwee
 the justified text on the first line, to compensate for the expression assigning $$\tau$$
 to stay on the same line:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/latex-mistakes/nbsp-positive.webp"
     width="300px"
     class="z-depth-1"
@@ -311,7 +311,7 @@ to stay on the same line:
 When referencing figures and equations, you want the text and number (i.e Figure 10) to end up on the same line.
 This is a negative example, where the region underlined in red shows how it was split up:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/latex-mistakes/figure-truncated.webp"
     width="500px"
     class="z-depth-1"
@@ -335,7 +335,7 @@ allows it to flow more naturally and make it easier for the reader to follow.
 
 Consider the following example that does not use punctuation:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/latex-mistakes/sentence-negative.webp"
     width="400px"
     class="z-depth-1"
@@ -351,7 +351,7 @@ Instead, commas should be added after each expression where the expression does 
 and the final equation should be ended by a full stop. Here is a good example of punctuation
 that helps to guide the reader along the author's train of thought:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/latex-mistakes/sentence-multiline.webp"
     width="400px"
     class="z-depth-1"
@@ -362,7 +362,7 @@ Here is another good example of how using commas for the equations
 allow the text to flow naturally, where it takes the form of
 "analogously, observe that we have [foo] and [bar], where the inequality...":
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/latex-mistakes/sentence-two-exp.webp"
     width="400px"
     class="z-depth-1"
@@ -372,7 +372,7 @@ allow the text to flow naturally, where it takes the form of
 This even extends to when you pack several equations on a single line, which
 is common when you are trying to fit the page limit for conference submissions:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/latex-mistakes/sentence-singleline.webp"
     width="400px"
     class="z-depth-1"
@@ -403,7 +403,7 @@ $\mathcal{F}$-limit of $(x_n)_n$.
 \end{proof}
 {% endhighlight %}
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/latex-mistakes/proof.webp"
     width="600px"
     class="z-depth-1"
@@ -431,7 +431,7 @@ newline before the closing `\end{proof}`, which happens pretty often:
 \end{proof}
 {% endhighlight %}
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/latex-mistakes/qedhere.webp"
     width="600px"
     class="z-depth-1"
@@ -463,7 +463,7 @@ Spacing matters a lot in readability, as it helps to separate logical components
 For instance, the following example fails to add spacing before the differential
 of the variable $$dz$$:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/latex-mistakes/integral.webp"
     width="500px"
     class="z-depth-1"
@@ -597,7 +597,7 @@ This allows it to know which side to orient the ticks:
 \text{``Hello World!''}
 {% endhighlight %}
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/latex-mistakes/quotes.webp"
     width="100px"
     class="z-depth-1"
@@ -613,7 +613,7 @@ when they really meant to write `\varepsilon` ($$\varepsilon$$). For instance, i
 this is usually the case, and therefore writing `\epsilon` results in a very uncomfortable
 read:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/latex-mistakes/epsilon-wrong.webp"
     width="600px"
     class="z-depth-1"
@@ -622,7 +622,7 @@ read:
 
 Using `\varepsilon` makes the reader feel much more at peace:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/latex-mistakes/epsilon-right.webp"
     width="600px"
     class="z-depth-1"
@@ -638,7 +638,7 @@ For sets like $$\mathbb{N}$$, you should use `\mathbbm{N}`
 difference in how the rendering of the set of natural numbers
 $$\mathbb{N}$$ differs, using the same example as the previous section:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/latex-mistakes/mathbbm.webp"
     width="600px"
     class="z-depth-1"
@@ -655,7 +655,7 @@ X = \left( X_1, ..., X_n \right)
 X = \left( X_1, \dots, X_n \right)
 {% endhighlight %}
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/latex-mistakes/dots.webp"
     width="300px"
     class="z-depth-1"
@@ -683,7 +683,7 @@ from the raw script:
 To denote multiplication, use `\cdot` or `times` instead of `*`. See the difference below
 in the equation:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/posts/latex-mistakes/multiplication.webp"
     width="600px"
     class="z-depth-1"

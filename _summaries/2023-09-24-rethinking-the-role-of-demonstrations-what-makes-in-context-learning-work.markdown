@@ -16,7 +16,7 @@ Surprisingly, the authors found that randomizing the labels only had a slight
 impact on the accuracy of tasks that GPT-3 was evaluated on, and still performed
 much better than when no labels were supplied:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/in-context-random.webp"
     width="600px"
     class="z-depth-1"
@@ -28,7 +28,7 @@ The authors also tried varying the proportion of correct labels
 supplied (out of 16 in-context examples), and found that this did
 not really affect accuracy:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/in-context-varying.webp"
     width="600px"
     class="z-depth-1"

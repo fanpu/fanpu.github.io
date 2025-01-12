@@ -9,7 +9,7 @@ bib_id: 2201.11903v6
 
 #### 1. Chain-of-Thought Prompting for Large Language Models
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/cot.webp"
     width="600px"
     class="z-depth-1"

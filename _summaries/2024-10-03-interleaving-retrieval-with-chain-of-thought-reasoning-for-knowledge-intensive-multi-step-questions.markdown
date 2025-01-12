@@ -34,7 +34,7 @@ Q: <Question>
 A: <CoT-Sent-1> ... <CoT-Sent-n>
 ```
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/ir_cot_workflow.webp"
     width="600px"
     class="z-depth-1"
@@ -45,7 +45,7 @@ A: <CoT-Sent-1> ... <CoT-Sent-n>
 Unsurprisingly outperforms one-step retrievers and when
 no retrievers were used.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/ir_cot_results.webp"
     width="600px"
     class="z-depth-1"

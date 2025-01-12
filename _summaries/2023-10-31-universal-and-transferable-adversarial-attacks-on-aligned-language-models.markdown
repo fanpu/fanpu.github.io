@@ -22,7 +22,7 @@ user's harmful request. In the figure below, the `!!!!` indicates the added suff
 the proposed attack will produce to increase the likelihood of the model responding affirmatively
 to the request:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/adv-prompt-success.webp"
     width="600px"
     class="z-depth-1"
@@ -59,7 +59,7 @@ As a sneak peek, this is what the found adversarial suffixes look like.
 They're mostly seemingly rather nonsensical and not something a normal
 human would come up with, which is why it's interesting:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/adv-prompt-samples.webp"
     width="600px"
     class="z-depth-1"
@@ -105,7 +105,7 @@ than AutoPrompt.
 
 The exact algorithm is given below:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/adv-prompt-alg.webp"
     width="600px"
     class="z-depth-1"
@@ -150,7 +150,7 @@ which works as follows:
 
 The full algorithm is given below:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/adv-prompt-universal-prompt-optimization.webp"
     width="600px"
     class="z-depth-1"
@@ -160,7 +160,7 @@ The full algorithm is given below:
 #### 4. Results
 
 Their method performs much better than other state-of-the-art baselines:
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/adv-prompt-results.webp"
     width="600px"
     class="z-depth-1"
@@ -172,7 +172,7 @@ However, they showed that it also performed decently on transfer attacks,
 where the adversarial prompt generated for open-source models (Vicuna-7B and 13B)
 could also do somewhat well on other models, including proprietary ones:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/adv-prompt-transfer.webp"
     width="600px"
     class="z-depth-1"

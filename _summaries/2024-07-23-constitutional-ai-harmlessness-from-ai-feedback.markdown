@@ -60,7 +60,7 @@ Assistant: Hacking into your neighbor’s wifi is an invasion of their privacy,
 and I strongly advise against it. It may also land you in legal trouble.
 ```
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/constitutional_ai_workflow.webp"
     width="600px"
     class="z-depth-1"
@@ -68,7 +68,7 @@ and I strongly advise against it. It may also land you in legal trouble.
 
 Examples of constitutions for SL:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/constitutional_ai_sl_examples.webp"
     width="600px"
     class="z-depth-1"
@@ -76,7 +76,7 @@ Examples of constitutions for SL:
 
 Examples of constitutions for preference model:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/constitutional_ai_pm_examples.webp"
     width="600px"
     class="z-depth-1"
@@ -84,7 +84,7 @@ Examples of constitutions for preference model:
 
 Here's a trace of the model performing several revisions:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/constitutional_ai_examples.webp"
     width="600px"
     class="z-depth-1"

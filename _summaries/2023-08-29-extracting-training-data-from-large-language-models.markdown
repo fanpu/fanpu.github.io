@@ -17,7 +17,7 @@ model with 1.5 billion parameters.
 An example of personally identifiable information that they managed to extract is
 given below (with permission from the individual affected):
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/llm-extraction-example.webp"
     width="350px"
     class="z-depth-1"
@@ -25,7 +25,7 @@ given below (with permission from the individual affected):
 
 The table below shows the types of memorized content that they were able to recover:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/llm-extraction-memorized.webp"
     width="350px"
     class="z-depth-1"
@@ -55,7 +55,7 @@ will be discussed later.
 5. The researchers manually verified whether the generations are indeed memorized by an internet search,
 with confirmation with OpenAI (who developed GPT-2)
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/llm-extraction-workflow.webp"
     width="600px"
     class="z-depth-1"
@@ -107,7 +107,7 @@ such, the minimum perplexity averaged over a sliding window of 50 tokens was use
 The number of memorized samples recovered using each of these metrics and text
 generation strategies are given below:
 
-{% include figure.html 
+{% include figure.liquid 
     path="/assets/img/summaries/llm-extraction-results.webp"
     width="600px"
     class="z-depth-1"

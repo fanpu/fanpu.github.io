@@ -23,7 +23,7 @@ few-shot learning.
 
 The paper identified 3 main sources of high variance in few-shot learning.
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/calibrate-high-variance-sources.webp"
     width="600px"
     class="z-depth-1"
@@ -69,7 +69,7 @@ example assign equal probability to all tokens.
 They showed that this scheme resulted in generally better performance
 and less variance:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/calibration-results.webp"
     width="600px"
     class="z-depth-1"

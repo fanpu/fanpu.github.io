@@ -19,7 +19,7 @@ according to a Contriever, but do not contain the answer, such that this could s
 
 Here's an example of an experiment setup:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/lost_in_the_middle_exp.webp"
     width="600px"
     class="z-depth-1"
@@ -27,7 +27,7 @@ Here's an example of an experiment setup:
 
 They found a U-shaped curve across multiple models and retrieved document lengths:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/lost_in_the_middle_results.webp"
     width="600px"
     class="z-depth-1"
@@ -35,7 +35,7 @@ They found a U-shaped curve across multiple models and retrieved document length
 
 In fact, it could even be possible that when the relevant document is in the middle, providing context is more harmful than not providing context at all:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/lost-in-the-middle-summary.webp"
     width="300px"
     class="z-depth-1"
@@ -68,7 +68,7 @@ primacy bias. One may be inclined to say no, and think that it is an artifact of
 instruction-tuning because instructions normally appear at the start of the
 document. But in fact they also exhibit primacy bias:
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/lost_in_the_middle_primacy_bias.webp"
     width="300px"
     class="z-depth-1"

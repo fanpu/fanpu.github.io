@@ -37,7 +37,7 @@ Question: [QUESTION]
 Passage:
 ```
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/hyde_overview.webp"
     width="600px"
     class="z-depth-1"
@@ -45,7 +45,7 @@ Passage:
 
 #### 2. Results
 
-{% include figure.html
+{% include figure.liquid
     path="/assets/img/summaries/hyde_results.webp"
     width="600px"
     class="z-depth-1"
