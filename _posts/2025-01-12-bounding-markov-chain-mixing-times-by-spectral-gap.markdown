@@ -210,7 +210,7 @@ This can be seen from the following:
 $$
 \begin{align}
     (T \pi)_i & =
-    \sum\limits_{j \in [n]} \frac{\deg (j)}{2 |E| } \mathbbm{1}
+    \sum\limits_{j \in [n]} \frac{\deg (j)}{2 |E| } \mathbb{1}
     \begin{rcases}
         \begin{dcases}
             \frac{1}{\deg(j)} & \text{ if $j \sim i$}, \\
@@ -291,8 +291,8 @@ We prove each of the claims in [Lemma 1](#lemma-1) in order.
     This shows that $|\lambda v_i| \leq |v_i|$ for all $i$, and so $|\lambda| \leq 1$.
     <br><br>
     It remains to show that $\lambda_1=1$. To see this, consider
-    the vectors where all entries are 1, i.e $\mathbbm{1}$.  Then $T
-        \cdot \mathbbm{1} = \mathbbm{1}$. So $\mathbbm{1}$ is an
+    the vectors where all entries are 1, i.e $\mathbb{1}$.  Then $T
+        \cdot \mathbb{1} = \mathbb{1}$. So $\mathbb{1}$ is an
     eigenvector of $T$ with eigenvalue 1.
   "
 %}
@@ -328,7 +328,7 @@ We prove each of the claims in [Lemma 1](#lemma-1) in order.
     \begin{align}
         (T \cdot v^1)_i
          & = \sum\limits_{j \in N(i)} \frac{1}{d} v^1_j                                  & \text{(multiplying row $i$ of $T$ by $v^1$)} \\
-         & = \sum\limits_{j \in N(i)} \frac{1}{d} \mathbbm{1} \left\{ j \in S_1 \right\}                                                \\
+         & = \sum\limits_{j \in N(i)} \frac{1}{d} \mathbb{1} \left\{ j \in S_1 \right\}                                                \\
          & = \begin{cases}
                  1 & \text{if $i \in S_1$,} \\
                  0 & \text{otherwise.}      \\
@@ -339,14 +339,14 @@ We prove each of the claims in [Lemma 1](#lemma-1) in order.
     <br><br>
     We can show the same for $v^2$ to get $T \cdot v^2 = v^2$. which shows that $\lambda_2 = 1$.
     <br>
-    Since by our disconnected assumption $v^1, v^2 \neq \mathbbm{1}$, the
+    Since by our disconnected assumption $v^1, v^2 \neq \mathbb{1}$, the
     all-ones eigenvector corresponding to eigenvalue $\lambda_1$, it means $\lambda_2 = 1$.
     <br>
     This shows the backwards direction.
     <br><br>
     $(\implies)$ For the other direction, suppose that $G$ is connected, we want to show that $\lambda_2 < 1$.
     <br><br>
-    We will show that for any eigenvector $v$ with eigenvalue $1$, then it must be a scaling of $\mathbbm{1}$.
+    We will show that for any eigenvector $v$ with eigenvalue $1$, then it must be a scaling of $\mathbb{1}$.
     <br><br>
     Let $v$ be any eigenvector with eigenvalue $1$. Then let $v_i$ be its maximum entry. From Equation \ref{eq:max_entry}, we must have that
     \begin{align}
@@ -514,7 +514,7 @@ $$
     T^k \cdot x & =
     \sum\limits_{i} \langle x, v_i \rangle  \cdot \lambda_i^k \cdot v_i                                                                                       \\
                 & = \langle x, v^1 \rangle \cdot v^1 + \sum\limits_{i \geq 2} \langle x, v_i \rangle  \cdot \lambda_i^k \cdot v_i                             \\
-                & = \frac{1}{n} \langle x, \mathbbm{1} \rangle \cdot \mathbbm{1} + \sum\limits_{i \geq 2} \langle x, v_i \rangle  \cdot \lambda_i^k \cdot v_i \\
+                & = \frac{1}{n} \langle x, \mathbb{1} \rangle \cdot \mathbb{1} + \sum\limits_{i \geq 2} \langle x, v_i \rangle  \cdot \lambda_i^k \cdot v_i \\
                 & =
     \begin{pmatrix}
         \frac{1}{{n}} \\
@@ -524,7 +524,7 @@ $$
     \sum\limits_{i \geq 2} \langle x, v_i \rangle  \cdot \lambda_i^k \cdot v_i,                                                                               \\
 \end{align}
 $$
-where the last step follows from the fact that $x$ is a probability distribution and thus $x \cdot \mathbbm{1} = 1$.
+where the last step follows from the fact that $x$ is a probability distribution and thus $x \cdot \mathbb{1} = 1$.
 
 Rearranging and moving to work in the L2 (Euclidean) norm, we obtain
 
@@ -606,8 +606,8 @@ Recall that for any $n$-dimensional vector $x$, $\| x \|_1 = \sqrt{n} \| x \|_s$
 $$
 \begin{align}
     \| x \|_1
-        & = \mathbbm{1} \cdot x                                      \\
-        & \leq \| \mathbbm{1} \|_2 \| x \|_2 \tag{by Cauchy-Schwarz} \\
+        & = \mathbb{1} \cdot x                                      \\
+        & \leq \| \mathbb{1} \|_2 \| x \|_2 \tag{by Cauchy-Schwarz} \\
         & = \sqrt{n} \| x \|_2.
 \end{align}
 $$
