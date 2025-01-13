@@ -39,7 +39,7 @@ ninja.data = [{
           },
         },{id: "nav-ml-reading-list",
           title: "ML Reading List",
-          description: "Machine Learning Reading List",
+          description: "Curated list of papers that I have bookmarked to read, well, someday...",
           section: "Navigation",
           handler: () => {
             window.location.href = "/reading-list/";
