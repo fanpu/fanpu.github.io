@@ -1,6 +1,9 @@
 {%- assign img_path = include.path | remove: '.jpg' | remove: '.jpeg' | remove: '.png' | remove: '.tiff' | remove: '.gif' -%}
 
-<figure>
+<figure
+    {% if include.num %}
+      id="fig-{{ include.num }}"
+    {% endif %}>
   <picture>
     <!-- Auto scaling with imagemagick -->
     <!--
