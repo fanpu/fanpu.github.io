@@ -77,16 +77,17 @@ The formulation that we will use is via the Total Variation Distance.
   "
 %}
 
-\begin{definition}[Total Variation Distance]
-\end{definition}
-
 The equality between the two lines can be observed from the fact that
-\begin{equation}
+
+$$
+\begin{align}
     \max_{A \subseteq \Omega} \sum\limits_{\omega \in A}
     \mathcal{D}_1(\omega) - \sum\limits_{\omega \in A} \mathcal{D}_2(\omega)=
     \max_{B \subseteq \Omega} \sum\limits_{\omega \in B}
     \mathcal{D}_2(\omega) - \sum\limits_{\omega \in B} \mathcal{D}_1(\omega),
-\end{equation}
+\end{align}
+$$
+
 since both $\mathcal{D}_1, \mathcal{D}_2$ are probability distributions and integrate to 1. See Figure \ref{fig:tv}
 for an illustration.
 
@@ -97,14 +98,15 @@ for an illustration.
     \caption{Total Variation distance between some sample $\mathcal{D}_1, \mathcal{D}_2$ illustrated by the sum of the shaded green regions.}
 \end{figure}
 
-\section{Intuition for Mixing Times}
+# Intuition for Mixing Times
 We consider how long it takes to converge on some special graphs to build up intuition.
 
-\subsection{Random Walks on Path Graphs}
+## Random Walks on Path Graphs
 The path graph is a line graph on $n$ vertices.
 We claim that the mixing time of the path graph is at least $n$:
 this is because it takes at least $n$ steps to even reach the rightmost vertex from the leftmost vertex.
 
+$$
 \begin{figure}[h]
     \centering
     \begin{tikzpicture}
@@ -120,8 +122,9 @@ this is because it takes at least $n$ steps to even reach the rightmost vertex f
     \end{tikzpicture}
     \caption{The path graph, $n=4$.}
 \end{figure}
+$$
 
-\subsection{Random Walks on the Complete Graph}
+## Random Walks on the Complete Graph
 The complete graph $K_n$ on $n$ vertices is one where each vertex has an edge to every other vertex.
 
 This only takes 1 step to mix, since after a single step we can reach any vertex.
@@ -147,36 +150,44 @@ This only takes 1 step to mix, since after a single step we can reach any vertex
 
 This short analysis tells us that if our graph looks like a line graph then we should expect poor mixing times; whereas if it looks more like a complete graph then we can expect the opposite.
 
+$$
 \newcommand{\tmix}{\tau_{\mathsf{mix}}}
 \newcommand{\sgap}[1]{\mathsf{spectral\_gap}(#1)}
+$$
 
-\section{Mixing Times}
+# Mixing Times
 We now formally introduce the concept of mixing times.
 
-\begin{definition}[Mixing Time]
+{% include theorem.md 
+  type="definition"
+  name="Mixing Time"
+  statement="
     Let $\left\{  X_t \right\}$ be a finite, irreducible, aperiodic Markov
     Chain, $\pi$ be the stationary distribution, and $T$ to be the transition matrix. Then define
-    \begin{equation}
+    \begin{align}
         \Delta(t) = \max_{\omega \in \Omega} \| \pi - T_\omega^t \|_{TV},
-    \end{equation}
+    \end{align}
     where $T_\omega^t$ is the distribution of $X_t$ given $X_o = \omega$.
     In words, $\Delta(t)$ is the maximum time to converge to stationary
     distribution over all the starting points, where convergence is defined on
     total variation distance.
 
     Then the mixing time $\tmix$ is defined to be the smallest $t$ such that $\Delta(t) \leq \frac{1}{4}$.
-\end{definition}
+  "
+%}
 
 We claim that the choice of $\frac{1}{4}$ in defining $\tmix$ does not matter.
 
-\begin{proposition}[Constants Don't Matter]
+{% include theorem.md 
+  type="proposition"
+  name="Constants Don't Matter"
+  statement="
     The choice of constant $\frac{1}{4}$ does not matter.
 
-    \begin{proof}
-        This is because for all $c \geq 1$, $\Delta(c \cdot \tmix) \leq \frac{1}{4^c}$. In other words, we can increase
-        the mixing time by a linear amount to get an exponential decrease in total variation distance.
-    \end{proof}
-\end{proposition}
+    This is because for all $c \geq 1$, $\Delta(c \cdot \tmix) \leq \frac{1}{4^c}$. In other words, we can increase
+    the mixing time by a linear amount to get an exponential decrease in total variation distance.
+  "
+%}
 
 To bound mixing times, we consider random walks on undirected, regular graphs $G$. The same analysis can be extended to
 directed, weighted, irregular graphs, but it causes the notation to become more
@@ -185,7 +196,8 @@ cumbersome and distracts from the key ideas.
 Consider random walks on an undirected, regular graph $G(V, E)$, $|V| = n$.
 Define the transition matrix $T$ of the graph to be
 
-\begin{equation}
+$$
+\begin{align}
     T =
     \begin{blockarray}{cccccc}
         &   &  & j  & &\\
@@ -204,14 +216,16 @@ Define the transition matrix $T$ of the graph to be
             & & & & &   \\
         \end{block}
     \end{blockarray},
-\end{equation}
+\end{align}
+$$
 
 where $j \sim i$ means that $j$ shares an edge with $i$.
 
 The stationary distribution for $T$ is given by
-\begin{equation}
+$$
+\begin{align}
     \pi = \left(  \frac{\deg (1)}{2|E|} , \dots, \frac{\deg (n)}{2|E|}  \right).
-\end{equation}
+\end{align}
 This can be seen from the following:
 \begin{align}
     (T \pi)_i & =
@@ -228,41 +242,61 @@ This can be seen from the following:
         \deg (i)
     }{2|E|}.
 \end{align}
+$$
 
 If $G$ is $d$-regular, then
 
-\begin{equation}
+$$
+\begin{align}
     T = \frac{1}{d} \cdot A,
-\end{equation}
+\end{align}
+$$
+
 where $A$ is the adjacency matrix of the graph.
 
-\section{Spectral Graph Theory}
+## Spectral Graph Theory
 Spectral graph theory is the study of how the eigenvalues and eigenvectors of
 the matrix of a graph reveals certain properties about the graph, for instance,
 how well-connected it is.
 
-\begin{lemma}[Properties of the Adjacency Matrix of a $d$-regular Graph]\label{laplacian-prop}
+
+{% include theorem.md 
+  type="lemma"
+  name="Lemma 1: Properties of the Adjacency Matrix of a $d$-regular Graph"
+  id="lemma-1"
+  statement="
     Let $T = \frac{1}{d} A$.
     Let ${\lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_n}$ to be the eigenvalues of $T$.
-    Then the following properties hold:
-    \begin{enumerate}
-        \item $|\lambda_i| \leq 1$ for all $i$, and $\lambda_1 = 1$
+    Then the following properties hold: $\label{laplacian-prop}$
 
-        \item $\lambda_2 < 1$ if and only if $G$ is connected
+    <ol>
+        <li>
+        $|\lambda_i| \leq 1$ for all $i$, and $\lambda_1 = 1$
+        </li>
 
-        \item $\lambda_n > -1$ if and only if $G$ does not have a bipartite connected component
-    \end{enumerate}
-\end{lemma}
+        <li>
+        $\lambda_2 < 1$ if and only if $G$ is connected
+        </li>
 
-We prove each of the claims in Lemma \ref{laplacian-prop} in order.
+        <li>
+        $\lambda_n > -1$ if and only if $G$ does not have a bipartite connected component
+        </li>
+    </ol>
+  "
+%}
 
-Claim 1: $|\lambda_i| \leq 1$ for all $i$, and $\lambda_1 = 1$.
-\begin{proof}
+We prove each of the claims in [Lemma 1](#lemma-1) in order.
 
+{% include theorem.md 
+  type="proof"
+  name="Claim 1: $|\lambda_i| \leq 1$ for all $i$, and $\lambda_1 = 1$"
+  statement="
     Choose any eigenvector $v$.
+    <br>
     Let $v_i$ be the maximum magnitude entry of $v$.  Observe that $v$
     is an eigenvector of $T$ only if $Tv = \lambda
         v$ for some $\lambda$.  Then
+
     \begin{align}
         \lambda v_i \label{eq:max_entry}
          & = (Tv)_i                                                                                        \\
@@ -272,25 +306,29 @@ Claim 1: $|\lambda_i| \leq 1$ for all $i$, and $\lambda_1 = 1$.
     The last step comes from the fact that since each $|v_j| \leq
         |v_i|$, so at most we have $d \times \frac{1}{d}|v_i| = |v_i|$,
     recalling that $|N(i)| = d$ since the graph is $d$-regular.
-
+    <br><br>
     This shows that $|\lambda v_i| \leq |v_i|$ for all $i$, and so $|\lambda| \leq 1$.
-
+    <br><br>
     It remains to show that $\lambda_1=1$. To see this, consider
     the vectors where all entries are 1, i.e $\mathbbm{1}$.  Then $T
         \cdot \mathbbm{1} = \mathbbm{1}$. So $\mathbbm{1}$ is an
-    eigenvector of $T$ with eigenvalue 1. \qedhere
-\end{proof}
+    eigenvector of $T$ with eigenvalue 1.
+  "
+%}
 
-Claim 2: $\lambda_2 < 1$ if and only if $G$ is connected.
-\begin{proof}
+{% include theorem.md 
+  type="proof"
+  name="Claim 2: $\lambda_2 < 1$ if and only if $G$ is connected."
+  statement="
     $(\Longleftarrow)$ Suppose that $G$ is disconnected, we show that its second largest eigenvalue $\lambda_2$ is 1.
-
+    <br><br>
     WLOG, assume that the graph has two distinct connected components; the proof
     easily extends to having more components.
+    <br>
     Let $S_1, S_2$ be connected components of $G$. Recall that the
     connected components of $G$ are the equivalence class of components where
     in each component, all vertices are reachable from any other vertex.
-
+    <br><br>
     Define $v^1, v^2$ via
     \begin{align*}
         v^1_i =
@@ -304,7 +342,7 @@ Claim 2: $\lambda_2 < 1$ if and only if $G$ is connected.
             0 & \text{otherwise.}      \\
         \end{cases} \\
     \end{align*}
-
+    <br><br>
     Then
     \begin{align}
         (T \cdot v^1)_i
@@ -317,17 +355,18 @@ Claim 2: $\lambda_2 < 1$ if and only if $G$ is connected.
     \end{align}
     This shows that $T \cdot v^1 = v^1$. Similarly, we can perform the same
     sequence of steps to derive that $T \cdot v^2 = v^2$.
-
-
+    <br><br>
     We can show the same for $v^2$ to get $T \cdot v^2 = v^2$. which shows that $\lambda_2 = 1$.
+    <br>
     Since by our disconnected assumption $v^1, v^2 \neq \mathbbm{1}$, the
     all-ones eigenvector corresponding to eigenvalue $\lambda_1$, it means $\lambda_2 = 1$.
+    <br>
     This shows the backwards direction.
-
+    <br><br>
     $(\implies)$ For the other direction, suppose that $G$ is connected, we want to show that $\lambda_2 < 1$.
-
+    <br><br>
     We will show that for any eigenvector $v$ with eigenvalue $1$, then it must be a scaling of $\mathbbm{1}$.
-
+    <br><br>
     Let $v$ be any eigenvector with eigenvalue $1$. Then let $v_i$ be its maximum entry. From Equation \ref{eq:max_entry}, we must have that
     \begin{align}
         \lambda v_i
@@ -340,26 +379,30 @@ Claim 2: $\lambda_2 < 1$ if and only if $G$ is connected.
     for all $j \sim i$.  We then repeat this argument to observe that all the
     neighbors of each $j$ must also take on the same value. Since the graph is
     connected, $v$ is just the uniform vector, as desired.
-
+    <br><br>
     Note that this lemma shows that if $G$ is disconnected, then it has a spectral gap of 0.
-\end{proof}
+    "
+%}
 
-Claim 3: $\lambda_n > -1$ if and only if $G$ does not have a bipartite connected component
-\begin{proof}
+{% include theorem.md 
+  type="proof"
+  name="Claim 3: $\lambda_n > -1$ if and only if $G$ does not have a bipartite connected component"
+  statement="
     $(\implies)$
-    We show the forward drection by contraposition.
+    We show the forward direction by contraposition.
+    <br>
     Suppose that $G$ has a bipartite component $S$. We want to show that $\lambda_n = -1$.
-
+    <br><br>
     Let $S = L \cup R$ denote the two disjoint bipartite components.
-
+    <br><br>
     Define vector
-    \begin{equation}
+    \begin{align}
         v_i = \begin{cases}
             1  & \text{if $i \in L$,} \\
             -1 & \text{if $i \in R$,} \\
             0  & \text{otherwise.}    \\
         \end{cases}
-    \end{equation}
+    \end{align}
 
     Again we compute $T \cdot v$, and consider its $i$th entry:
     \begin{align}
@@ -368,55 +411,78 @@ Claim 3: $\lambda_n > -1$ if and only if $G$ does not have a bipartite connected
          & = -v_i,
     \end{align}
     since the signs of its neighbors $N(i)$ are always the opposite of the sign of $v_i$ by construction.
-
+    <br><br>
     Since $Tv = -v$, this shows that we have an eigenvector with eigenvalue $-1$.
-
+    <br><br>
     $(\Longleftarrow)$ Now suppose that $Tv = -v$, with the goal to show that
-    the graph is bipartite.  Similarly as for the backwards direction of Claim
+    the graph is bipartite. 
+    <br>
+    Similarly as for the backwards direction of Claim
     2, we can see that this can only hold on each element $v_i$ if all the signs
     of the neighbors of $v_i$ have the same magnitude but opposite sign of
     $v_i$. Then we can similarly expand this argument to the neighbors of its
     neighbors, which shows that the graph is bipartite.
-\end{proof}
+  "
+%}
 
 This shows how we can gleam useful information about a graph just from its eigenvalues.
 
 Recall how we previously showed that a unique stationary distribution exists if the graph is connected and not bipartite. Now we have another characterization of the same property, except in terms of the eigenvalues of its
 transition matrix:
 
-\begin{corollary}[Corollary of the Fundamental Theorem]
+{% include theorem.md 
+  type="corollary"
+  name="Corollary of the Fundamental Theorem"
+  statement="
     If $T$ is such that $\lambda_2 < 1$, $\lambda_n > -1$ then the random walk
     has a unique stationary distribution which is uniform.
-\end{corollary}
+  "
+%}
+
 Our goal now is to formulate a robust version of this corollary, where we can bound the mixing time of approaching the stationary distribution.
 
-\section{Bounding the Mixing Time via the Spectral Gap}
+# Bounding the Mixing Time via the Spectral Gap
 We define the spectral gap:
-\begin{definition}[Spectral Gap]
+
+{% include theorem.md 
+  type="definition"
+  name="Spectral Gap"
+  statement="
     Given $T$, define
-    \begin{equation}
+    \begin{align}
         beta = \max\left\{ \lambda_2, | \lambda_n | \right\} = \max_{2 \leq i \leq n} |\lambda_i|.
-    \end{equation}
+    \end{align}
 
     Then the spectral gap is given by
-    \begin{equation}
+    \begin{align}
         \sgap{T} = 1 - \beta.
-    \end{equation}
-\end{definition}
+    \end{align}
+  "
+%}
 
 We now finally introduce a lemma that shows that the mixing time is proportional to the inverse of the spectral gap multiplied by a log factor:
-\begin{lemma}\label{mixing}
+
+{% include theorem.md 
+  type="lemma"
+  name="Mixing Time of Markov Chains"
+  id="theorem-mixing"
+  statement="
     Suppose $T = \frac{1}{d} A$. Then
-    \begin{equation}
+    \begin{align}
         \tmix(T) \leq O\left(\frac{\log (n)}{1 - \beta}\right).
-    \end{equation}
-\end{lemma}
+    \end{align}
+  "
+%}
 
 This shows that if your spectral gap is bounded by a constant, your mixing time is in $O(\log (n))$.
 
-\begin{exercise}
+{% include theorem.md 
+  type="exercise"
+  name="Exercise 1"
+  statement="
     Verify that the path graph indeed has a small spectral gap, since we previously established that it has a large mixing time. Similarly, check that the complete graph has a large spectral gap.
-\end{exercise}
+  "
+%}
 
 \begin{proof}[Proof of Lemma \ref{mixing}]
     Let $T$ have eigenvalues $1 = \lambda_1 \geq \lambda_2 \geq \dots \geq
@@ -426,14 +492,14 @@ This shows that if your spectral gap is bounded by a constant, your mixing time 
     Since this is a symmetric matrix, the eigenvectors are pairwise orthogonal.
 
     We can perform an eigenvalue decomposition of $T$ in terms of its eigenvectors via
-    \begin{equation}\label{eq:decomp}
+    \begin{align}\label{eq:decomp}
         T = \sum\limits_i \lambda_i v_i v_i^\top .
-    \end{equation}
+    \end{align}
 
     It follows from Equation \ref{eq:decomp} that
-    \begin{equation}
+    \begin{align}
         T^k = \sum\limits_i \lambda_i^k v_i v_i^\top .
-    \end{equation}
+    \end{align}
 
     Let $x \in [0,1]^n$ be a probability vector of $G$ where all entries are
     non-negative and sum to 1.  Think of $x$ as the start state of the Markov
@@ -442,21 +508,21 @@ This shows that if your spectral gap is bounded by a constant, your mixing time 
     After $k$ steps, the state will be $T^k \cdot x$.
 
     We can re-write $x$ in terms of the orthogonal basis of the eigenvectors of $T$, i.e
-    \begin{equation}
+    \begin{align}
         x = \sum\limits_{i} \langle x, v_i \rangle \cdot v_i.
-    \end{equation}
+    \end{align}
     Write $a_i = \langle x, v_i \rangle $ to be the coefficients of each eigenvector $v_i$.
 
     $\lambda_1=1$, so $\lambda_1^k = 1$.
     We also know that
-    \begin{equation}
+    \begin{align}
         v^1 =
         \begin{pmatrix}
             \frac{1}{\sqrt{n}} \\
             \vdots             \\
             \frac{1}{\sqrt{n}} \\
         \end{pmatrix},
-    \end{equation}
+    \end{align}
     since we previously showed that the all-ones vector is always an
     eigenvector with eigenvalue 1, where here it is re-scaled to have unit norm.
 
@@ -517,7 +583,7 @@ This shows that if your spectral gap is bounded by a constant, your mixing time 
          & = (1 - (1 - \beta))^k.
     \end{align}
     However, what we really care about is the total variation distance, which is the quantity
-    \begin{equation}
+    \begin{align}
         \frac{1}{2}
         \left| \left|
         T^k \cdot x -
@@ -537,7 +603,7 @@ This shows that if your spectral gap is bounded by a constant, your mixing time 
             \frac{1}{{n}} \\
         \end{pmatrix}
         \right| \right|_{1}.
-    \end{equation}
+    \end{align}
 
     Recall that for any $n$-dimensional vector $x$, $\| x \|_1 = \sqrt{n} \| x \|_s$ by Cauchy-Schwarz:
     \begin{align}
