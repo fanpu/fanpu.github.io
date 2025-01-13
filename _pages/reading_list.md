@@ -2,7 +2,7 @@
 layout: page
 permalink: /reading-list/
 title: ML Reading List
-description: Machine Learning Reading List
+description: Curated list of papers that I have bookmarked to read, well, someday...
 nav: true
 nav_order: 10
 toc:
@@ -10,4 +10,4 @@ toc:
 giscus_comments: true
 ---
 
-hello
+- [Fast Inference from Transformers via Speculative Decoding](https://arxiv.org/abs/2211.17192)
