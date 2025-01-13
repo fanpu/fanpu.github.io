@@ -17,9 +17,12 @@ description: >
     where random walks on Markov chains are used to obtain a good estimate of the
     log likelihood of the partition function of a model, which is hard to compute
     directly as it is #P-hard (this is even harder than NP-hard).
+    <br><br>
     However, one major issue is that it is unclear how many steps we should take
     before we are guaranteed that the Markov chain has converged to the true
-    stationary distribution. In this post, we will see how the spectral gap
+    stationary distribution. 
+    <br><br>
+    In this post, we understand how the spectral gap
     of the transition matrix of the Markov Chain relates to its mixing time.
 ---
 A Markov chain that is aperiodic and irreducible will eventually converge to a
@@ -88,15 +91,18 @@ $$
 \end{align}
 $$
 
-since both $\mathcal{D}_1, \mathcal{D}_2$ are probability distributions and integrate to 1. See Figure \ref{fig:tv}
-for an illustration.
+since both $\mathcal{D}_1, \mathcal{D}_2$ are probability distributions and
+integrate to 1. See [Figure 1](#fig-1) for an illustration.
 
-\begin{figure}[h]
-    \label{fig:tv}
-    \centering
-    \includegraphics[width=0.7\textwidth]{tv.webp}
-    \caption{Total Variation distance between some sample $\mathcal{D}_1, \mathcal{D}_2$ illustrated by the sum of the shaded green regions.}
-\end{figure}
+{% include figure.liquid 
+    path="/assets/img/posts/markov-chain-mixing-times/tv.webp"
+    width="500px"
+    class="z-depth-1"
+    num=1
+    caption="
+        Total Variation distance between some sample $\mathcal{D}_1, \mathcal{D}_2$ illustrated by the sum of the shaded green regions.
+    "
+%}
 
 # Intuition for Mixing Times
 We consider how long it takes to converge on some special graphs to build up intuition.
@@ -106,47 +112,30 @@ The path graph is a line graph on $n$ vertices.
 We claim that the mixing time of the path graph is at least $n$:
 this is because it takes at least $n$ steps to even reach the rightmost vertex from the leftmost vertex.
 
-$$
-\begin{figure}[h]
-    \centering
-    \begin{tikzpicture}
-        \node[circle,fill=blue!20,draw, minimum size=1cm] (1) {};
-        \node[circle,fill=blue!20,draw, minimum size=1cm] (2) [right = 2cm of 1] {};
-        \node[circle,fill=blue!20,draw, minimum size=1cm] (3) [right = 2cm of 2] {};
-        \node[circle,fill=blue!20,draw, minimum size=1cm] (4) [right = 2cm of 3] {};
-
-        \path[draw,thick]
-        (1) edge node {} (2)
-        (2) edge node {} (3)
-        (3) edge node {} (4);
-    \end{tikzpicture}
-    \caption{The path graph, $n=4$.}
-\end{figure}
-$$
+{% include figure.liquid 
+    path="/assets/img/posts/markov-chain-mixing-times/random-walk-path-graph.webp"
+    width="500px"
+    class="z-depth-1"
+    num=2
+    caption="
+    The path graph, $n=4$.
+    "
+%}
 
 ## Random Walks on the Complete Graph
 The complete graph $K_n$ on $n$ vertices is one where each vertex has an edge to every other vertex.
 
 This only takes 1 step to mix, since after a single step we can reach any vertex.
 
-\begin{figure}[H]
-    \centering
-    \begin{tikzpicture}
-        \graph[circular placement, radius=3cm,
-            empty nodes, nodes={circle,fill=blue!17,draw, minimum size=0.8cm, inner sep=0pt}] {
-            \foreach \x in {a,...,f} {
-                    \foreach \y in {\x,...,f} {
-                            \x -- \y;
-                        };
-                };
-        };
-        \foreach \x [count=\idx from 0] in {a,...,f} {
-                \pgfmathparse{90 + \idx * (360 / 6)}
-                \node at (\pgfmathresult:4cm) {};
-            };
-    \end{tikzpicture}
-    \caption{The complete graph $K_6$}
-\end{figure}
+{% include figure.liquid 
+    path="/assets/img/posts/markov-chain-mixing-times/random-walk-complete-graph.webp"
+    width="300px"
+    class="z-depth-1"
+    num=3
+    caption="
+    The complete graph, $K_6$.
+    "
+%}
 
 This short analysis tells us that if our graph looks like a line graph then we should expect poor mixing times; whereas if it looks more like a complete graph then we can expect the opposite.
 
@@ -198,35 +187,27 @@ Define the transition matrix $T$ of the graph to be
 
 $$
 \begin{align}
-    T =
-    \begin{blockarray}{cccccc}
-        &   &  & j  & &\\
-        \begin{block}{c[ccccc]}
-            & & & & &   \\
-            & & & & &   \\
-            & & & & &   \\
-            i & & &
-            \begin{cases}
-                \frac{1}{\deg(j)} & \text{if $j \sim i$} \\
-                0                 & \text{ otherwise}
-            \end{cases}
-            & &   \\
-            & & & & &   \\
-            & & & & &   \\
-            & & & & &   \\
-        \end{block}
-    \end{blockarray},
+    T_{ij} =
+        \begin{cases} 
+            \frac{1}{\deg(j)} & \text{if $j \sim i$} \\ 
+            0 & \text{otherwise} 
+        \end{cases}
 \end{align}
 $$
 
 where $j \sim i$ means that $j$ shares an edge with $i$.
 
 The stationary distribution for $T$ is given by
+
 $$
 \begin{align}
     \pi = \left(  \frac{\deg (1)}{2|E|} , \dots, \frac{\deg (n)}{2|E|}  \right).
 \end{align}
+$$
+
 This can be seen from the following:
+
+$$
 \begin{align}
     (T \pi)_i & =
     \sum\limits_{j \in [n]} \frac{\deg (j)}{2 |E| } \mathbbm{1}
@@ -450,7 +431,7 @@ We define the spectral gap:
   statement="
     Given $T$, define
     \begin{align}
-        beta = \max\left\{ \lambda_2, | \lambda_n | \right\} = \max_{2 \leq i \leq n} |\lambda_i|.
+        \beta = \max\left\{ \lambda_2, | \lambda_n | \right\} = \max_{2 \leq i \leq n} |\lambda_i|.
     \end{align}
 
     Then the spectral gap is given by
@@ -464,8 +445,8 @@ We now finally introduce a lemma that shows that the mixing time is proportional
 
 {% include theorem.md 
   type="lemma"
-  name="Mixing Time of Markov Chains"
-  id="theorem-mixing"
+  name="Lemma 2: Mixing Time of Markov Chains"
+  id="lemma-2"
   statement="
     Suppose $T = \frac{1}{d} A$. Then
     \begin{align}
@@ -478,180 +459,205 @@ This shows that if your spectral gap is bounded by a constant, your mixing time 
 
 {% include theorem.md 
   type="exercise"
-  name="Exercise 1"
   statement="
     Verify that the path graph indeed has a small spectral gap, since we previously established that it has a large mixing time. Similarly, check that the complete graph has a large spectral gap.
   "
 %}
 
-\begin{proof}[Proof of Lemma \ref{mixing}]
-    Let $T$ have eigenvalues $1 = \lambda_1 \geq \lambda_2 \geq \dots \geq
-        \lambda_n$ with eigenvectors $v^1, v^2, \dots, v^n$. Assume that the
-    eigenvectors are scaled to be unit vectors.
+## Proof
+We now prove [Lemma 2](#lemma-2).
+  
+Let $T$ have eigenvalues $1 = \lambda_1 \geq \lambda_2 \geq \dots \geq
+    \lambda_n$ with eigenvectors $v^1, v^2, \dots, v^n$. Assume that the
+eigenvectors are scaled to be unit vectors.
 
-    Since this is a symmetric matrix, the eigenvectors are pairwise orthogonal.
+Since this is a symmetric matrix, the eigenvectors are pairwise orthogonal.
 
-    We can perform an eigenvalue decomposition of $T$ in terms of its eigenvectors via
-    \begin{align}\label{eq:decomp}
-        T = \sum\limits_i \lambda_i v_i v_i^\top .
-    \end{align}
+We can perform an eigenvalue decomposition of $T$ in terms of its eigenvectors via
+\begin{align}\label{eq:decomp}
+    T = \sum\limits_i \lambda_i v_i v_i^\top .
+\end{align}
 
-    It follows from Equation \ref{eq:decomp} that
-    \begin{align}
-        T^k = \sum\limits_i \lambda_i^k v_i v_i^\top .
-    \end{align}
+It follows from Equation \ref{eq:decomp} that
+\begin{align}
+    T^k = \sum\limits_i \lambda_i^k v_i v_i^\top .
+\end{align}
 
-    Let $x \in [0,1]^n$ be a probability vector of $G$ where all entries are
-    non-negative and sum to 1.  Think of $x$ as the start state of the Markov
-    chain.
+Let $x \in [0,1]^n$ be a probability vector of $G$ where all entries are
+non-negative and sum to 1.  Think of $x$ as the start state of the Markov
+chain.
 
-    After $k$ steps, the state will be $T^k \cdot x$.
+After $k$ steps, the state will be $T^k \cdot x$.
 
-    We can re-write $x$ in terms of the orthogonal basis of the eigenvectors of $T$, i.e
-    \begin{align}
-        x = \sum\limits_{i} \langle x, v_i \rangle \cdot v_i.
-    \end{align}
-    Write $a_i = \langle x, v_i \rangle $ to be the coefficients of each eigenvector $v_i$.
+We can re-write $x$ in terms of the orthogonal basis of the eigenvectors of $T$, i.e
+\begin{align}
+    x = \sum\limits_{i} \langle x, v_i \rangle \cdot v_i.
+\end{align}
+Write $a_i = \langle x, v_i \rangle $ to be the coefficients of each eigenvector $v_i$.
 
-    $\lambda_1=1$, so $\lambda_1^k = 1$.
-    We also know that
-    \begin{align}
-        v^1 =
-        \begin{pmatrix}
-            \frac{1}{\sqrt{n}} \\
-            \vdots             \\
-            \frac{1}{\sqrt{n}} \\
-        \end{pmatrix},
-    \end{align}
-    since we previously showed that the all-ones vector is always an
-    eigenvector with eigenvalue 1, where here it is re-scaled to have unit norm.
+$\lambda_1=1$, so $\lambda_1^k = 1$.
+We also know that
+\begin{align}
+    v^1 =
+    \begin{pmatrix}
+        \frac{1}{\sqrt{n}} \\
+        \vdots             \\
+        \frac{1}{\sqrt{n}} \\
+    \end{pmatrix},
+\end{align}
+since we previously showed that the all-ones vector is always an
+eigenvector with eigenvalue 1, where here it is re-scaled to have unit norm.
 
-    Then
-    \begin{align}
-        T^k \cdot x & =
-        \sum\limits_{i} \langle x, v_i \rangle  \cdot \lambda_i^k \cdot v_i                                                                                       \\
-                    & = \langle x, v^1 \rangle \cdot v^1 + \sum\limits_{i \geq 2} \langle x, v_i \rangle  \cdot \lambda_i^k \cdot v_i                             \\
-                    & = \frac{1}{n} \langle x, \mathbbm{1} \rangle \cdot \mathbbm{1} + \sum\limits_{i \geq 2} \langle x, v_i \rangle  \cdot \lambda_i^k \cdot v_i \\
-                    & =
-        \begin{pmatrix}
-            \frac{1}{{n}} \\
-            \vdots        \\
-            \frac{1}{{n}} \\
-        \end{pmatrix} +
-        \sum\limits_{i \geq 2} \langle x, v_i \rangle  \cdot \lambda_i^k \cdot v_i,                                                                               \\
-    \end{align}
-    where the last step follows from the fact that $x$ is a probability distribution and thus $x \cdot \mathbbm{1} = 1$.
+Then
+$$
+\begin{align}
+    T^k \cdot x & =
+    \sum\limits_{i} \langle x, v_i \rangle  \cdot \lambda_i^k \cdot v_i                                                                                       \\
+                & = \langle x, v^1 \rangle \cdot v^1 + \sum\limits_{i \geq 2} \langle x, v_i \rangle  \cdot \lambda_i^k \cdot v_i                             \\
+                & = \frac{1}{n} \langle x, \mathbbm{1} \rangle \cdot \mathbbm{1} + \sum\limits_{i \geq 2} \langle x, v_i \rangle  \cdot \lambda_i^k \cdot v_i \\
+                & =
+    \begin{pmatrix}
+        \frac{1}{{n}} \\
+        \vdots        \\
+        \frac{1}{{n}} \\
+    \end{pmatrix} +
+    \sum\limits_{i \geq 2} \langle x, v_i \rangle  \cdot \lambda_i^k \cdot v_i,                                                                               \\
+\end{align}
+$$
+where the last step follows from the fact that $x$ is a probability distribution and thus $x \cdot \mathbbm{1} = 1$.
 
-    Rearranging and moving to work in the L2 (Euclidean) norm, we obtain
-    \begin{align}
-        \left| \left|
-        T^k \cdot x -
-        \begin{pmatrix}
-            \frac{1}{{n}} \\
-            \vdots        \\
-            \frac{1}{{n}} \\
-        \end{pmatrix}
-        \right| \right|_2
-         & =
-        \left| \left|
-        \sum\limits_{i = 2}^n \langle x, v_i \rangle  \cdot \lambda_i^{k}  v_i
-        \right| \right|_2                                                                                   \\
-         & =
-        \sqrt{
-            \sum\limits_{i = 2}^n \langle x, v_i \rangle^2  \cdot \lambda_i^{2k} \cdot \| v_i \|^2_2
-        } \tag{by definition of L2 norm, cross-terms cancel out since eigenvectors are pairwise orthogonal} \\
-         & =
-        \sqrt{
-            \sum\limits_{i = 2}^n \langle x, v_i \rangle^2  \cdot \lambda_i^{2k}
-        } \tag{$v_i$ has unit norm}                                                                         \\
-         & \leq \| x \|_2 \cdot \beta^k,
-    \end{align}
-    where the last step comes from the fact that $\lambda_i \leq \beta$ for all $i \geq 2$ since $\beta$ is the second-largest eigenvalue, and
-    $\sum\limits_{i = 1}^n \langle x, v_i \rangle^2 = \| x \|_2^2$ .
+Rearranging and moving to work in the L2 (Euclidean) norm, we obtain
 
-    Since $\| x \|_2 \leq 1$, we can simplify
-    \begin{align}
-        \left| \left|
-        T^k \cdot x -
-        \begin{pmatrix}
-            \frac{1}{{n}} \\
-            \vdots        \\
-            \frac{1}{{n}} \\
-        \end{pmatrix}
-        \right| \right|_2
-         & \leq \beta^k           \\
-         & = (1 - (1 - \beta))^k.
-    \end{align}
-    However, what we really care about is the total variation distance, which is the quantity
-    \begin{align}
-        \frac{1}{2}
-        \left| \left|
-        T^k \cdot x -
-        \begin{pmatrix}
-            \frac{1}{{n}} \\
-            \vdots        \\
-            \frac{1}{{n}} \\
-        \end{pmatrix}
-        \right| \right|_{TV} \\
-        =
-        \frac{1}{2}
-        \left| \left|
-        T^k \cdot x -
-        \begin{pmatrix}
-            \frac{1}{{n}} \\
-            \vdots        \\
-            \frac{1}{{n}} \\
-        \end{pmatrix}
-        \right| \right|_{1}.
-    \end{align}
+$$
+\begin{align}
+    \left| \left|
+    T^k \cdot x -
+    \begin{pmatrix}
+        \frac{1}{{n}} \\
+        \vdots        \\
+        \frac{1}{{n}} \\
+    \end{pmatrix}
+    \right| \right|_2
+        & =
+    \left| \left|
+    \sum\limits_{i = 2}^n \langle x, v_i \rangle  \cdot \lambda_i^{k}  v_i
+    \right| \right|_2                                                                                   \\
+        & =
+    \sqrt{
+        \sum\limits_{i = 2}^n \langle x, v_i \rangle^2  \cdot \lambda_i^{2k} \cdot \| v_i \|^2_2
+    } \\ &
+    \text{(def of L2 norm, x-terms cancel as e.v are pairwise orth)} \\
+        & =
+    \sqrt{
+        \sum\limits_{i = 2}^n \langle x, v_i \rangle^2  \cdot \lambda_i^{2k}
+    } \\ & \text{($v_i$ has unit norm)}                                                                         \\
+        & \leq \| x \|_2 \cdot \beta^k,
+\end{align}
+$$
 
-    Recall that for any $n$-dimensional vector $x$, $\| x \|_1 = \sqrt{n} \| x \|_s$ by Cauchy-Schwarz:
-    \begin{align}
-        \| x \|_1
-         & = \mathbbm{1} \cdot x                                      \\
-         & \leq \| \mathbbm{1} \|_2 \| x \|_2 \tag{by Cauchy-Schwarz} \\
-         & = \sqrt{n} \| x \|_2.
-    \end{align}
+where the last step comes from the fact that $\lambda_i \leq \beta$ for all $i \geq 2$ since $\beta$ is the second-largest eigenvalue, and
+$\sum\limits_{i = 1}^n \langle x, v_i \rangle^2 = \| x \|_2^2$ .
 
-    To relate the L2 distance to L1 distance, we can apply the above inequality to get
-    \begin{align}
-        \frac{1}{2}
-        \left| \left|
-        T^k \cdot x -
-        \begin{pmatrix}
-            \frac{1}{{n}} \\
-            \vdots        \\
-            \frac{1}{{n}} \\
-        \end{pmatrix}
-        \right| \right|_1
-         & \leq
-        \frac{1}{2}
-        \sqrt{n}
-        \left| \left|
-        T^k \cdot x -
-        \begin{pmatrix}
-            \frac{1}{{n}} \\
-            \vdots        \\
-            \frac{1}{{n}} \\
-        \end{pmatrix}
-        \right| \right|_2                                                            \\
-        \\
-         & \leq \frac{1}{2} \sqrt{n} \beta^k                                         \\
-         & \leq \frac{1}{4}, \tag{if $k > O\left( \frac{\log n}{1 - \beta} \right)$}
-    \end{align}
-    as desired.
+Since $\| x \|_2 \leq 1$, we can simplify
 
-    So we set $k \geq O\left( \frac{\log n}{1 - \beta} \right)$ for the total variation distance to be less than 1/4.
-\end{proof}
+$$
+\begin{align}
+    \left| \left|
+    T^k \cdot x -
+    \begin{pmatrix}
+        \frac{1}{{n}} \\
+        \vdots        \\
+        \frac{1}{{n}} \\
+    \end{pmatrix}
+    \right| \right|_2
+        & \leq \beta^k           \\
+        & = (1 - (1 - \beta))^k.
+\end{align}
+$$
+
+However, what we really care about is the total variation distance, which is the quantity
+
+$$
+\begin{align}
+    \frac{1}{2}
+    \left| \left|
+    T^k \cdot x -
+    \begin{pmatrix}
+        \frac{1}{{n}} \\
+        \vdots        \\
+        \frac{1}{{n}} \\
+    \end{pmatrix}
+    \right| \right|_{TV} \\
+    =
+    \frac{1}{2}
+    \left| \left|
+    T^k \cdot x -
+    \begin{pmatrix}
+        \frac{1}{{n}} \\
+        \vdots        \\
+        \frac{1}{{n}} \\
+    \end{pmatrix}
+    \right| \right|_{1}.
+\end{align}
+$$
+
+Recall that for any $n$-dimensional vector $x$, $\| x \|_1 = \sqrt{n} \| x \|_s$ by Cauchy-Schwarz:
+
+$$
+\begin{align}
+    \| x \|_1
+        & = \mathbbm{1} \cdot x                                      \\
+        & \leq \| \mathbbm{1} \|_2 \| x \|_2 \tag{by Cauchy-Schwarz} \\
+        & = \sqrt{n} \| x \|_2.
+\end{align}
+$$
+
+To relate the L2 distance to L1 distance, we can apply the above inequality to get
+$$
+\begin{align}
+    \frac{1}{2}
+    \left| \left|
+    T^k \cdot x -
+    \begin{pmatrix}
+        \frac{1}{{n}} \\
+        \vdots        \\
+        \frac{1}{{n}} \\
+    \end{pmatrix}
+    \right| \right|_1
+        & \leq
+    \frac{1}{2}
+    \sqrt{n}
+    \left| \left|
+    T^k \cdot x -
+    \begin{pmatrix}
+        \frac{1}{{n}} \\
+        \vdots        \\
+        \frac{1}{{n}} \\
+    \end{pmatrix}
+    \right| \right|_2                                                            \\
+    \\
+        & \leq \frac{1}{2} \sqrt{n} \beta^k                                         \\
+        & \leq \frac{1}{4}, \tag{if $k > O\left( \frac{\log n}{1 - \beta} \right)$}
+\end{align}
+$$
+as desired.
+
+So we set $k \geq O\left( \frac{\log n}{1 - \beta} \right)$ for the total variation distance to be less than 1/4.
 
 We say that a Markov Chain is fast mixing if $\tmix \leq \log^{O(1)}(n)$.
 
-\section{Expander Graphs}
-Lemma \ref{mixing}  motivates the following definition of expander graphs:
-\begin{definition}[Expander Graph]
+# Expander Graphs
+[Lemma 2](#lemma-2)  motivates the following definition of expander graphs:
+
+{% include theorem.md 
+  type="definition"
+  name="Expander Graphs"
+  statement="
     $G$ is a $(n, d, \epsilon)$-expander graph if $G$ is a $d$-regular graph and
     $T = \frac{1}{d} A$ has spectral gap at least $\epsilon$.
-\end{definition}
+  "
+%}
 
-From what we have learnt so far, we know that an expander has to be well-connected in order to have a large spectral gap. Next lecture, we will see how to use expander graphs for derandomization. This helps to reduce the amount of random
-bits required for algorithms.
+From what we have learnt so far, we know that an expander has to be
+well-connected in order to have a large spectral gap. Expander graphs can be used for derandomization, which helps to reduce the
+amount of random bits required for algorithms.
