@@ -37,6 +37,13 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/summaries/";
           },
+        },{id: "nav-ml-reading-list",
+          title: "ML Reading List",
+          description: "Machine Learning Reading List",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/reading-list/";
+          },
         },{id: "post-bounding-mixing-times-of-markov-chains-via-the-spectral-gap",
       
         title: "Bounding Mixing Times of Markov Chains via the Spectral Gap",
