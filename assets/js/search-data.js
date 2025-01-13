@@ -37,7 +37,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/summaries/";
           },
-        },{id: "post-notes-on-39-the-llama-3-herd-of-models-39",
+        },{id: "post-bounding-mixing-times-of-markov-chains-via-the-spectral-gap",
+      
+        title: "Bounding Mixing Times of Markov Chains via the Spectral Gap",
+      
+      description: "A Markov chain that is aperiodic and irreducible will eventually converge to a stationary distribution. This is widely used in many applications in machine learning, such as in Markov Chain Monte Carlo (MCMC) methods, where random walks on Markov chains are used to obtain a good estimate of the log likelihood of the partition function of a model, which is hard to compute directly as it is #P-hard (this is even harder than NP-hard).  However, one major issue is that it is unclear how many steps we should take before we are guaranteed that the Markov chain has converged to the true stationary distribution.   In this post, we understand how the spectral gap of the transition matrix of the Markov Chain relates to its mixing time.",
+      section: "Posts",
+      handler: () => {
+        
+          window.location.href = "/blog/2025/bounding-markov-chain-mixing-times-by-spectral-gap/";
+        
+      },
+    },{id: "post-notes-on-39-the-llama-3-herd-of-models-39",
       
         title: "Notes on &#39;The Llama 3 Herd of Models&#39;",
       
@@ -200,17 +211,6 @@ ninja.data = [{
       handler: () => {
         
           window.location.href = "/blog/2022/affine-embeddings-for-low-rank-approximation/";
-        
-      },
-    },{id: "post-bounding-mixing-times-of-markov-chains-via-the-spectral-gap",
-      
-        title: "Bounding Mixing Times of Markov Chains via the Spectral Gap",
-      
-      description: "",
-      section: "Posts",
-      handler: () => {
-        
-          window.location.href = "/blog/2022/bounding-mixing-time-by-spectral-gap/";
         
       },
     },{id: "post-cmu-15-441-641-computer-networks-course-review",
@@ -654,6 +654,9 @@ ninja.data = [{
           description: "",
           section: "News",},{id: "news-i-will-be-at-neurips-from-12-10-12-15-let-s-chat-if-you-re-also-there",
           title: 'I will be at NeurIPs from 12/10-12/15. Let’s chat if you’re also there!...',
+          description: "",
+          section: "News",},{id: "news-wrote-on-the-beautiful-connection-between-how-long-a-markov-chain-takes-to-mix-commonly-used-in-mcmc-methods-in-ml-and-the-spectral-gap-of-its-transition-matrix-bounding-mixing-times-of-markov-chains-via-the-spectral-gap",
+          title: 'Wrote on the beautiful connection between how long a Markov Chain takes to...',
           description: "",
           section: "News",},{id: "projects-graphical-bayesian-networks-for-predicting-asset-covariances",
           title: 'Graphical Bayesian Networks for Predicting Asset Covariances',

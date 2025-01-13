@@ -1,1 +1,1 @@
-window.MathJax={loader:{load:["[tex]/mathtools"]},tex:{packages:{"[+]":["mathtools","ams"]},tags:"ams"}};
+window.MathJax={loader:{load:["[tex]/mathtools"]},tex:{packages:{"[+]":["mathtools","ams"]},tags:"ams",inlineMath:[["$","$"],["\\(","\\)"]]}};
