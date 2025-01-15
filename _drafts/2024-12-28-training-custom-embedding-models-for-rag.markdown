@@ -14,3 +14,5 @@ description: >
   TODO TODO
 published: false
 ---
+
+  {% assign image_url = page.cover | prepend: '/assets/img/posts/' | relative_url %}
