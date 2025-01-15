@@ -48,7 +48,7 @@ ninja.data = [{
       
         title: "Bounding Mixing Times of Markov Chains via the Spectral Gap",
       
-      description: "A Markov chain that is aperiodic and irreducible will eventually converge to a stationary distribution. This is widely used in many applications in machine learning, such as in Markov Chain Monte Carlo (MCMC) methods, where random walks on Markov chains are used to obtain a good estimate of the log likelihood of the partition function of a model, which is hard to compute directly as it is #P-hard (this is even harder than NP-hard).  However, one major issue is that it is unclear how many steps we should take before we are guaranteed that the Markov chain has converged to the true stationary distribution.   In this post, we understand how the spectral gap of the transition matrix of the Markov Chain relates to its mixing time.",
+      description: "An aperiodic and irreducible Markov chain will eventually converge to a stationary distribution. This is used in many applications in machine learning like Markov Chain Monte Carlo (MCMC) methods, where random walks on Markov chains are used to obtain a good estimate of the log likelihood of the partition function of a model, which is hard to compute directly as it is #P-hard (this is even harder than NP-hard). However, one common problem is that it is unclear how many steps we should take before we are guaranteed that the Markov chain has converged to the its stationary distribution.   In this post, we understand how the spectral gap of the transition matrix of the Markov chain relates to its mixing time.",
       section: "Posts",
       handler: () => {
         
