@@ -64,6 +64,16 @@ layout: default
     </p>
   </header>
 
+  {% assign image_url = page.cover | prepend: '/assets/img/posts/' | relative_url %}
+  {%- if page.cover %}
+      {% include figure.liquid path=image_url alt="post.cover" width="100%"
+      height="450px" class="preview z-depth-1 rounded" %}
+    <div class="caption">
+        {{ page.caption}}
+    </div>
+  {% endif %}
+
+
   <article class="post-content">
     {% if page.toc and page.toc.beginning %}
       <div id="table-of-contents">
