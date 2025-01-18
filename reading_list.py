@@ -19,7 +19,7 @@ def fetch_arxiv_title(arxiv_id):
 def append_to_reading_list(arxiv_id, title):
     """Append the paper title and link to the reading list file."""
     link = f"https://arxiv.org/abs/{arxiv_id}"
-    entry = f"- [{title}]({link})\n"
+    entry = f"1. [{title}]({link})\n"
 
     if not os.path.exists(READING_LIST_PATH):
         raise FileNotFoundError(f"The file {READING_LIST_PATH} does not exist.")
