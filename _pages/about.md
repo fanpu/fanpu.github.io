@@ -71,7 +71,7 @@ forms since then. All banner pictures on the blog are taken by yours truly!
 
 ## Talks
 
-Slides for talks on LLM-related topics that I gave.
+Slides I developed for talks on various LLM-related topics.
 You are free to share, adapt, and reuse these
 materials, provided that you give appropriate credit.
 

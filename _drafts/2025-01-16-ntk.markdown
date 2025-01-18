@@ -1,0 +1,37 @@
+---
+title: "NTK"
+layout: post
+tags: [machine-learning, math]
+cover: furano.webp
+cover_preview: furano.webp
+caption: Lavender Fields in Biei, Kamikawa Subprefecture, Hokkaido, Japan
+class: post-template
+author: fanpu
+toc:
+  sidebar: left
+giscus_comments: true
+description: >
+  TODO
+published: false
+---
+
+When do we have algorithmic results?
+- optimizing a single layer (random features)
+- local results (Polyak condition)
+
+
+Functions of some form induces a RKHS...
+
+if very wide:
+sums become integrals
+those kind of function can be approximated by a two-layer
+network
+
+
+something something only requires a finite number of basis elements?? such that it is close?
+
+construction: sample uniformly from omega
+
+Show: function classes learnable via SGD
+
+
