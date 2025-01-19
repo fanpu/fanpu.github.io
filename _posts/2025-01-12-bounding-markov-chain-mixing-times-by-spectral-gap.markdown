@@ -496,6 +496,8 @@ Write $a_i = \langle x, v_i \rangle $ to be the coefficients of each eigenvector
 
 $\lambda_1=1$, so $\lambda_1^k = 1$.
 We also know that
+
+$$
 \begin{align}
     v^1 =
     \begin{pmatrix}
@@ -504,6 +506,8 @@ We also know that
         \frac{1}{\sqrt{n}} \\
     \end{pmatrix},
 \end{align}
+$$
+
 since we previously showed that the all-ones vector is always an
 eigenvector with eigenvalue 1, where here it is re-scaled to have unit norm.
 
@@ -516,13 +520,14 @@ $$
                 & = \frac{1}{n} \langle x, \mathbb{1} \rangle \cdot \mathbb{1} + \sum\limits_{i \geq 2} \langle x, v_i \rangle  \cdot \lambda_i^k \cdot v_i \\
                 & =
     \begin{pmatrix}
-        \frac{1}{{n}} \\
+        \frac{1}{n} \\
         \vdots        \\
-        \frac{1}{{n}} \\
+        \frac{1}{n} \\
     \end{pmatrix} +
-    \sum\limits_{i \geq 2} \langle x, v_i \rangle  \cdot \lambda_i^k \cdot v_i,                                                                               \\
+    \sum\limits_{i \geq 2} \langle x, v_i \rangle  \cdot \lambda_i^k \cdot v_i,
 \end{align}
 $$
+
 where the last step follows from the fact that $x$ is a probability distribution and thus $x \cdot \mathbb{1} = 1$.
 
 Rearranging and moving to work in the L2 (Euclidean) norm, we obtain
@@ -532,9 +537,9 @@ $$
     \left| \left|
     T^k \cdot x -
     \begin{pmatrix}
-        \frac{1}{{n}} \\
+        \frac{1}{n} \\
         \vdots        \\
-        \frac{1}{{n}} \\
+        \frac{1}{n} \\
     \end{pmatrix}
     \right| \right|_2
         & =
@@ -564,9 +569,9 @@ $$
     \left| \left|
     T^k \cdot x -
     \begin{pmatrix}
-        \frac{1}{{n}} \\
+        \frac{1}{n} \\
         \vdots        \\
-        \frac{1}{{n}} \\
+        \frac{1}{n} \\
     \end{pmatrix}
     \right| \right|_2
         & \leq \beta^k           \\
@@ -582,9 +587,9 @@ $$
     \left| \left|
     T^k \cdot x -
     \begin{pmatrix}
-        \frac{1}{{n}} \\
+        \frac{1}{n} \\
         \vdots        \\
-        \frac{1}{{n}} \\
+        \frac{1}{n} \\
     \end{pmatrix}
     \right| \right|_{TV} \\
     =
@@ -592,9 +597,9 @@ $$
     \left| \left|
     T^k \cdot x -
     \begin{pmatrix}
-        \frac{1}{{n}} \\
+        \frac{1}{n} \\
         \vdots        \\
-        \frac{1}{{n}} \\
+        \frac{1}{n} \\
     \end{pmatrix}
     \right| \right|_{1}.
 \end{align}
@@ -618,9 +623,9 @@ $$
     \left| \left|
     T^k \cdot x -
     \begin{pmatrix}
-        \frac{1}{{n}} \\
+        \frac{1}{n} \\
         \vdots        \\
-        \frac{1}{{n}} \\
+        \frac{1}{n} \\
     \end{pmatrix}
     \right| \right|_1
         & \leq
@@ -629,9 +634,9 @@ $$
     \left| \left|
     T^k \cdot x -
     \begin{pmatrix}
-        \frac{1}{{n}} \\
+        \frac{1}{n} \\
         \vdots        \\
-        \frac{1}{{n}} \\
+        \frac{1}{n} \\
     \end{pmatrix}
     \right| \right|_2                                                            \\
     \\
