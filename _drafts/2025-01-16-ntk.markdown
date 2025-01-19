@@ -35,3 +35,33 @@ construction: sample uniformly from omega
 Show: function classes learnable via SGD
 
 
+# Gradient Descent Finds Global Minima of Deep Neural Networks
+
+Tries to demystify two phenomenons:
+1. First-order methods like GD can get zero training loss, even if labels are arbitrary
+2. Deep NNs are harder to train (requires residual connections)
+
+Draws on previous work:
+Learning overparameterized neural networks via stochastic gradient descent on
+structured data
+- says that in over-parameterized NNs, every weight matrix is close
+to its initialization
+
+Gradient descent provably optimizes over-parameterized neural networks
+- convergence is determined by the least eigenvalue of the Gram matrix
+induced by the NN architecture. 
+- So want to lower bound the least eigenvalue
+- To do that, sufficient to bound distance of each weight matrix from initialization
+
+Proof technique:
+- Extending this to deep networks
+- perturbation analysis: shows why for resnet there isn't the exponential
+problem with how the perturbation grows, as opposed to normal deep networks
+
+
+# On Exact Computation with an Infinitely Wide Neural Net
+
+Easier to study objects in the infinite limit in math
+
+Weakly-trained nets: layers receive random initialization, only top layer trained by GD
+
