@@ -44,7 +44,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/reading-list/";
           },
-        },{id: "post-bounding-mixing-times-of-markov-chains-via-the-spectral-gap",
+        },{id: "post-an-intuitive-introduction-to-gaussian-processes",
+      
+        title: "An Intuitive Introduction to Gaussian Processes",
+      
+      description: "Deep learning is currently dominated by parametric models, which are models with a fixed number of parameters regardless of the size of the training dataset. Examples include linear regression models and neural networks.   However, it&#39;s good to occasionally take a step back and remember that that is not all there is. Non-parametric models like k-NN, decision trees, or kernel density estimation don&#39;t rely on a fixed set of weights, but instead grow in complexity based on the size of the data.    In this post we&#39;ll talk about Gaussian processes, a conceptually important, but in my opinion under-appreciated non-parametric approach with deep connections with modern-day neural networks. An intersting motivating fact which we will eventually show is that neural networks initialized with Gaussian weights are equivalent to Gaussian processes in the infinite-width limit.",
+      section: "Posts",
+      handler: () => {
+        
+          window.location.href = "/blog/2025/gaussian-processes/";
+        
+      },
+    },{id: "post-bounding-mixing-times-of-markov-chains-via-the-spectral-gap",
       
         title: "Bounding Mixing Times of Markov Chains via the Spectral Gap",
       
@@ -664,6 +675,9 @@ ninja.data = [{
           description: "",
           section: "News",},{id: "news-wrote-on-the-beautiful-connection-between-how-long-a-markov-chain-takes-to-mix-commonly-used-in-mcmc-methods-in-ml-and-the-spectral-gap-of-its-transition-matrix-bounding-mixing-times-of-markov-chains-via-the-spectral-gap",
           title: 'Wrote on the beautiful connection between how long a Markov Chain takes to...',
+          description: "",
+          section: "News",},{id: "news-completed-a-new-post-on-what-i-think-is-an-under-appreciated-topic-an-an-intuitive-introduction-to-gaussian-processes",
+          title: 'Completed a new post on what I think is an under-appreciated topic: An...',
           description: "",
           section: "News",},{id: "projects-graphical-bayesian-networks-for-predicting-asset-covariances",
           title: 'Graphical Bayesian Networks for Predicting Asset Covariances',
