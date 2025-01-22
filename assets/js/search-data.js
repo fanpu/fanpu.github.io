@@ -676,7 +676,7 @@ ninja.data = [{
           section: "News",},{id: "news-wrote-on-the-beautiful-connection-between-how-long-a-markov-chain-takes-to-mix-commonly-used-in-mcmc-methods-in-ml-and-the-spectral-gap-of-its-transition-matrix-bounding-mixing-times-of-markov-chains-via-the-spectral-gap",
           title: 'Wrote on the beautiful connection between how long a Markov Chain takes to...',
           description: "",
-          section: "News",},{id: "news-completed-a-new-post-on-what-i-think-is-an-under-appreciated-topic-an-an-intuitive-introduction-to-gaussian-processes",
+          section: "News",},{id: "news-completed-a-new-post-on-what-i-think-is-an-under-appreciated-topic-an-intuitive-introduction-to-gaussian-processes",
           title: 'Completed a new post on what I think is an under-appreciated topic: An...',
           description: "",
           section: "News",},{id: "projects-graphical-bayesian-networks-for-predicting-asset-covariances",
