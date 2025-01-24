@@ -107,13 +107,56 @@ Below is an illustration of what this looks like:
 We make some preliminary observations without worrying too much about what is
 precisely happening yet: 
 1. Observe via the confidence interval that our prior is centered with mean 0, and 1 standard deviation (and hence $\pm$1.96 for a 95% confidence interval).
-2. Notice how the confidence bands shrink to zero at the
+2. Notice how the confidence bands shrinks at the
 observed points, and increases as we get further from these points. This is due
 to our specific choice of kernel (explained later) used for the Gaussian process, which makes the
 assumption that points which are closer together tend to be more correlated in
 their values. 
 
-Let's do a quick review of Bayesian modelling before diving right in.
+Let's see it try to fit a random smooth function as we increase the number of
+randomly sampled training datapoints:
+
+{% include figure.liquid
+    path="/assets/img/posts/gaussian-process/gp_random_sampling.gif"
+    width="600px"
+    class="z-depth-1"
+    num=3
+    caption="Fitting a random smooth function by sampling training points randomly."
+%}
+
+It is possible that sampling the underlying function is expensive,
+and we want to minimize the number of samples we make before getting a good fit.
+
+We can be smart about this by prioritizing sampling regions where there is most
+uncertainty:
+
+{% include figure.liquid
+    path="/assets/img/posts/gaussian-process/gp_most_uncertain_sampling.gif"
+    width="600px"
+    class="z-depth-1"
+    num=4
+    caption="Fitting a random smooth function by choosing training points that currently have the most uncertainty under the model."
+%}
+
+You can also use Gaussian processes for time-series prediction, where you can now quantify uncertain in future values.
+Here's an example of predicting the price of NVDA's over the last 120 days from when the post was written:
+
+{% include figure.liquid
+    path="/assets/img/posts/gaussian-process/gp_nvda.gif"
+    width="600px"
+    class="z-depth-1"
+    num=5
+    caption="Homework: try to make some money off of this."
+%}
+
+Well.. it certainly doesn't really do too great here as Gaussian process kernels usually assume
+stationarity, which means that the statistical characteristics of the data (i.e mean, variance, autocorrelation) doesn't change over time,
+which is definitely not what is happening in the stock market. Still
+worth a shot though!
+
+Hope these examples help to motivate why Gaussian processes are cool.
+
+Let's now do a quick review of Bayesian modelling before diving right in.
 
 ### Bayesian Modeling
 
@@ -148,7 +191,7 @@ follow the beta distribution, visualized below:
     path="/assets/img/posts/gaussian-process/coin-flip.webp"
     width="600px"
     class="z-depth-1"
-    num=3
+    num=6
     caption="Uniform prior and updated posterior with mean 0.7 after flipping 7 heads and 3 tails"
 %}
 
