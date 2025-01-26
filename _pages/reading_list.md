@@ -249,3 +249,8 @@ There's a good chance that if I like the paper, I will write a summary about it.
 1. [Trainability and Accuracy of Neural Networks: An Interacting Particle System Approach](https://arxiv.org/abs/1805.00915)
 1. [Disentangling feature and lazy training in deep neural networks](https://arxiv.org/abs/1906.08034)
 1. [Meta-Principled Family of Hyperparameter Scaling Strategies](https://arxiv.org/abs/2210.04909)
+1. [On Lazy Training in Differentiable Programming](https://arxiv.org/abs/1812.07956)
+1. [Limitations of the NTK for Understanding Generalization in Deep Learning](https://arxiv.org/abs/2206.10012)
+1. [Spectral Normalization for Generative Adversarial Networks](https://arxiv.org/abs/1802.05957)
+1. [On the distance between two neural networks and the stability of learning](https://arxiv.org/abs/2002.03432)
+1. [Feature Learning in Infinite-Width Neural Networks](https://arxiv.org/abs/2011.14522)
