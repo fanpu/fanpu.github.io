@@ -64,4 +64,80 @@ problem with how the perturbation grows, as opposed to normal deep networks
 Easier to study objects in the infinite limit in math
 
 Weakly-trained nets: layers receive random initialization, only top layer trained by GD
+Fully-trained nets: all parameters trained by GD
 
+Extra-wideness plays a crucial role in the proof: it is shown that as width
+increases, training causes increasingly smaller changes (in a proportionate
+sense) in the parameters. 
+
+Requires the Gram matrix H(t)
+
+In the limit, H(t) remains constant during training - equal to H(0)
+
+Under certain random initialization of parameters, random matrix H(0)
+converges in probability to a deterministic kernel matrix H^* as width goes to infinity - the Neural Tangent
+Kernel ker(\cdot, \cdot) evaluated on the training data
+
+Then if at all steps H(t) = H^*, then the change in loss becomes
+
+du(t)/dt = -H^* \cdot (u(t) - y)
+
+Dynamics become same as kernel regression under gradient flow: at time t \to \infty, final
+prediction function is 
+
+f^*(x) = (ker(x, x_1), \cdot ker(x, x_n)) (H^*)^-1 y
+
+Theorem 3.2 (Equivalence between trained net and kernel regression). 
+- essentially shows that the nn is equivalent to the NTK kernel regression
+
+That is, the prediction is essentially a kernel
+predictor. Therefore, to study the properties of these over-parameterized nets, such as their generalization power, it is sufficient to study the corresponding NTK.
+
+While this theorem only gives guarantee for a single point, using a union bound, we can show that
+this guarantee holds for (exponentially many) finite testing points. Combing this with the standard
+analysis of hold-out validation set, we can conclude that a fully-trained wide neural net enjoys the
+same generalization ability as its corresponding NTK.
+
+### DEEP NEURAL NETWORKS AS GAUSSIAN PROCESSES
+
+Recall from [Lee et al., 2018] that in the infinite width limit, the pre-activations f
+(h)
+(x) at every hidden layer h ∈ [L] has all its coordinates tending to i.i.d. centered Gaussian processes of covariance
+Σ
+(h−1) : R
+d × R
+d → R defined recursively as: for h ∈ [L]
+
+Neural Tangent Kernel: Convergence and Generalization in Neural Networks
+
+
+ While it has long been known that ANNs can approximate any function with sufficiently
+many hidden neurons (11; 14), it is not known what the optimization of ANNs converges to. Indeed
+the loss surface of neural networks optimization problems is highly non-convex: it has a high number
+of saddle points which may slow down the convergence (5). A number of results (3; 17; 18) suggest
+that for wide enough networks, there are very few “bad” local minima, i.e. local minima with much
+higher cost than the global minimum
+
+A particularly mysterious feature of ANNs is their good generalization properties in spite of their
+usual over-parametrization (20). It seems paradoxical that a reasonably large neural network can fit
+random labels, while still obtaining good test accuracy when trained on real data (23). It can be noted
+that in this case, kernel methods have the same properties (1).
+
+We will see that in the same limit, the behavior of
+ANNs during training is described by a related kernel, which we call the neural tangent network
+(NTK).
+
+
+Scaling behavior of training dynamics of NNs
+
+NTK limit: 
+- jacot
+- Wide Neural Networks of Any Depth Evolve as Linear Models Under Gradient Descent https://arxiv.org/abs/1902.06720
+
+Mean field theory:
+- Mean-field theory of two-layers neural networks: dimension-free bounds and kernel limit
+https://arxiv.org/abs/1902.06015
+- Trainability and Accuracy of Neural Networks: An Interacting Particle System Approach
+https://arxiv.org/abs/1805.00915
+- Mean Field Analysis of Deep Neural Networks
+https://arxiv.org/abs/1903.04440
