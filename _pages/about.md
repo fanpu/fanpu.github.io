@@ -69,7 +69,7 @@ I have a Technician amateur radio license, with callsign
 This blog was originally started on 24 June 2018, although it has taken many
 forms since then. All banner pictures on the blog are taken by yours truly!
 
-## Talks
+### Talks
 
 Slides I developed for talks on various LLM-related topics.
 You are free to share, adapt, and reuse these
@@ -88,13 +88,15 @@ materials, provided that you give appropriate credit.
 - (2024-03-01) [Understanding Transformers]({% link
   /assets/presentations/Understanding Transformers.pdf %})
 
-## Starred Blog Posts
+### Starred Blog Posts
 
 Some of my more popular posts:
 
 **Technical Posts**
 
 - [Score-Based Diffusion Models]({% post_url 2023-06-07-score-based-diffusion-models %})
+- [Bounding Mixing Times of Markov Chains via the Spectral Gap]({% post_url 2025-01-12-bounding-markov-chain-mixing-times-by-spectral-gap %})
+- [An Intuitive Introduction to Gaussian Processes]({% post_url 2025-01-21-gaussian-processes %})
 - [(Paper Summary) Zero-shot Image-to-Image Translation]({% link _summaries/2023-10-22-zero-shot-image-to-image-translation.markdown %})
 - [(Paper Summary) The Implicit Bias of Gradient Descent on Separable Data]({% link _summaries/2023-09-09-the-implicit-bias-of-gradient-descent-on-separable-data.markdown %})
 - [A Unified Framework for High-Dimensional Analysis of M-Estimators with Decomposable Regularizers: A Guided Walkthrough]({% post_url 2023-07-14-high-dimensional-analysis-of-m-estimators %})
