@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import requests
 import yaml
 import random
@@ -76,8 +77,23 @@ def update_papers_file(arxiv_id, notes, tags):
         papers = []
 
     # Check if arXiv ID already exists
-    if any(paper["arxiv_id"] == arxiv_id for paper in papers):
-        raise Exception(f"Paper with ID {arxiv_id} already exists in _data/papers.yml.")
+    for paper in papers:
+        if paper["arxiv_id"] == arxiv_id:
+            print(f"Paper with ID {arxiv_id} already exists:")
+            print(f"  Title: {paper['title']}")
+            print(f"  Authors: {paper['authors']}")
+            print(f"  Published: {paper['published']}")
+            print(f"  URL: {paper['url']}")
+            print(f"  Notes: {paper.get('notes', '')}")
+            print(f"  Tags: {', '.join(paper.get('tags', []))}")
+
+            override = input("Would you like to override it? (y/n): ").strip().lower()
+            if override != "y":
+                print("Operation aborted. No changes were made.")
+                sys.exit(0)
+            else:
+                papers.remove(paper)
+                break
 
     # Fetch metadata
     metadata = fetch_arxiv_metadata(arxiv_id)
@@ -135,7 +151,7 @@ def main():
 
     # Success message
     print(
-        f"Successfully added paper:\n  Title: {metadata['title']}\n  Authors: {metadata['authors']}\n  Published: {metadata['published']}\n  URL: {metadata['url']}\n  Notes: {notes}\n  Tags: {', '.join(tags)}"
+        f"Successfully added/updated paper:\n  Title: {metadata['title']}\n  Authors: {metadata['authors']}\n  Published: {metadata['published']}\n  URL: {metadata['url']}\n  Notes: {notes}\n  Tags: {', '.join(tags)}"
     )
 
 
