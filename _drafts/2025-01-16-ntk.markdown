@@ -141,3 +141,9 @@ https://arxiv.org/abs/1902.06015
 https://arxiv.org/abs/1805.00915
 - Mean Field Analysis of Deep Neural Networks
 https://arxiv.org/abs/1903.04440
+
+Feature learning
+- Disentangling feature and lazy training in deep neural networks
+https://arxiv.org/abs/1906.08034
+- Meta-Principled Family of Hyperparameter Scaling Strategies
+https://arxiv.org/abs/2210.04909

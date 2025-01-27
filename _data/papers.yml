@@ -1,0 +1,27 @@
+- arxiv_id: '2210.04909'
+  title: Meta-Principled Family of Hyperparameter Scaling Strategies
+  authors: Sho Yaida
+  url: http://arxiv.org/abs/2210.04909v2
+  published: '2022-10-10'
+  notes: read for fun
+  tags:
+  - Tag1
+  - Tag3
+- arxiv_id: '1906.08034'
+  title: Disentangling feature and lazy training in deep neural networks
+  authors: Mario Geiger, Stefano Spigler, Arthur Jacot, Matthieu Wyart
+  url: http://arxiv.org/abs/1906.08034v4
+  published: '2019-06-19'
+  notes: test
+  tags:
+  - Tag1
+  - Tag2
+- arxiv_id: '1901.08584'
+  title: "Fine-Grained Analysis of Optimization and Generalization for\n  Overparameterized\
+    \ Two-Layer Neural Networks"
+  authors: Sanjeev Arora, Simon S. Du, Wei Hu, Zhiyuan Li, Ruosong Wang
+  url: http://arxiv.org/abs/1901.08584v2
+  published: '2019-01-24'
+  notes: another one
+  tags:
+  - Deep Learning
