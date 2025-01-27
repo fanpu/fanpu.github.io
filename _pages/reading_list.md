@@ -25,7 +25,12 @@ giscus_comments: true
             {{ forloop.index }}. <a href="{{ paper.url }}">{{ paper.title }}</a>
           </h6>
           <h6 class="ml-1 ml-md-4" style="font-size: 0.95rem; font-style: italic; color: #888">
-            {{ paper.authors }}
+            {% assign authors_list = paper.authors | split: ',' %}
+            {% if authors_list.size > 7 %}
+              {{ authors_list | slice: 0, 7 | join: ', ' }} et al.
+            {% else %}
+              {{ authors_list | join: ', ' }}
+            {% endif %}
           </h6>
           <h6 class="ml-1 ml-md-4" style="font-size: 0.95rem">
             {{ paper.notes }}
@@ -48,7 +53,7 @@ giscus_comments: true
         </div>
         <div class="col-auto text-right">
           {% if paper.published %}
-            {% assign date = paper.published | split: '-' | join: '.' %}
+            {% assign date = paper.published %}
             <span class="text-muted" style="font-size: 0.85rem;">
               {{ date }}
             </span>
