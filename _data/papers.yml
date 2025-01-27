@@ -1176,15 +1176,6 @@
   published: '2024-06-19'
   notes: ''
   tags: []
-- arxiv_id: '2405.14333'
-  title: "DeepSeek-Prover: Advancing Theorem Proving in LLMs through Large-Scale\n\
-    \  Synthetic Data"
-  authors: Huajian Xin, Daya Guo, Zhihong Shao, Zhizhou Ren, Qihao Zhu, Bo Liu, Chong
-    Ruan, Wenda Li, Xiaodan Liang
-  url: http://arxiv.org/abs/2405.14333v1
-  published: '2024-05-23'
-  notes: ''
-  tags: []
 - arxiv_id: '2410.21265'
   title: Modular Duality in Deep Learning
   authors: Jeremy Bernstein, Laker Newhouse
@@ -1818,24 +1809,14 @@
   - Feature Learning
   - Training Dynamics
   - Overparamerization
-- arxiv_id: '2011.14522'
-  title: Feature Learning in Infinite-Width Neural Networks
-  authors: Greg Yang, Edward J. Hu
-  url: http://arxiv.org/abs/2011.14522v3
-  published: '2020-11-30'
-  notes: Introduces maximal update parametrization (muP)
-  tags:
-  - MUP
-  - Feature Learning
-  - Hyperparameter Scaling
-  - Overparamerization
 - arxiv_id: '2210.04909'
   title: Meta-Principled Family of Hyperparameter Scaling Strategies
   authors: Sho Yaida
   url: http://arxiv.org/abs/2210.04909v2
   published: '2022-10-10'
-  notes: Hyperparameter Scaling
-  tags: []
+  notes: null
+  tags:
+  - Hyperparameter Scaling
 - arxiv_id: '1812.07956'
   title: On Lazy Training in Differentiable Programming
   authors: Lenaic Chizat, Edouard Oyallon, Francis Bach
@@ -1945,3 +1926,28 @@
   - Efficient Architectures
   - Multi-token Prediction
   - Load Balancing
+- arxiv_id: '2405.14333'
+  title: "DeepSeek-Prover: Advancing Theorem Proving in LLMs through Large-Scale\n\
+    \  Synthetic Data"
+  authors: Huajian Xin, Daya Guo, Zhihong Shao, Zhizhou Ren, Qihao Zhu, Bo Liu, Chong
+    Ruan, Wenda Li, Xiaodan Liang
+  url: http://arxiv.org/abs/2405.14333v1
+  published: '2024-05-23'
+  notes: Uses autoformalization to create training data
+  tags:
+  - Deepseek
+  - Autoformalization
+  - Theorem Proving
+- arxiv_id: '2011.14522'
+  title: Feature Learning in Infinite-Width Neural Networks
+  authors: Greg Yang, Edward J. Hu
+  url: http://arxiv.org/abs/2011.14522v3
+  published: '2020-11-30'
+  notes: Shows that NN parameterizations using Standard/Mean Field/NTK either has
+    feature learning or infinite-width training dynamics given by kernel gradient
+    descent
+  tags:
+  - MUP
+  - NTK
+  - Mean Field
+  - Overparameterization
