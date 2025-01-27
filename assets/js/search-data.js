@@ -39,7 +39,7 @@ ninja.data = [{
           },
         },{id: "nav-ml-reading-list",
           title: "ML Reading List",
-          description: "Curated list of papers I have bookmarked to read, or have read",
+          description: "Curated list of papers I have bookmarked to read/have read, accompanied by a description on why I think it is worth reading. You can click on the tags to filter for only papers in that category.",
           section: "Navigation",
           handler: () => {
             window.location.href = "/reading-list/";
