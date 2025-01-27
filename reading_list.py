@@ -51,9 +51,17 @@ def fetch_arxiv_metadata(arxiv_id):
     }
 
 
+def smart_title_case(text):
+    words = text.split()  # Split the string into words
+    capitalized_words = [
+        word if word.isupper() else word.capitalize() for word in words
+    ]
+    return " ".join(capitalized_words)  # Join the processed words back
+
+
 def normalize_tags(tags):
     """Normalize tags by capitalizing the first letter of each word."""
-    return [tag.title() for tag in tags]
+    return [smart_title_case(tag) for tag in tags]
 
 
 def update_papers_file(arxiv_id, notes, tags):
