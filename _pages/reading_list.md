@@ -33,7 +33,8 @@ giscus_comments: true
 
           {% if paper.tags %}
             <div class="ml-1 ml-md-4">
-              {% for tag in paper.tags %}
+              {% assign sorted_tags = paper.tags | sort %}
+              {% for tag in sorted_tags %}
                 {% assign bgColor = site.data.tag_colors[tag] | default: "#ccc" %}
                 <a href="#{{ tag | downcase | replace: ' ', '-' }}"
                    class="badge"
