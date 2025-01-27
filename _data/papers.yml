@@ -1738,13 +1738,6 @@
   published: '2018-06-05'
   notes: ''
   tags: []
-- arxiv_id: '2011.14522'
-  title: Feature Learning in Infinite-Width Neural Networks
-  authors: Greg Yang, Edward J. Hu
-  url: http://arxiv.org/abs/2011.14522v3
-  published: '2020-11-30'
-  notes: ''
-  tags: []
 - arxiv_id: '1802.05957'
   title: Spectral Normalization for Generative Adversarial Networks
   authors: Takeru Miyato, Toshiki Kataoka, Masanori Koyama, Yuichi Yoshida
@@ -1757,27 +1750,6 @@
   authors: Nikhil Vyas, Yamini Bansal, Preetum Nakkiran
   url: http://arxiv.org/abs/2206.10012v1
   published: '2022-06-20'
-  notes: ''
-  tags: []
-- arxiv_id: '1812.07956'
-  title: On Lazy Training in Differentiable Programming
-  authors: Lenaic Chizat, Edouard Oyallon, Francis Bach
-  url: http://arxiv.org/abs/1812.07956v5
-  published: '2018-12-19'
-  notes: ''
-  tags: []
-- arxiv_id: '2210.04909'
-  title: Meta-Principled Family of Hyperparameter Scaling Strategies
-  authors: Sho Yaida
-  url: http://arxiv.org/abs/2210.04909v2
-  published: '2022-10-10'
-  notes: ''
-  tags: []
-- arxiv_id: '1906.08034'
-  title: Disentangling feature and lazy training in deep neural networks
-  authors: Mario Geiger, Stefano Spigler, Arthur Jacot, Matthieu Wyart
-  url: http://arxiv.org/abs/1906.08034v4
-  published: '2019-06-19'
   notes: ''
   tags: []
 - arxiv_id: '1805.00915'
@@ -1819,4 +1791,78 @@
   notes: Paper that introduced NTK, nice kernel viewpoint of how NNs evolve during
     training at the infinite width limit
   tags:
+  - NTK
+  - Training Dynamics
+  - Overparamerization
+- arxiv_id: '1902.06720'
+  title: "Wide Neural Networks of Any Depth Evolve as Linear Models Under Gradient\n\
+    \  Descent"
+  authors: Jaehoon Lee, Lechao Xiao, Samuel S. Schoenholz, Yasaman Bahri, Roman Novak,
+    Jascha Sohl-Dickstein, Jeffrey Pennington
+  url: http://arxiv.org/abs/1902.06720v4
+  published: '2019-02-18'
+  notes: Dynamics of NTK in parameter space
+  tags:
+  - NTK
+  - Training Dynamics
+  - Overparamerization
+- arxiv_id: '1902.06015'
+  title: "Mean-field theory of two-layers neural networks: dimension-free bounds\n\
+    \  and kernel limit"
+  authors: Song Mei, Theodor Misiakiewicz, Andrea Montanari
+  url: http://arxiv.org/abs/1902.06015v1
+  published: '2019-02-16'
+  notes: Introduces mean-field theory for analyzing NN training
+  tags:
+  - Mean Field
+  - Training Dynamics
+  - Overparamerization
+- arxiv_id: '1906.08034'
+  title: Disentangling feature and lazy training in deep neural networks
+  authors: Mario Geiger, Stefano Spigler, Arthur Jacot, Matthieu Wyart
+  url: http://arxiv.org/abs/1906.08034v4
+  published: '2019-06-19'
+  notes: Feature learning limit for NN dynamics
+  tags:
+  - Feature Learning
+  - Training Dynamics
+  - Overparamerization
+- arxiv_id: '2011.14522'
+  title: Feature Learning in Infinite-Width Neural Networks
+  authors: Greg Yang, Edward J. Hu
+  url: http://arxiv.org/abs/2011.14522v3
+  published: '2020-11-30'
+  notes: Introduces maximal update parametrization (muP)
+  tags:
+  - MUP
+  - Feature Learning
+  - Hyperparameter Scaling
+  - Overparamerization
+- arxiv_id: '2210.04909'
+  title: Meta-Principled Family of Hyperparameter Scaling Strategies
+  authors: Sho Yaida
+  url: http://arxiv.org/abs/2210.04909v2
+  published: '2022-10-10'
+  notes: Hyperparameter Scaling
+  tags: []
+- arxiv_id: '1812.07956'
+  title: On Lazy Training in Differentiable Programming
+  authors: Lenaic Chizat, Edouard Oyallon, Francis Bach
+  url: http://arxiv.org/abs/1812.07956v5
+  published: '2018-12-19'
+  notes: Shows feature learning is usually beneficial in practical large-scale DL
+    settings
+  tags:
+  - Feature Learning
+  - Overparamerization
+- arxiv_id: '2010.15110'
+  title: "Deep learning versus kernel learning: an empirical study of loss\n  landscape\
+    \ geometry and the time evolution of the Neural Tangent Kernel"
+  authors: Stanislav Fort, Gintare Karolina Dziugaite, Mansheej Paul, Sepideh Kharaghani,
+    Daniel M. Roy, Surya Ganguli
+  url: http://arxiv.org/abs/2010.15110v1
+  published: '2020-10-28'
+  notes: Benefits of feature learning
+  tags:
+  - Feature Learning
   - NTK
