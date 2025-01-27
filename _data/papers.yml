@@ -1884,6 +1884,31 @@
   - Deepseek
   - MLA
   - Efficient Architectures
+- arxiv_id: '2405.14333'
+  title: "DeepSeek-Prover: Advancing Theorem Proving in LLMs through Large-Scale\n\
+    \  Synthetic Data"
+  authors: Huajian Xin, Daya Guo, Zhihong Shao, Zhizhou Ren, Qihao Zhu, Bo Liu, Chong
+    Ruan, Wenda Li, Xiaodan Liang
+  url: http://arxiv.org/abs/2405.14333v1
+  published: '2024-05-23'
+  notes: Uses autoformalization to create training data
+  tags:
+  - Deepseek
+  - Autoformalization
+  - Theorem Proving
+- arxiv_id: '2011.14522'
+  title: Feature Learning in Infinite-Width Neural Networks
+  authors: Greg Yang, Edward J. Hu
+  url: http://arxiv.org/abs/2011.14522v3
+  published: '2020-11-30'
+  notes: Shows that NN parameterizations using Standard/Mean Field/NTK either has
+    feature learning or infinite-width training dynamics given by kernel gradient
+    descent
+  tags:
+  - MUP
+  - NTK
+  - Mean Field
+  - Overparameterization
 - arxiv_id: 2412.19437v1
   title: DeepSeek-V3 Technical Report
   authors: DeepSeek-AI, Aixin Liu, Bei Feng, Bing Xue, Bingxuan Wang, Bochao Wu, Chengda
@@ -1920,34 +1945,9 @@
   published: '2024-12-27'
   notes: First open model to beat SOTA closed models
   tags:
-  - Moe
-  - Deepseek
+  - MoE
+  - DeepSeek
   - LLM Training
   - Efficient Architectures
   - Multi-token Prediction
   - Load Balancing
-- arxiv_id: '2405.14333'
-  title: "DeepSeek-Prover: Advancing Theorem Proving in LLMs through Large-Scale\n\
-    \  Synthetic Data"
-  authors: Huajian Xin, Daya Guo, Zhihong Shao, Zhizhou Ren, Qihao Zhu, Bo Liu, Chong
-    Ruan, Wenda Li, Xiaodan Liang
-  url: http://arxiv.org/abs/2405.14333v1
-  published: '2024-05-23'
-  notes: Uses autoformalization to create training data
-  tags:
-  - Deepseek
-  - Autoformalization
-  - Theorem Proving
-- arxiv_id: '2011.14522'
-  title: Feature Learning in Infinite-Width Neural Networks
-  authors: Greg Yang, Edward J. Hu
-  url: http://arxiv.org/abs/2011.14522v3
-  published: '2020-11-30'
-  notes: Shows that NN parameterizations using Standard/Mean Field/NTK either has
-    feature learning or infinite-width training dynamics given by kernel gradient
-    descent
-  tags:
-  - MUP
-  - NTK
-  - Mean Field
-  - Overparameterization
