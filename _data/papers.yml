@@ -91,13 +91,6 @@
   published: '2018-11-12'
   notes: ''
   tags: []
-- arxiv_id: '1806.07572'
-  title: 'Neural Tangent Kernel: Convergence and Generalization in Neural Networks'
-  authors: "Arthur Jacot, Franck Gabriel, Cl\xE9ment Hongler"
-  url: http://arxiv.org/abs/1806.07572v4
-  published: '2018-06-20'
-  notes: ''
-  tags: []
 - arxiv_id: '1904.11955'
   title: On Exact Computation with an Infinitely Wide Neural Net
   authors: Sanjeev Arora, Simon S. Du, Wei Hu, Zhiyuan Li, Ruslan Salakhutdinov, Ruosong
@@ -1818,3 +1811,12 @@
   tags:
   - Feature Learning
   - Optimizers
+- arxiv_id: '1806.07572'
+  title: 'Neural Tangent Kernel: Convergence and Generalization in Neural Networks'
+  authors: "Arthur Jacot, Franck Gabriel, Cl\xE9ment Hongler"
+  url: http://arxiv.org/abs/1806.07572v4
+  published: '2018-06-20'
+  notes: Paper that introduced NTK, nice kernel viewpoint of how NNs evolve during
+    training at the infinite width limit
+  tags:
+  - NTK

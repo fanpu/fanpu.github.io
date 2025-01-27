@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import requests
 import yaml
 import random
