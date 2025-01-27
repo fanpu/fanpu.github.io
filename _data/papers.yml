@@ -1,27 +1,1818 @@
+- arxiv_id: '1903.04440'
+  title: Mean Field Analysis of Deep Neural Networks
+  authors: Justin Sirignano, Konstantinos Spiliopoulos
+  url: http://arxiv.org/abs/1903.04440v5
+  published: '2019-03-11'
+  notes: ''
+  tags: []
+- arxiv_id: 2111.00396v3
+  title: Efficiently Modeling Long Sequences with Structured State Spaces
+  authors: "Albert Gu, Karan Goel, Christopher R\xE9"
+  url: http://arxiv.org/abs/2111.00396v3
+  published: '2021-10-31'
+  notes: ''
+  tags: []
+- arxiv_id: '2004.11362'
+  title: Supervised Contrastive Learning
+  authors: Prannay Khosla, Piotr Teterwak, Chen Wang, Aaron Sarna, Yonglong Tian,
+    Phillip Isola, Aaron Maschinot, Ce Liu, Dilip Krishnan
+  url: http://arxiv.org/abs/2004.11362v5
+  published: '2020-04-23'
+  notes: ''
+  tags: []
+- arxiv_id: '2012.07805'
+  title: Extracting Training Data from Large Language Models
+  authors: Nicholas Carlini, Florian Tramer, Eric Wallace, Matthew Jagielski, Ariel
+    Herbert-Voss, Katherine Lee, Adam Roberts, Tom Brown, Dawn Song, Ulfar Erlingsson,
+    Alina Oprea, Colin Raffel
+  url: http://arxiv.org/abs/2012.07805v2
+  published: '2020-12-14'
+  notes: ''
+  tags: []
+- arxiv_id: '2103.15670'
+  title: On the Adversarial Robustness of Vision Transformers
+  authors: Rulin Shao, Zhouxing Shi, Jinfeng Yi, Pin-Yu Chen, Cho-Jui Hsieh
+  url: http://arxiv.org/abs/2103.15670v3
+  published: '2021-03-29'
+  notes: ''
+  tags: []
+- arxiv_id: '2105.07581'
+  title: Vision Transformers are Robust Learners
+  authors: Sayak Paul, Pin-Yu Chen
+  url: http://arxiv.org/abs/2105.07581v3
+  published: '2021-05-17'
+  notes: ''
+  tags: []
+- arxiv_id: '2010.11929'
+  title: "An Image is Worth 16x16 Words: Transformers for Image Recognition at\n \
+    \ Scale"
+  authors: Alexey Dosovitskiy, Lucas Beyer, Alexander Kolesnikov, Dirk Weissenborn,
+    Xiaohua Zhai, Thomas Unterthiner, Mostafa Dehghani, Matthias Minderer, Georg Heigold,
+    Sylvain Gelly, Jakob Uszkoreit, Neil Houlsby
+  url: http://arxiv.org/abs/2010.11929v2
+  published: '2020-10-22'
+  notes: ''
+  tags: []
+- arxiv_id: '1902.02918'
+  title: Certified Adversarial Robustness via Randomized Smoothing
+  authors: Jeremy M Cohen, Elan Rosenfeld, J. Zico Kolter
+  url: http://arxiv.org/abs/1902.02918v2
+  published: '2019-02-08'
+  notes: ''
+  tags: []
+- arxiv_id: '1906.08988'
+  title: A Fourier Perspective on Model Robustness in Computer Vision
+  authors: Dong Yin, Raphael Gontijo Lopes, Jonathon Shlens, Ekin D. Cubuk, Justin
+    Gilmer
+  url: http://arxiv.org/abs/1906.08988v3
+  published: '2019-06-21'
+  notes: ''
+  tags: []
+- arxiv_id: '1912.11370'
+  title: 'Big Transfer (BiT): General Visual Representation Learning'
+  authors: Alexander Kolesnikov, Lucas Beyer, Xiaohua Zhai, Joan Puigcerver, Jessica
+    Yung, Sylvain Gelly, Neil Houlsby
+  url: http://arxiv.org/abs/1912.11370v3
+  published: '2019-12-24'
+  notes: ''
+  tags: []
+- arxiv_id: '2002.05709'
+  title: A Simple Framework for Contrastive Learning of Visual Representations
+  authors: Ting Chen, Simon Kornblith, Mohammad Norouzi, Geoffrey Hinton
+  url: http://arxiv.org/abs/2002.05709v3
+  published: '2020-02-13'
+  notes: ''
+  tags: []
+- arxiv_id: '1803.03635'
+  title: 'The Lottery Ticket Hypothesis: Finding Sparse, Trainable Neural Networks'
+  authors: Jonathan Frankle, Michael Carbin
+  url: http://arxiv.org/abs/1803.03635v5
+  published: '2018-03-09'
+  notes: ''
+  tags: []
+- arxiv_id: '1811.04918'
+  title: "Learning and Generalization in Overparameterized Neural Networks, Going\n\
+    \  Beyond Two Layers"
+  authors: Zeyuan Allen-Zhu, Yuanzhi Li, Yingyu Liang
+  url: http://arxiv.org/abs/1811.04918v6
+  published: '2018-11-12'
+  notes: ''
+  tags: []
+- arxiv_id: '1806.07572'
+  title: 'Neural Tangent Kernel: Convergence and Generalization in Neural Networks'
+  authors: "Arthur Jacot, Franck Gabriel, Cl\xE9ment Hongler"
+  url: http://arxiv.org/abs/1806.07572v4
+  published: '2018-06-20'
+  notes: ''
+  tags: []
+- arxiv_id: '1904.11955'
+  title: On Exact Computation with an Infinitely Wide Neural Net
+  authors: Sanjeev Arora, Simon S. Du, Wei Hu, Zhiyuan Li, Ruslan Salakhutdinov, Ruosong
+    Wang
+  url: http://arxiv.org/abs/1904.11955v2
+  published: '2019-04-26'
+  notes: ''
+  tags: []
+- arxiv_id: '1611.03530'
+  title: Understanding deep learning requires rethinking generalization
+  authors: Chiyuan Zhang, Samy Bengio, Moritz Hardt, Benjamin Recht, Oriol Vinyals
+  url: http://arxiv.org/abs/1611.03530v2
+  published: '2016-11-10'
+  notes: ''
+  tags: []
+- arxiv_id: '1706.08947'
+  title: Exploring Generalization in Deep Learning
+  authors: Behnam Neyshabur, Srinadh Bhojanapalli, David McAllester, Nathan Srebro
+  url: http://arxiv.org/abs/1706.08947v2
+  published: '2017-06-27'
+  notes: ''
+  tags: []
+- arxiv_id: '1908.05355'
+  title: "The generalization error of random features regression: Precise\n  asymptotics\
+    \ and double descent curve"
+  authors: Song Mei, Andrea Montanari
+  url: http://arxiv.org/abs/1908.05355v5
+  published: '2019-08-14'
+  notes: ''
+  tags: []
+- arxiv_id: '1912.02292'
+  title: 'Deep Double Descent: Where Bigger Models and More Data Hurt'
+  authors: Preetum Nakkiran, Gal Kaplun, Yamini Bansal, Tristan Yang, Boaz Barak,
+    Ilya Sutskever
+  url: http://arxiv.org/abs/1912.02292v1
+  published: '2019-12-04'
+  notes: ''
+  tags: []
+- arxiv_id: '1906.05890'
+  title: Gradient Descent Maximizes the Margin of Homogeneous Neural Networks
+  authors: Kaifeng Lyu, Jian Li
+  url: http://arxiv.org/abs/1906.05890v4
+  published: '2019-06-13'
+  notes: ''
+  tags: []
+- arxiv_id: '2106.06530'
+  title: Label Noise SGD Provably Prefers Flat Global Minimizers
+  authors: Alex Damian, Tengyu Ma, Jason D. Lee
+  url: http://arxiv.org/abs/2106.06530v2
+  published: '2021-06-11'
+  notes: ''
+  tags: []
+- arxiv_id: '2003.02218'
+  title: 'The large learning rate phase of deep learning: the catapult mechanism'
+  authors: Aitor Lewkowycz, Yasaman Bahri, Ethan Dyer, Jascha Sohl-Dickstein, Guy
+    Gur-Ari
+  url: http://arxiv.org/abs/2003.02218v1
+  published: '2020-03-04'
+  notes: ''
+  tags: []
+- arxiv_id: '2103.00065'
+  title: "Gradient Descent on Neural Networks Typically Occurs at the Edge of\n  Stability"
+  authors: Jeremy M. Cohen, Simran Kaur, Yuanzhi Li, J. Zico Kolter, Ameet Talwalkar
+  url: http://arxiv.org/abs/2103.00065v3
+  published: '2021-02-26'
+  notes: ''
+  tags: []
+- arxiv_id: '2010.01412'
+  title: Sharpness-Aware Minimization for Efficiently Improving Generalization
+  authors: Pierre Foret, Ariel Kleiner, Hossein Mobahi, Behnam Neyshabur
+  url: http://arxiv.org/abs/2010.01412v3
+  published: '2020-10-03'
+  notes: ''
+  tags: []
+- arxiv_id: '1804.06561'
+  title: A Mean Field View of the Landscape of Two-Layers Neural Networks
+  authors: Song Mei, Andrea Montanari, Phan-Minh Nguyen
+  url: http://arxiv.org/abs/1804.06561v2
+  published: '2018-04-18'
+  notes: ''
+  tags: []
+- arxiv_id: '2309.01826'
+  title: One Wide Feedforward is All You Need
+  authors: "Telmo Pessoa Pires, Ant\xF3nio V. Lopes, Yannick Assogba, Hendra Setiawan"
+  url: http://arxiv.org/abs/2309.01826v2
+  published: '2023-09-04'
+  notes: ''
+  tags: []
+- arxiv_id: '2111.06377'
+  title: Masked Autoencoders Are Scalable Vision Learners
+  authors: "Kaiming He, Xinlei Chen, Saining Xie, Yanghao Li, Piotr Doll\xE1r, Ross\
+    \ Girshick"
+  url: http://arxiv.org/abs/2111.06377v3
+  published: '2021-11-11'
+  notes: ''
+  tags: []
+- arxiv_id: '2208.07339'
+  title: 'LLM.int8(): 8-bit Matrix Multiplication for Transformers at Scale'
+  authors: Tim Dettmers, Mike Lewis, Younes Belkada, Luke Zettlemoyer
+  url: http://arxiv.org/abs/2208.07339v2
+  published: '2022-08-15'
+  notes: ''
+  tags: []
+- arxiv_id: '2211.17192'
+  title: Fast Inference from Transformers via Speculative Decoding
+  authors: Yaniv Leviathan, Matan Kalman, Yossi Matias
+  url: http://arxiv.org/abs/2211.17192v2
+  published: '2022-11-30'
+  notes: ''
+  tags: []
+- arxiv_id: '2302.01318'
+  title: Accelerating Large Language Model Decoding with Speculative Sampling
+  authors: Charlie Chen, Sebastian Borgeaud, Geoffrey Irving, Jean-Baptiste Lespiau,
+    Laurent Sifre, John Jumper
+  url: http://arxiv.org/abs/2302.01318v1
+  published: '2023-02-02'
+  notes: ''
+  tags: []
+- arxiv_id: '2308.04623'
+  title: Accelerating LLM Inference with Staged Speculative Decoding
+  authors: Benjamin Spector, Chris Re
+  url: http://arxiv.org/abs/2308.04623v1
+  published: '2023-08-08'
+  notes: ''
+  tags: []
+- arxiv_id: '2312.01429'
+  title: "Transformers are uninterpretable with myopic methods: a case study with\n\
+    \  bounded Dyck grammars"
+  authors: Kaiyue Wen, Yuchen Li, Bingbin Liu, Andrej Risteski
+  url: http://arxiv.org/abs/2312.01429v1
+  published: '2023-12-03'
+  notes: ''
+  tags: []
+- arxiv_id: '2007.00072'
+  title: 'Data Movement Is All You Need: A Case Study on Optimizing Transformers'
+  authors: Andrei Ivanov, Nikoli Dryden, Tal Ben-Nun, Shigang Li, Torsten Hoefler
+  url: http://arxiv.org/abs/2007.00072v3
+  published: '2020-06-30'
+  notes: ''
+  tags: []
+- arxiv_id: '2305.18290'
+  title: "Direct Preference Optimization: Your Language Model is Secretly a Reward\n\
+    \  Model"
+  authors: Rafael Rafailov, Archit Sharma, Eric Mitchell, Stefano Ermon, Christopher
+    D. Manning, Chelsea Finn
+  url: http://arxiv.org/abs/2305.18290v3
+  published: '2023-05-29'
+  notes: ''
+  tags: []
+- arxiv_id: '2302.03169'
+  title: Data Selection for Language Models via Importance Resampling
+  authors: Sang Michael Xie, Shibani Santurkar, Tengyu Ma, Percy Liang
+  url: http://arxiv.org/abs/2302.03169v3
+  published: '2023-02-06'
+  notes: ''
+  tags: []
+- arxiv_id: '2309.05463'
+  title: 'Textbooks Are All You Need II: phi-1.5 technical report'
+  authors: "Yuanzhi Li, S\xE9bastien Bubeck, Ronen Eldan, Allie Del Giorno, Suriya\
+    \ Gunasekar, Yin Tat Lee"
+  url: http://arxiv.org/abs/2309.05463v1
+  published: '2023-09-11'
+  notes: ''
+  tags: []
+- arxiv_id: '2210.11416'
+  title: Scaling Instruction-Finetuned Language Models
+  authors: Hyung Won Chung, Le Hou, Shayne Longpre, Barret Zoph, Yi Tay, William Fedus,
+    Yunxuan Li, Xuezhi Wang, Mostafa Dehghani, Siddhartha Brahma, Albert Webson, Shixiang
+    Shane Gu, Zhuyun Dai, Mirac Suzgun, Xinyun Chen, Aakanksha Chowdhery, Alex Castro-Ros,
+    Marie Pellat, Kevin Robinson, Dasha Valter, Sharan Narang, Gaurav Mishra, Adams
+    Yu, Vincent Zhao, Yanping Huang, Andrew Dai, Hongkun Yu, Slav Petrov, Ed H. Chi,
+    Jeff Dean, Jacob Devlin, Adam Roberts, Denny Zhou, Quoc V. Le, Jason Wei
+  url: http://arxiv.org/abs/2210.11416v5
+  published: '2022-10-20'
+  notes: ''
+  tags: []
+- arxiv_id: '1802.08246'
+  title: Characterizing Implicit Bias in Terms of Optimization Geometry
+  authors: Suriya Gunasekar, Jason Lee, Daniel Soudry, Nathan Srebro
+  url: http://arxiv.org/abs/1802.08246v3
+  published: '2018-02-22'
+  notes: ''
+  tags: []
+- arxiv_id: '2209.11895'
+  title: In-context Learning and Induction Heads
+  authors: Catherine Olsson, Nelson Elhage, Neel Nanda, Nicholas Joseph, Nova DasSarma,
+    Tom Henighan, Ben Mann, Amanda Askell, Yuntao Bai, Anna Chen, Tom Conerly, Dawn
+    Drain, Deep Ganguli, Zac Hatfield-Dodds, Danny Hernandez, Scott Johnston, Andy
+    Jones, Jackson Kernion, Liane Lovitt, Kamal Ndousse, Dario Amodei, Tom Brown,
+    Jack Clark, Jared Kaplan, Sam McCandlish, Chris Olah
+  url: http://arxiv.org/abs/2209.11895v1
+  published: '2022-09-24'
+  notes: ''
+  tags: []
+- arxiv_id: '2312.14977'
+  title: "Diffusion Models for Generative Artificial Intelligence: An Introduction\n\
+    \  for Applied Mathematicians"
+  authors: Catherine F. Higham, Desmond J. Higham, Peter Grindrod
+  url: http://arxiv.org/abs/2312.14977v1
+  published: '2023-12-21'
+  notes: ''
+  tags: []
+- arxiv_id: '2311.04163'
+  title: "Outliers with Opposing Signals Have an Outsized Effect on Neural Network\n\
+    \  Optimization"
+  authors: Elan Rosenfeld, Andrej Risteski
+  url: http://arxiv.org/abs/2311.04163v1
+  published: '2023-11-07'
+  notes: ''
+  tags: []
+- arxiv_id: '2205.13147'
+  title: Matryoshka Representation Learning
+  authors: Aditya Kusupati, Gantavya Bhatt, Aniket Rege, Matthew Wallingford, Aditya
+    Sinha, Vivek Ramanujan, William Howard-Snyder, Kaifeng Chen, Sham Kakade, Prateek
+    Jain, Ali Farhadi
+  url: http://arxiv.org/abs/2205.13147v4
+  published: '2022-05-26'
+  notes: ''
+  tags: []
+- arxiv_id: '2401.12178'
+  title: In-Context Learning for Extreme Multi-Label Classification
+  authors: "Karel D'Oosterlinck, Omar Khattab, Fran\xE7ois Remy, Thomas Demeester,\
+    \ Chris Develder, Christopher Potts"
+  url: http://arxiv.org/abs/2401.12178v1
+  published: '2024-01-22'
+  notes: ''
+  tags: []
+- arxiv_id: '2212.09748'
+  title: Scalable Diffusion Models with Transformers
+  authors: William Peebles, Saining Xie
+  url: http://arxiv.org/abs/2212.09748v2
+  published: '2022-12-19'
+  notes: ''
+  tags: []
+- arxiv_id: '2402.16842'
+  title: Asymmetry in Low-Rank Adapters of Foundation Models
+  authors: "Jiacheng Zhu, Kristjan Greenewald, Kimia Nadjahi, Haitz S\xE1ez de Oc\xE1\
+    riz Borde, Rickard Br\xFCel Gabrielsson, Leshem Choshen, Marzyeh Ghassemi, Mikhail\
+    \ Yurochkin, Justin Solomon"
+  url: http://arxiv.org/abs/2402.16842v2
+  published: '2024-02-26'
+  notes: ''
+  tags: []
+- arxiv_id: '1911.01547'
+  title: On the Measure of Intelligence
+  authors: "Fran\xE7ois Chollet"
+  url: http://arxiv.org/abs/1911.01547v2
+  published: '2019-11-05'
+  notes: ''
+  tags: []
+- arxiv_id: 2002.05202v1
+  title: GLU Variants Improve Transformer
+  authors: Noam Shazeer
+  url: http://arxiv.org/abs/2002.05202v1
+  published: '2020-02-12'
+  notes: ''
+  tags: []
+- arxiv_id: '1612.08083'
+  title: Language Modeling with Gated Convolutional Networks
+  authors: Yann N. Dauphin, Angela Fan, Michael Auli, David Grangier
+  url: http://arxiv.org/abs/1612.08083v3
+  published: '2016-12-23'
+  notes: ''
+  tags: []
+- arxiv_id: '2403.05440'
+  title: Is Cosine-Similarity of Embeddings Really About Similarity?
+  authors: Harald Steck, Chaitanya Ekanadham, Nathan Kallus
+  url: http://arxiv.org/abs/2403.05440v1
+  published: '2024-03-08'
+  notes: ''
+  tags: []
+- arxiv_id: '2403.03206'
+  title: Scaling Rectified Flow Transformers for High-Resolution Image Synthesis
+  authors: "Patrick Esser, Sumith Kulal, Andreas Blattmann, Rahim Entezari, Jonas\
+    \ M\xFCller, Harry Saini, Yam Levi, Dominik Lorenz, Axel Sauer, Frederic Boesel,\
+    \ Dustin Podell, Tim Dockhorn, Zion English, Kyle Lacey, Alex Goodwin, Yannik\
+    \ Marek, Robin Rombach"
+  url: http://arxiv.org/abs/2403.03206v1
+  published: '2024-03-05'
+  notes: ''
+  tags: []
+- arxiv_id: '2310.00873'
+  title: Deep Neural Networks Tend To Extrapolate Predictably
+  authors: Katie Kang, Amrith Setlur, Claire Tomlin, Sergey Levine
+  url: http://arxiv.org/abs/2310.00873v2
+  published: '2023-10-02'
+  notes: ''
+  tags: []
+- arxiv_id: '2312.08365'
+  title: An Invitation to Deep Reinforcement Learning
+  authors: Bernhard Jaeger, Andreas Geiger
+  url: http://arxiv.org/abs/2312.08365v2
+  published: '2023-12-13'
+  notes: ''
+  tags: []
+- arxiv_id: '2403.13187'
+  title: Evolutionary Optimization of Model Merging Recipes
+  authors: Takuya Akiba, Makoto Shing, Yujin Tang, Qi Sun, David Ha
+  url: http://arxiv.org/abs/2403.13187v1
+  published: '2024-03-19'
+  notes: ''
+  tags: []
+- arxiv_id: '2403.09636'
+  title: 'Dynamic Memory Compression: Retrofitting LLMs for Accelerated Inference'
+  authors: "Piotr Nawrot, Adrian \u0141a\u0144cucki, Marcin Chochowski, David Tarjan,\
+    \ Edoardo M. Ponti"
+  url: http://arxiv.org/abs/2403.09636v2
+  published: '2024-03-14'
+  notes: ''
+  tags: []
+- arxiv_id: '2402.10200'
+  title: Chain-of-Thought Reasoning Without Prompting
+  authors: Xuezhi Wang, Denny Zhou
+  url: http://arxiv.org/abs/2402.10200v2
+  published: '2024-02-15'
+  notes: ''
+  tags: []
+- arxiv_id: '2402.18668'
+  title: "Simple linear attention language models balance the recall-throughput\n\
+    \  tradeoff"
+  authors: "Simran Arora, Sabri Eyuboglu, Michael Zhang, Aman Timalsina, Silas Alberti,\
+    \ Dylan Zinsley, James Zou, Atri Rudra, Christopher R\xE9"
+  url: http://arxiv.org/abs/2402.18668v1
+  published: '2024-02-28'
+  notes: ''
+  tags: []
+- arxiv_id: '2103.02138'
+  title: Parametric Complexity Bounds for Approximating PDEs with Neural Networks
+  authors: Tanya Marwah, Zachary C. Lipton, Andrej Risteski
+  url: http://arxiv.org/abs/2103.02138v2
+  published: '2021-03-03'
+  notes: ''
+  tags: []
+- arxiv_id: '2312.00234'
+  title: Deep Equilibrium Based Neural Operators for Steady-State PDEs
+  authors: Tanya Marwah, Ashwini Pokle, J. Zico Kolter, Zachary C. Lipton, Jianfeng
+    Lu, Andrej Risteski
+  url: http://arxiv.org/abs/2312.00234v1
+  published: '2023-11-30'
+  notes: ''
+  tags: []
+- arxiv_id: '1906.08039'
+  title: "The Barron Space and the Flow-induced Function Spaces for Neural Network\n\
+    \  Models"
+  authors: Weinan E, Chao Ma, Lei Wu
+  url: http://arxiv.org/abs/1906.08039v2
+  published: '2019-06-18'
+  notes: ''
+  tags: []
+- arxiv_id: '2309.17002'
+  title: "Understanding and Mitigating the Label Noise in Pre-training on\n  Downstream\
+    \ Tasks"
+  authors: Hao Chen, Jindong Wang, Ankit Shah, Ran Tao, Hongxin Wei, Xing Xie, Masashi
+    Sugiyama, Bhiksha Raj
+  url: http://arxiv.org/abs/2309.17002v2
+  published: '2023-09-29'
+  notes: ''
+  tags: []
+- arxiv_id: '2203.14465'
+  title: 'STaR: Bootstrapping Reasoning With Reasoning'
+  authors: Eric Zelikman, Yuhuai Wu, Jesse Mu, Noah D. Goodman
+  url: http://arxiv.org/abs/2203.14465v2
+  published: '2022-03-28'
+  notes: ''
+  tags: []
+- arxiv_id: '2012.13255'
+  title: "Intrinsic Dimensionality Explains the Effectiveness of Language Model\n\
+    \  Fine-Tuning"
+  authors: Armen Aghajanyan, Luke Zettlemoyer, Sonal Gupta
+  url: http://arxiv.org/abs/2012.13255v1
+  published: '2020-12-22'
+  notes: ''
+  tags: []
+- arxiv_id: '1906.05392'
+  title: "Generalization Guarantees for Neural Networks via Harnessing the\n  Low-rank\
+    \ Structure of the Jacobian"
+  authors: Samet Oymak, Zalan Fabian, Mingchen Li, Mahdi Soltanolkotabi
+  url: http://arxiv.org/abs/1906.05392v2
+  published: '2019-06-12'
+  notes: ''
+  tags: []
+- arxiv_id: '1811.03962'
+  title: A Convergence Theory for Deep Learning via Over-Parameterization
+  authors: Zeyuan Allen-Zhu, Yuanzhi Li, Zhao Song
+  url: http://arxiv.org/abs/1811.03962v5
+  published: '2018-11-09'
+  notes: ''
+  tags: []
+- arxiv_id: '1808.01204'
+  title: "Learning Overparameterized Neural Networks via Stochastic Gradient\n  Descent\
+    \ on Structured Data"
+  authors: Yuanzhi Li, Yingyu Liang
+  url: http://arxiv.org/abs/1808.01204v3
+  published: '2018-08-03'
+  notes: ''
+  tags: []
+- arxiv_id: '1804.04235'
+  title: 'Adafactor: Adaptive Learning Rates with Sublinear Memory Cost'
+  authors: Noam Shazeer, Mitchell Stern
+  url: http://arxiv.org/abs/1804.04235v1
+  published: '2018-04-11'
+  notes: ''
+  tags: []
+- arxiv_id: '2306.01128'
+  title: Learning Transformer Programs
+  authors: Dan Friedman, Alexander Wettig, Danqi Chen
+  url: http://arxiv.org/abs/2306.01128v2
+  published: '2023-06-01'
+  notes: ''
+  tags: []
+- arxiv_id: '2306.04751'
+  title: "How Far Can Camels Go? Exploring the State of Instruction Tuning on Open\n\
+    \  Resources"
+  authors: Yizhong Wang, Hamish Ivison, Pradeep Dasigi, Jack Hessel, Tushar Khot,
+    Khyathi Raghavi Chandu, David Wadden, Kelsey MacMillan, Noah A. Smith, Iz Beltagy,
+    Hannaneh Hajishirzi
+  url: http://arxiv.org/abs/2306.04751v2
+  published: '2023-06-07'
+  notes: ''
+  tags: []
+- arxiv_id: '2202.00828'
+  title: Co-training Improves Prompt-based Learning for Large Language Models
+  authors: Hunter Lang, Monica Agrawal, Yoon Kim, David Sontag
+  url: http://arxiv.org/abs/2202.00828v1
+  published: '2022-02-02'
+  notes: ''
+  tags: []
+- arxiv_id: '2402.09668'
+  title: How to Train Data-Efficient LLMs
+  authors: Noveen Sachdeva, Benjamin Coleman, Wang-Cheng Kang, Jianmo Ni, Lichan Hong,
+    Ed H. Chi, James Caverlee, Julian McAuley, Derek Zhiyuan Cheng
+  url: http://arxiv.org/abs/2402.09668v1
+  published: '2024-02-15'
+  notes: ''
+  tags: []
+- arxiv_id: '2210.11610'
+  title: Large Language Models Can Self-Improve
+  authors: Jiaxin Huang, Shixiang Shane Gu, Le Hou, Yuexin Wu, Xuezhi Wang, Hongkun
+    Yu, Jiawei Han
+  url: http://arxiv.org/abs/2210.11610v2
+  published: '2022-10-20'
+  notes: ''
+  tags: []
+- arxiv_id: '2404.12358'
+  title: 'From $r$ to $Q^*$: Your Language Model is Secretly a Q-Function'
+  authors: Rafael Rafailov, Joey Hejna, Ryan Park, Chelsea Finn
+  url: http://arxiv.org/abs/2404.12358v2
+  published: '2024-04-18'
+  notes: ''
+  tags: []
+- arxiv_id: '2207.14255'
+  title: Efficient Training of Language Models to Fill in the Middle
+  authors: Mohammad Bavarian, Heewoo Jun, Nikolas Tezak, John Schulman, Christine
+    McLeavey, Jerry Tworek, Mark Chen
+  url: http://arxiv.org/abs/2207.14255v1
+  published: '2022-07-28'
+  notes: ''
+  tags: []
+- arxiv_id: '1711.05101'
+  title: Decoupled Weight Decay Regularization
+  authors: Ilya Loshchilov, Frank Hutter
+  url: http://arxiv.org/abs/1711.05101v3
+  published: '2017-11-14'
+  notes: ''
+  tags: []
+- arxiv_id: '2209.06015'
+  title: Black-box Dataset Ownership Verification via Backdoor Watermarking
+  authors: Yiming Li, Mingyan Zhu, Xue Yang, Yong Jiang, Tao Wei, Shu-Tao Xia
+  url: http://arxiv.org/abs/2209.06015v2
+  published: '2022-08-04'
+  notes: ''
+  tags: []
+- arxiv_id: '1211.2476'
+  title: Random Utility Theory for Social Choice
+  authors: Hossein Azari Soufiani, David C. Parkes, Lirong Xia
+  url: http://arxiv.org/abs/1211.2476v1
+  published: '2012-11-11'
+  notes: ''
+  tags: []
+- arxiv_id: '1407.4443'
+  title: "On the Complexity of Best Arm Identification in Multi-Armed Bandit\n  Models"
+  authors: "Emilie Kaufmann, Olivier Capp\xE9, Aur\xE9lien Garivier"
+  url: http://arxiv.org/abs/1407.4443v2
+  published: '2014-07-16'
+  notes: ''
+  tags: []
+- arxiv_id: '2207.08815'
+  title: Why do tree-based models still outperform deep learning on tabular data?
+  authors: "L\xE9o Grinsztajn, Edouard Oyallon, Ga\xEBl Varoquaux"
+  url: http://arxiv.org/abs/2207.08815v1
+  published: '2022-07-18'
+  notes: ''
+  tags: []
+- arxiv_id: '1712.05877'
+  title: "Quantization and Training of Neural Networks for Efficient\n  Integer-Arithmetic-Only\
+    \ Inference"
+  authors: Benoit Jacob, Skirmantas Kligys, Bo Chen, Menglong Zhu, Matthew Tang, Andrew
+    Howard, Hartwig Adam, Dmitry Kalenichenko
+  url: http://arxiv.org/abs/1712.05877v1
+  published: '2017-12-15'
+  notes: ''
+  tags: []
+- arxiv_id: '1911.12543'
+  title: How Can We Know What Language Models Know?
+  authors: Zhengbao Jiang, Frank F. Xu, Jun Araki, Graham Neubig
+  url: http://arxiv.org/abs/1911.12543v2
+  published: '2019-11-28'
+  notes: ''
+  tags: []
+- arxiv_id: '2006.05205'
+  title: "On the Bottleneck of Graph Neural Networks and its Practical\n  Implications"
+  authors: Uri Alon, Eran Yahav
+  url: http://arxiv.org/abs/2006.05205v4
+  published: '2020-06-09'
+  notes: ''
+  tags: []
+- arxiv_id: '2404.18444'
+  title: "U-Nets as Belief Propagation: Efficient Classification, Denoising, and\n\
+    \  Diffusion in Generative Hierarchical Models"
+  authors: Song Mei
+  url: http://arxiv.org/abs/2404.18444v2
+  published: '2024-04-29'
+  notes: ''
+  tags: []
+- arxiv_id: '2404.12272'
+  title: "Who Validates the Validators? Aligning LLM-Assisted Evaluation of LLM\n\
+    \  Outputs with Human Preferences"
+  authors: "Shreya Shankar, J. D. Zamfirescu-Pereira, Bj\xF6rn Hartmann, Aditya G.\
+    \ Parameswaran, Ian Arawjo"
+  url: http://arxiv.org/abs/2404.12272v1
+  published: '2024-04-18'
+  notes: ''
+  tags: []
+- arxiv_id: '2405.00675'
+  title: Self-Play Preference Optimization for Language Model Alignment
+  authors: Yue Wu, Zhiqing Sun, Huizhuo Yuan, Kaixuan Ji, Yiming Yang, Quanquan Gu
+  url: http://arxiv.org/abs/2405.00675v5
+  published: '2024-05-01'
+  notes: ''
+  tags: []
+- arxiv_id: '2405.01536'
+  title: Customizing Text-to-Image Models with a Single Image Pair
+  authors: Maxwell Jones, Sheng-Yu Wang, Nupur Kumari, David Bau, Jun-Yan Zhu
+  url: http://arxiv.org/abs/2405.01536v2
+  published: '2024-05-02'
+  notes: ''
+  tags: []
+- arxiv_id: '2405.05417'
+  title: "Fishing for Magikarp: Automatically Detecting Under-trained Tokens in\n\
+    \  Large Language Models"
+  authors: Sander Land, Max Bartolo
+  url: http://arxiv.org/abs/2405.05417v2
+  published: '2024-05-08'
+  notes: ''
+  tags: []
+- arxiv_id: '2312.08550'
+  title: "Harmonics of Learning: Universal Fourier Features Emerge in Invariant\n\
+    \  Networks"
+  authors: Giovanni Luca Marchetti, Christopher Hillar, Danica Kragic, Sophia Sanborn
+  url: http://arxiv.org/abs/2312.08550v3
+  published: '2023-12-13'
+  notes: ''
+  tags: []
+- arxiv_id: '2310.06816'
+  title: Text Embeddings Reveal (Almost) As Much As Text
+  authors: John X. Morris, Volodymyr Kuleshov, Vitaly Shmatikov, Alexander M. Rush
+  url: http://arxiv.org/abs/2310.06816v1
+  published: '2023-10-10'
+  notes: ''
+  tags: []
+- arxiv_id: '2406.08929'
+  title: 'Step-by-Step Diffusion: An Elementary Tutorial'
+  authors: Preetum Nakkiran, Arwen Bradley, Hattie Zhou, Madhu Advani
+  url: http://arxiv.org/abs/2406.08929v2
+  published: '2024-06-13'
+  notes: ''
+  tags: []
+- arxiv_id: 2406.11741v1
+  title: "Transcendence: Generative Models Can Outperform The Experts That Train\n\
+    \  Them"
+  authors: Edwin Zhang, Vincent Zhu, Naomi Saphra, Anat Kleiman, Benjamin L. Edelman,
+    Milind Tambe, Sham M. Kakade, Eran Malach
+  url: http://arxiv.org/abs/2406.11741v1
+  published: '2024-06-17'
+  notes: ''
+  tags: []
+- arxiv_id: '2402.03175'
+  title: "Beyond the Black Box: A Statistical Model for LLM Reasoning and\n  Inference"
+  authors: Siddhartha Dalal, Vishal Misra
+  url: http://arxiv.org/abs/2402.03175v2
+  published: '2024-02-05'
+  notes: ''
+  tags: []
+- arxiv_id: '1707.02038'
+  title: A Tutorial on Thompson Sampling
+  authors: Daniel Russo, Benjamin Van Roy, Abbas Kazerouni, Ian Osband, Zheng Wen
+  url: http://arxiv.org/abs/1707.02038v3
+  published: '2017-07-07'
+  notes: ''
+  tags: []
+- arxiv_id: '2406.12168'
+  title: "BPO: Staying Close to the Behavior LLM Creates Better Online LLM\n  Alignment"
+  authors: Wenda Xu, Jiachen Li, William Yang Wang, Lei Li
+  url: http://arxiv.org/abs/2406.12168v4
+  published: '2024-06-18'
+  notes: ''
+  tags: []
+- arxiv_id: '2406.10529'
+  title: A Theory of Interpretable Approximations
+  authors: "Marco Bressan, Nicol\xF2 Cesa-Bianchi, Emmanuel Esposito, Yishay Mansour,\
+    \ Shay Moran, Maximilian Thiessen"
+  url: http://arxiv.org/abs/2406.10529v1
+  published: '2024-06-15'
+  notes: ''
+  tags: []
+- arxiv_id: '2406.20094'
+  title: Scaling Synthetic Data Creation with 1,000,000,000 Personas
+  authors: Tao Ge, Xin Chan, Xiaoyang Wang, Dian Yu, Haitao Mi, Dong Yu
+  url: http://arxiv.org/abs/2406.20094v2
+  published: '2024-06-28'
+  notes: ''
+  tags: []
+- arxiv_id: '2402.09142'
+  title: "When Representations Align: Universality in Representation Learning\n  Dynamics"
+  authors: Loek van Rossem, Andrew M. Saxe
+  url: http://arxiv.org/abs/2402.09142v2
+  published: '2024-02-14'
+  notes: ''
+  tags: []
+- arxiv_id: '2406.01506'
+  title: "The Geometry of Categorical and Hierarchical Concepts in Large Language\n\
+    \  Models"
+  authors: Kiho Park, Yo Joong Choe, Yibo Jiang, Victor Veitch
+  url: http://arxiv.org/abs/2406.01506v2
+  published: '2024-06-03'
+  notes: ''
+  tags: []
+- arxiv_id: '2210.17323'
+  title: "GPTQ: Accurate Post-Training Quantization for Generative Pre-trained\n \
+    \ Transformers"
+  authors: Elias Frantar, Saleh Ashkboos, Torsten Hoefler, Dan Alistarh
+  url: http://arxiv.org/abs/2210.17323v2
+  published: '2022-10-31'
+  notes: ''
+  tags: []
+- arxiv_id: '2204.02937'
+  title: "Last Layer Re-Training is Sufficient for Robustness to Spurious\n  Correlations"
+  authors: Polina Kirichenko, Pavel Izmailov, Andrew Gordon Wilson
+  url: http://arxiv.org/abs/2204.02937v2
+  published: '2022-04-06'
+  notes: ''
+  tags: []
+- arxiv_id: '1807.02811'
+  title: A Tutorial on Bayesian Optimization
+  authors: Peter I. Frazier
+  url: http://arxiv.org/abs/1807.02811v1
+  published: '2018-07-08'
+  notes: ''
+  tags: []
+- arxiv_id: '2207.05221'
+  title: Language Models (Mostly) Know What They Know
+  authors: Saurav Kadavath, Tom Conerly, Amanda Askell, Tom Henighan, Dawn Drain,
+    Ethan Perez, Nicholas Schiefer, Zac Hatfield-Dodds, Nova DasSarma, Eli Tran-Johnson,
+    Scott Johnston, Sheer El-Showk, Andy Jones, Nelson Elhage, Tristan Hume, Anna
+    Chen, Yuntao Bai, Sam Bowman, Stanislav Fort, Deep Ganguli, Danny Hernandez, Josh
+    Jacobson, Jackson Kernion, Shauna Kravec, Liane Lovitt, Kamal Ndousse, Catherine
+    Olsson, Sam Ringer, Dario Amodei, Tom Brown, Jack Clark, Nicholas Joseph, Ben
+    Mann, Sam McCandlish, Chris Olah, Jared Kaplan
+  url: http://arxiv.org/abs/2207.05221v4
+  published: '2022-07-11'
+  notes: ''
+  tags: []
+- arxiv_id: '2404.01413'
+  title: "Is Model Collapse Inevitable? Breaking the Curse of Recursion by\n  Accumulating\
+    \ Real and Synthetic Data"
+  authors: Matthias Gerstgrasser, Rylan Schaeffer, Apratim Dey, Rafael Rafailov, Henry
+    Sleight, John Hughes, Tomasz Korbak, Rajashree Agrawal, Dhruv Pai, Andrey Gromov,
+    Daniel A. Roberts, Diyi Yang, David L. Donoho, Sanmi Koyejo
+  url: http://arxiv.org/abs/2404.01413v2
+  published: '2024-04-01'
+  notes: ''
+  tags: []
+- arxiv_id: 2307.12375v4
+  title: "In-Context Learning Learns Label Relationships but Is Not Conventional\n\
+    \  Learning"
+  authors: Jannik Kossen, Yarin Gal, Tom Rainforth
+  url: http://arxiv.org/abs/2307.12375v4
+  published: '2023-07-23'
+  notes: ''
+  tags: []
+- arxiv_id: '2202.06856'
+  title: "Domain-Adjusted Regression or: ERM May Already Learn Features Sufficient\n\
+    \  for Out-of-Distribution Generalization"
+  authors: Elan Rosenfeld, Pradeep Ravikumar, Andrej Risteski
+  url: http://arxiv.org/abs/2202.06856v2
+  published: '2022-02-14'
+  notes: ''
+  tags: []
+- arxiv_id: '2011.12945'
+  title: "No Subclass Left Behind: Fine-Grained Robustness in Coarse-Grained\n  Classification\
+    \ Problems"
+  authors: "Nimit S. Sohoni, Jared A. Dunnmon, Geoffrey Angus, Albert Gu, Christopher\
+    \ R\xE9"
+  url: http://arxiv.org/abs/2011.12945v2
+  published: '2020-11-25'
+  notes: ''
+  tags: []
+- arxiv_id: '1707.02968'
+  title: Revisiting Unreasonable Effectiveness of Data in Deep Learning Era
+  authors: Chen Sun, Abhinav Shrivastava, Saurabh Singh, Abhinav Gupta
+  url: http://arxiv.org/abs/1707.02968v2
+  published: '2017-07-10'
+  notes: ''
+  tags: []
+- arxiv_id: '1804.08838'
+  title: Measuring the Intrinsic Dimension of Objective Landscapes
+  authors: Chunyuan Li, Heerad Farkhoor, Rosanne Liu, Jason Yosinski
+  url: http://arxiv.org/abs/1804.08838v1
+  published: '2018-04-24'
+  notes: ''
+  tags: []
+- arxiv_id: '1501.01332'
+  title: "Causal inference using invariant prediction: identification and\n  confidence\
+    \ intervals"
+  authors: "Jonas Peters, Peter B\xFChlmann, Nicolai Meinshausen"
+  url: http://arxiv.org/abs/1501.01332v3
+  published: '2015-01-06'
+  notes: ''
+  tags: []
+- arxiv_id: '2004.14444'
+  title: The Effect of Natural Distribution Shift on Question Answering Models
+  authors: John Miller, Karl Krauth, Benjamin Recht, Ludwig Schmidt
+  url: http://arxiv.org/abs/2004.14444v1
+  published: '2020-04-29'
+  notes: ''
+  tags: []
+- arxiv_id: '1902.10811'
+  title: Do ImageNet Classifiers Generalize to ImageNet?
+  authors: Benjamin Recht, Rebecca Roelofs, Ludwig Schmidt, Vaishaal Shankar
+  url: http://arxiv.org/abs/1902.10811v2
+  published: '2019-02-13'
+  notes: ''
+  tags: []
+- arxiv_id: '1808.04926'
+  title: "How Much Reading Does Reading Comprehension Require? A Critical\n  Investigation\
+    \ of Popular Benchmarks"
+  authors: Divyansh Kaushik, Zachary C. Lipton
+  url: http://arxiv.org/abs/1808.04926v2
+  published: '2018-08-14'
+  notes: ''
+  tags: []
+- arxiv_id: '1907.02893'
+  title: Invariant Risk Minimization
+  authors: "Martin Arjovsky, L\xE9on Bottou, Ishaan Gulrajani, David Lopez-Paz"
+  url: http://arxiv.org/abs/1907.02893v3
+  published: '2019-07-05'
+  notes: ''
+  tags: []
+- arxiv_id: '1812.01754'
+  title: Moment Matching for Multi-Source Domain Adaptation
+  authors: Xingchao Peng, Qinxun Bai, Xide Xia, Zijun Huang, Kate Saenko, Bo Wang
+  url: http://arxiv.org/abs/1812.01754v4
+  published: '2018-12-04'
+  notes: ''
+  tags: []
+- arxiv_id: '1812.11118'
+  title: "Reconciling modern machine learning practice and the bias-variance\n  trade-off"
+  authors: Mikhail Belkin, Daniel Hsu, Siyuan Ma, Soumik Mandal
+  url: http://arxiv.org/abs/1812.11118v2
+  published: '2018-12-28'
+  notes: ''
+  tags: []
+- arxiv_id: '2408.03314'
+  title: "Scaling LLM Test-Time Compute Optimally can be More Effective than\n  Scaling\
+    \ Model Parameters"
+  authors: Charlie Snell, Jaehoon Lee, Kelvin Xu, Aviral Kumar
+  url: http://arxiv.org/abs/2408.03314v1
+  published: '2024-08-06'
+  notes: ''
+  tags: []
+- arxiv_id: '2406.03476'
+  title: "Does your data spark joy? Performance gains from domain upsampling at\n\
+    \  the end of training"
+  authors: Cody Blakeney, Mansheej Paul, Brett W. Larsen, Sean Owen, Jonathan Frankle
+  url: http://arxiv.org/abs/2406.03476v1
+  published: '2024-06-05'
+  notes: ''
+  tags: []
+- arxiv_id: '2408.00949'
+  title: Equivariant neural networks and piecewise linear representation theory
+  authors: Joel Gibson, Daniel Tubbenhauer, Geordie Williamson
+  url: http://arxiv.org/abs/2408.00949v2
+  published: '2024-08-01'
+  notes: ''
+  tags: []
+- arxiv_id: '2308.07074'
+  title: "#InsTag: Instruction Tagging for Analyzing Supervised Fine-tuning of\n \
+    \ Large Language Models"
+  authors: Keming Lu, Hongyi Yuan, Zheng Yuan, Runji Lin, Junyang Lin, Chuanqi Tan,
+    Chang Zhou, Jingren Zhou
+  url: http://arxiv.org/abs/2308.07074v2
+  published: '2023-08-14'
+  notes: ''
+  tags: []
+- arxiv_id: '2308.12950'
+  title: 'Code Llama: Open Foundation Models for Code'
+  authors: "Baptiste Rozi\xE8re, Jonas Gehring, Fabian Gloeckle, Sten Sootla, Itai\
+    \ Gat, Xiaoqing Ellen Tan, Yossi Adi, Jingyu Liu, Romain Sauvestre, Tal Remez,\
+    \ J\xE9r\xE9my Rapin, Artyom Kozhevnikov, Ivan Evtimov, Joanna Bitton, Manish\
+    \ Bhatt, Cristian Canton Ferrer, Aaron Grattafiori, Wenhan Xiong, Alexandre D\xE9\
+    fossez, Jade Copet, Faisal Azhar, Hugo Touvron, Louis Martin, Nicolas Usunier,\
+    \ Thomas Scialom, Gabriel Synnaeve"
+  url: http://arxiv.org/abs/2308.12950v3
+  published: '2023-08-24'
+  notes: ''
+  tags: []
+- arxiv_id: '2312.02120'
+  title: 'Magicoder: Empowering Code Generation with OSS-Instruct'
+  authors: Yuxiang Wei, Zhe Wang, Jiawei Liu, Yifeng Ding, Lingming Zhang
+  url: http://arxiv.org/abs/2312.02120v2
+  published: '2023-12-04'
+  notes: ''
+  tags: []
+- arxiv_id: '2403.10853'
+  title: "Just Say the Name: Online Continual Learning with Category Names Only\n\
+    \  via Data Generation"
+  authors: Minhyuk Seo, Seongwon Cho, Minjae Lee, Diganta Misra, Hyeonbeom Choi, Seon
+    Joo Kim, Jonghyun Choi
+  url: http://arxiv.org/abs/2403.10853v3
+  published: '2024-03-16'
+  notes: ''
+  tags: []
+- arxiv_id: '2311.13110'
+  title: "White-Box Transformers via Sparse Rate Reduction: Compression Is All\n \
+    \ There Is?"
+  authors: Yaodong Yu, Sam Buchanan, Druv Pai, Tianzhe Chu, Ziyang Wu, Shengbang Tong,
+    Hao Bai, Yuexiang Zhai, Benjamin D. Haeffele, Yi Ma
+  url: http://arxiv.org/abs/2311.13110v4
+  published: '2023-11-22'
+  notes: ''
+  tags: []
+- arxiv_id: '2409.02426'
+  title: "Diffusion Models Learn Low-Dimensional Distributions via Subspace\n  Clustering"
+  authors: Peng Wang, Huijie Zhang, Zekai Zhang, Siyi Chen, Yi Ma, Qing Qu
+  url: http://arxiv.org/abs/2409.02426v2
+  published: '2024-09-04'
+  notes: ''
+  tags: []
+- arxiv_id: '2409.03384'
+  title: 'Hardware Acceleration of LLMs: A comprehensive survey and comparison'
+  authors: Nikoletta Koilia, Christoforos Kachris
+  url: http://arxiv.org/abs/2409.03384v1
+  published: '2024-09-05'
+  notes: ''
+  tags: []
+- arxiv_id: '2402.12875'
+  title: "Chain of Thought Empowers Transformers to Solve Inherently Serial\n  Problems"
+  authors: Zhiyuan Li, Hong Liu, Denny Zhou, Tengyu Ma
+  url: http://arxiv.org/abs/2402.12875v4
+  published: '2024-02-20'
+  notes: ''
+  tags: []
+- arxiv_id: '2406.16838'
+  title: "From Decoding to Meta-Generation: Inference-time Algorithms for Large\n\
+    \  Language Models"
+  authors: Sean Welleck, Amanda Bertsch, Matthew Finlayson, Hailey Schoelkopf, Alex
+    Xie, Graham Neubig, Ilia Kulikov, Zaid Harchaoui
+  url: http://arxiv.org/abs/2406.16838v2
+  published: '2024-06-24'
+  notes: ''
+  tags: []
+- arxiv_id: '2403.09472'
+  title: 'Easy-to-Hard Generalization: Scalable Alignment Beyond Human Supervision'
+  authors: Zhiqing Sun, Longhui Yu, Yikang Shen, Weiyang Liu, Yiming Yang, Sean Welleck,
+    Chuang Gan
+  url: http://arxiv.org/abs/2403.09472v2
+  published: '2024-03-14'
+  notes: ''
+  tags: []
+- arxiv_id: '2409.14254'
+  title: Instruction Following without Instruction Tuning
+  authors: John Hewitt, Nelson F. Liu, Percy Liang, Christopher D. Manning
+  url: http://arxiv.org/abs/2409.14254v1
+  published: '2024-09-21'
+  notes: ''
+  tags: []
+- arxiv_id: '2410.01201'
+  title: Were RNNs All We Needed?
+  authors: Leo Feng, Frederick Tung, Mohamed Osama Ahmed, Yoshua Bengio, Hossein Hajimirsadeghi
+  url: http://arxiv.org/abs/2410.01201v3
+  published: '2024-10-02'
+  notes: ''
+  tags: []
+- arxiv_id: '2410.02525'
+  title: Contextual Document Embeddings
+  authors: John X. Morris, Alexander M. Rush
+  url: http://arxiv.org/abs/2410.02525v4
+  published: '2024-10-03'
+  notes: ''
+  tags: []
+- arxiv_id: '2409.18842'
+  title: "Classical Statistical (In-Sample) Intuitions Don't Generalize Well: A\n\
+    \  Note on Bias-Variance Tradeoffs, Overfitting and Moving from Fixed to Random\n\
+    \  Designs"
+  authors: Alicia Curth
+  url: http://arxiv.org/abs/2409.18842v1
+  published: '2024-09-27'
+  notes: ''
+  tags: []
+- arxiv_id: '2310.18988'
+  title: "A U-turn on Double Descent: Rethinking Parameter Counting in Statistical\n\
+    \  Learning"
+  authors: Alicia Curth, Alan Jeffares, Mihaela van der Schaar
+  url: http://arxiv.org/abs/2310.18988v1
+  published: '2023-10-29'
+  notes: ''
+  tags: []
+- arxiv_id: '2408.08294'
+  title: eGAD! double descent is explained by Generalized Aliasing Decomposition
+  authors: Mark K. Transtrum, Gus L. W. Hart, Tyler J. Jarvis, Jared P. Whitehead
+  url: http://arxiv.org/abs/2408.08294v3
+  published: '2024-08-15'
+  notes: ''
+  tags: []
+- arxiv_id: '2308.08998'
+  title: Reinforced Self-Training (ReST) for Language Modeling
+  authors: Caglar Gulcehre, Tom Le Paine, Srivatsan Srinivasan, Ksenia Konyushkova,
+    Lotte Weerts, Abhishek Sharma, Aditya Siddhant, Alex Ahern, Miaosen Wang, Chenjie
+    Gu, Wolfgang Macherey, Arnaud Doucet, Orhan Firat, Nando de Freitas
+  url: http://arxiv.org/abs/2308.08998v2
+  published: '2023-08-17'
+  notes: ''
+  tags: []
+- arxiv_id: '2402.01502'
+  title: "Why do Random Forests Work? Understanding Tree Ensembles as\n  Self-Regularizing\
+    \ Adaptive Smoothers"
+  authors: Alicia Curth, Alan Jeffares, Mihaela van der Schaar
+  url: http://arxiv.org/abs/2402.01502v1
+  published: '2024-02-02'
+  notes: ''
+  tags: []
+- arxiv_id: '2407.01219'
+  title: Searching for Best Practices in Retrieval-Augmented Generation
+  authors: Xiaohua Wang, Zhenghua Wang, Xuan Gao, Feiran Zhang, Yixin Wu, Zhibo Xu,
+    Tianyuan Shi, Zhengyuan Wang, Shizheng Li, Qi Qian, Ruicheng Yin, Changze Lv,
+    Xiaoqing Zheng, Xuanjing Huang
+  url: http://arxiv.org/abs/2407.01219v1
+  published: '2024-07-01'
+  notes: ''
+  tags: []
+- arxiv_id: '2410.02724'
+  title: Large Language Models as Markov Chains
+  authors: "Oussama Zekri, Ambroise Odonnat, Abdelhakim Benechehab, Linus Bleistein,\
+    \ Nicolas Boull\xE9, Ievgen Redko"
+  url: http://arxiv.org/abs/2410.02724v1
+  published: '2024-10-03'
+  notes: ''
+  tags: []
+- arxiv_id: '2410.06205'
+  title: Round and Round We Go! What makes Rotary Positional Encodings useful?
+  authors: "Federico Barbero, Alex Vitvitskyi, Christos Perivolaropoulos, Razvan Pascanu,\
+    \ Petar Veli\u010Dkovi\u0107"
+  url: http://arxiv.org/abs/2410.06205v1
+  published: '2024-10-08'
+  notes: ''
+  tags: []
+- arxiv_id: '2402.14740'
+  title: "Back to Basics: Revisiting REINFORCE Style Optimization for Learning\n \
+    \ from Human Feedback in LLMs"
+  authors: "Arash Ahmadian, Chris Cremer, Matthias Gall\xE9, Marzieh Fadaee, Julia\
+    \ Kreutzer, Olivier Pietquin, Ahmet \xDCst\xFCn, Sara Hooker"
+  url: http://arxiv.org/abs/2402.14740v2
+  published: '2024-02-22'
+  notes: ''
+  tags: []
+- arxiv_id: '2408.15240'
+  title: 'Generative Verifiers: Reward Modeling as Next-Token Prediction'
+  authors: Lunjun Zhang, Arian Hosseini, Hritik Bansal, Mehran Kazemi, Aviral Kumar,
+    Rishabh Agarwal
+  url: http://arxiv.org/abs/2408.15240v2
+  published: '2024-08-27'
+  notes: ''
+  tags: []
+- arxiv_id: '2410.06940'
+  title: "Representation Alignment for Generation: Training Diffusion Transformers\n\
+    \  Is Easier Than You Think"
+  authors: Sihyun Yu, Sangkyung Kwak, Huiwon Jang, Jongheon Jeong, Jonathan Huang,
+    Jinwoo Shin, Saining Xie
+  url: http://arxiv.org/abs/2410.06940v2
+  published: '2024-10-09'
+  notes: ''
+  tags: []
+- arxiv_id: '2410.08146'
+  title: "Rewarding Progress: Scaling Automated Process Verifiers for LLM\n  Reasoning"
+  authors: Amrith Setlur, Chirag Nagpal, Adam Fisch, Xinyang Geng, Jacob Eisenstein,
+    Rishabh Agarwal, Alekh Agarwal, Jonathan Berant, Aviral Kumar
+  url: http://arxiv.org/abs/2410.08146v1
+  published: '2024-10-10'
+  notes: ''
+  tags: []
+- arxiv_id: '1702.03118'
+  title: "Sigmoid-Weighted Linear Units for Neural Network Function Approximation\n\
+    \  in Reinforcement Learning"
+  authors: Stefan Elfwing, Eiji Uchibe, Kenji Doya
+  url: http://arxiv.org/abs/1702.03118v3
+  published: '2017-02-10'
+  notes: ''
+  tags: []
+- arxiv_id: '2002.05202'
+  title: GLU Variants Improve Transformer
+  authors: Noam Shazeer
+  url: http://arxiv.org/abs/2002.05202v1
+  published: '2020-02-12'
+  notes: ''
+  tags: []
+- arxiv_id: '2310.04415'
+  title: Why Do We Need Weight Decay in Modern Deep Learning?
+  authors: Francesco D'Angelo, Maksym Andriushchenko, Aditya Varre, Nicolas Flammarion
+  url: http://arxiv.org/abs/2310.04415v2
+  published: '2023-10-06'
+  notes: ''
+  tags: []
+- arxiv_id: '2410.01131'
+  title: "nGPT: Normalized Transformer with Representation Learning on the\n  Hypersphere"
+  authors: Ilya Loshchilov, Cheng-Ping Hsieh, Simeng Sun, Boris Ginsburg
+  url: http://arxiv.org/abs/2410.01131v1
+  published: '2024-10-01'
+  notes: ''
+  tags: []
+- arxiv_id: '2410.09713'
+  title: Agentic Information Retrieval
+  authors: Weinan Zhang, Junwei Liao, Ning Li, Kounianhua Du
+  url: http://arxiv.org/abs/2410.09713v2
+  published: '2024-10-13'
+  notes: ''
+  tags: []
+- arxiv_id: 2408.13296v1
+  title: "The Ultimate Guide to Fine-Tuning LLMs from Basics to Breakthroughs: An\n\
+    \  Exhaustive Review of Technologies, Research, Best Practices, Applied Research\n\
+    \  Challenges and Opportunities"
+  authors: Venkatesh Balavadhani Parthasarathy, Ahtsham Zafar, Aafaq Khan, Arsalan
+    Shahid
+  url: http://arxiv.org/abs/2408.13296v1
+  published: '2024-08-23'
+  notes: ''
+  tags: []
+- arxiv_id: '2410.19034'
+  title: 'Mixture of Parrots: Experts improve memorization more than reasoning'
+  authors: Samy Jelassi, Clara Mohri, David Brandfonbrener, Alex Gu, Nikhil Vyas,
+    Nikhil Anand, David Alvarez-Melis, Yuanzhi Li, Sham M. Kakade, Eran Malach
+  url: http://arxiv.org/abs/2410.19034v1
+  published: '2024-10-24'
+  notes: ''
+  tags: []
+- arxiv_id: '2405.16359'
+  title: A First Course in Monte Carlo Methods
+  authors: Daniel Sanz-Alonso, Omar Al-Ghattas
+  url: http://arxiv.org/abs/2405.16359v1
+  published: '2024-05-25'
+  notes: ''
+  tags: []
+- arxiv_id: 2410.12001v1
+  title: "Impacts of Continued Legal Pre-Training and IFT on LLMs' Latent\n  Representations\
+    \ of Human-Defined Legal Concepts"
+  authors: Shaun Ho
+  url: http://arxiv.org/abs/2410.12001v1
+  published: '2024-10-15'
+  notes: ''
+  tags: []
+- arxiv_id: '2410.05192'
+  title: "Understanding Warmup-Stable-Decay Learning Rates: A River Valley Loss\n\
+    \  Landscape Perspective"
+  authors: Kaiyue Wen, Zhiyuan Li, Jason Wang, David Hall, Percy Liang, Tengyu Ma
+  url: http://arxiv.org/abs/2410.05192v3
+  published: '2024-10-07'
+  notes: ''
+  tags: []
+- arxiv_id: '2406.13762'
+  title: "Unveiling the Hidden Structure of Self-Attention via Kernel Principal\n\
+    \  Component Analysis"
+  authors: Rachel S. Y. Teo, Tan M. Nguyen
+  url: http://arxiv.org/abs/2406.13762v2
+  published: '2024-06-19'
+  notes: ''
+  tags: []
+- arxiv_id: '2405.14333'
+  title: "DeepSeek-Prover: Advancing Theorem Proving in LLMs through Large-Scale\n\
+    \  Synthetic Data"
+  authors: Huajian Xin, Daya Guo, Zhihong Shao, Zhizhou Ren, Qihao Zhu, Bo Liu, Chong
+    Ruan, Wenda Li, Xiaodan Liang
+  url: http://arxiv.org/abs/2405.14333v1
+  published: '2024-05-23'
+  notes: ''
+  tags: []
+- arxiv_id: '2410.21265'
+  title: Modular Duality in Deep Learning
+  authors: Jeremy Bernstein, Laker Newhouse
+  url: http://arxiv.org/abs/2410.21265v2
+  published: '2024-10-28'
+  notes: ''
+  tags: []
+- arxiv_id: '2410.24206'
+  title: Understanding Optimization in Deep Learning with Central Flows
+  authors: Jeremy M. Cohen, Alex Damian, Ameet Talwalkar, Zico Kolter, Jason D. Lee
+  url: http://arxiv.org/abs/2410.24206v1
+  published: '2024-10-31'
+  notes: ''
+  tags: []
+- arxiv_id: '2402.04384'
+  title: Denoising Diffusion Probabilistic Models in Six Simple Steps
+  authors: Richard E. Turner, Cristiana-Diana Diaconu, Stratis Markou, Aliaksandra
+    Shysheya, Andrew Y. K. Foong, Bruno Mlodozeniec
+  url: http://arxiv.org/abs/2402.04384v2
+  published: '2024-02-06'
+  notes: ''
+  tags: []
+- arxiv_id: '2411.02853'
+  title: "ADOPT: Modified Adam Can Converge with Any $\u03B2_2$ with the Optimal\n\
+    \  Rate"
+  authors: Shohei Taniguchi, Keno Harada, Gouki Minegishi, Yuta Oshima, Seong Cheol
+    Jeong, Go Nagahara, Tomoshi Iiyama, Masahiro Suzuki, Yusuke Iwasawa, Yutaka Matsuo
+  url: http://arxiv.org/abs/2411.02853v3
+  published: '2024-11-05'
+  notes: ''
+  tags: []
+- arxiv_id: '1802.07044'
+  title: The Description Length of Deep Learning Models
+  authors: "L\xE9onard Blier, Yann Ollivier"
+  url: http://arxiv.org/abs/1802.07044v5
+  published: '2018-02-20'
+  notes: ''
+  tags: []
+- arxiv_id: '1812.06162'
+  title: An Empirical Model of Large-Batch Training
+  authors: Sam McCandlish, Jared Kaplan, Dario Amodei, OpenAI Dota Team
+  url: http://arxiv.org/abs/1812.06162v1
+  published: '2018-12-14'
+  notes: ''
+  tags: []
+- arxiv_id: 2410.21228v1
+  title: 'LoRA vs Full Fine-tuning: An Illusion of Equivalence'
+  authors: Reece Shuttleworth, Jacob Andreas, Antonio Torralba, Pratyusha Sharma
+  url: http://arxiv.org/abs/2410.21228v1
+  published: '2024-10-28'
+  notes: ''
+  tags: []
+- arxiv_id: '2411.04105'
+  title: "How Transformers Solve Propositional Logic Problems: A Mechanistic\n  Analysis"
+  authors: Guan Zhe Hong, Nishanth Dikkala, Enming Luo, Cyrus Rashtchian, Xin Wang,
+    Rina Panigrahy
+  url: http://arxiv.org/abs/2411.04105v3
+  published: '2024-11-06'
+  notes: ''
+  tags: []
+- arxiv_id: '1706.04599'
+  title: On Calibration of Modern Neural Networks
+  authors: Chuan Guo, Geoff Pleiss, Yu Sun, Kilian Q. Weinberger
+  url: http://arxiv.org/abs/1706.04599v2
+  published: '2017-06-14'
+  notes: ''
+  tags: []
+- arxiv_id: '2312.05523'
+  title: 'Functional Data Analysis: An Introduction and Recent Developments'
+  authors: "Jan Gertheiss, David R\xFCgamer, Bernard X. W. Liew, Sonja Greven"
+  url: http://arxiv.org/abs/2312.05523v1
+  published: '2023-12-09'
+  notes: ''
+  tags: []
+- arxiv_id: '2308.04014'
+  title: "Continual Pre-Training of Large Language Models: How to (re)warm your\n\
+    \  model?"
+  authors: "Kshitij Gupta, Benjamin Th\xE9rien, Adam Ibrahim, Mats L. Richter, Quentin\
+    \ Anthony, Eugene Belilovsky, Irina Rish, Timoth\xE9e Lesort"
+  url: http://arxiv.org/abs/2308.04014v2
+  published: '2023-08-08'
+  notes: ''
+  tags: []
+- arxiv_id: '2305.14201'
+  title: 'Goat: Fine-tuned LLaMA Outperforms GPT-4 on Arithmetic Tasks'
+  authors: Tiedong Liu, Bryan Kian Hsiang Low
+  url: http://arxiv.org/abs/2305.14201v1
+  published: '2023-05-23'
+  notes: ''
+  tags: []
+- arxiv_id: '2306.01694'
+  title: Evaluating Language Models for Mathematics through Interactions
+  authors: Katherine M. Collins, Albert Q. Jiang, Simon Frieder, Lionel Wong, Miri
+    Zilka, Umang Bhatt, Thomas Lukasiewicz, Yuhuai Wu, Joshua B. Tenenbaum, William
+    Hart, Timothy Gowers, Wenda Li, Adrian Weller, Mateja Jamnik
+  url: http://arxiv.org/abs/2306.01694v2
+  published: '2023-06-02'
+  notes: ''
+  tags: []
+- arxiv_id: '2308.01825'
+  title: "Scaling Relationship on Learning Mathematical Reasoning with Large\n  Language\
+    \ Models"
+  authors: Zheng Yuan, Hongyi Yuan, Chengpeng Li, Guanting Dong, Keming Lu, Chuanqi
+    Tan, Chang Zhou, Jingren Zhou
+  url: http://arxiv.org/abs/2308.01825v2
+  published: '2023-08-03'
+  notes: ''
+  tags: []
+- arxiv_id: '2102.13019'
+  title: "Investigating the Limitations of Transformers with Simple Arithmetic\n \
+    \ Tasks"
+  authors: Rodrigo Nogueira, Zhiying Jiang, Jimmy Lin
+  url: http://arxiv.org/abs/2102.13019v3
+  published: '2021-02-25'
+  notes: ''
+  tags: []
+- arxiv_id: '1406.2572'
+  title: "Identifying and attacking the saddle point problem in high-dimensional\n\
+    \  non-convex optimization"
+  authors: Yann Dauphin, Razvan Pascanu, Caglar Gulcehre, Kyunghyun Cho, Surya Ganguli,
+    Yoshua Bengio
+  url: http://arxiv.org/abs/1406.2572v1
+  published: '2014-06-10'
+  notes: ''
+  tags: []
+- arxiv_id: '2409.20325'
+  title: 'Old Optimizer, New Norm: An Anthology'
+  authors: Jeremy Bernstein, Laker Newhouse
+  url: http://arxiv.org/abs/2409.20325v2
+  published: '2024-09-30'
+  notes: ''
+  tags: []
+- arxiv_id: '2310.17813'
+  title: A Spectral Condition for Feature Learning
+  authors: Greg Yang, James B. Simon, Jeremy Bernstein
+  url: http://arxiv.org/abs/2310.17813v2
+  published: '2023-10-26'
+  notes: ''
+  tags: []
+- arxiv_id: '1708.00523'
+  title: "The duality structure gradient descent algorithm: analysis and\n  applications\
+    \ to neural networks"
+  authors: Thomas Flynn
+  url: http://arxiv.org/abs/1708.00523v8
+  published: '2017-08-01'
+  notes: ''
+  tags: []
+- arxiv_id: '2105.14368'
+  title: "Fit without fear: remarkable mathematical phenomena of deep learning\n \
+    \ through the prism of interpolation"
+  authors: Mikhail Belkin
+  url: http://arxiv.org/abs/2105.14368v1
+  published: '2021-05-29'
+  notes: ''
+  tags: []
+- arxiv_id: '1810.05369'
+  title: "Regularization Matters: Generalization and Optimization of Neural Nets\n\
+    \  v.s. their Induced Kernel"
+  authors: Colin Wei, Jason D. Lee, Qiang Liu, Tengyu Ma
+  url: http://arxiv.org/abs/1810.05369v4
+  published: '2018-10-12'
+  notes: ''
+  tags: []
+- arxiv_id: '2402.13728'
+  title: Average gradient outer product as a mechanism for deep neural collapse
+  authors: "Daniel Beaglehole, Peter S\xFAken\xEDk, Marco Mondelli, Mikhail Belkin"
+  url: http://arxiv.org/abs/2402.13728v6
+  published: '2024-02-21'
+  notes: ''
+  tags: []
+- arxiv_id: '2309.00570'
+  title: Mechanism of feature learning in convolutional neural networks
+  authors: Daniel Beaglehole, Adityanarayanan Radhakrishnan, Parthe Pandit, Mikhail
+    Belkin
+  url: http://arxiv.org/abs/2309.00570v1
+  published: '2023-09-01'
+  notes: ''
+  tags: []
+- arxiv_id: '2406.11200'
+  title: 'AvaTaR: Optimizing LLM Agents for Tool Usage via Contrastive Reasoning'
+  authors: Shirley Wu, Shiyu Zhao, Qian Huang, Kexin Huang, Michihiro Yasunaga, Kaidi
+    Cao, Vassilis N. Ioannidis, Karthik Subbian, Jure Leskovec, James Zou
+  url: http://arxiv.org/abs/2406.11200v3
+  published: '2024-06-17'
+  notes: ''
+  tags: []
+- arxiv_id: '2411.11824'
+  title: Theoretical Foundations of Conformal Prediction
+  authors: Anastasios N. Angelopoulos, Rina Foygel Barber, Stephen Bates
+  url: http://arxiv.org/abs/2411.11824v1
+  published: '2024-11-18'
+  notes: ''
+  tags: []
+- arxiv_id: '2309.03060'
+  title: "CoLA: Exploiting Compositional Structure for Automatic and Efficient\n \
+    \ Numerical Linear Algebra"
+  authors: Andres Potapczynski, Marc Finzi, Geoff Pleiss, Andrew Gordon Wilson
+  url: http://arxiv.org/abs/2309.03060v2
+  published: '2023-09-06'
+  notes: ''
+  tags: []
+- arxiv_id: '2406.06248'
+  title: 'Compute Better Spent: Replacing Dense Layers with Structured Matrices'
+  authors: Shikai Qiu, Andres Potapczynski, Marc Finzi, Micah Goldblum, Andrew Gordon
+    Wilson
+  url: http://arxiv.org/abs/2406.06248v1
+  published: '2024-06-10'
+  notes: ''
+  tags: []
+- arxiv_id: '2410.02117'
+  title: "Searching for Efficient Linear Layers over a Continuous Space of\n  Structured\
+    \ Matrices"
+  authors: Andres Potapczynski, Shikai Qiu, Marc Finzi, Christopher Ferri, Zixi Chen,
+    Micah Goldblum, Bayan Bruss, Christopher De Sa, Andrew Gordon Wilson
+  url: http://arxiv.org/abs/2410.02117v2
+  published: '2024-10-03'
+  notes: ''
+  tags: []
+- arxiv_id: '2203.03466'
+  title: "Tensor Programs V: Tuning Large Neural Networks via Zero-Shot\n  Hyperparameter\
+    \ Transfer"
+  authors: Greg Yang, Edward J. Hu, Igor Babuschkin, Szymon Sidor, Xiaodong Liu, David
+    Farhi, Nick Ryder, Jakub Pachocki, Weizhu Chen, Jianfeng Gao
+  url: http://arxiv.org/abs/2203.03466v2
+  published: '2022-03-07'
+  notes: ''
+  tags: []
+- arxiv_id: '2406.01583'
+  title: "Decomposing and Interpreting Image Representations via Text in ViTs\n  Beyond\
+    \ CLIP"
+  authors: Sriram Balasubramanian, Samyadeep Basu, Soheil Feizi
+  url: http://arxiv.org/abs/2406.01583v2
+  published: '2024-06-03'
+  notes: ''
+  tags: []
+- arxiv_id: '2412.05265'
+  title: 'Reinforcement Learning: An Overview'
+  authors: Kevin Murphy
+  url: http://arxiv.org/abs/2412.05265v1
+  published: '2024-12-06'
+  notes: ''
+  tags: []
+- arxiv_id: '2207.01848'
+  title: "TabPFN: A Transformer That Solves Small Tabular Classification Problems\n\
+    \  in a Second"
+  authors: "Noah Hollmann, Samuel M\xFCller, Katharina Eggensperger, Frank Hutter"
+  url: http://arxiv.org/abs/2207.01848v6
+  published: '2022-07-05'
+  notes: ''
+  tags: []
+- arxiv_id: '2311.02971'
+  title: "TabRepo: A Large Scale Repository of Tabular Model Evaluations and its\n\
+    \  AutoML Applications"
+  authors: David Salinas, Nick Erickson
+  url: http://arxiv.org/abs/2311.02971v3
+  published: '2023-11-06'
+  notes: ''
+  tags: []
+- arxiv_id: '2405.15599'
+  title: On the Computational Landscape of Replicable Learning
+  authors: Alkis Kalavasis, Amin Karbasi, Grigoris Velegkas, Felix Zhou
+  url: http://arxiv.org/abs/2405.15599v2
+  published: '2024-05-24'
+  notes: ''
+  tags: []
+- arxiv_id: '2307.03997'
+  title: Efficient Model-Free Exploration in Low-Rank MDPs
+  authors: Zakaria Mhammedi, Adam Block, Dylan J. Foster, Alexander Rakhlin
+  url: http://arxiv.org/abs/2307.03997v2
+  published: '2023-07-08'
+  notes: ''
+  tags: []
+- arxiv_id: '2408.12857'
+  title: Memory-Efficient LLM Training with Online Subspace Descent
+  authors: Kaizhao Liang, Bo Liu, Lizhang Chen, Qiang Liu
+  url: http://arxiv.org/abs/2408.12857v1
+  published: '2024-08-23'
+  notes: ''
+  tags: []
+- arxiv_id: '2405.04517'
+  title: 'xLSTM: Extended Long Short-Term Memory'
+  authors: "Maximilian Beck, Korbinian P\xF6ppel, Markus Spanring, Andreas Auer, Oleksandra\
+    \ Prudnikova, Michael Kopp, G\xFCnter Klambauer, Johannes Brandstetter, Sepp Hochreiter"
+  url: http://arxiv.org/abs/2405.04517v2
+  published: '2024-05-07'
+  notes: ''
+  tags: []
+- arxiv_id: '2402.08147'
+  title: "VerMCTS: Synthesizing Multi-Step Programs using a Verifier, a Large\n  Language\
+    \ Model, and Tree Search"
+  authors: David Brandfonbrener, Simon Henniger, Sibi Raja, Tarun Prasad, Chloe Loughridge,
+    Federico Cassano, Sabrina Ruixin Hu, Jianang Yang, William E. Byrd, Robert Zinkov,
+    Nada Amin
+  url: http://arxiv.org/abs/2402.08147v2
+  published: '2024-02-13'
+  notes: ''
+  tags: []
+- arxiv_id: '2411.15370'
+  title: "Deep Policy Gradient Methods Without Batch Updates, Target Networks, or\n\
+    \  Replay Buffers"
+  authors: Gautham Vasan, Mohamed Elsayed, Alireza Azimi, Jiamin He, Fahim Shariar,
+    Colin Bellinger, Martha White, A. Rupam Mahmood
+  url: http://arxiv.org/abs/2411.15370v1
+  published: '2024-11-22'
+  notes: ''
+  tags: []
+- arxiv_id: '2406.11233'
+  title: "Probing the Decision Boundaries of In-context Learning in Large Language\n\
+    \  Models"
+  authors: Siyan Zhao, Tung Nguyen, Aditya Grover
+  url: http://arxiv.org/abs/2406.11233v3
+  published: '2024-06-17'
+  notes: ''
+  tags: []
+- arxiv_id: '2211.09760'
+  title: 'VeLO: Training Versatile Learned Optimizers by Scaling Up'
+  authors: Luke Metz, James Harrison, C. Daniel Freeman, Amil Merchant, Lucas Beyer,
+    James Bradbury, Naman Agrawal, Ben Poole, Igor Mordatch, Adam Roberts, Jascha
+    Sohl-Dickstein
+  url: http://arxiv.org/abs/2211.09760v1
+  published: '2022-11-17'
+  notes: ''
+  tags: []
+- arxiv_id: '2406.00153'
+  title: "$\u03BC$LO: Compute-Efficient Meta-Generalization of Learned Optimizers"
+  authors: "Benjamin Th\xE9rien, Charles-\xC9tienne Joseph, Boris Knyazev, Edouard\
+    \ Oyallon, Irina Rish, Eugene Belilovsky"
+  url: http://arxiv.org/abs/2406.00153v2
+  published: '2024-05-31'
+  notes: ''
+  tags: []
+- arxiv_id: '2306.04815'
+  title: "Catapults in SGD: spikes in the training loss and their impact on\n  generalization\
+    \ through feature learning"
+  authors: Libin Zhu, Chaoyue Liu, Adityanarayanan Radhakrishnan, Mikhail Belkin
+  url: http://arxiv.org/abs/2306.04815v3
+  published: '2023-06-07'
+  notes: ''
+  tags: []
+- arxiv_id: '2205.11787'
+  title: Quadratic models for understanding catapult dynamics of neural networks
+  authors: Libin Zhu, Chaoyue Liu, Adityanarayanan Radhakrishnan, Mikhail Belkin
+  url: http://arxiv.org/abs/2205.11787v3
+  published: '2022-05-24'
+  notes: ''
+  tags: []
+- arxiv_id: '2404.03683'
+  title: 'Stream of Search (SoS): Learning to Search in Language'
+  authors: Kanishk Gandhi, Denise Lee, Gabriel Grand, Muxin Liu, Winson Cheng, Archit
+    Sharma, Noah D. Goodman
+  url: http://arxiv.org/abs/2404.03683v1
+  published: '2024-04-01'
+  notes: ''
+  tags: []
+- arxiv_id: 2410.21216v1
+  title: "HoPE: A Novel Positional Encoding Without Long-Term Decay for Enhanced\n\
+    \  Context Awareness and Extrapolation"
+  authors: Yuhan Chen, Ang Lv, Jian Luan, Bin Wang, Wei Liu
+  url: http://arxiv.org/abs/2410.21216v1
+  published: '2024-10-28'
+  notes: ''
+  tags: []
+- arxiv_id: '2410.08020'
+  title: 'Efficiently Learning at Test-Time: Active Fine-Tuning of LLMs'
+  authors: "Jonas H\xFCbotter, Sascha Bongni, Ido Hakimi, Andreas Krause"
+  url: http://arxiv.org/abs/2410.08020v2
+  published: '2024-10-10'
+  notes: ''
+  tags: []
+- arxiv_id: '2410.02089'
+  title: "RLEF: Grounding Code LLMs in Execution Feedback with Reinforcement\n  Learning"
+  authors: Jonas Gehring, Kunhao Zheng, Jade Copet, Vegard Mella, Taco Cohen, Gabriel
+    Synnaeve
+  url: http://arxiv.org/abs/2410.02089v1
+  published: '2024-10-02'
+  notes: ''
+  tags: []
+- arxiv_id: '2305.19466'
+  title: "The Impact of Positional Encoding on Length Generalization in\n  Transformers"
+  authors: Amirhossein Kazemnejad, Inkit Padhi, Karthikeyan Natesan Ramamurthy, Payel
+    Das, Siva Reddy
+  url: http://arxiv.org/abs/2305.19466v2
+  published: '2023-05-31'
+  notes: ''
+  tags: []
+- arxiv_id: '2412.08905'
+  title: Phi-4 Technical Report
+  authors: "Marah Abdin, Jyoti Aneja, Harkirat Behl, S\xE9bastien Bubeck, Ronen Eldan,\
+    \ Suriya Gunasekar, Michael Harrison, Russell J. Hewett, Mojan Javaheripi, Piero\
+    \ Kauffmann, James R. Lee, Yin Tat Lee, Yuanzhi Li, Weishung Liu, Caio C. T. Mendes,\
+    \ Anh Nguyen, Eric Price, Gustavo de Rosa, Olli Saarikivi, Adil Salim, Shital\
+    \ Shah, Xin Wang, Rachel Ward, Yue Wu, Dingli Yu, Cyril Zhang, Yi Zhang"
+  url: http://arxiv.org/abs/2412.08905v1
+  published: '2024-12-12'
+  notes: ''
+  tags: []
+- arxiv_id: '2411.02272'
+  title: Combining Induction and Transduction for Abstract Reasoning
+  authors: Wen-Ding Li, Keya Hu, Carter Larsen, Yuqing Wu, Simon Alford, Caleb Woo,
+    Spencer M. Dunn, Hao Tang, Michelangelo Naim, Dat Nguyen, Wei-Long Zheng, Zenna
+    Tavares, Yewen Pu, Kevin Ellis
+  url: http://arxiv.org/abs/2411.02272v4
+  published: '2024-11-04'
+  notes: ''
+  tags: []
+- arxiv_id: '2402.18819'
+  title: Dual Operating Modes of In-Context Learning
+  authors: Ziqian Lin, Kangwook Lee
+  url: http://arxiv.org/abs/2402.18819v2
+  published: '2024-02-29'
+  notes: ''
+  tags: []
+- arxiv_id: '2401.12187'
+  title: 'WARM: On the Benefits of Weight Averaged Reward Models'
+  authors: "Alexandre Ram\xE9, Nino Vieillard, L\xE9onard Hussenot, Robert Dadashi,\
+    \ Geoffrey Cideron, Olivier Bachem, Johan Ferret"
+  url: http://arxiv.org/abs/2401.12187v1
+  published: '2024-01-22'
+  notes: ''
+  tags: []
+- arxiv_id: '2407.18219'
+  title: "Recursive Introspection: Teaching Language Model Agents How to\n  Self-Improve"
+  authors: Yuxiao Qu, Tianjun Zhang, Naman Garg, Aviral Kumar
+  url: http://arxiv.org/abs/2407.18219v2
+  published: '2024-07-25'
+  notes: ''
+  tags: []
+- arxiv_id: '2404.10719'
+  title: Is DPO Superior to PPO for LLM Alignment? A Comprehensive Study
+  authors: Shusheng Xu, Wei Fu, Jiaxuan Gao, Wenjie Ye, Weilin Liu, Zhiyu Mei, Guangju
+    Wang, Chao Yu, Yi Wu
+  url: http://arxiv.org/abs/2404.10719v3
+  published: '2024-04-16'
+  notes: ''
+  tags: []
+- arxiv_id: '1506.03134'
+  title: Pointer Networks
+  authors: Oriol Vinyals, Meire Fortunato, Navdeep Jaitly
+  url: http://arxiv.org/abs/1506.03134v2
+  published: '2015-06-09'
+  notes: ''
+  tags: []
+- arxiv_id: '2404.19737'
+  title: Better & Faster Large Language Models via Multi-token Prediction
+  authors: "Fabian Gloeckle, Badr Youbi Idrissi, Baptiste Rozi\xE8re, David Lopez-Paz,\
+    \ Gabriel Synnaeve"
+  url: http://arxiv.org/abs/2404.19737v1
+  published: '2024-04-30'
+  notes: ''
+  tags: []
+- arxiv_id: '2410.21676'
+  title: How Does Critical Batch Size Scale in Pre-training?
+  authors: Hanlin Zhang, Depen Morwani, Nikhil Vyas, Jingfeng Wu, Difan Zou, Udaya
+    Ghai, Dean Foster, Sham Kakade
+  url: http://arxiv.org/abs/2410.21676v2
+  published: '2024-10-29'
+  notes: ''
+  tags: []
+- arxiv_id: '2401.10241'
+  title: Zero Bubble Pipeline Parallelism
+  authors: Penghui Qi, Xinyi Wan, Guangxing Huang, Min Lin
+  url: http://arxiv.org/abs/2401.10241v1
+  published: '2023-11-30'
+  notes: ''
+  tags: []
+- arxiv_id: '2309.00071'
+  title: 'YaRN: Efficient Context Window Extension of Large Language Models'
+  authors: Bowen Peng, Jeffrey Quesnelle, Honglu Fan, Enrico Shippole
+  url: http://arxiv.org/abs/2309.00071v2
+  published: '2023-08-31'
+  notes: ''
+  tags: []
+- arxiv_id: '2402.03300'
+  title: "DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open\n  Language\
+    \ Models"
+  authors: Zhihong Shao, Peiyi Wang, Qihao Zhu, Runxin Xu, Junxiao Song, Xiao Bi,
+    Haowei Zhang, Mingchuan Zhang, Y. K. Li, Y. Wu, Daya Guo
+  url: http://arxiv.org/abs/2402.03300v3
+  published: '2024-02-05'
+  notes: ''
+  tags: []
+- arxiv_id: '2412.19048'
+  title: 'Jasper and Stella: distillation of SOTA embedding models'
+  authors: Dun Zhang, Jiacheng Li, Ziyang Zeng, Fulong Wang
+  url: http://arxiv.org/abs/2412.19048v2
+  published: '2024-12-26'
+  notes: ''
+  tags: []
+- arxiv_id: '1811.01727'
+  title: "AttentionXML: Label Tree-based Attention-Aware Deep Model for\n  High-Performance\
+    \ Extreme Multi-Label Text Classification"
+  authors: Ronghui You, Zihan Zhang, Ziye Wang, Suyang Dai, Hiroshi Mamitsuka, Shanfeng
+    Zhu
+  url: http://arxiv.org/abs/1811.01727v3
+  published: '2018-11-01'
+  notes: ''
+  tags: []
+- arxiv_id: '2401.10774'
+  title: "Medusa: Simple LLM Inference Acceleration Framework with Multiple\n  Decoding\
+    \ Heads"
+  authors: Tianle Cai, Yuhong Li, Zhengyang Geng, Hongwu Peng, Jason D. Lee, Deming
+    Chen, Tri Dao
+  url: http://arxiv.org/abs/2401.10774v3
+  published: '2024-01-19'
+  notes: ''
+  tags: []
+- arxiv_id: '2212.04089'
+  title: Editing Models with Task Arithmetic
+  authors: Gabriel Ilharco, Marco Tulio Ribeiro, Mitchell Wortsman, Suchin Gururangan,
+    Ludwig Schmidt, Hannaneh Hajishirzi, Ali Farhadi
+  url: http://arxiv.org/abs/2212.04089v3
+  published: '2022-12-08'
+  notes: ''
+  tags: []
+- arxiv_id: '2306.01708'
+  title: 'TIES-Merging: Resolving Interference When Merging Models'
+  authors: Prateek Yadav, Derek Tam, Leshem Choshen, Colin Raffel, Mohit Bansal
+  url: http://arxiv.org/abs/2306.01708v2
+  published: '2023-06-02'
+  notes: ''
+  tags: []
+- arxiv_id: '2311.03099'
+  title: "Language Models are Super Mario: Absorbing Abilities from Homologous\n \
+    \ Models as a Free Lunch"
+  authors: Le Yu, Bowen Yu, Haiyang Yu, Fei Huang, Yongbin Li
+  url: http://arxiv.org/abs/2311.03099v3
+  published: '2023-11-06'
+  notes: ''
+  tags: []
+- arxiv_id: '2305.16264'
+  title: Scaling Data-Constrained Language Models
+  authors: Niklas Muennighoff, Alexander M. Rush, Boaz Barak, Teven Le Scao, Aleksandra
+    Piktus, Nouamane Tazi, Sampo Pyysalo, Thomas Wolf, Colin Raffel
+  url: http://arxiv.org/abs/2305.16264v4
+  published: '2023-05-25'
+  notes: ''
+  tags: []
+- arxiv_id: '2312.08935'
+  title: "Math-Shepherd: Verify and Reinforce LLMs Step-by-step without Human\n  Annotations"
+  authors: Peiyi Wang, Lei Li, Zhihong Shao, R. X. Xu, Damai Dai, Yifei Li, Deli Chen,
+    Y. Wu, Zhifang Sui
+  url: http://arxiv.org/abs/2312.08935v3
+  published: '2023-12-14'
+  notes: ''
+  tags: []
+- arxiv_id: '2102.07227'
+  title: 'Learning by Turning: Neural Architecture Aware Optimisation'
+  authors: Yang Liu, Jeremy Bernstein, Markus Meister, Yisong Yue
+  url: http://arxiv.org/abs/2102.07227v2
+  published: '2021-02-14'
+  notes: ''
+  tags: []
+- arxiv_id: '1806.01603'
+  title: "Layer rotation: a surprisingly powerful indicator of generalization in\n\
+    \  deep networks?"
+  authors: Simon Carbonnelle, Christophe De Vleeschouwer
+  url: http://arxiv.org/abs/1806.01603v2
+  published: '2018-06-05'
+  notes: ''
+  tags: []
+- arxiv_id: '2011.14522'
+  title: Feature Learning in Infinite-Width Neural Networks
+  authors: Greg Yang, Edward J. Hu
+  url: http://arxiv.org/abs/2011.14522v3
+  published: '2020-11-30'
+  notes: ''
+  tags: []
+- arxiv_id: '2002.03432'
+  title: "On the distance between two neural networks and the stability of\n  learning"
+  authors: Jeremy Bernstein, Arash Vahdat, Yisong Yue, Ming-Yu Liu
+  url: http://arxiv.org/abs/2002.03432v3
+  published: '2020-02-09'
+  notes: ''
+  tags: []
+- arxiv_id: '1802.05957'
+  title: Spectral Normalization for Generative Adversarial Networks
+  authors: Takeru Miyato, Toshiki Kataoka, Masanori Koyama, Yuichi Yoshida
+  url: http://arxiv.org/abs/1802.05957v1
+  published: '2018-02-16'
+  notes: ''
+  tags: []
+- arxiv_id: '2206.10012'
+  title: Limitations of the NTK for Understanding Generalization in Deep Learning
+  authors: Nikhil Vyas, Yamini Bansal, Preetum Nakkiran
+  url: http://arxiv.org/abs/2206.10012v1
+  published: '2022-06-20'
+  notes: ''
+  tags: []
+- arxiv_id: '1812.07956'
+  title: On Lazy Training in Differentiable Programming
+  authors: Lenaic Chizat, Edouard Oyallon, Francis Bach
+  url: http://arxiv.org/abs/1812.07956v5
+  published: '2018-12-19'
+  notes: ''
+  tags: []
 - arxiv_id: '2210.04909'
   title: Meta-Principled Family of Hyperparameter Scaling Strategies
   authors: Sho Yaida
   url: http://arxiv.org/abs/2210.04909v2
   published: '2022-10-10'
-  notes: read for fun
-  tags:
-  - Tag1
-  - Tag3
+  notes: ''
+  tags: []
 - arxiv_id: '1906.08034'
   title: Disentangling feature and lazy training in deep neural networks
   authors: Mario Geiger, Stefano Spigler, Arthur Jacot, Matthieu Wyart
   url: http://arxiv.org/abs/1906.08034v4
   published: '2019-06-19'
-  notes: test
-  tags:
-  - Tag1
-  - Tag2
-- arxiv_id: '1901.08584'
-  title: "Fine-Grained Analysis of Optimization and Generalization for\n  Overparameterized\
-    \ Two-Layer Neural Networks"
-  authors: Sanjeev Arora, Simon S. Du, Wei Hu, Zhiyuan Li, Ruosong Wang
-  url: http://arxiv.org/abs/1901.08584v2
-  published: '2019-01-24'
-  notes: another one
-  tags:
-  - Deep Learning
+  notes: ''
+  tags: []
+- arxiv_id: '1805.00915'
+  title: "Trainability and Accuracy of Neural Networks: An Interacting Particle\n\
+    \  System Approach"
+  authors: Grant M. Rotskoff, Eric Vanden-Eijnden
+  url: http://arxiv.org/abs/1805.00915v3
+  published: '2018-05-02'
+  notes: ''
+  tags: []
