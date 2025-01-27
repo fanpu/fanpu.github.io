@@ -1324,13 +1324,6 @@
   published: '2024-09-30'
   notes: ''
   tags: []
-- arxiv_id: '2310.17813'
-  title: A Spectral Condition for Feature Learning
-  authors: Greg Yang, James B. Simon, Jeremy Bernstein
-  url: http://arxiv.org/abs/2310.17813v2
-  published: '2023-10-26'
-  notes: ''
-  tags: []
 - arxiv_id: '1708.00523'
   title: "The duality structure gradient descent algorithm: analysis and\n  applications\
     \ to neural networks"
@@ -1759,13 +1752,6 @@
   published: '2020-11-30'
   notes: ''
   tags: []
-- arxiv_id: '2002.03432'
-  title: "On the distance between two neural networks and the stability of\n  learning"
-  authors: Jeremy Bernstein, Arash Vahdat, Yisong Yue, Ming-Yu Liu
-  url: http://arxiv.org/abs/2002.03432v3
-  published: '2020-02-09'
-  notes: ''
-  tags: []
 - arxiv_id: '1802.05957'
   title: Spectral Normalization for Generative Adversarial Networks
   authors: Takeru Miyato, Toshiki Kataoka, Masanori Koyama, Yuichi Yoshida
@@ -1809,3 +1795,26 @@
   published: '2018-05-02'
   notes: ''
   tags: []
+- arxiv_id: '2310.17813'
+  title: A Spectral Condition for Feature Learning
+  authors: Greg Yang, James B. Simon, Jeremy Bernstein
+  url: http://arxiv.org/abs/2310.17813v2
+  published: '2023-10-26'
+  notes: Shows that using spectral instead of Frobenius norm to analyze how NNs change
+    during training is the right framing. Good summary & generalization of previous
+    Tensor Program series of work.
+  tags:
+  - NTK
+  - Tensor Programs
+  - MUP
+- arxiv_id: '2002.03432'
+  title: "On the distance between two neural networks and the stability of\n  learning"
+  authors: Jeremy Bernstein, Arash Vahdat, Yisong Yue, Ming-Yu Liu
+  url: http://arxiv.org/abs/2002.03432v3
+  published: '2020-02-09'
+  notes: Derived a spectral analysis of feature learning based on perturbation bounds,
+    but obtained wrong scaling relation with network width due to flawed conditioning
+    assumption on gradients
+  tags:
+  - Feature Learning
+  - Optimizers

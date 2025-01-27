@@ -24,10 +24,10 @@ giscus_comments: true
           <h6 class="title font-weight-bold ml-1 ml-md-4">
             {{ forloop.index }}. <a href="{{ paper.url }}">{{ paper.title }}</a>
           </h6>
-          <h6 class="ml-1 ml-md-4" style="font-size: 0.95rem; font-style: italic">
+          <h6 class="ml-1 ml-md-4" style="font-size: 0.95rem; font-style: italic; color: #888">
             {{ paper.authors }}
           </h6>
-          <h6 class="ml-1 ml-md-4" style="font-size: 0.95rem; font-style: italic">
+          <h6 class="ml-1 ml-md-4" style="font-size: 0.95rem">
             {{ paper.notes }}
           </h6>
 
