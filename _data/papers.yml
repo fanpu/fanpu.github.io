@@ -2118,3 +2118,19 @@
   - Batchnorm
   - Regularization
   - Mean Field Theory
+- arxiv_id: '2105.10386'
+  title: Analysis of Boolean Functions
+  authors: Ryan O'Donnell
+  url: http://arxiv.org/abs/2105.10386v1
+  published: '2021-05-21'
+  notes: Contains results on Hermite polynomials that can be useful for DL
+  tags: []
+- arxiv_id: '1910.12478'
+  title: "Tensor Programs I: Wide Feedforward or Recurrent Neural Networks of Any\n\
+    \  Architecture are Gaussian Processes"
+  authors: Greg Yang
+  url: http://arxiv.org/abs/1910.12478v3
+  published: '2019-10-28'
+  notes: Framework for analyzing modern NN architectures. Pretty notation heavy though.
+  tags:
+  - Tensor Programs
