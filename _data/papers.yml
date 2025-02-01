@@ -1951,3 +1951,88 @@
   - Efficient Architectures
   - Multi-token Prediction
   - Load Balancing
+- arxiv_id: '1502.03167'
+  title: "Batch Normalization: Accelerating Deep Network Training by Reducing\n  Internal\
+    \ Covariate Shift"
+  authors: Sergey Ioffe, Christian Szegedy
+  url: http://arxiv.org/abs/1502.03167v3
+  published: '2015-02-11'
+  notes: Batchnorm paper
+  tags:
+  - Normalization
+- arxiv_id: '1508.05133'
+  title: Steps Toward Deep Kernel Methods from Infinite Neural Networks
+  authors: Tamir Hazan, Tommi Jaakkola
+  url: http://arxiv.org/abs/1508.05133v2
+  published: '2015-08-20'
+  notes: GP behavior on wide NNs under other conditions
+  tags:
+  - NN Scaling
+  - Gaussian Process
+- arxiv_id: '1711.00165'
+  title: Deep Neural Networks as Gaussian Processes
+  authors: Jaehoon Lee, Yasaman Bahri, Roman Novak, Samuel S. Schoenholz, Jeffrey
+    Pennington, Jascha Sohl-Dickstein
+  url: http://arxiv.org/abs/1711.00165v3
+  published: '2017-11-01'
+  notes: Scaling limit for infinite width MLPs
+  tags:
+  - NN Scaling
+  - Gaussian Process
+- arxiv_id: '1810.05148'
+  title: "Bayesian Deep Convolutional Networks with Many Channels are Gaussian\n \
+    \ Processes"
+  authors: Roman Novak, Lechao Xiao, Jaehoon Lee, Yasaman Bahri, Greg Yang, Jiri Hron,
+    Daniel A. Abolafia, Jeffrey Pennington, Jascha Sohl-Dickstein
+  url: http://arxiv.org/abs/1810.05148v4
+  published: '2018-10-11'
+  notes: Showed equivalence betw infinitely wide CNNs to GPs
+  tags:
+  - NN Scaling
+  - Gaussian Process
+- arxiv_id: '1502.01852'
+  title: "Delving Deep into Rectifiers: Surpassing Human-Level Performance on\n  ImageNet\
+    \ Classification"
+  authors: Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
+  url: http://arxiv.org/abs/1502.01852v1
+  published: '2015-02-06'
+  notes: He initialization
+  tags:
+  - Initialization
+- arxiv_id: '1606.05340'
+  title: Exponential expressivity in deep neural networks through transient chaos
+  authors: Ben Poole, Subhaneil Lahiri, Maithra Raghu, Jascha Sohl-Dickstein, Surya
+    Ganguli
+  url: http://arxiv.org/abs/1606.05340v2
+  published: '2016-06-16'
+  notes: Signal propagation in NNs, NN expressivitiy
+  tags:
+  - Signal Propagation
+- arxiv_id: '2402.06184'
+  title: The boundary of neural network trainability is fractal
+  authors: Jascha Sohl-Dickstein
+  url: http://arxiv.org/abs/2402.06184v1
+  published: '2024-02-09'
+  notes: Boundary between trainable and untrainable NN hyperparameters is fractal,
+    nice visualizations
+  tags:
+  - Trainability Boundaries
+  - Art
+- arxiv_id: '1806.05393'
+  title: "Dynamical Isometry and a Mean Field Theory of CNNs: How to Train\n  10,000-Layer\
+    \ Vanilla Convolutional Neural Networks"
+  authors: Lechao Xiao, Yasaman Bahri, Jascha Sohl-Dickstein, Samuel S. Schoenholz,
+    Jeffrey Pennington
+  url: http://arxiv.org/abs/1806.05393v2
+  published: '2018-06-14'
+  notes: Training 10k layer CNN w/o batcnorm or skip connections
+  tags:
+  - Initialization
+- arxiv_id: '1611.01232'
+  title: Deep Information Propagation
+  authors: Samuel S. Schoenholz, Justin Gilmer, Surya Ganguli, Jascha Sohl-Dickstein
+  url: http://arxiv.org/abs/1611.01232v2
+  published: '2016-11-04'
+  notes: Mean field theory for backprop
+  tags:
+  - Mean Field Theory
