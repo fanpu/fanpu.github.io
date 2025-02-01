@@ -2036,3 +2036,85 @@
   notes: Mean field theory for backprop
   tags:
   - Mean Field Theory
+- arxiv_id: '1712.08969'
+  title: 'Mean Field Residual Networks: On the Edge of Chaos'
+  authors: Greg Yang, Samuel S. Schoenholz
+  url: http://arxiv.org/abs/1712.08969v1
+  published: '2017-12-24'
+  notes: Edge of chaos MFT
+  tags:
+  - Mean Field Theory
+- arxiv_id: '1808.07172'
+  title: Fisher Information and Natural Gradient Learning of Random Deep Networks
+  authors: Shun-ichi Amari, Ryo Karakida, Masafumi Oizumi
+  url: http://arxiv.org/abs/1808.07172v1
+  published: '2018-08-22'
+  notes: Spectral properties of the empirical Fisher information matrix of random
+    NNs
+  tags:
+  - Fisher Information
+  - Natural Gradient
+- arxiv_id: '1806.01316'
+  title: "Universal Statistics of Fisher Information in Deep Neural Networks: Mean\n\
+    \  Field Approach"
+  authors: Ryo Karakida, Shotaro Akaho, Shun-ichi Amari
+  url: http://arxiv.org/abs/1806.01316v3
+  published: '2018-06-04'
+  notes: Spectral properties of the empirical Fisher information matrix of random
+    NNs
+  tags:
+  - Fisher Information
+  - Natural Gradient
+- arxiv_id: '1809.06042'
+  title: Path Integral Approach to Random Neural Networks
+  authors: A. Crisanti, H. Sompolinsky
+  url: http://arxiv.org/abs/1809.06042v2
+  published: '2018-09-17'
+  notes: Random classic spiking networks
+  tags: []
+- arxiv_id: '0907.3574'
+  title: Message Passing Algorithms for Compressed Sensing
+  authors: David L. Donoho, Arian Maleki, Andrea Montanari
+  url: http://arxiv.org/abs/0907.3574v1
+  published: '2009-07-21'
+  notes: Approximate message passing
+  tags:
+  - Message Passing
+  - Compressed Sensing
+- arxiv_id: '1602.05897'
+  title: "Toward Deeper Understanding of Neural Networks: The Power of\n  Initialization\
+    \ and a Dual View on Expressivity"
+  authors: Amit Daniely, Roy Frostig, Yoram Singer
+  url: http://arxiv.org/abs/1602.05897v2
+  published: '2016-02-18'
+  notes: ''
+  tags: []
+- arxiv_id: '1607.06450'
+  title: Layer Normalization
+  authors: Jimmy Lei Ba, Jamie Ryan Kiros, Geoffrey E. Hinton
+  url: http://arxiv.org/abs/1607.06450v1
+  published: '2016-07-21'
+  notes: Introduced layer norm
+  tags:
+  - Normalization
+- arxiv_id: '1001.3448'
+  title: "The dynamics of message passing on dense graphs, with applications to\n\
+    \  compressed sensing"
+  authors: Mohsen Bayati, Andrea Montanari
+  url: http://arxiv.org/abs/1001.3448v4
+  published: '2010-01-20'
+  notes: Introduces a useful Gaussian conditioning technique
+  tags:
+  - Approximate Message Passing
+  - Compressed Sensing
+- arxiv_id: '1902.08129'
+  title: A Mean Field Theory of Batch Normalization
+  authors: Greg Yang, Jeffrey Pennington, Vinay Rao, Jascha Sohl-Dickstein, Samuel
+    S. Schoenholz
+  url: http://arxiv.org/abs/1902.08129v2
+  published: '2019-02-21'
+  notes: ''
+  tags:
+  - Batchnorm
+  - Regularization
+  - Mean Field Theory
