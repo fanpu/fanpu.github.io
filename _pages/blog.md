@@ -1,22 +1,20 @@
 ---
 layout: default
 permalink: /blog/
-title: Blog
+title: blog
 nav: true
 nav_order: 1
 pagination:
   enabled: true
   collection: posts
   permalink: /page/:num/
-  per_page: 20
+  per_page: 5
   sort_field: date
   sort_reverse: true
   trail:
     before: 1 # The number of links before the current page
     after: 3 # The number of links after the current page
 ---
-
-{% include scripts/mathjax_macros.html %}
 
 <div class="post">
 
@@ -122,22 +120,14 @@ pagination:
     {% assign tags = post.tags | join: "" %}
     {% assign categories = post.categories | join: "" %}
 
-    {% if post.cover_preview %}
-      {% assign image_url = post.cover_preview | prepend: '/assets/img/posts/' | relative_url %}
-    {% else %}
-      {% assign image_url = post.cover | prepend: '/assets/img/posts/' | relative_url %}
-    {% endif %}
-
     <li>
-      <div class="row">
-        <div class="col-sm-6">
-          <a href="{{ post.url | prepend: site.url }}">
-            {% include figure.liquid path=image_url width="100%"
-            height="240px" class="preview z-depth-1 rounded" %}
-          </a>
-        </div>
-        <div class="col-sm-6">
-      <h3>
+
+{% if post.thumbnail %}
+
+<div class="row">
+          <div class="col-sm-9">
+{% endif %}
+        <h3>
         {% if post.redirect == blank %}
           <a class="post-title" href="{{ post.url | relative_url }}">{{ post.title }}</a>
         {% elsif post.redirect contains '://' %}
@@ -184,16 +174,23 @@ pagination:
           {% endif %}
     </p>
 
-        </div>
-      </div>
+{% if post.thumbnail %}
+
+</div>
+
+  <div class="col-sm-3">
+    <img class="card-img" src="{{ post.thumbnail | relative_url }}" style="object-fit: cover; height: 90%" alt="image">
+  </div>
+</div>
+{% endif %}
     </li>
 
     {% endfor %}
 
   </ul>
 
-{%- if page.pagination.enabled -%}
-{%- include pagination.liquid -%}
-{%- endif -%}
+{% if page.pagination.enabled %}
+{% include pagination.liquid %}
+{% endif %}
 
 </div>

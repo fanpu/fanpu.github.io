@@ -5,7 +5,7 @@
     <video
       src="{% if include.cache_bust %}{{ include.path | relative_url | bust_file_cache }}{% else %}{{ include.path | relative_url }}{% endif %}"
       {% if include.class %}
-        class="{{ include.class }} center"
+        class="{{ include.class }}"
       {% endif %}
       {% if include.width %}
         width="{{ include.width }}"

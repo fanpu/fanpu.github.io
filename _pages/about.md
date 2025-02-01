@@ -1,119 +1,34 @@
 ---
 layout: about
-title: About
+title: about
 permalink: /
-subtitle: Software Engineer at <a href='https://www.janestreet.com/'>Jane Street</a> based in New York
+subtitle: <a href='#'>Affiliations</a>. Address. Contacts. Motto. Etc.
 
 profile:
-  align: left
-  image: untermyer_closer.webp
+  align: right
+  image: prof_pic.jpg
   image_circular: false # crops the image to make it circular
   more_info: >
+    <p>555 your office number</p>
+    <p>123 your address street</p>
+    <p>Your City, State 12345</p>
 
-news: true # includes a list of news items
-selected_papers: false # includes a list of papers marked as "selected={true}"
-selected_posts: true # includes a list of posts marked as "selected={true}"
-latest_posts: false # includes a list of the newest posts
+selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
+
+announcements:
+  enabled: true # includes a list of news items
+  scrollable: true # adds a vertical scroll bar if there are more than 3 news items
+  limit: 5 # leave blank to include all the news in the `_news` folder
+
+latest_posts:
+  enabled: true
+  scrollable: true # adds a vertical scroll bar if there are more than 3 new posts items
+  limit: 3 # leave blank to include all the blog posts
 ---
 
-Hello! I am Fan Pu, and I help large language models have a good time at [Jane Street](https://www.janestreet.com/) on the AI Assistants team.
+Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](http://reddit.com). You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
 
-Specifically, I work on fine-tuning LLMs to be proficient at writing OCaml,
-crafting evals for a variety of (mostly coding-related) tasks that we care
-about, and leading the development of several in-house RAG use cases, including
-for trading.
+Put your address / P.O. box / other info right below your picture. You can also disable any of these elements by editing `profile` property of the YAML header of your `_pages/about.md`. Edit `_bibliography/papers.bib` and Jekyll will render your [publications page](/al-folio/publications/) automatically.
 
-_(2025-01-01) Our team is hiring_ - if this work sounds interesting to you and
-you have strong software engineering skills and a machine learning background,
-please shoot me an email!
-
-I graduated with a B.S (2022) and M.S (2023) in Computer
-Science from [Carnegie Mellon University](https://www.cmu.edu/).
-
-At CMU, I was actively involved in the open-source programming assignment
-auto-grading platform [Autolab](https://autolabproject.com/) from 2018-2023. I
-served as the Masters Student Liaison for the [Singapore Students
-Association](https://cmussa.org/). I also used to play Capture-The-Flag (CTF)
-competitions with [PPP](https://pwning.net/). I previously interned at [Jane
-Street](https://www.janestreet.com/), [Meta](https://about.meta.com/),
-[Asana](https://asana.com/), and [Saleswhale](https://www.saleswhale.com/)
-(acquired 2022). I was a TA for [10-708 Probabilistic Graphical
-Models](https://andrejristeski.github.io/10708-S23/) in the Spring 2023
-semester.
-
-My current academic interests lies in understanding reasoning in large language
-models and exploring the theoretical foundations of deep learning. Specifically,
-I am interested in the principles underlying generalization and the mechanisms
-contributing to the effectiveness of optimization algorithms.
-
-In my free time, I enjoy bouldering, K-pop dance, running, reading and
-learning new things, writing things for my blog, and watching anime. I used to
-do sprint canoe competitively. If I have an extended break I enjoy traveling,
-especially hiking and exploring the great outdoors. Most of the banner pictures
-on my blog posts were taken during these hikes. My favorite classroom in CMU is
-GHC 4303.
-
-I grew up in my hometown Singapore before moving to the US for college and work.
-I try to go back and visit once a year.
-
-Feel free to reach out to me at fzeng[at]alumni[dot]cmu[dot]edu. I am happy to
-chat and provide advice.
-
-Regrettably, I am unable to provide referrals for people that I have not
-directly collaborated with, as I cannot write you a meaningful recommendation.
-
-I have a Technician amateur radio license, with callsign
-[KC3UFE](https://www.fccbulletin.com/callsign/?q=KC3UFE).
-
-This blog was originally started on 24 June 2018, although it has taken many
-forms since then. All banner pictures on the blog are taken by yours truly!
-
-### Talks
-
-Slides I developed for talks on various LLM-related topics.
-You are free to share, adapt, and reuse these
-materials, provided that you give appropriate credit.
-
-- (2024-11-18) [A Statistical Approach to Language Model Evaluations]({% link
-  /assets/presentations/Statistics for Evals.pdf %})
-- (2024-10-08) [Advanced Retrieval Augmented Generation Techniques]({% link
-  /assets/presentations/Advanced Retrieval Augmented Generation.pdf %})
-- (2024-07-24) [Superalignment, or how to train models smarter than us]({% link
-  /assets/presentations/Superalignment.pdf %})
-- (2024-05-03) [Rotary Positional Embeddings (RoPE)]({% link
-  /assets/presentations/Rotary Positional Embeddings.pdf %})
-- (2024-04-30) [Parameter-Efficient Fine-Tuning]({% link
-  /assets/presentations/Parameter Efficient Fine-Tuning.pdf %})
-- (2024-03-01) [Understanding Transformers]({% link
-  /assets/presentations/Understanding Transformers.pdf %})
-
-### Starred Blog Posts
-
-Some of my more popular posts:
-
-**Technical Posts**
-
-- [Score-Based Diffusion Models]({% post_url 2023-06-07-score-based-diffusion-models %})
-- [Bounding Mixing Times of Markov Chains via the Spectral Gap]({% post_url 2025-01-12-bounding-markov-chain-mixing-times-by-spectral-gap %})
-- [An Intuitive Introduction to Gaussian Processes]({% post_url 2025-01-21-gaussian-processes %})
-- [(Paper Summary) Zero-shot Image-to-Image Translation]({% link _summaries/2023-10-22-zero-shot-image-to-image-translation.markdown %})
-- [(Paper Summary) The Implicit Bias of Gradient Descent on Separable Data]({% link _summaries/2023-09-09-the-implicit-bias-of-gradient-descent-on-separable-data.markdown %})
-- [A Unified Framework for High-Dimensional Analysis of M-Estimators with Decomposable Regularizers: A Guided Walkthrough]({% post_url 2023-07-14-high-dimensional-analysis-of-m-estimators %})
-- [The Delightful Consequences of the Graph Minor Theorem]({% post_url 2022-06-01-the-delightful-consequences-of-the-graph-minor-theorem %})
-- [Universal types, and your type checker doesn't suck as much as you think]({% post_url 2022-01-11-universal-types %})
-
-**General**
-
-- [The Art of LaTeX: Common Mistakes, and Advice for Typesetting Beautiful, Delightful Proofs]({% post_url 2023-01-02-latex-tips %})
-- [Against Government Scholarships]({% post_url
-  2021-12-24-against-government-scholarships %})
-- [Notes On Founding A Startup To My Future Self]({% post_url
-  2018-07-31-notes-on-founding-a-startup-to-my-future-self %})
-
-**CMU**
-
-- [CMU 15-712 Advanced Operating Systems and Distributed Systems Course Review]({% post_url 2023-06-09-advanced-operating-systems-course-review %})
-- [CMU 15-441/641 Computer Networks Course Review]({% post_url 2022-08-15-cmu-computer-networks-review %})
-- [My Sharing at the Hwa Chong Undergrad Alumni Forum]({% post_url
-    2022-06-22-cmu-scs-ecg-talk %}), i.e. why study Computer Science at CMU
+Link to your social media connections, too. This theme is set up to use [Font Awesome icons](https://fontawesome.com/) and [Academicons](https://jpswalsh.github.io/academicons/), like the ones below. Add your Facebook, Twitter, LinkedIn, Google Scholar, or just disable all of them.
