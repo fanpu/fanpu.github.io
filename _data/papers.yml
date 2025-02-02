@@ -2134,3 +2134,114 @@
   notes: Framework for analyzing modern NN architectures. Pretty notation heavy though.
   tags:
   - Tensor Programs
+- arxiv_id: '2006.14548'
+  title: 'Tensor Programs II: Neural Tangent Kernel for Any Architecture'
+  authors: Greg Yang
+  url: http://arxiv.org/abs/2006.14548v4
+  published: '2020-06-25'
+  notes: Provides a good overview of NTK. Some nice discussions on Gradient Independence
+    Assumption (GIA). Extends TP I language to RNNs
+  tags:
+  - Tensor Programs
+  - NTK
+- arxiv_id: '1807.11694'
+  title: "Spectrum concentration in deep residual learning: a free probability\n \
+    \ approach"
+  authors: Zenan Ling, Xing He, Robert C. Qiu
+  url: http://arxiv.org/abs/1807.11694v3
+  published: '2018-07-31'
+  notes: Random matrix theory applied to DL
+  tags:
+  - Random Matrix Theory
+- arxiv_id: '1802.09979'
+  title: The Emergence of Spectral Universality in Deep Networks
+  authors: Jeffrey Pennington, Samuel S. Schoenholz, Surya Ganguli
+  url: http://arxiv.org/abs/1802.09979v1
+  published: '2018-02-27'
+  notes: Random matrix theory applied to DL
+  tags:
+  - Random Matrix Theory
+- arxiv_id: '1809.08848'
+  title: "Dynamical Isometry is Achieved in Residual Networks in a Universal Way\n\
+    \  for any Activation Function"
+  authors: "Wojciech Tarnowski, Piotr Warcho\u0142, Stanis\u0142aw Jastrz\u0119bski,\
+    \ Jacek Tabor, Maciej A. Nowak"
+  url: http://arxiv.org/abs/1809.08848v3
+  published: '2018-09-24'
+  notes: Random matrix theory applied to DL
+  tags:
+  - Random Matrix Theory
+- arxiv_id: '1711.04735'
+  title: "Resurrecting the sigmoid in deep learning through dynamical isometry:\n\
+    \  theory and practice"
+  authors: Jeffrey Pennington, Samuel S. Schoenholz, Surya Ganguli
+  url: http://arxiv.org/abs/1711.04735v1
+  published: '2017-11-13'
+  notes: Shows that if Jacobian singular value distribution of a wide NN concentrates
+    around 1 even when network gets deper, error signal largely preserved and all
+    layers get signal to improve
+  tags:
+  - Dynamical Isometry
+  - Random Matrix Theory
+- arxiv_id: '1804.11271'
+  title: Gaussian Process Behaviour in Wide Deep Neural Networks
+  authors: Alexander G. de G. Matthews, Mark Rowland, Jiri Hron, Richard E. Turner,
+    Zoubin Ghahramani
+  url: http://arxiv.org/abs/1804.11271v2
+  published: '2018-04-30'
+  notes: GP behavior of wide nets
+  tags:
+  - Gaussian Process
+  - NN Scaling
+- arxiv_id: '1801.03744'
+  title: "Which Neural Net Architectures Give Rise To Exploding and Vanishing\n  Gradients?"
+  authors: Boris Hanin
+  url: http://arxiv.org/abs/1801.03744v3
+  published: '2018-01-11'
+  notes: Signal progation in NN with random weights
+  tags:
+  - Signal Propagation
+- arxiv_id: '1806.00179'
+  title: "The Nonlinearity Coefficient - Predicting Generalization in Deep Neural\n\
+    \  Networks"
+  authors: George Philipp, Jaime G. Carbonell
+  url: http://arxiv.org/abs/1806.00179v2
+  published: '2018-06-01'
+  notes: Signal progation in NN with random weights
+  tags:
+  - Signal Propagation
+  - Generalization
+- arxiv_id: '1811.08888'
+  title: "Stochastic Gradient Descent Optimizes Over-parameterized Deep ReLU\n  Networks"
+  authors: Difan Zou, Yuan Cao, Dongruo Zhou, Quanquan Gu
+  url: http://arxiv.org/abs/1811.08888v3
+  published: '2018-11-21'
+  notes: Wide NNs behave as linear models
+  tags:
+  - Overparameterization
+- arxiv_id: '2006.10246'
+  title: The Recurrent Neural Tangent Kernel
+  authors: Sina Alemohammad, Zichao Wang, Randall Balestriero, Richard Baraniuk
+  url: http://arxiv.org/abs/2006.10246v4
+  published: '2020-06-18'
+  notes: NTK for RNNs
+  tags:
+  - NTK
+- arxiv_id: '1902.04760'
+  title: "Scaling Limits of Wide Neural Networks with Weight Sharing: Gaussian\n \
+    \ Process Behavior, Gradient Independence, and Neural Tangent Kernel Derivation"
+  authors: Greg Yang
+  url: http://arxiv.org/abs/1902.04760v3
+  published: '2019-02-13'
+  notes: NTK
+  tags:
+  - NTK
+- arxiv_id: '2006.10956'
+  title: Haar Measures
+  authors: Stephan Tornier
+  url: http://arxiv.org/abs/2006.10956v1
+  published: '2020-06-19'
+  notes: Used in RMT
+  tags:
+  - Random Matrix Theory
+  - Free Probability
