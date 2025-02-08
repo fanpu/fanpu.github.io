@@ -2153,14 +2153,6 @@
   notes: Random matrix theory applied to DL
   tags:
   - Random Matrix Theory
-- arxiv_id: '1802.09979'
-  title: The Emergence of Spectral Universality in Deep Networks
-  authors: Jeffrey Pennington, Samuel S. Schoenholz, Surya Ganguli
-  url: http://arxiv.org/abs/1802.09979v1
-  published: '2018-02-27'
-  notes: Random matrix theory applied to DL
-  tags:
-  - Random Matrix Theory
 - arxiv_id: '1809.08848'
   title: "Dynamical Isometry is Achieved in Residual Networks in a Universal Way\n\
     \  for any Activation Function"
@@ -2245,3 +2237,21 @@
   tags:
   - Random Matrix Theory
   - Free Probability
+- arxiv_id: '0911.0087'
+  title: Free Probability Theory
+  authors: Roland Speicher
+  url: http://arxiv.org/abs/0911.0087v1
+  published: '2009-10-31'
+  notes: Reference for free probability
+  tags:
+  - Free Probability
+- arxiv_id: '1802.09979'
+  title: The Emergence of Spectral Universality in Deep Networks
+  authors: Jeffrey Pennington, Samuel S. Schoenholz, Surya Ganguli
+  url: http://arxiv.org/abs/1802.09979v1
+  published: '2018-02-27'
+  notes: Studied MLP's Jacobian singular value distribution in the limit of large
+    width
+  tags:
+  - Random Matrix Theory
+  - Singular Value Distribution
