@@ -1292,15 +1292,6 @@
   published: '2021-02-25'
   notes: ''
   tags: []
-- arxiv_id: '1406.2572'
-  title: "Identifying and attacking the saddle point problem in high-dimensional\n\
-    \  non-convex optimization"
-  authors: Yann Dauphin, Razvan Pascanu, Caglar Gulcehre, Kyunghyun Cho, Surya Ganguli,
-    Yoshua Bengio
-  url: http://arxiv.org/abs/1406.2572v1
-  published: '2014-06-10'
-  notes: ''
-  tags: []
 - arxiv_id: '2409.20325'
   title: 'Old Optimizer, New Norm: An Anthology'
   authors: Jeremy Bernstein, Laker Newhouse
@@ -1322,14 +1313,6 @@
   authors: Mikhail Belkin
   url: http://arxiv.org/abs/2105.14368v1
   published: '2021-05-29'
-  notes: ''
-  tags: []
-- arxiv_id: '1810.05369'
-  title: "Regularization Matters: Generalization and Optimization of Neural Nets\n\
-    \  v.s. their Induced Kernel"
-  authors: Colin Wei, Jason D. Lee, Qiang Liu, Tengyu Ma
-  url: http://arxiv.org/abs/1810.05369v4
-  published: '2018-10-12'
   notes: ''
   tags: []
 - arxiv_id: '2402.13728'
@@ -2255,3 +2238,81 @@
   tags:
   - Random Matrix Theory
   - Singular Value Distribution
+- arxiv_id: '1702.08503'
+  title: SGD Learns the Conjugate Kernel Class of the Network
+  authors: Amit Daniely
+  url: http://arxiv.org/abs/1702.08503v2
+  published: '2017-02-27'
+  notes: Function classes learnable via SGD
+  tags:
+  - SGD
+  - Expressivity
+  - Deep Learning Theory
+- arxiv_id: '1811.03804'
+  title: Gradient Descent Finds Global Minima of Deep Neural Networks
+  authors: Simon S. Du, Jason D. Lee, Haochuan Li, Liwei Wang, Xiyu Zhai
+  url: http://arxiv.org/abs/1811.03804v4
+  published: '2018-11-09'
+  notes: Shows GD converges to global minimizer with 0 train loss for width m depth
+    L resnet ReLU activations where m=O(n^4 L^2)
+  tags:
+  - Optimization
+  - Convergence
+  - Gradient Descent
+- arxiv_id: '1810.05369'
+  title: "Regularization Matters: Generalization and Optimization of Neural Nets\n\
+    \  v.s. their Induced Kernel"
+  authors: Colin Wei, Jason D. Lee, Qiang Liu, Tengyu Ma
+  url: http://arxiv.org/abs/1810.05369v4
+  published: '2018-10-12'
+  notes: ''
+  tags:
+  - NTK
+  - RKHS
+- arxiv_id: '2410.14706'
+  title: Transformers are Efficient Compilers, Provably
+  authors: Xiyu Zhai, Runlong Zhou, Liao Zhang, Simon Shaolei Du
+  url: http://arxiv.org/abs/2410.14706v2
+  published: '2024-10-07'
+  notes: ''
+  tags: []
+- arxiv_id: '1406.2572'
+  title: "Identifying and attacking the saddle point problem in high-dimensional\n\
+    \  non-convex optimization"
+  authors: Yann Dauphin, Razvan Pascanu, Caglar Gulcehre, Kyunghyun Cho, Surya Ganguli,
+    Yoshua Bengio
+  url: http://arxiv.org/abs/1406.2572v1
+  published: '2014-06-10'
+  notes: Shows there are high number of saddle points in NN optimization
+  tags:
+  - Optimization
+  - Loss Surface
+- arxiv_id: '1405.4604'
+  title: On the saddle point problem for non-convex optimization
+  authors: Razvan Pascanu, Yann N. Dauphin, Surya Ganguli, Yoshua Bengio
+  url: http://arxiv.org/abs/1405.4604v2
+  published: '2014-05-19'
+  notes: Loss surface & saddle points
+  tags:
+  - Optimization
+  - Loss Surface
+- arxiv_id: '1706.04454'
+  title: Empirical Analysis of the Hessian of Over-Parametrized Neural Networks
+  authors: Levent Sagun, Utku Evci, V. Ugur Guney, Yann Dauphin, Leon Bottou
+  url: http://arxiv.org/abs/1706.04454v3
+  published: '2017-06-14'
+  notes: Good generalization from overparameterization
+  tags:
+  - Overparameterization
+  - Hessian
+- arxiv_id: '1802.01396'
+  title: To understand deep learning we need to understand kernel learning
+  authors: Mikhail Belkin, Siyuan Ma, Soumik Mandal
+  url: http://arxiv.org/abs/1802.01396v3
+  published: '2018-02-05'
+  notes: Oveparameterized kernel methods can fit random labels, and also generalize
+    well when fit on real data
+  tags:
+  - Overparameterization
+  - Kernel Methods
+  - Generalization
