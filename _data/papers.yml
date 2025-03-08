@@ -1214,13 +1214,6 @@
   published: '2018-02-20'
   notes: ''
   tags: []
-- arxiv_id: '1812.06162'
-  title: An Empirical Model of Large-Batch Training
-  authors: Sam McCandlish, Jared Kaplan, Dario Amodei, OpenAI Dota Team
-  url: http://arxiv.org/abs/1812.06162v1
-  published: '2018-12-14'
-  notes: ''
-  tags: []
 - arxiv_id: 2410.21228v1
   title: 'LoRA vs Full Fine-tuning: An Illusion of Equivalence'
   authors: Reece Shuttleworth, Jacob Andreas, Antonio Torralba, Pratyusha Sharma
@@ -2316,3 +2309,59 @@
   - Overparameterization
   - Kernel Methods
   - Generalization
+- arxiv_id: '2501.08313'
+  title: 'MiniMax-01: Scaling Foundation Models with Lightning Attention'
+  authors: MiniMax, Aonian Li, Bangwei Gong, Bo Yang, Boji Shan, Chang Liu, Cheng
+    Zhu, Chunhao Zhang, Congchao Guo, Da Chen, Dong Li, Enwei Jiao, Gengxin Li, Guojun
+    Zhang, Haohai Sun, Houze Dong, Jiadai Zhu, Jiaqi Zhuang, Jiayuan Song, Jin Zhu,
+    Jingtao Han, Jingyang Li, Junbin Xie, Junhao Xu, Junjie Yan, Kaishun Zhang, Kecheng
+    Xiao, Kexi Kang, Le Han, Leyang Wang, Lianfei Yu, Liheng Feng, Lin Zheng, Linbo
+    Chai, Long Xing, Meizhi Ju, Mingyuan Chi, Mozhi Zhang, Peikai Huang, Pengcheng
+    Niu, Pengfei Li, Pengyu Zhao, Qi Yang, Qidi Xu, Qiexiang Wang, Qin Wang, Qiuhui
+    Li, Ruitao Leng, Shengmin Shi, Shuqi Yu, Sichen Li, Songquan Zhu, Tao Huang, Tianrun
+    Liang, Weigao Sun, Weixuan Sun, Weiyu Cheng, Wenkai Li, Xiangjun Song, Xiao Su,
+    Xiaodong Han, Xinjie Zhang, Xinzhu Hou, Xu Min, Xun Zou, Xuyang Shen, Yan Gong,
+    Yingjie Zhu, Yipeng Zhou, Yiran Zhong, Yongyi Hu, Yuanxiang Fan, Yue Yu, Yufeng
+    Yang, Yuhao Li, Yunan Huang, Yunji Li, Yunpeng Huang, Yunzhi Xu, Yuxin Mao, Zehan
+    Li, Zekang Li, Zewei Tao, Zewen Ying, Zhaoyang Cong, Zhen Qin, Zhenhua Fan, Zhihang
+    Yu, Zhuo Jiang, Zijia Wu
+  url: http://arxiv.org/abs/2501.08313v1
+  published: '2025-01-14'
+  notes: Lightning attention, and discussion of batch size (section 4.2)
+  tags:
+  - Batch Size
+- arxiv_id: '1812.06162'
+  title: An Empirical Model of Large-Batch Training
+  authors: Sam McCandlish, Jared Kaplan, Dario Amodei, OpenAI Dota Team
+  url: http://arxiv.org/abs/1812.06162v1
+  published: '2018-12-14'
+  notes: Determining batch size
+  tags:
+  - Batch Size
+- arxiv_id: '2503.02113'
+  title: Deep Learning is Not So Mysterious or Different
+  authors: Andrew Gordon Wilson
+  url: http://arxiv.org/abs/2503.02113v1
+  published: '2025-03-03'
+  notes: Soft inductive biases
+  tags:
+  - Generalization
+- arxiv_id: '1710.03740'
+  title: Mixed Precision Training
+  authors: Paulius Micikevicius, Sharan Narang, Jonah Alben, Gregory Diamos, Erich
+    Elsen, David Garcia, Boris Ginsburg, Michael Houston, Oleksii Kuchaiev, Ganesh
+    Venkatesh, Hao Wu
+  url: http://arxiv.org/abs/1710.03740v3
+  published: '2017-10-10'
+  notes: Mixed precision training
+  tags:
+  - Mixed Precision
+- arxiv_id: '2205.05198'
+  title: Reducing Activation Recomputation in Large Transformer Models
+  authors: Vijay Korthikanti, Jared Casper, Sangkug Lym, Lawrence McAfee, Michael
+    Andersch, Mohammad Shoeybi, Bryan Catanzaro
+  url: http://arxiv.org/abs/2205.05198v1
+  published: '2022-05-10'
+  notes: Derivation on amount of memory used to store activations in Transformers
+  tags:
+  - Model Training
