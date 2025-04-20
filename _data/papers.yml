@@ -2362,6 +2362,6 @@
     Andersch, Mohammad Shoeybi, Bryan Catanzaro
   url: http://arxiv.org/abs/2205.05198v1
   published: '2022-05-10'
-  notes: Derivation on amount of memory used to store activations in Transformers
+  notes: Selective checkpointing of activations
   tags:
   - Model Training

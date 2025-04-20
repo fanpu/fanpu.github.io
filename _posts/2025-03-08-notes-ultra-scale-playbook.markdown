@@ -25,3 +25,16 @@ Distributed training profiling: https://nanotron-ultrascale-playbook.static.hf.s
 Torch cache allocator: https://zdevito.github.io/2022/08/04/cuda-caching-allocator.html
 
 Counting parameters: https://michaelwornow.net/2024/01/18/counting-params-in-transformer
+
+Memory usage not static during training - activations is what will scale as we increase batch sizes or sequence length
+
+# Activation Recomputation
+
+Full vs selective
+
+When you’re measuring how efficient your training setup is at using your GPU/TPU/accelerator, you usually want to take recomputation into account to compute total FLOPS (Floating point operations per second) and compare it to theoretical maximum FLOPS of the GPU/TPU/accelerator. Taking recomputation into account when calculating FLOPS for a training step gives a value called “hardware FLOPS” which is the real number of operations performed on the accelerator. Dividing this number by the duration of the training step and the maximum accelerator FLOPS yields the Hardware FLOPS Utilization (HFU).
+
+
+# Profilers
+
+Read and learn how to use: https://pytorch.org/tutorials/recipes/recipes/profiler_recipe.html
