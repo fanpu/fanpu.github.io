@@ -583,12 +583,7 @@ ninja.data = [{
           window.location.href = "/blog/2018/welcome-to-my-blog/";
         
       },
-    },{id: "news-a-long-announcement-with-details",
-          title: 'A long announcement with details',
-          description: "",
-          section: "News",handler: () => {
-              window.location.href = "/news/announcement_2/";
-            },},{id: "news-i-migrated-my-blog-from-jasper2-to-al-folio-as-it-has-better-support-for-non-blog-post-pages",
+    },{id: "news-i-migrated-my-blog-from-jasper2-to-al-folio-as-it-has-better-support-for-non-blog-post-pages",
           title: 'I migrated my blog from jasper2 to al-folio as it has better support...',
           description: "",
           section: "News",},{id: "news-i-wrote-a-new-blog-post-reinforcement-learning-policy-optimization-deriving-the-policy-gradient-update",
@@ -678,6 +673,9 @@ ninja.data = [{
           description: "",
           section: "News",},{id: "news-completed-a-new-post-on-what-i-think-is-an-under-appreciated-topic-an-intuitive-introduction-to-gaussian-processes",
           title: 'Completed a new post on what I think is an under-appreciated topic: An...',
+          description: "",
+          section: "News",},{id: "news-i-will-attending-iclr-from-04-24-04-28-let-s-talk-if-you-re-also-in-town",
+          title: 'I will attending ICLR from 04/24-04/28. Let’s talk if you’re also in town!...',
           description: "",
           section: "News",},{id: "projects-graphical-bayesian-networks-for-predicting-asset-covariances",
           title: 'Graphical Bayesian Networks for Predicting Asset Covariances',
