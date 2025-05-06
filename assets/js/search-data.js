@@ -1022,11 +1022,11 @@ ninja.data = [{
           description: "",
           section: "Summaries",handler: () => {
               window.location.href = "/summaries/2024-11-04-ragas-automated-evaluation-of-retrieval-augmented-generation/";
-            },},{id: "summaries-bge-m3-embedding-multi-lingual-multi-functionality-multi-granularity-text-embeddings-through-self-knowledge-distillation",
-          title: 'BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation',
+            },},{id: "summaries-diloco-distributed-low-communication-training-of-language-models",
+          title: 'DiLoCo: Distributed Low-Communication Training of Language Models',
           description: "",
           section: "Summaries",handler: () => {
-              window.location.href = "/summaries/2025-01-06-bge-m3-embedding-multi-lingual-multi-functionality-multi-granularity-text-embeddings-through-self-knowledge-distillation/";
+              window.location.href = "/summaries/2025-05-05-diloco-distributed-low-communication-training-of-language-models/";
             },},{
         id: 'social-email',
         title: 'email',
