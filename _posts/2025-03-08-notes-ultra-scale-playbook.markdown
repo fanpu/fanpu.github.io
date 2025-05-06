@@ -25,3 +25,5 @@ Distributed training profiling: https://nanotron-ultrascale-playbook.static.hf.s
 Torch cache allocator: https://zdevito.github.io/2022/08/04/cuda-caching-allocator.html
 
 Counting parameters: https://michaelwornow.net/2024/01/18/counting-params-in-transformer
+
+DP can't keep scaling; benefit breaks fown at large scale due to coordination overhead
