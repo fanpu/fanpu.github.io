@@ -3,7 +3,7 @@ layout: summary
 title: "BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation"
 giscus_comments: true
 bib_id: 2402.03216v4
-hidden: true
+published: false
 ---
 
 ### Three Important Things

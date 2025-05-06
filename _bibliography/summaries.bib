@@ -2209,3 +2209,33 @@ Url           = {http://arxiv.org/abs/2402.03216v4},
 File          = {2402.03216v4.pdf},
 EprintNoVer   = {2402.03216}
 }
+
+@article{2311.08105v3,
+Author        = {Arthur Douillard and Qixuan Feng and Andrei A. Rusu and Rachita Chhaparia and Yani Donchev and Adhiguna Kuncoro and Marc'Aurelio Ranzato and Arthur Szlam and Jiajun Shen},
+Title         = {DiLoCo: Distributed Low-Communication Training of Language Models},
+Eprint        = {2311.08105v3},
+ArchivePrefix = {arXiv},
+PrimaryClass  = {cs.LG},
+Abstract      = {Large language models (LLM) have become a critical component in many
+applications of machine learning. However, standard approaches to training LLM
+require a large number of tightly interconnected accelerators, with devices
+exchanging gradients and other intermediate states at each optimization step.
+While it is difficult to build and maintain a single computing cluster hosting
+many accelerators, it might be easier to find several computing clusters each
+hosting a smaller number of devices. In this work, we propose a distributed
+optimization algorithm, Distributed Low-Communication (DiLoCo), that enables
+training of language models on islands of devices that are poorly connected.
+The approach is a variant of federated averaging, where the number of inner
+steps is large, the inner optimizer is AdamW, and the outer optimizer is
+Nesterov momentum. On the widely used C4 dataset, we show that DiLoCo on 8
+workers performs as well as fully synchronous optimization while communicating
+500 times less. DiLoCo exhibits great robustness to the data distribution of
+each worker. It is also robust to resources becoming unavailable over time, and
+vice versa, it can seamlessly leverage resources that become available during
+training.},
+Year          = {2023},
+Month         = {Nov},
+Url           = {http://arxiv.org/abs/2311.08105v3},
+File          = {2311.08105v3.pdf},
+EprintNoVer   = {2311.08105}
+}
