@@ -17,16 +17,17 @@ latest_posts: false # includes a list of the newest posts
 social: true # includes social icons at the bottom of the page
 ---
 
-Hello! I am Fan Pu, and I help large language models have a good time at [Jane Street](https://www.janestreet.com/) on the AI Assistants team.
+Hello! I am Fan Pu (曾繁朴), and I help large language models have a good time at [Jane
+Street](https://www.janestreet.com/).
 
-Specifically, I work on fine-tuning LLMs to be proficient at writing OCaml,
-crafting evals for a variety of (mostly coding-related) tasks that we care
-about, and leading the development of several in-house RAG use cases, including
-for trading.
+I work on training foundation models at scale to be good at writing OCaml 
+and doing various valuable trading tasks, and do research on novel ways to
+make them better.
 
-_(2025-01-01) Our team is hiring_ - if this work sounds interesting to you and
-you have strong software engineering skills and a machine learning background,
-please shoot me an email!
+_(2025-05-10) Our team is hiring_ - if this work sounds interesting to you and
+you have strong software engineering skills, a solid machine learning
+background, and keen interest in pushing the state of the art of LLMs, please
+shoot me an email! It's currently an incredibly exciting time to be doing ML here.
 
 I graduated with a B.S (2022) and M.S (2023) in Computer
 Science from [Carnegie Mellon University](https://www.cmu.edu/).
