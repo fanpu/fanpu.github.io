@@ -25,7 +25,7 @@ description: >
   In this post we'll talk about Gaussian processes, a
   conceptually important, but in my opinion under-appreciated
   non-parametric approach with deep connections with modern-day neural networks.
-  An intersting motivating fact which we will eventually show is that neural
+  An interesting motivating fact which we will eventually show is that neural
   networks initialized with Gaussian weights are equivalent to Gaussian processes
   in the infinite-width limit.
 ---
@@ -42,7 +42,7 @@ grow in complexity based on the size of the data.
 In this post we'll talk about Gaussian processes, a
 conceptually important, but in my opinion under-appreciated
 non-parametric approach with deep connections with modern-day neural networks.
-An intersting motivating fact which we will eventually show is that neural
+An interesting motivating fact which we will eventually show is that neural
 networks initialized with Gaussian weights are equivalent to Gaussian processes
 in the infinite-width limit.
 
