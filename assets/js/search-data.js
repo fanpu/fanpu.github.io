@@ -1027,6 +1027,11 @@ ninja.data = [{
           description: "",
           section: "Summaries",handler: () => {
               window.location.href = "/summaries/2025-05-05-diloco-distributed-low-communication-training-of-language-models/";
+            },},{id: "summaries-redunet-a-white-box-deep-network-from-the-principle-of-maximizing-rate-reduction",
+          title: 'ReduNet: A White-box Deep Network from the Principle of Maximizing Rate Reduction',
+          description: "",
+          section: "Summaries",handler: () => {
+              window.location.href = "/summaries/2025-05-10-redunet-a-white-box-deep-network-from-the-principle-of-maximizing-rate-reduction/";
             },},{
         id: 'social-email',
         title: 'email',
