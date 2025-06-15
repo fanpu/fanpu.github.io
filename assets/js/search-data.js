@@ -1046,6 +1046,11 @@ ninja.data = [{
           description: "",
           section: "Summaries",handler: () => {
               window.location.href = "/summaries/2025-05-10-redunet-a-white-box-deep-network-from-the-principle-of-maximizing-rate-reduction/";
+            },},{id: "summaries-diffusion-lm-improves-controllable-text-generation",
+          title: 'Diffusion-LM Improves Controllable Text Generation',
+          description: "",
+          section: "Summaries",handler: () => {
+              window.location.href = "/summaries/2025-06-08-diffusion-lm-improves-controllable-text-generation/";
             },},{
         id: 'social-email',
         title: 'email',
