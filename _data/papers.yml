@@ -2365,3 +2365,29 @@
   notes: Selective checkpointing of activations
   tags:
   - Model Training
+- arxiv_id: '2107.03006'
+  title: Structured Denoising Diffusion Models in Discrete State-Spaces
+  authors: Jacob Austin, Daniel D. Johnson, Jonathan Ho, Daniel Tarlow, Rianne van
+    den Berg
+  url: http://arxiv.org/abs/2107.03006v3
+  published: '2021-07-07'
+  notes: Discrete space text diffusion model
+  tags:
+  - Text Diffusion Models
+- arxiv_id: '2102.05379'
+  title: "Argmax Flows and Multinomial Diffusion: Learning Categorical\n  Distributions"
+  authors: "Emiel Hoogeboom, Didrik Nielsen, Priyank Jaini, Patrick Forr\xE9, Max\
+    \ Welling"
+  url: http://arxiv.org/abs/2102.05379v3
+  published: '2021-02-10'
+  notes: Discrete space text diffusion model
+  tags:
+  - Text Diffusion Models
+- arxiv_id: '2408.04220'
+  title: Diffusion Guided Language Modeling
+  authors: Justin Lovelace, Varsha Kishore, Yiwei Chen, Kilian Q. Weinberger
+  url: http://arxiv.org/abs/2408.04220v1
+  published: '2024-08-08'
+  notes: Using sentence encoders with noise (denoising transformer) for LMs
+  tags:
+  - Text Diffusion Models

@@ -24,7 +24,7 @@ I work on training foundation models at scale to be good at writing OCaml
 and doing various valuable trading tasks, and do research on novel ways to
 make them better.
 
-_(2025-05-10) Our team is hiring_ - if this work sounds interesting to you and
+_(2025-06-01) Our team is hiring_ - if this work sounds interesting to you and
 you have strong software engineering skills, a solid machine learning
 background, and keen interest in pushing the state of the art of LLMs, please
 shoot me an email! It's currently an incredibly exciting time to be doing ML here.
