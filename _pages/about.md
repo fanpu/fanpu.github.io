@@ -2,7 +2,7 @@
 layout: about
 title: About
 permalink: /
-subtitle: Software Engineer at <a href='https://www.janestreet.com/'>Jane Street</a> based in New York
+subtitle: ML Research Engineer at <a href='https://www.janestreet.com/'>Jane Street</a> based in New York
 
 profile:
   align: left
@@ -17,15 +17,12 @@ latest_posts: false # includes a list of the newest posts
 social: true # includes social icons at the bottom of the page
 ---
 
-Hello! I am Fan Pu (曾繁朴), and I help large language models have a good time at [Jane
-Street](https://www.janestreet.com/).
+Hello! I am Fan Pu (曾繁朴), and I work on LLM research at Jane Street.
+I previously worked on training foundation models to be good at writing OCaml 
+and perform valuable trading tasks.
 
-I work on training foundation models at scale to be good at writing OCaml 
-and doing various valuable trading tasks, and do research on novel ways to
-make them better.
-
-_(2025-06-01) Our team is hiring_ - if this work sounds interesting to you and
-you have strong software engineering skills, a solid machine learning
+_(2025-09-21) We are hiring_ - if this work sounds interesting to you and
+you have strong engineering skills, a solid machine learning
 background, and keen interest in pushing the state of the art of LLMs, please
 shoot me an email! It's currently an incredibly exciting time to be doing ML here.
 
@@ -43,13 +40,11 @@ Street](https://www.janestreet.com/), [Meta](https://about.meta.com/),
 Models](https://andrejristeski.github.io/10708-S23/) in the Spring 2023
 semester.
 
-My current academic interests lies in understanding reasoning in large language
-models and exploring the theoretical foundations of deep learning. Specifically,
-I am interested in the principles underlying generalization and the mechanisms
-contributing to the effectiveness of optimization algorithms.
+My academic interests lie in understanding the theoretical foundations for the
+success of deep learning, particularly in optimization and generalization.
 
-In my free time, I enjoy bouldering, K-pop dance, running, reading and
-learning new things, writing things for my blog, and watching anime. I used to
+In my free time, I enjoy climbing, running, skiing, reading and
+learning new things, and writing things for my blog. I used to
 do sprint canoe competitively. If I have an extended break I enjoy traveling,
 especially hiking and exploring the great outdoors. Most of the banner pictures
 on my blog posts were taken during these hikes. My favorite classroom in CMU is
