@@ -21,11 +21,6 @@ Hello! I am Fan Pu (曾繁朴), and I work on LLM research at Jane Street.
 I previously worked on training foundation models to be good at writing OCaml 
 and perform valuable trading tasks.
 
-_(2025-09-21) We are hiring_ - if this work sounds interesting to you and
-you have strong engineering skills, a solid machine learning
-background, and keen interest in pushing the state of the art of LLMs/ML, please
-shoot me an email! It's currently an incredibly exciting time to be doing ML here.
-
 I graduated with a B.S (2022) and M.S (2023) in Computer
 Science from [Carnegie Mellon University](https://www.cmu.edu/).
 
