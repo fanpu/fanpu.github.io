@@ -66,6 +66,12 @@ Slides I developed for talks on various LLM-related topics.
 You are free to share, adapt, and reuse these
 materials, provided that you give appropriate credit.
 
+- (2025-09-19) [Average Gradient Outer Product as a Mechanism for Feature Learning]({% link
+  /assets/presentations/Average Gradient Outer Product.pdf %})
+- (2025-05-13) [Learning Dynamics of LLM Finetuning]({% link
+  /assets/presentations/Learning Dynamics of LLM Finetuning.pdf %})
+- (2025-05-08) [DistiLLM-2: A Contrastive Approach Boosts the Distillation of LLMs]({% link
+  /assets/presentations/DistiLLM-2.pdf %})
 - (2024-11-18) [A Statistical Approach to Language Model Evaluations]({% link
   /assets/presentations/Statistics for Evals.pdf %})
 - (2024-10-08) [Advanced Retrieval Augmented Generation Techniques]({% link
