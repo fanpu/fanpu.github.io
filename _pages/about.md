@@ -72,6 +72,8 @@ materials, provided that you give appropriate credit.
   /assets/presentations/Learning Dynamics of LLM Finetuning.pdf %})
 - (2025-05-08) [DistiLLM-2: A Contrastive Approach Boosts the Distillation of LLMs]({% link
   /assets/presentations/DistiLLM-2.pdf %})
+- (2025-02-21) [Convergence and Generalization of Neural Networks: Neural Tangent Kernels and Beyond]({% link
+  /assets/presentations/Neural Tangent Kernels and Beyond.pdf %})
 - (2024-11-18) [A Statistical Approach to Language Model Evaluations]({% link
   /assets/presentations/Statistics for Evals.pdf %})
 - (2024-10-08) [Advanced Retrieval Augmented Generation Techniques]({% link
