@@ -754,6 +754,8 @@ diversity of applicable modalities.
 }
 ```
 
+[Link to our paper]({% link /assets/research/Score_Based_Diffusion_Models.pdf %})
+
 # References
 - Austin, J., Johnson, D. D., Ho, J., Tarlow, D., and van den Berg, R. 
 [Structured denoising diffusion models in discrete state-spaces.](https://arxiv.org/abs/2107.03006) CoRR, abs/2107.03006, 2021.
