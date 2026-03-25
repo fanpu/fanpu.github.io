@@ -154,6 +154,17 @@ ninja.data = [{
           window.location.href = "/blog/2023/score-based-diffusion-models/";
         
       },
+    },{id: "post-dynpartition-automatic-optimal-pipeline-parallelism-of-dynamic-neural-networks-over-heterogeneous-gpu-systems-for-inference-tasks",
+      
+        title: "DynPartition: Automatic Optimal Pipeline Parallelism of Dynamic Neural Networks over Heterogeneous GPU Systems...",
+      
+      description: "Dynamic neural networks are slowly gaining popularity due to their ability to adapt their structures or parameters to different inputs, leading to notable advantages in terms of accuracy, computational efficiency, and adaptivity, in comparison to static models which have fixed computational graphs and parameters. We propose a novel reinforcement learning-based scheduler called DynPartition that performs dynamic partitioning of computation across multiple heterogeneous GPUs for dynamic neural network inference tasks.",
+      section: "Posts",
+      handler: () => {
+        
+          window.location.href = "/blog/2023/dynpartition-automatic-pipeline-parallelism-of-dynamic-neural-networks/";
+        
+      },
     },{id: "post-the-art-of-latex-common-mistakes-and-advice-for-typesetting-beautiful-delightful-proofs",
       
         title: "The Art of LaTeX: Common Mistakes, and Advice for Typesetting Beautiful, Delightful Proofs...",
