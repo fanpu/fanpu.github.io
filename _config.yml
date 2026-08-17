@@ -11,6 +11,10 @@ contact_note: >
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
   Fan Pu's homepage
 footer_text: >
+  <a href="https://cmuwebr.ing/sites/fanpuz/prev">prev</a>
+  <a href="https://cmuwebr.ing">cmu webring</a>
+  <a href="https://cmuwebr.ing/sites/fanpuz/next">next</a>
+  <br></br>
   Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme.
 keywords: fanpu, fan pu, fanpu zeng, fan pu zeng, zengfanpu, fanpuzeng, fzeng, CMU, cmu, carnegie mellon, cmu courses, school of computer science, scs, machine learning, computer science, ml, theory, courses, course reviews, CS, Jane Street
 lang: en # the language of your site (for example: en, fr, cn, ru, etc.)
