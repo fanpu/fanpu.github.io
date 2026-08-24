@@ -14,6 +14,7 @@ description: >
   Notes on the new Llama 3.1 technical report. It's a long paper, but one
   that's well-written with lots of interesting technical details and 
   design choices.
+published: false
 ---
 
 # Reading Recommendations
