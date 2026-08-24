@@ -286,3 +286,45 @@ $theorem-padding-bottom: 20px;
   font-weight: 400;
   color: #a47864;
 }
+
+details.answer {
+  box-shadow:
+    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12),
+    0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  position: relative;
+  margin: 0.9765em 0;
+  padding: 0 0.75rem;
+  border-left: 0.25rem solid #64909a;
+  border-radius: 0.125rem;
+  overflow: auto;
+}
+
+details.answer > summary {
+  margin: 0 -0.75rem;
+  padding: 0.5rem 0.75rem 0.5rem 1.5rem;
+  background-color: rgba(100, 144, 154, 0.25);
+  font-weight: 700;
+  font-size: 1em;
+  color: #4a7681;
+  cursor: pointer;
+}
+
+details.answer[open] > summary {
+  border-bottom: 0.1rem solid rgba(100, 144, 154, 0.35);
+}
+
+// An answer placed directly after an exercise attaches to it as one block.
+// The :has() rule below zeroes the exercise's bottom margin, so this only
+// needs to zero its own top margin -- a negative value would overlap the two.
+.exercise + details.answer {
+  margin-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.exercise:has(+ details.answer) {
+  margin-bottom: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
