@@ -77,17 +77,6 @@ ninja.data = [{
           window.location.href = "/blog/2025/bounding-markov-chain-mixing-times-by-spectral-gap/";
         
       },
-    },{id: "post-notes-on-39-the-llama-3-herd-of-models-39",
-      
-        title: "Notes on &#39;The Llama 3 Herd of Models&#39;",
-      
-      description: "Notes on the new Llama 3.1 technical report. It&#39;s a long paper, but one that&#39;s well-written with lots of interesting technical details and  design choices.",
-      section: "Posts",
-      handler: () => {
-        
-          window.location.href = "/blog/2024/llama-3.1-technical-report-notes/";
-        
-      },
     },{id: "post-playing-sound-voltex-at-home-setting-up-unnamed-sdvx-clone-with-the-yuancon-sdvx-controller",
       
         title: "Playing Sound Voltex at Home: Setting Up Unnamed SDVX Clone with the Yuancon...",
