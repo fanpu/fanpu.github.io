@@ -67,7 +67,6 @@ you might be interested in directly.
 | [15-354 Computation and Discrete Math](#course15354)                          |
 | [15-210 Parallel and Sequential Data Structures and Algorithms](#course15210) |
 | [15-251 Great Ideas in Theoretical Computer Science](#course15251)            |
-
 {: .table .table-bordered .table-hover .table-sm }
 
 <br>
@@ -86,7 +85,6 @@ you might be interested in directly.
 | [10-701 Introduction to Machine Learning](#course10701)                     |
 | [15-784 Foundations of Cooperative AI](#course15784)                        |
 | [16-385 Computer Vision](#course16385)                                      |
-
 {: .table .table-bordered .table-hover .table-sm }
 
 <br>
@@ -105,7 +103,6 @@ you might be interested in directly.
 | [15-440 Distributed Systems](#course15440)                                |
 | [15-330 Introduction to Computer Security](#course15330)                  |
 | [15-213 Introduction to Computer Systems](#course15213)                   |
-
 {: .table .table-bordered .table-hover .table-sm }
 
 <br>
@@ -119,7 +116,6 @@ you might be interested in directly.
 | [15-317 Constructive Logic](#course15317)                             |
 | [15-150 Principles of Functional Programming](#course15150)           |
 | [98-317 StuCo: Type Theory (Hype for Types)](#course98317)            |
-
 {: .table .table-bordered .table-hover .table-sm }
 
 <br>
@@ -140,7 +136,6 @@ you might be interested in directly.
 | [21-122 Integration and Approximation](#course21122)                 |
 | [21-120 Differential and Integral Calculus](#course21120)            |
 | [15-151 Mathematical Foundations for Computer Science](#course15151) |
-
 {: .table .table-bordered .table-hover .table-sm }
 
 <br>
@@ -157,7 +152,6 @@ you might be interested in directly.
 | [15-604 Immigration Course](#course15604)                          |
 | [07-128 First Year Immigration Course](#course07128)               |
 | [07-131 Great Practical Ideas in Computer Science](#course07131)   |
-
 {: .table .table-bordered .table-hover .table-sm }
 
 <br>
@@ -178,7 +172,6 @@ you might be interested in directly.
 | [98-242 StuCo: Introduction to Esoteric Programming Languages](#course98242)          |
 | [98-212 StuCo: Competitive Computer Security](#course98212)                           |
 | [98-349 StuCo: Design and Analysis of Logic Puzzle Games](#course98349)               |
-
 {: .table .table-bordered .table-hover .table-sm }
 
 ---
