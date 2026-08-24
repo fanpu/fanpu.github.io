@@ -27,6 +27,17 @@ comma, a colon, a period, or parentheses.
 or `**ZeRO-3 gather buffers.**`. If a chunk needs a label it needs a heading;
 otherwise let the paragraph start with a sentence.
 
+**No stage directions.** Don't announce the move before making it, and don't
+echo the question's instructions back as a step. Putting the formula down *is*
+stating the formula first; writing the derivation *is* deriving it.
+
+> ✗ `**(b)** State the formula first:` / `**(d)** Derive it from the pass structure. Let $$F$$ be...`
+> ✓ `**(b)** One checkpoint per layer, each the layer's input of shape $$[t, d]$$ in bf16:` / `**(d)** Let $$F$$ be...`
+
+Same for `Now count.`, `First, frame the budget.`, `Putting it together`,
+`Start with the activations.` Cut the sentence; the paragraph underneath already
+does the thing.
+
 **No enumerated takeaway wind-ups.** Drop "Three things to take away. First...
 Second... Third...". State the points as plain sentences, or don't state them at
 all if the table above already showed them.
@@ -47,6 +58,17 @@ mid-sentence. If a number matters, the sentence should already make that clear.
 
 **No second-person scolding or hype.** No "you must", "worth knowing about",
 "here's the thing". Explain, don't coach.
+
+## The symptom underneath
+
+Stage directions, bold-lead paragraph labels, and enumerated takeaway wind-ups
+are one habit: narrating the shape of the answer instead of letting the answer
+have a shape. It reads as performing rigor rather than being rigorous, and it is
+the strongest single tell of LLM-written prose. The reader can see that a
+paragraph is a new topic, that a formula came before its numbers, and that a
+table has three rows. Announcing it adds words and subtracts trust.
+
+The test: delete the sentence or label. If nothing is lost, it was scaffolding.
 
 ## What to keep
 
