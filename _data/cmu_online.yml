@@ -40,7 +40,7 @@ ml_courses:
       - machine-learning
 
   - name: 11-711 Advanced NLP
-    url: http://phontron.com/class/anlp2021/
+    url: https://www.phontron.com/class/anlp-fall2024/
     description: >
       Natural language processing technology attempts to model human language
       with computers, tackling a wide variety of problems from automatic
@@ -55,8 +55,8 @@ ml_courses:
       therefore. The class culminates in a project in which students attempt to
       reimplement and improve upon a research paper in a topic of their
       choosing.
-    youtube_playlist_id: PL8PYTP1V4I8D0UkqW2fEhgLrnlDW9QK7z
-    semester: Fall 2022
+    youtube_playlist_id: PL8PYTP1V4I8D4BeyjwWczukWq9d8PNyZp
+    semester: Fall 2024
     instructors:
       - name: Graham Neubig
         website: http://phontron.com/
@@ -182,7 +182,7 @@ ml_courses:
       - machine-learning
 
   - name: 11-485/785 Introduction to Deep Learning
-    url: https://deeplearning.cs.cmu.edu/
+    url: https://deeplearning.cs.cmu.edu/S24/index.html
     description: >
       "Deep Learning" systems, typified by deep neural networks, are increasingly
       taking over all the AI tasks, ranging from language understanding, speech
@@ -198,8 +198,8 @@ ml_courses:
       and be able to apply Deep Learning to a variety of tasks. They will also be
       positioned to understand much of the current literature on the topic and
       extend their knowledge through further study.
-    youtube_playlist_id: PLp-0K3kfddPwgBSCbDtT6NaVOd-gIHVMW
-    semester: Spring 2023
+    youtube_playlist_id: PLp-0K3kfddPxUJzAW0KxNNjGiK_hISFas
+    semester: Spring 2024
     instructors:
       - name: Bhiksha Raj
         website: http://mlsp.cs.cmu.edu/people/bhiksha/
@@ -231,7 +231,7 @@ ml_courses:
       - machine-learning
 
   - name: 11-777 Multi-Modal Machine Learning
-    url: https://cmu-multicomp-lab.github.io/mmml-course/fall2020/
+    url: https://cmu-multicomp-lab.github.io/mmml-course/fall2022/
     description: >
       Multimodal machine learning (MMML) is a vibrant multi-disciplinary
       research field which addresses some of the original goals of artificial
@@ -258,11 +258,13 @@ ml_courses:
       also discuss many of the recent applications of MMML including multimodal
       affect recognition, image and video captioning and cross-modal multimedia
       retrieval.
-    youtube_playlist_id: PLTLz0-WCKX616TjsrgPr2wFzKF54y-ZKc
-    semester: Fall 2020
+    youtube_playlist_id: PL-Fhd_vrvisNM7pbbevXKAbT_Xmub37fA
+    semester: Fall 2022
     instructors:
       - name: Louis-Philippe Morency
         website: https://www.cs.cmu.edu/~morency/
+      - name: Paul Pu Liang
+        website: https://pliang279.github.io/
     tags:
       - graduate
       - machine-learning
@@ -378,7 +380,7 @@ systems_courses:
       - computer-systems
 
   - name: 15-445/645 Database Systems
-    url: https://15445.courses.cs.cmu.edu/fall2022/
+    url: https://15445.courses.cs.cmu.edu/fall2025/
     description: >
       This course is on the design and implementation of database management
       systems. Topics include data models (relational, document, key/value),
@@ -391,8 +393,8 @@ systems_courses:
       are used to illustrate these techniques and trade-offs. The course is
       appropriate for students that are prepared to flex their strong systems
       programming skills.
-    youtube_playlist_id: PLSE8ODhjZXjaKScG3l0nuOiDTTqpfnWFf
-    semester: Fall 2022
+    youtube_playlist_id: PLSE8ODhjZXjYMAgsGH-GtY5rJYZ6zjsd5
+    semester: Fall 2025
     instructors:
       - name: Andy Pavlo
         website: http://www.cs.cmu.edu/~pavlo/
@@ -401,7 +403,7 @@ systems_courses:
       - computer-systems
 
   - name: 15-721 Advanced Database Systems
-    url: https://15721.courses.cs.cmu.edu/spring2018/
+    url: https://15721.courses.cs.cmu.edu/spring2024/
     description: >
       This course is a comprehensive study of the internals of modern database
       management systems. It will cover the core concepts and fundamentals of the
@@ -412,8 +414,8 @@ systems_courses:
       database system. The course is appropriate for graduate students in software
       systems and for advanced undergraduates with dirty systems programming
       skills.
-    youtube_playlist_id: PLSE8ODhjZXjYzlLMbX3cR0sxWnRM7CLFn
-    semester: Spring 2023
+    youtube_playlist_id: PLSE8ODhjZXjYa_zX-KeMJui7pcN1rIaIJ
+    semester: Spring 2024
     instructors:
       - name: Andy Pavlo
         website: http://www.cs.cmu.edu/~pavlo/
@@ -444,8 +446,8 @@ systems_courses:
       - undergraduate
       - computer-systems
 
-  - name: ¡Databases! – A Database Seminar Series
-    url: https://db.cs.cmu.edu/seminar2022/
+  - name: CMU Database Group Seminar Series
+    url: https://db.cs.cmu.edu/seminars/
     description: >
       A weekly seminar series on databases hosted by CMU,
       streamed on Zoom and open to the public.
@@ -454,12 +456,35 @@ systems_courses:
       with real-world customers.
       <br>
       <br>
-      It is possible that similar such seminars will be held in the future,
-      check their <a href="https://www.youtube.com/@CMUDatabaseGroup">Youtube
-      channel</a> for the latest updates.
-    youtube_playlist_id: PLSE8ODhjZXjZKp-oX_75aBnznulk7nubu
-    semester: Fall 2020
+      The series is renamed each semester (past editions include
+      "¡Databases!", "ML⇄DB", "Database Building Blocks", "SQL or Death?",
+      and "Future Data Systems"). Below is the playlist for the most recent
+      completed edition, "PostgreSQL vs. The World" (Spring 2026); check the
+      <a href="https://db.cs.cmu.edu/seminars/">seminar hub</a> or their
+      <a href="https://www.youtube.com/@CMUDatabaseGroup">Youtube
+      channel</a> for the latest edition.
+    youtube_playlist_id: PLSE8ODhjZXjZEVnVTtgDWw6P3wA_gDwj4
+    semester: Ongoing
     tags:
+      - computer-systems
+
+  - name: 15-799 Special Topics in Database Systems - Query Optimization
+    url: https://15799.courses.cs.cmu.edu/spring2025/
+    description: >
+      A hands-on deep dive into database query optimization, covering both
+      classical and modern algorithms for converting SQL statements into
+      efficient physical query plans. Topics include cost models, feedback
+      mechanisms, and adaptive query optimization. Students build on an
+      open-source query optimizer service and evaluate their work on
+      real-world queries, making this a good follow-up for anyone who has
+      completed 15-445/645 or 15-721.
+    youtube_playlist_id: PLSE8ODhjZXjYCZfIbmEWH7f6MnYqyPwCE
+    semester: Spring 2025
+    instructors:
+      - name: Andy Pavlo
+        website: http://www.cs.cmu.edu/~pavlo/
+    tags:
+      - graduate
       - computer-systems
 
 theory_courses:
@@ -887,7 +912,7 @@ robotics_courses:
       - robotics
 
   - name: 16-745 Optimal Control and Reinforcement Learning
-    url: https://github.com/Optimal-Control-16-745
+    url: https://optimalcontrol.ri.cmu.edu/
     description: >
       This is a course about how to make robots move through and interact with
       their environment with speed, efficiency, and robustness. We will survey a
@@ -897,8 +922,8 @@ robotics_courses:
       students with hands-on experience applying each of these ideas to a
       variety of robotic systems so that they can use them in their own
       research.
-    youtube_playlist_id: PLZnJoM76RM6Iaf59ICcU9-DzztGZvK_52
-    semester: Spring 2022
+    youtube_playlist_id: PLZnJoM76RM6IAJfMXd1PgGNXn3dxhkVgI
+    semester: Spring 2025
     instructors:
       - name: Zachary Manchester
         website: https://www.ri.cmu.edu/ri-faculty/zachary-manchester/
