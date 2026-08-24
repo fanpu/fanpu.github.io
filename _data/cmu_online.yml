@@ -40,30 +40,131 @@ ml_courses:
       - machine-learning
 
   - name: 11-711 Advanced NLP
-    url: https://www.phontron.com/class/anlp-fall2024/
+    url: https://cmu-l3.github.io/anlp-fall2025/
     description: >
-      Natural language processing technology attempts to model human language
-      with computers, tackling a wide variety of problems from automatic
-      translation to question answering. CS11-711 Advanced Natural Language
-      Processing (at Carnegie Mellon University's Language Technology Institute)
-      is an introductory graduate-level course on natural language processing
-      aimed at students who are interested in doing cutting-edge research in the
-      field. In it, we describe fundamental tasks in natural language processing
-      such as syntactic, semantic, and discourse analysis, as well as methods to
-      solve these tasks. The course focuses on modern methods using neural
-      networks, and covers the basic modeling and learning algorithms required
-      therefore. The class culminates in a project in which students attempt to
-      reimplement and improve upon a research paper in a topic of their
-      choosing.
-    youtube_playlist_id: PL8PYTP1V4I8D4BeyjwWczukWq9d8PNyZp
-    semester: Fall 2024
+      Advanced natural language processing is an introductory graduate-level
+      course on natural language processing aimed at students who are
+      interested in doing cutting-edge research in the field. In it, we
+      describe fundamental tasks in natural language processing as well as
+      methods to solve these tasks. The course focuses on modern methods
+      using neural networks, and covers the basic modeling, learning, and
+      inference algorithms required therefore. The class culminates in a
+      project in which students attempt to reimplement and improve upon a
+      research paper in a topic of their choosing.
+    youtube_playlist_id: PLqC25OT8ZpD2-RuhyacIsODl5iJVgMjI3
+    semester: Fall 2025
+    instructors:
+      - name: Sean Welleck
+        website: https://wellecks.com
+    tags:
+      - graduate
+      - machine-learning
+
+  - name: 11-747 Neural Networks for NLP
+    url: https://phontron.com/class/nn4nlp2021/
+    description: >
+      A more in-depth, modeling-focused follow-up to 11-711 Advanced NLP,
+      covering neural network approaches to core NLP tasks: language
+      modeling, structured prediction, efficient training and inference,
+      semi-/unsupervised learning, and multilingual and multi-task learning.
+    youtube_playlist_id: PL8PYTP1V4I8AkaHEJ7lOOrlex-pcxS-XV
+    semester: Spring 2021
     instructors:
       - name: Graham Neubig
         website: http://phontron.com/
-      - name: Robert E. Frederking
-        website: https://www.cs.cmu.edu/~ref/
     tags:
       - graduate
+      - machine-learning
+
+  - name: 11-737 Multilingual NLP
+    url: https://www.phontron.com/class/multiling2022/
+    description: >
+      Covers linguistically-motivated methods for building NLP systems that
+      generalize across languages, especially low-resource ones: morphology,
+      multilingual and cross-lingual representations, and cross-lingual
+      transfer for tasks like translation and speech recognition.
+    youtube_playlist_id: PL8PYTP1V4I8BhCpzfdKKdd1OnTfLcyZr7
+    semester: Fall 2022
+    instructors:
+      - name: Graham Neubig
+        website: http://phontron.com/
+      - name: Alan Black
+        website: https://www.cs.cmu.edu/~awb/
+      - name: Shinji Watanabe
+        website: https://www.wavlab.org/
+    tags:
+      - graduate
+      - machine-learning
+
+  - name: 11-751/18-781 Speech Recognition and Understanding
+    url: https://www.wavlab.org/activities/2022/11751-2022f/
+    description: >
+      Covers the foundations and modern approaches to automatic speech
+      recognition, progressing from classical HMM-based systems through
+      deep learning and end-to-end/transformer-based architectures, with
+      hands-on tutorials using the ESPnet toolkit.
+      <br>
+      <br>
+      Recordings are linked per-lecture from the course activity page above
+      rather than collected into a single playlist; most (though not all)
+      lectures have a public video available.
+    youtube_channel_link: https://www.youtube.com/@wavlab3016
+    semester: Fall 2022
+    instructors:
+      - name: Shinji Watanabe
+        website: https://www.wavlab.org/
+    tags:
+      - graduate
+      - machine-learning
+
+  - name: 11-664/763 Inference Algorithms for Language Modeling
+    url: https://phontron.com/class/lminference-fall2025/
+    description: >
+      Covers inference-time algorithms for language models: sampling
+      methods, beam search and its variants, chain-of-thought and reasoning
+      models, tool use, and agents.
+    youtube_playlist_id: PL8PYTP1V4I8DY15Ob83nmwBAVyNtUQadX
+    semester: Fall 2025
+    instructors:
+      - name: Graham Neubig
+        website: http://phontron.com/
+    tags:
+      - graduate
+      - machine-learning
+
+  - name: 17-445/645/745 / 11-695 Machine Learning in Production
+    url: https://mlip-cmu.github.io/s2026/
+    description: >
+      This is a course for those who want to build and operate software
+      products with machine learning, not just models and demos. We assume
+      that you can train a model or build prompts/agents and compete on
+      benchmarks, but what does it take to turn the model into a product and
+      actually deploy it, have confidence in its quality, and successfully
+      operate and maintain it at scale?
+      <br>
+      <br>
+      The course is designed to establish a working relationship between
+      software engineers and data scientists: both contribute to building
+      ML-enabled systems but have different expertise and focuses.
+    youtube_playlist_id: PLDS2JMJnJzdmubSKnanmIwzr08cionWm_
+    semester: Spring 2026
+    instructors:
+      - name: Claire Le Goues
+        website: https://clairelegoues.com/
+      - name: Christian Kaestner
+        website: https://www.cs.cmu.edu/~ckaestne/
+    tags:
+      - graduate
+      - machine-learning
+
+  - name: LTI Colloquium
+    url: https://www.lti.cs.cmu.edu/misc-pages/lti-colloquium.html
+    description: >
+      Welcome to the LTI Colloquium, a series of talks given by experts from
+      across the country related to different areas of language technologies.
+    youtube_playlist_id: PLTLz0-WCKX61yeUechroQtlOJi951YltR
+    semester: Ongoing
+    tags:
       - machine-learning
 
   - name: 10-708 Probabilistic Graphical Models
@@ -214,11 +315,11 @@ ml_courses:
     description: >
       This course will cover latest advances in Reinforcement Learning and
       Imitation learning. This is a fast developing research field and an
-      official textbook is available only for about one forth of the course
+      official textbook is available only for about one fourth of the course
       material. The rest will be taught from recent research papers. This course
       brings together many disciplines of Artificial Intelligence to show how to
       develop intelligent agent that can learn to sense the world and learn to
-      act imitating others or maximizing sparse rewards Particular focus will be
+      act imitating others or maximizing sparse rewards. Particular focus will be
       given in incorporating visual sensory input and learning suitable visual
       state representations.
     panopto_link: https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx?folderID=ee5794a2-cb54-4edc-836b-aefc01023243
@@ -423,6 +524,36 @@ systems_courses:
       - graduate
       - computer-systems
 
+  - name: 18-447 Introduction to Computer Architecture
+    url: https://people.inf.ethz.ch/omutlu/lecture-videos.html
+    description: >
+      An undergraduate introduction to computer architecture: pipelined RISC
+      processor design, the memory hierarchy (caches, virtual memory, DRAM),
+      and superscalar/out-of-order execution.
+    youtube_playlist_id: PL5PHm2jkkXmi5CxxI7b3JCL1TWybTDtKq
+    semester: Spring 2015
+    instructors:
+      - name: Onur Mutlu
+        website: https://people.inf.ethz.ch/omutlu/
+    tags:
+      - undergraduate
+      - computer-systems
+
+  - name: 18-740/640 Computer Architecture
+    url: https://people.inf.ethz.ch/omutlu/lecture-videos.html
+    description: >
+      A graduate-level continuation of 18-447 covering advanced computer
+      architecture topics such as memory systems design, prefetching,
+      reliability, and emerging memory technologies.
+    youtube_playlist_id: PL5PHm2jkkXmgVhh8CHAu9N76TShJqfYDt
+    semester: Fall 2015
+    instructors:
+      - name: Onur Mutlu
+        website: https://people.inf.ethz.ch/omutlu/
+    tags:
+      - graduate
+      - computer-systems
+
   - name: 15-418/618 Parallel Computer Architecture and Programming
     url: https://www.cs.cmu.edu/~418/
     description: >
@@ -471,13 +602,16 @@ systems_courses:
   - name: 15-799 Special Topics in Database Systems - Query Optimization
     url: https://15799.courses.cs.cmu.edu/spring2025/
     description: >
-      A hands-on deep dive into database query optimization, covering both
-      classical and modern algorithms for converting SQL statements into
-      efficient physical query plans. Topics include cost models, feedback
-      mechanisms, and adaptive query optimization. Students build on an
-      open-source query optimizer service and evaluate their work on
-      real-world queries, making this a good follow-up for anyone who has
-      completed 15-445/645 or 15-721.
+      This course is a hands-on exploration of the most challenging problem
+      in computer science: database query optimization. It will cover the
+      classical and state-of-the-art methods and algorithms for converting
+      SQL statements into physical query plans. Additional topics include
+      cost models, feedback mechanisms, and adaptive query optimization. All
+      class projects will be in the context of an open-source query
+      optimizer service using real-world queries. The course is appropriate
+      for graduate students in software systems and advanced undergraduates
+      with nasty programming skills that are pursuing a
+      <i>database-centric lifestyle</i>.
     youtube_playlist_id: PLSE8ODhjZXjYCZfIbmEWH7f6MnYqyPwCE
     semester: Spring 2025
     instructors:
@@ -532,7 +666,7 @@ theory_courses:
     description: >
       This course will be an introduction to quantum computation and quantum
       information theory, from the perspective of theoretical computer science.
-      Topics include: Qubit operations, multi-qubit systems, p=artial
+      Topics include: Qubit operations, multi-qubit systems, partial
       measurements, entanglement, quantum teleportation and quantum money,
       quantum circuit model, Deutsch-Jozsa and Simons algorithm, number theory
       and Shors Algorithm, Grovers Algorithm, quantum complexity theory,
@@ -589,7 +723,7 @@ theory_courses:
       - graduate
       - theory
     prerequisites:
-      - 15-445 Undergraduate Complexity Theory
+      - 15-455 Undergraduate Complexity Theory
 
   - name: 15-751 Theory Toolkit
     url: https://www.cs.cmu.edu/~odonnell/toolkit20
@@ -663,7 +797,7 @@ theory_courses:
       - theory
 
   - name: Theory Lunch
-    url: https://www.cs.cmu.edu/~odonnell/aobf12/
+    url: https://www.cs.cmu.edu/~theorylunch/pastSemesterIndices/theorylunch/
     description: >
       Theory Lunch is an informal seminar run by the 
       <a href="http://theory.cs.cmu.edu/">Algorithms and Complexity</a>
@@ -676,6 +810,21 @@ theory_courses:
       - theory
 
 pl_courses:
+  - name: 15-150 Principles of Functional Programming
+    url: https://www.cs.cmu.edu/~15150/
+    description: >
+      The purpose of this course is to introduce the theory and practice of
+      <i>functional programming (FP)</i>. The characteristic feature of FP
+      is the emphasis on <i>computation as evaluation</i>.
+    youtube_playlist_id: PLsydD1kw8jng2t2G8USQNLz0faYZetPnH
+    semester: Summer 2023
+    instructors:
+      - name: Brandon Wu
+        website: https://brandonspark.github.io/
+    tags:
+      - undergraduate
+      - pl-theory
+
   - name: 15-312 Foundations of Programming Languages
     url: https://www.andrew.cmu.edu/course/15-312
     description: >
@@ -972,7 +1121,7 @@ math_courses:
       open-notes.
     youtube_playlist_id: PLgTkKBA6LRqYuuQ-LboerRblBoD_q_eUM
     video_note: Note that videos in the playlist are in reverse chronological order.
-    semester: Sping 2021
+    semester: Spring 2021
     instructors:
       - name: Po-Shen Loh
         website: https://www.poshenloh.com/
@@ -1022,6 +1171,23 @@ math_courses:
     youtube_playlist_id: PL_Ig1a5kxu55KBWM3Su6-K352gQJcmEZd
     semester: Fall 2016
     instructors:
+      - name: Larry Wasserman
+        website: http://www.stat.cmu.edu/~larry
+    tags:
+      - graduate
+
+  - name: 10-702/36-702 Statistical Machine Learning
+    url: http://www.stat.cmu.edu/~ryantibs/statml/
+    description: >
+      A follow-up to 36-705 Intermediate Statistics, covering the
+      theoretical underpinnings of modern machine learning methods from a
+      statistical perspective, including nonparametric regression,
+      classification, minimax theory, the bootstrap, and graphical models.
+    youtube_playlist_id: PLjbUi5mgii6B7A0nM74zHTOVQtTC9DaCv
+    semester: Spring 2017
+    instructors:
+      - name: Ryan Tibshirani
+        website: https://www.stat.cmu.edu/~ryantibs/
       - name: Larry Wasserman
         website: http://www.stat.cmu.edu/~larry
     tags:
