@@ -4,25 +4,20 @@
 @charset "utf-8";
 
 // Dimensions
-$max-content-width: {{ site.max_width }};
-
-@import
-  "variables",
-  "themes",
-  "layout",
-  "base",
-  "distill",
-  "theorems",
-  "custom",
-  "cv",
-  "tabs",
-  "typograms",
-  "font-awesome/fontawesome",
-  "font-awesome/brands",
-  "font-awesome/solid",
-  "font-awesome/regular",
-  "tabler-icons/tabler-icons.scss",
-  "tabler-icons/tabler-icons-filled.scss",
-  "tabler-icons/tabler-icons-outline.scss",
-  "custom"
-;
+@use "variables" with ($max-content-width: {{ site.max_width }});
+@use "themes";
+@use "layout";
+@use "base";
+@use "distill";
+@use "theorems";
+@use "custom";
+@use "cv";
+@use "tabs";
+@use "typograms";
+@use "font-awesome/fontawesome";
+@use "font-awesome/brands";
+@use "font-awesome/solid";
+@use "font-awesome/regular";
+@use "tabler-icons/tabler-icons.scss" with ($ti-font-path: "../fonts");
+@use "tabler-icons/tabler-icons-filled.scss" with ($ti-font-path: "../fonts");
+@use "tabler-icons/tabler-icons-outline.scss" with ($ti-font-path: "../fonts");
