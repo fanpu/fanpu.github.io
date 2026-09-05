@@ -1,0 +1,2281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Xiangqi trainer</title>
+<style>
+:root{
+  --chrome:#2A2E37; --chrome-2:#343945; --chrome-3:#3E4452; --line:#4A505E;
+  --ink:#ECE8DF; --ink-2:#B9BCB7; --ink-3:#858A8A;
+  --cinnabar:#D23A24; --cinnabar-2:#F06A52; --jade:#5FA57A; --amber:#E0A93A;
+  --board:#DDBD82; --board-line:#5C3E1C; --disc:#F3E4BF; --disc-edge:#8A6132;
+  --red-piece:#B4231A; --black-piece:#1F1A15;
+  --sans:"Avenir Next","Segoe UI","Helvetica Neue",system-ui,sans-serif;
+  --cjk:"Kaiti SC","STKaiti","KaiTi","BiauKai","Noto Serif SC","Songti SC","SimSun",serif;
+  --cjk-ui:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC","Noto Sans SC",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--chrome);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5}
+body{min-height:100vh}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--cinnabar-2)}
+.app{max-width:1180px;margin:0 auto;padding:14px 18px 40px}
+header{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-bottom:10px}
+header h1{font-size:22px;font-weight:600;margin:0;letter-spacing:.2px}
+header h1 .cn{font-family:var(--cjk);font-size:26px;margin-right:8px;color:var(--cinnabar-2)}
+nav.rooms{display:flex;gap:2px;margin-left:auto;flex-wrap:wrap}
+nav.rooms button{background:none;border:0;border-bottom:2px solid transparent;padding:6px 12px;color:var(--ink-2);border-radius:0}
+nav.rooms button:hover{color:var(--ink)}
+nav.rooms button.active{color:var(--ink);border-bottom-color:var(--cinnabar)}
+nav.rooms button .badge{display:inline-block;margin-left:6px;font-size:11px;padding:0 6px;border-radius:9px;background:var(--chrome-3);color:var(--ink-2)}
+.layout{display:grid;grid-template-columns:minmax(300px,600px) minmax(320px,1fr);gap:22px;align-items:start}
+@media (max-width:860px){.layout{grid-template-columns:1fr}}
+.boardwrap{position:relative}
+.boardwrap svg{width:100%;height:auto;display:block;border-radius:6px;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.under-board{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap;font-size:13px;color:var(--ink-2)}
+.under-board .spacer{flex:1}
+.panel{background:var(--chrome-2);border:1px solid var(--line);border-radius:8px;padding:16px 18px;min-height:200px}
+.panel h2{font-size:18px;margin:0 0 10px;font-weight:600}
+.panel h3{font-size:15px;margin:16px 0 6px;font-weight:600;color:var(--ink)}
+.panel p{margin:0 0 10px;color:var(--ink-2);max-width:62ch}
+.panel p strong{color:var(--ink)}
+.panel ul,.panel ol{margin:0 0 10px;padding-left:20px;color:var(--ink-2);max-width:62ch}
+.panel li{margin-bottom:4px}
+.cn{font-family:var(--cjk-ui)}
+.term{white-space:nowrap}
+.term .zh{font-family:var(--cjk-ui);color:var(--ink)}
+.term .py{color:var(--ink-3);font-size:.92em;margin-left:3px}
+.big-cn{font-family:var(--cjk);font-size:22px;color:var(--ink)}
+.btn{background:var(--chrome-3);border:1px solid var(--line);border-radius:6px;padding:7px 12px;font-size:14px}
+.btn:hover{background:#485062}
+.btn.primary{background:var(--cinnabar);border-color:var(--cinnabar);color:#fff}
+.btn.primary:hover{background:#e04a33}
+.btn.small{padding:4px 9px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:default}
+.btn.ghost{background:none}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.row.right{justify-content:flex-end}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg button{background:none;border:0;padding:5px 10px;font-size:13px;color:var(--ink-2)}
+.seg button.on{background:var(--chrome-3);color:var(--ink)}
+.subnav{display:flex;flex-direction:column;gap:2px;margin:0 0 14px}
+.subnav button{text-align:left;background:none;border:0;padding:6px 8px;border-radius:5px;color:var(--ink-2);display:flex;justify-content:space-between}
+.subnav button.on{background:var(--chrome-3);color:var(--ink)}
+.subnav button .done{color:var(--jade);font-size:12px}
+.two-col{display:grid;grid-template-columns:172px 1fr;gap:14px}
+@media (max-width:1000px){.two-col{grid-template-columns:1fr}.subnav{flex-direction:row;flex-wrap:wrap}}
+table.plain{border-collapse:collapse;width:100%;font-size:14px;margin:6px 0 12px}
+table.plain th,table.plain td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.plain th{color:var(--ink-3);font-weight:500}
+table.plain td.cn{font-family:var(--cjk);font-size:19px;white-space:nowrap}
+table.plain tr.clickable{cursor:pointer}
+table.plain tr.clickable:hover td{background:var(--chrome-3)}
+.piece-chip{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--disc);border:2px solid var(--disc-edge);font-family:var(--cjk);font-size:18px;font-weight:700;margin-right:6px;vertical-align:middle}
+.piece-chip.red{color:var(--red-piece)} .piece-chip.black{color:var(--black-piece)}
+.verdict{border-left:3px solid var(--line);padding:8px 12px;margin:8px 0;background:var(--chrome-3);border-radius:0 6px 6px 0}
+.verdict.fine{border-color:var(--jade)} .verdict.inaccuracy{border-color:var(--amber)} .verdict.mistake{border-color:#e0743a} .verdict.blunder{border-color:var(--cinnabar)}
+.verdict .head{font-weight:600;margin-bottom:3px}
+.verdict p{margin:0 0 6px}
+.moves{font-size:14px;max-height:220px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:6px 8px;background:var(--chrome)}
+.moves .mv{display:grid;grid-template-columns:34px 1fr 1fr;gap:6px;padding:2px 0}
+.moves .n{color:var(--ink-3)}
+.moves .m{cursor:default}
+.moves .m .zh{font-family:var(--cjk-ui)} .moves .m .py{color:var(--ink-3);font-size:12px;display:block}
+.moves .m.red .zh{color:var(--cinnabar-2)}
+.moves .m.cur{background:var(--chrome-3);border-radius:4px}
+.evalbar{height:10px;border-radius:5px;background:linear-gradient(90deg,var(--red-piece) 0,var(--red-piece) var(--pct,50%),#111 var(--pct,50%),#111 100%);border:1px solid var(--line);margin:6px 0 2px}
+.stat{display:inline-block;margin:0 14px 8px 0}
+.stat b{display:block;font-size:22px;font-weight:600}
+.stat span{color:var(--ink-3);font-size:13px}
+.bar{height:8px;background:var(--chrome);border-radius:4px;overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:var(--jade)}
+.pill{display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;background:var(--chrome-3);color:var(--ink-2);margin-right:4px}
+.pill.ok{background:#2f4b3a;color:#bfe6cc}
+.pill.warn{background:#4b3a2f;color:#e6cdbf}
+.options{display:flex;flex-direction:column;gap:6px;margin:8px 0}
+.options button{text-align:left;background:var(--chrome-3);border:1px solid var(--line);border-radius:6px;padding:8px 10px}
+.options button:hover{background:#485062}
+.options button.correct{border-color:var(--jade)} .options button.wrong{border-color:var(--cinnabar)}
+.feedback{margin:8px 0;padding:8px 12px;border-radius:6px;background:var(--chrome-3)}
+.feedback.good{border-left:3px solid var(--jade)} .feedback.bad{border-left:3px solid var(--cinnabar)}
+.puzzle-list{max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:6px;background:var(--chrome);margin:8px 0}
+.puzzle-list button{display:flex;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:6px 10px;gap:8px;align-items:center;color:var(--ink-2)}
+.puzzle-list button.on{background:var(--chrome-3);color:var(--ink)}
+.puzzle-list button .t{flex:1}
+.puzzle-list button .s{color:var(--jade);font-size:12px}
+.muted{color:var(--ink-3)}
+.small{font-size:13px}
+.kbd{font-family:ui-monospace,monospace;font-size:12px;background:var(--chrome);padding:1px 5px;border-radius:3px;border:1px solid var(--line)}
+.notice{background:#3a3323;border:1px solid #6a5a2a;border-radius:6px;padding:8px 12px;margin:8px 0;color:#efe3bd}
+label.chk{display:inline-flex;gap:6px;align-items:center;font-size:14px;color:var(--ink-2);margin-right:12px}
+select{background:var(--chrome-3);color:var(--ink);border:1px solid var(--line);border-radius:5px;padding:4px 6px;font:inherit}
+.tag{font-size:12px;color:var(--ink-3)}
+.hl{color:var(--ink)}
+.gate{background:var(--chrome-3);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.savestate{border:1px solid var(--line);background:none;border-radius:12px;padding:1px 10px 1px 8px;font-size:12px;color:var(--ink-2)}
+.savestate::before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;background:var(--ink-3)}
+.savestate.ok::before{background:var(--jade)} .savestate.bad::before{background:var(--cinnabar)} .savestate.bad{color:#f0c9c0;border-color:#7a3a30}
+textarea.code{width:100%;min-height:70px;background:var(--chrome);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px;font:12px ui-monospace,monospace}
+.thinking{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--amber);margin-right:6px;animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.3}}
+@media (prefers-reduced-motion:reduce){.thinking{animation:none}}
+.mini-boards{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin:8px 0}
+.mini-boards .mb{cursor:pointer;border:1px solid var(--line);border-radius:6px;padding:4px;background:var(--chrome)}
+.mini-boards .mb:hover{border-color:var(--ink-3)}
+.mini-boards .mb svg{width:100%;height:auto;display:block}
+.mini-boards .mb .lab{font-size:12px;color:var(--ink-2);text-align:center;margin-top:3px}
+</style>
+<script defer src="/assets/js/game-analytics.js"></script>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1><span class="cn">象棋</span>Xiangqi trainer</h1>
+    <button class="savestate wait" id="savestate" title="">Loading progress</button>
+    <nav class="rooms" id="rooms"></nav>
+  </header>
+  <div class="layout">
+    <div>
+      <div class="boardwrap" id="boardwrap"></div>
+      <div class="under-board" id="underboard"></div>
+    </div>
+    <div class="panel" id="panel"></div>
+  </div>
+</div>
+<script id="engine-src">
+/* Xiangqi engine: rules, move generation, evaluation, alpha-beta search,
+   notation. Coordinates: x 0..8 left to right, y 0..9 top to bottom.
+   Black's back rank is y=0, red's back rank is y=9. Square index = y*9+x.
+   Piece codes: 0 empty; red 1..7 = K A B N R C P; black = red + 8. */
+var XQ = (function () {
+  'use strict';
+  var EMPTY = 0, K = 1, A = 2, B = 3, N = 4, R = 5, C = 6, P = 7;
+  var RED = 0, BLACK = 1;
+  var MATE = 100000, WIN_BOUND = 90000;
+  var CHAR_TO_TYPE = { k: K, a: A, b: B, e: B, n: N, h: N, r: R, c: C, p: P };
+  var TYPE_TO_CHAR = ['.', 'k', 'a', 'b', 'n', 'r', 'c', 'p'];
+
+  function sq(x, y) { return y * 9 + x; }
+  function fx(s) { return s % 9; }
+  function fy(s) { return (s / 9) | 0; }
+  function typeOf(c) { return c & 7; }
+  function sideOf(c) { return c >> 3; }
+  function make(side, t) { return side ? t | 8 : t; }
+
+  var IN_PALACE = [new Uint8Array(90), new Uint8Array(90)];
+  var OWN_SIDE = [new Uint8Array(90), new Uint8Array(90)];
+  var ELEPHANT_OK = [new Uint8Array(90), new Uint8Array(90)];
+  var ADVISOR_OK = [new Uint8Array(90), new Uint8Array(90)];
+  (function () {
+    for (var y = 0; y < 10; y++) for (var x = 0; x < 9; x++) {
+      var s = sq(x, y);
+      IN_PALACE[RED][s] = (x >= 3 && x <= 5 && y >= 7) ? 1 : 0;
+      IN_PALACE[BLACK][s] = (x >= 3 && x <= 5 && y <= 2) ? 1 : 0;
+      OWN_SIDE[RED][s] = y >= 5 ? 1 : 0;
+      OWN_SIDE[BLACK][s] = y <= 4 ? 1 : 0;
+    }
+    var eRed = [[2, 9], [6, 9], [0, 7], [4, 7], [8, 7], [2, 5], [6, 5]];
+    var aRed = [[3, 9], [5, 9], [4, 8], [3, 7], [5, 7]];
+    eRed.forEach(function (p) { ELEPHANT_OK[RED][sq(p[0], p[1])] = 1; ELEPHANT_OK[BLACK][sq(p[0], 9 - p[1])] = 1; });
+    aRed.forEach(function (p) { ADVISOR_OK[RED][sq(p[0], p[1])] = 1; ADVISOR_OK[BLACK][sq(p[0], 9 - p[1])] = 1; });
+  })();
+
+  // [dx, dy, legdx, legdy]
+  var HORSE = [[1, 2, 0, 1], [-1, 2, 0, 1], [1, -2, 0, -1], [-1, -2, 0, -1], [2, 1, 1, 0], [2, -1, 1, 0], [-2, 1, -1, 0], [-2, -1, -1, 0]];
+  var ORTHO = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+  var DIAG = [[1, 1], [1, -1], [-1, 1], [-1, -1]];
+
+  // ---------- Zobrist ----------
+  var seed = 0x9E3779B9 | 0;
+  function rnd() { seed ^= seed << 13; seed ^= seed >>> 17; seed ^= seed << 5; return seed | 0; }
+  var ZLO = new Int32Array(16 * 90), ZHI = new Int32Array(16 * 90), ZSIDE_LO = rnd(), ZSIDE_HI = rnd();
+  for (var zi = 0; zi < 16 * 90; zi++) { ZLO[zi] = rnd(); ZHI[zi] = rnd(); }
+
+  // ---------- Piece-square tables (red perspective, y=0 is the enemy back rank) ----------
+  var MAT = [0, 0, 200, 200, 400, 900, 450, 100];
+  var PST = {};
+  PST[P] = [
+    [9, 9, 9, 11, 13, 11, 9, 9, 9],
+    [70, 85, 100, 110, 115, 110, 100, 85, 70],
+    [65, 80, 92, 100, 102, 100, 92, 80, 65],
+    [55, 70, 80, 88, 92, 88, 80, 70, 55],
+    [45, 55, 65, 75, 80, 75, 65, 55, 45],
+    [8, 0, 14, 0, 18, 0, 14, 0, 8],
+    [6, 0, 8, 0, 14, 0, 8, 0, 6],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0]];
+  PST[N] = [
+    [0, 4, 8, 10, 4, 10, 8, 4, 0],
+    [4, 12, 18, 22, 22, 22, 18, 12, 4],
+    [8, 18, 26, 30, 26, 30, 26, 18, 8],
+    [6, 20, 26, 30, 32, 30, 26, 20, 6],
+    [4, 16, 22, 26, 28, 26, 22, 16, 4],
+    [2, 12, 18, 22, 24, 22, 18, 12, 2],
+    [0, 6, 12, 18, 12, 18, 12, 6, 0],
+    [-2, 2, 8, 10, 4, 10, 8, 2, -2],
+    [-4, 0, 4, 2, -6, 2, 4, 0, -4],
+    [-6, -2, 0, 0, -4, 0, 0, -2, -6]];
+  PST[R] = [
+    [8, 10, 8, 14, 16, 14, 8, 10, 8],
+    [8, 12, 10, 16, 18, 16, 10, 12, 8],
+    [6, 10, 8, 12, 14, 12, 8, 10, 6],
+    [6, 10, 8, 12, 14, 12, 8, 10, 6],
+    [6, 10, 8, 12, 14, 12, 8, 10, 6],
+    [4, 8, 6, 10, 12, 10, 6, 8, 4],
+    [2, 6, 4, 8, 10, 8, 4, 6, 2],
+    [0, 4, 2, 6, 8, 6, 2, 4, 0],
+    [-2, 2, 0, 4, 6, 4, 0, 2, -2],
+    [-4, 0, -2, 2, 0, 2, -2, 0, -4]];
+  PST[C] = [
+    [6, 6, 4, 6, 10, 6, 4, 6, 6],
+    [4, 4, 2, 6, 10, 6, 2, 4, 4],
+    [4, 4, 2, 6, 12, 6, 2, 4, 4],
+    [2, 2, 0, 4, 10, 4, 0, 2, 2],
+    [2, 2, 0, 4, 8, 4, 0, 2, 2],
+    [0, 0, 0, 2, 8, 2, 0, 0, 0],
+    [0, 0, 0, 2, 8, 2, 0, 0, 0],
+    [0, 2, 2, 4, 12, 4, 2, 2, 0],
+    [0, 0, 0, 2, 6, 2, 0, 0, 0],
+    [0, 0, 0, 0, 2, 0, 0, 0, 0]];
+  PST[A] = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 4, 0, 0, 0], [0, 0, 0, 0, 6, 0, 0, 0, 0], [0, 0, 0, 2, 0, 2, 0, 0, 0]];
+  PST[A][7][3] = 0; PST[A][7][5] = 0;
+  PST[B] = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, -2, 0, 0, 0, -2, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [-2, 0, 0, 0, 6, 0, 0, 0, -2], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 2, 0, 0, 0, 2, 0, 0]];
+  PST[K] = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, -8, -10, -8, 0, 0, 0], [0, 0, 0, -4, -6, -4, 0, 0, 0], [0, 0, 0, 0, 4, 0, 0, 0, 0]];
+  // Flattened, per side: PSQ[side][piece][sq]
+  var PSQ = [[], []];
+  for (var t = 1; t <= 7; t++) {
+    PSQ[RED][t] = new Int16Array(90); PSQ[BLACK][t] = new Int16Array(90);
+    for (var y = 0; y < 10; y++) for (var x = 0; x < 9; x++) {
+      PSQ[RED][t][sq(x, y)] = MAT[t] + PST[t][y][x];
+      PSQ[BLACK][t][sq(x, 9 - y)] = MAT[t] + PST[t][y][x];
+    }
+  }
+
+  // ---------- Position ----------
+  function Position() {
+    this.b = new Uint8Array(90);
+    this.side = RED;
+    this.kings = [sq(4, 9), sq(4, 0)];
+    this.lo = 0; this.hi = 0;
+    this.stack = [];     // undo info
+    this.keyLo = [];     // key history for repetition (includes current position at end)
+    this.keyHi = [];
+    this.checks = [];    // checks[i] = 1 if move i gave check (to side to move after it)
+    this.halfmove = 0;
+  }
+  Position.prototype.clone = function () {
+    var p = new Position();
+    p.b.set(this.b); p.side = this.side; p.kings = this.kings.slice();
+    p.lo = this.lo; p.hi = this.hi;
+    p.keyLo = this.keyLo.slice(); p.keyHi = this.keyHi.slice(); p.checks = this.checks.slice();
+    p.stack = this.stack.slice(); p.halfmove = this.halfmove;
+    return p;
+  };
+  Position.prototype.computeHash = function () {
+    var lo = 0, hi = 0;
+    for (var s = 0; s < 90; s++) { var c = this.b[s]; if (c) { lo ^= ZLO[c * 90 + s]; hi ^= ZHI[c * 90 + s]; } }
+    if (this.side) { lo ^= ZSIDE_LO; hi ^= ZSIDE_HI; }
+    this.lo = lo; this.hi = hi;
+  };
+  Position.prototype.setFen = function (fen) {
+    var parts = fen.trim().split(/\s+/);
+    var rows = parts[0].split('/');
+    this.b.fill(0);
+    for (var y = 0; y < 10; y++) {
+      var row = rows[y] || '', x = 0;
+      for (var i = 0; i < row.length; i++) {
+        var ch = row[i];
+        if (ch >= '1' && ch <= '9') x += parseInt(ch, 10);
+        else {
+          var t = CHAR_TO_TYPE[ch.toLowerCase()];
+          if (t) { var side = ch === ch.toUpperCase() ? RED : BLACK; this.b[sq(x, y)] = make(side, t); if (t === K) this.kings[side] = sq(x, y); }
+          x++;
+        }
+      }
+    }
+    this.side = (parts[1] && (parts[1][0] === 'b')) ? BLACK : RED;
+    this.stack = []; this.keyLo = []; this.keyHi = []; this.checks = []; this.halfmove = 0;
+    this.computeHash();
+    this.keyLo.push(this.lo); this.keyHi.push(this.hi);
+    return this;
+  };
+  Position.prototype.fen = function () {
+    var rows = [];
+    for (var y = 0; y < 10; y++) {
+      var row = '', empty = 0;
+      for (var x = 0; x < 9; x++) {
+        var c = this.b[sq(x, y)];
+        if (!c) { empty++; continue; }
+        if (empty) { row += empty; empty = 0; }
+        var ch = TYPE_TO_CHAR[typeOf(c)];
+        row += sideOf(c) === RED ? ch.toUpperCase() : ch;
+      }
+      if (empty) row += empty;
+      rows.push(row);
+    }
+    return rows.join('/') + ' ' + (this.side ? 'b' : 'w');
+  };
+  Position.prototype.pieceAt = function (x, y) { return this.b[sq(x, y)]; };
+
+  // Is square s attacked by side att? full version (all piece types)
+  Position.prototype.attacked = function (s, att) {
+    var b = this.b, x = fx(s), y = fy(s), i, nx, ny, c, d, ns;
+    // orthogonal rays: chariot, cannon, facing general
+    for (d = 0; d < 4; d++) {
+      var dx = ORTHO[d][0], dy = ORTHO[d][1];
+      nx = x + dx; ny = y + dy; var screen = 0;
+      while (nx >= 0 && nx < 9 && ny >= 0 && ny < 10) {
+        c = b[sq(nx, ny)];
+        if (c) {
+          if (!screen) {
+            if (sideOf(c) === att) {
+              var tt = typeOf(c);
+              if (tt === R) return true;
+              if (tt === K && dx === 0) return true;
+              if (tt === K && Math.abs(nx - x) + Math.abs(ny - y) === 1 && IN_PALACE[att][s]) return true;
+            }
+            screen = 1;
+          } else {
+            if (sideOf(c) === att && typeOf(c) === C) return true;
+            break;
+          }
+        }
+        nx += dx; ny += dy;
+      }
+    }
+    // horse: attacker at s+(dx,dy), leg between attacker and s
+    for (i = 0; i < 8; i++) {
+      nx = x + HORSE[i][0]; ny = y + HORSE[i][1];
+      if (nx < 0 || nx > 8 || ny < 0 || ny > 9) continue;
+      c = b[sq(nx, ny)];
+      if (c && sideOf(c) === att && typeOf(c) === N) {
+        var lx = nx - HORSE[i][2], ly = ny - HORSE[i][3];
+        if (!b[sq(lx, ly)]) return true;
+      }
+    }
+    // soldier
+    var fwd = att === RED ? 1 : -1; // red soldier attacking s sits at y+1
+    ny = y + fwd;
+    if (ny >= 0 && ny < 10) { c = b[sq(x, ny)]; if (c && sideOf(c) === att && typeOf(c) === P) return true; }
+    for (i = -1; i <= 1; i += 2) {
+      nx = x + i; if (nx < 0 || nx > 8) continue;
+      c = b[sq(nx, y)];
+      if (c && sideOf(c) === att && typeOf(c) === P && !OWN_SIDE[att][sq(nx, y)]) return true;
+    }
+    // elephant
+    for (i = 0; i < 4; i++) {
+      nx = x + 2 * DIAG[i][0]; ny = y + 2 * DIAG[i][1];
+      if (nx < 0 || nx > 8 || ny < 0 || ny > 9) continue;
+      ns = sq(nx, ny); c = b[ns];
+      if (c && sideOf(c) === att && typeOf(c) === B && OWN_SIDE[att][s] && !b[sq(x + DIAG[i][0], y + DIAG[i][1])]) return true;
+    }
+    // advisor
+    if (IN_PALACE[att][s]) for (i = 0; i < 4; i++) {
+      nx = x + DIAG[i][0]; ny = y + DIAG[i][1];
+      if (nx < 0 || nx > 8 || ny < 0 || ny > 9) continue;
+      c = b[sq(nx, ny)];
+      if (c && sideOf(c) === att && typeOf(c) === A) return true;
+    }
+    return false;
+  };
+  // Fast king-safety: is side's king attacked (chariot, cannon, horse, soldier, facing)
+  Position.prototype.inCheck = function (side) {
+    return this.attacked(this.kings[side], side ^ 1);
+  };
+  // All attackers of square s by side att (list of squares)
+  Position.prototype.attackers = function (s, att) {
+    var res = [], b = this.b, x = fx(s), y = fy(s), i, nx, ny, c, d, targetIsKing = typeOf(b[s]) === K;
+    for (d = 0; d < 4; d++) {
+      var dx = ORTHO[d][0], dy = ORTHO[d][1];
+      nx = x + dx; ny = y + dy; var screen = 0;
+      while (nx >= 0 && nx < 9 && ny >= 0 && ny < 10) {
+        c = b[sq(nx, ny)];
+        if (c) {
+          if (!screen) {
+            if (sideOf(c) === att) {
+              var tt = typeOf(c);
+              if (tt === R) res.push(sq(nx, ny));
+              else if (tt === K && dx === 0 && targetIsKing) res.push(sq(nx, ny));
+              else if (tt === K && Math.abs(nx - x) + Math.abs(ny - y) === 1 && IN_PALACE[att][s]) res.push(sq(nx, ny));
+            }
+            screen = 1;
+          } else { if (sideOf(c) === att && typeOf(c) === C) res.push(sq(nx, ny)); break; }
+        }
+        nx += dx; ny += dy;
+      }
+    }
+    for (i = 0; i < 8; i++) {
+      nx = x + HORSE[i][0]; ny = y + HORSE[i][1];
+      if (nx < 0 || nx > 8 || ny < 0 || ny > 9) continue;
+      c = b[sq(nx, ny)];
+      if (c && sideOf(c) === att && typeOf(c) === N && !b[sq(nx - HORSE[i][2], ny - HORSE[i][3])]) res.push(sq(nx, ny));
+    }
+    var fwd = att === RED ? 1 : -1; ny = y + fwd;
+    if (ny >= 0 && ny < 10) { c = b[sq(x, ny)]; if (c && sideOf(c) === att && typeOf(c) === P) res.push(sq(x, ny)); }
+    for (i = -1; i <= 1; i += 2) { nx = x + i; if (nx < 0 || nx > 8) continue; c = b[sq(nx, y)]; if (c && sideOf(c) === att && typeOf(c) === P && !OWN_SIDE[att][sq(nx, y)]) res.push(sq(nx, y)); }
+    for (i = 0; i < 4; i++) {
+      nx = x + 2 * DIAG[i][0]; ny = y + 2 * DIAG[i][1];
+      if (nx < 0 || nx > 8 || ny < 0 || ny > 9) continue;
+      c = b[sq(nx, ny)];
+      if (c && sideOf(c) === att && typeOf(c) === B && OWN_SIDE[att][s] && !b[sq(x + DIAG[i][0], y + DIAG[i][1])]) res.push(sq(nx, ny));
+    }
+    if (IN_PALACE[att][s]) for (i = 0; i < 4; i++) {
+      nx = x + DIAG[i][0]; ny = y + DIAG[i][1];
+      if (nx < 0 || nx > 8 || ny < 0 || ny > 9) continue;
+      c = b[sq(nx, ny)];
+      if (c && sideOf(c) === att && typeOf(c) === A) res.push(sq(nx, ny));
+    }
+    return res;
+  };
+
+  // Pseudo-legal moves for the piece on square s (its own side). Returns array of target squares.
+  Position.prototype.pieceTargets = function (s) {
+    var b = this.b, c = b[s], side = sideOf(c), t = typeOf(c), x = fx(s), y = fy(s), out = [], i, nx, ny, ns, oc;
+    function ok(ns) { var q = b[ns]; return !q || sideOf(q) !== side; }
+    if (t === K) {
+      for (i = 0; i < 4; i++) { nx = x + ORTHO[i][0]; ny = y + ORTHO[i][1]; if (nx < 0 || nx > 8 || ny < 0 || ny > 9) continue; ns = sq(nx, ny); if (IN_PALACE[side][ns] && ok(ns)) out.push(ns); }
+    } else if (t === A) {
+      for (i = 0; i < 4; i++) { nx = x + DIAG[i][0]; ny = y + DIAG[i][1]; if (nx < 0 || nx > 8 || ny < 0 || ny > 9) continue; ns = sq(nx, ny); if (IN_PALACE[side][ns] && ok(ns)) out.push(ns); }
+    } else if (t === B) {
+      for (i = 0; i < 4; i++) { nx = x + 2 * DIAG[i][0]; ny = y + 2 * DIAG[i][1]; if (nx < 0 || nx > 8 || ny < 0 || ny > 9) continue; ns = sq(nx, ny); if (OWN_SIDE[side][ns] && !b[sq(x + DIAG[i][0], y + DIAG[i][1])] && ok(ns)) out.push(ns); }
+    } else if (t === N) {
+      for (i = 0; i < 8; i++) { nx = x + HORSE[i][0]; ny = y + HORSE[i][1]; if (nx < 0 || nx > 8 || ny < 0 || ny > 9) continue; if (b[sq(x + HORSE[i][2], y + HORSE[i][3])]) continue; ns = sq(nx, ny); if (ok(ns)) out.push(ns); }
+    } else if (t === R) {
+      for (i = 0; i < 4; i++) { nx = x + ORTHO[i][0]; ny = y + ORTHO[i][1]; while (nx >= 0 && nx < 9 && ny >= 0 && ny < 10) { ns = sq(nx, ny); oc = b[ns]; if (!oc) out.push(ns); else { if (sideOf(oc) !== side) out.push(ns); break; } nx += ORTHO[i][0]; ny += ORTHO[i][1]; } }
+    } else if (t === C) {
+      for (i = 0; i < 4; i++) { nx = x + ORTHO[i][0]; ny = y + ORTHO[i][1]; var scr = 0; while (nx >= 0 && nx < 9 && ny >= 0 && ny < 10) { ns = sq(nx, ny); oc = b[ns]; if (!scr) { if (!oc) out.push(ns); else scr = 1; } else if (oc) { if (sideOf(oc) !== side) out.push(ns); break; } nx += ORTHO[i][0]; ny += ORTHO[i][1]; } }
+    } else if (t === P) {
+      var fwd = side === RED ? -1 : 1;
+      ny = y + fwd; if (ny >= 0 && ny < 10) { ns = sq(x, ny); if (ok(ns)) out.push(ns); }
+      if (!OWN_SIDE[side][s]) for (i = -1; i <= 1; i += 2) { nx = x + i; if (nx < 0 || nx > 8) continue; ns = sq(nx, y); if (ok(ns)) out.push(ns); }
+    }
+    return out;
+  };
+  Position.prototype.pseudoMoves = function () {
+    var out = [], b = this.b, side = this.side;
+    for (var s = 0; s < 90; s++) {
+      var c = b[s]; if (!c || sideOf(c) !== side) continue;
+      var ts = this.pieceTargets(s);
+      for (var i = 0; i < ts.length; i++) out.push(s | (ts[i] << 7));
+    }
+    return out;
+  };
+  Position.prototype.legalMoves = function () {
+    var pm = this.pseudoMoves(), out = [];
+    for (var i = 0; i < pm.length; i++) {
+      var m = pm[i];
+      this.makeMove(m);
+      if (!this.inCheck(this.side ^ 1)) out.push(m);
+      this.unmakeMove();
+    }
+    return out;
+  };
+  Position.prototype.legalTargets = function (s) {
+    var ts = this.pieceTargets(s), out = [];
+    for (var i = 0; i < ts.length; i++) {
+      var m = s | (ts[i] << 7);
+      this.makeMove(m);
+      if (!this.inCheck(this.side ^ 1)) out.push(ts[i]);
+      this.unmakeMove();
+    }
+    return out;
+  };
+  Position.prototype.isLegal = function (m) {
+    var from = m & 127, c = this.b[from];
+    if (!c || sideOf(c) !== this.side) return false;
+    var to = m >> 7, ts = this.pieceTargets(from);
+    if (ts.indexOf(to) < 0) return false;
+    this.makeMove(m);
+    var ok = !this.inCheck(this.side ^ 1);
+    this.unmakeMove();
+    return ok;
+  };
+  Position.prototype.makeMove = function (m) {
+    var from = m & 127, to = m >> 7, b = this.b, c = b[from], cap = b[to];
+    this.stack.push({ m: m, cap: cap, half: this.halfmove });
+    if (cap) { this.lo ^= ZLO[cap * 90 + to]; this.hi ^= ZHI[cap * 90 + to]; }
+    this.lo ^= ZLO[c * 90 + from] ^ ZLO[c * 90 + to]; this.hi ^= ZHI[c * 90 + from] ^ ZHI[c * 90 + to];
+    b[to] = c; b[from] = 0;
+    if (typeOf(c) === K) this.kings[sideOf(c)] = to;
+    this.side ^= 1;
+    this.lo ^= ZSIDE_LO; this.hi ^= ZSIDE_HI;
+    this.halfmove = cap ? 0 : this.halfmove + 1;
+    this.keyLo.push(this.lo); this.keyHi.push(this.hi);
+    this.checks.push(this.inCheck(this.side) ? 1 : 0);
+  };
+  Position.prototype.makeNull = function () {
+    this.stack.push({ m: -1, cap: 0, half: this.halfmove });
+    this.side ^= 1; this.lo ^= ZSIDE_LO; this.hi ^= ZSIDE_HI;
+    this.keyLo.push(this.lo); this.keyHi.push(this.hi); this.checks.push(0);
+  };
+  Position.prototype.unmakeMove = function () {
+    var u = this.stack.pop();
+    this.keyLo.pop(); this.keyHi.pop(); this.checks.pop();
+    this.side ^= 1; this.lo ^= ZSIDE_LO; this.hi ^= ZSIDE_HI;
+    this.halfmove = u.half;
+    if (u.m < 0) return;
+    var from = u.m & 127, to = u.m >> 7, b = this.b, c = b[to];
+    b[from] = c; b[to] = u.cap;
+    this.lo ^= ZLO[c * 90 + from] ^ ZLO[c * 90 + to]; this.hi ^= ZHI[c * 90 + from] ^ ZHI[c * 90 + to];
+    if (u.cap) { this.lo ^= ZLO[u.cap * 90 + to]; this.hi ^= ZHI[u.cap * 90 + to]; }
+    if (typeOf(c) === K) this.kings[sideOf(c)] = from;
+  };
+  // Repetition status for the current position. Returns 0 none, or an object
+  // {count, result} where result is 'draw' | 'redLoses' | 'blackLoses' (perpetual check rule).
+  Position.prototype.repetition = function (minCount) {
+    minCount = minCount || 2;
+    var n = this.keyLo.length - 1, count = 1, first = -1;
+    var limit = this.halfmove; // captures reset history
+    for (var i = n - 2; i >= 0 && (n - i) <= limit; i -= 2) {
+      if (this.keyLo[i] === this.lo && this.keyHi[i] === this.hi) { count++; first = i; if (count >= minCount) break; }
+    }
+    if (count < minCount) return null;
+    // moves from index first+1 .. n: move j leads to position j. checks[j-1] tells if position j is a check.
+    var stmAll = true, oppAll = true; // did side-to-move (of the repeated position) check on every move? and the opponent?
+    for (var j = first + 1; j <= n; j++) {
+      var gaveCheck = this.checks[j - 1] === 1;
+      // position j has side to move = (this.side if (n-j) even). The move that led to j was made by the other side.
+      var moverIsStm = ((n - j) % 2) === 1; // mover of move j is the side to move at position n?
+      if (moverIsStm) { if (!gaveCheck) stmAll = false; } else { if (!gaveCheck) oppAll = false; }
+    }
+    var result = 'draw';
+    if (stmAll && !oppAll) result = this.side === RED ? 'redLoses' : 'blackLoses';
+    else if (oppAll && !stmAll) result = this.side === RED ? 'blackLoses' : 'redLoses';
+    return { count: count, result: result };
+  };
+
+  // ---------- Evaluation ----------
+  var noiseAmp = 0;
+  Position.prototype.evaluate = function () {
+    var b = this.b, red = 0, black = 0, nonKing = 0, cannonsR = 0, cannonsB = 0, horsesR = 0, horsesB = 0;
+    for (var s = 0; s < 90; s++) {
+      var c = b[s]; if (!c) continue;
+      var t = typeOf(c);
+      if (t !== K) nonKing++;
+      if (c < 8) { red += PSQ[RED][t][s]; if (t === C) cannonsR++; if (t === N) horsesR++; }
+      else { black += PSQ[BLACK][t][s]; if (t === C) cannonsB++; if (t === N) horsesB++; }
+    }
+    // phase: 30 non-king pieces at start, cannons lose value and horses gain as the board empties
+    var empt = 30 - nonKing; if (empt < 0) empt = 0; // 0..30
+    var adj = (empt * 2) | 0; // up to 60
+    red += (horsesR - cannonsR) * adj; black += (horsesB - cannonsB) * adj;
+    var score = red - black;
+    if (noiseAmp) { var r = ((this.lo ^ (this.hi >>> 3)) & 1023) / 1023; score += ((r * 2 - 1) * noiseAmp) | 0; }
+    return this.side === RED ? score : -score;
+  };
+  Position.prototype.material = function () {
+    var b = this.b, red = 0, black = 0;
+    for (var s = 0; s < 90; s++) { var c = b[s]; if (!c) continue; var t = typeOf(c); var v = MAT[t]; if (t === P && !OWN_SIDE[sideOf(c)][s]) v = 200; if (c < 8) red += v; else black += v; }
+    return { red: red, black: black };
+  };
+
+  // ---------- Search ----------
+  var TT_SIZE = 1 << 20, TT_MASK = TT_SIZE - 1;
+  var ttLo = new Int32Array(TT_SIZE), ttHi = new Int32Array(TT_SIZE), ttDepth = new Int8Array(TT_SIZE), ttFlag = new Int8Array(TT_SIZE), ttScore = new Int32Array(TT_SIZE), ttMove = new Int32Array(TT_SIZE);
+  var history = new Int32Array(90 * 90);
+  var killers = [];
+  var nodes = 0, stopFlag = false, deadline = 0, rootDepthNow = 0;
+  var MAX_PLY = 64;
+  for (var kp = 0; kp < MAX_PLY + 2; kp++) killers.push([0, 0]);
+  function clearTT() { ttLo.fill(0); ttHi.fill(0); ttDepth.fill(0); ttFlag.fill(0); ttScore.fill(0); ttMove.fill(0); history.fill(0); }
+  function mvvLva(pos, m) {
+    var cap = pos.b[m >> 7]; if (!cap) return 0;
+    var att = pos.b[m & 127];
+    return MAT[typeOf(cap)] * 10 - MAT[typeOf(att)] / 10 + 1000;
+  }
+  function orderMoves(pos, moves, ttm, ply) {
+    var n = moves.length, scores = new Array(n), k1 = killers[ply][0], k2 = killers[ply][1];
+    for (var i = 0; i < n; i++) {
+      var m = moves[i], s;
+      if (m === ttm) s = 1e9;
+      else { s = mvvLva(pos, m); if (!s) { if (m === k1) s = 900; else if (m === k2) s = 800; else s = history[(m & 127) * 90 + (m >> 7)] & 0x7fffff; } }
+      scores[i] = s;
+    }
+    // simple selection sort by score (moves lists are short)
+    var idx = []; for (i = 0; i < n; i++) idx.push(i);
+    idx.sort(function (a, b) { return scores[b] - scores[a]; });
+    var out = new Array(n); for (i = 0; i < n; i++) out[i] = moves[idx[i]];
+    return out;
+  }
+  function checkTime() { if ((nodes & 2047) === 0 && Date.now() > deadline) stopFlag = true; }
+  function quiesce(pos, alpha, beta, ply) {
+    nodes++; checkTime();
+    if (stopFlag) return 0;
+    var stand = pos.evaluate();
+    if (ply >= MAX_PLY - 1) return stand;
+    if (stand >= beta) return stand;
+    if (stand > alpha) alpha = stand;
+    var pm = pos.pseudoMoves(), caps = [];
+    for (var i = 0; i < pm.length; i++) if (pos.b[pm[i] >> 7]) caps.push(pm[i]);
+    caps = orderMoves(pos, caps, 0, ply);
+    var best = stand;
+    for (i = 0; i < caps.length; i++) {
+      var m = caps[i];
+      pos.makeMove(m);
+      if (pos.inCheck(pos.side ^ 1)) { pos.unmakeMove(); continue; }
+      var sc = -quiesce(pos, -beta, -alpha, ply + 1);
+      pos.unmakeMove();
+      if (stopFlag) return 0;
+      if (sc > best) { best = sc; if (sc > alpha) { alpha = sc; if (sc >= beta) return sc; } }
+    }
+    return best;
+  }
+  function repScore(pos, ply) {
+    var r = pos.repetition(2);
+    if (!r) return null;
+    if (r.result === 'draw') return 0;
+    var stmLoses = (r.result === 'redLoses') === (pos.side === RED);
+    return stmLoses ? -MATE + ply : MATE - ply;
+  }
+  function search(pos, depth, alpha, beta, ply, nullOk) {
+    if (ply > 0) {
+      var rs = repScore(pos, ply); if (rs !== null) return rs;
+      // mate distance pruning
+      if (alpha < -MATE + ply) alpha = -MATE + ply;
+      if (beta > MATE - ply - 1) beta = MATE - ply - 1;
+      if (alpha >= beta) return alpha;
+    }
+    var inChk = pos.inCheck(pos.side);
+    if (inChk) depth++;
+    if (depth <= 0) return quiesce(pos, alpha, beta, ply);
+    nodes++; checkTime();
+    if (stopFlag) return 0;
+    // TT probe
+    var ix = pos.lo & TT_MASK, ttm = 0;
+    if (ttLo[ix] === pos.lo && ttHi[ix] === pos.hi) {
+      ttm = ttMove[ix];
+      if (ttDepth[ix] >= depth && ply > 0) {
+        var ts = ttScore[ix];
+        if (ts > WIN_BOUND) ts -= ply; else if (ts < -WIN_BOUND) ts += ply;
+        var f = ttFlag[ix];
+        if (f === 0) return ts;
+        if (f === 1 && ts >= beta) return ts;
+        if (f === 2 && ts <= alpha) return ts;
+      }
+    }
+    // null move
+    if (nullOk && !inChk && depth >= 3 && ply > 0) {
+      pos.makeNull();
+      var ns = -search(pos, depth - 3, -beta, -beta + 1, ply + 1, false);
+      pos.unmakeMove();
+      if (stopFlag) return 0;
+      if (ns >= beta && ns < WIN_BOUND) return ns;
+    }
+    var moves = orderMoves(pos, pos.pseudoMoves(), ttm, ply);
+    var bestScore = -MATE - 1, bestMove = 0, legal = 0, flag = 2, origAlpha = alpha;
+    for (var i = 0; i < moves.length; i++) {
+      var m = moves[i];
+      pos.makeMove(m);
+      if (pos.inCheck(pos.side ^ 1)) { pos.unmakeMove(); continue; }
+      legal++;
+      var sc;
+      if (legal === 1) sc = -search(pos, depth - 1, -beta, -alpha, ply + 1, true);
+      else {
+        sc = -search(pos, depth - 1, -alpha - 1, -alpha, ply + 1, true);
+        if (sc > alpha && sc < beta && !stopFlag) sc = -search(pos, depth - 1, -beta, -alpha, ply + 1, true);
+      }
+      pos.unmakeMove();
+      if (stopFlag) return 0;
+      if (sc > bestScore) {
+        bestScore = sc; bestMove = m;
+        if (sc > alpha) {
+          alpha = sc; flag = 0;
+          if (sc >= beta) {
+            flag = 1;
+            if (!pos.b[m >> 7]) {
+              if (killers[ply][0] !== m) { killers[ply][1] = killers[ply][0]; killers[ply][0] = m; }
+              history[(m & 127) * 90 + (m >> 7)] += depth * depth;
+            }
+            break;
+          }
+        }
+      }
+    }
+    if (!legal) return -MATE + ply; // no legal moves: mate or stalemate, both lose in xiangqi
+    // store
+    var st = bestScore;
+    if (st > WIN_BOUND) st += ply; else if (st < -WIN_BOUND) st -= ply;
+    if (ttDepth[ix] <= depth || ttLo[ix] !== pos.lo) {
+      ttLo[ix] = pos.lo; ttHi[ix] = pos.hi; ttDepth[ix] = depth; ttFlag[ix] = flag; ttScore[ix] = st; ttMove[ix] = bestMove;
+    }
+    return bestScore;
+  }
+  function pvLine(pos, maxLen) {
+    var pv = [], seen = {};
+    for (var i = 0; i < maxLen; i++) {
+      var ix = pos.lo & TT_MASK;
+      if (ttLo[ix] !== pos.lo || ttHi[ix] !== pos.hi) break;
+      var m = ttMove[ix]; if (!m || !pos.isLegal(m)) break;
+      var key = pos.lo + ':' + pos.hi; if (seen[key]) break; seen[key] = 1;
+      pv.push(m); pos.makeMove(m);
+    }
+    for (i = 0; i < pv.length; i++) pos.unmakeMove();
+    return pv;
+  }
+  // Iterative deepening. opts: {depth, timeMs, noise}. Returns {move, score, depth, pv, nodes}
+  function think(pos, opts) {
+    opts = opts || {};
+    var maxDepth = opts.depth || 6, timeMs = opts.timeMs || 3000;
+    noiseAmp = opts.noise || 0;
+    nodes = 0; stopFlag = false; deadline = Date.now() + timeMs;
+    for (var i = 0; i < killers.length; i++) { killers[i][0] = 0; killers[i][1] = 0; }
+    for (i = 0; i < history.length; i++) history[i] = history[i] >> 2;
+    var best = 0, bestScore = 0, pv = [], reached = 0;
+    var legal = pos.legalMoves();
+    if (!legal.length) return { move: 0, score: -MATE, depth: 0, pv: [], nodes: 0 };
+    if (legal.length === 1) { return { move: legal[0], score: 0, depth: 1, pv: [legal[0]], nodes: 0, forced: true }; }
+    for (var d = 1; d <= maxDepth; d++) {
+      rootDepthNow = d;
+      var sc = search(pos, d, -MATE - 1, MATE + 1, 0, true);
+      if (stopFlag && d > 1) break;
+      var ix = pos.lo & TT_MASK;
+      if (ttLo[ix] === pos.lo && ttHi[ix] === pos.hi && ttMove[ix]) { best = ttMove[ix]; bestScore = sc; reached = d; pv = pvLine(pos, d); }
+      if (sc > WIN_BOUND || sc < -WIN_BOUND) break;
+      if (Date.now() - (deadline - timeMs) > timeMs * 0.5) break;
+    }
+    if (!best) best = legal[0];
+    noiseAmp = 0;
+    return { move: best, score: bestScore, depth: reached, pv: pv, nodes: nodes };
+  }
+  // Score every legal root move (full window each). Returns sorted array [{move, score}].
+  function analyzeRoot(pos, opts) {
+    opts = opts || {};
+    var depth = opts.depth || 4, timeMs = opts.timeMs || 4000;
+    noiseAmp = 0; nodes = 0; stopFlag = false; deadline = Date.now() + timeMs;
+    var legal = pos.legalMoves(), res = [];
+    for (var i = 0; i < legal.length; i++) {
+      var m = legal[i];
+      pos.makeMove(m);
+      var sc = -search(pos, depth - 1, -MATE - 1, MATE + 1, 1, true);
+      var pv = [m].concat(pvLine(pos, depth));
+      pos.unmakeMove();
+      if (stopFlag) break;
+      res.push({ move: m, score: sc, pv: pv });
+    }
+    res.sort(function (a, b) { return b.score - a.score; });
+    return res;
+  }
+  // Static exchange-ish: is piece on s (of side) attacked and how well defended
+  Position.prototype.hanging = function (s) {
+    var c = this.b[s]; if (!c) return null;
+    var side = sideOf(c), att = this.attackers(s, side ^ 1), def = this.attackers(s, side);
+    if (!att.length) return null;
+    var v = MAT[typeOf(c)]; if (typeOf(c) === P && !OWN_SIDE[side][s]) v = 200;
+    var minAtt = 1e9;
+    for (var i = 0; i < att.length; i++) { var t = typeOf(this.b[att[i]]); var av = t === K ? 5000 : MAT[t]; if (av < minAtt) minAtt = av; }
+    if (!def.length) return { value: v, attackers: att, defenders: def, free: true };
+    if (minAtt < v) return { value: v - minAtt, attackers: att, defenders: def, free: false };
+    return null;
+  };
+
+  // ---------- Mate solver ----------
+  // Returns array of mating first moves for side to move within n moves (n = 1,2,3); forced.
+  function mateIn(pos, n) {
+    var out = [], moves = pos.legalMoves();
+    for (var i = 0; i < moves.length; i++) {
+      pos.makeMove(moves[i]);
+      var ok;
+      if (n === 1) ok = pos.legalMoves().length === 0;
+      else ok = forcedMate(pos, n - 1);
+      pos.unmakeMove();
+      if (ok) out.push(moves[i]);
+    }
+    return out;
+  }
+  // side to move (defender) cannot avoid mate in n moves by attacker
+  function forcedMate(pos, n) {
+    var replies = pos.legalMoves();
+    if (!replies.length) return true;
+    for (var i = 0; i < replies.length; i++) {
+      pos.makeMove(replies[i]);
+      var mates = mateIn(pos, n);
+      pos.unmakeMove();
+      if (!mates.length) return false;
+    }
+    return true;
+  }
+  // The defender's best (longest-resisting) reply after a mating first move
+  function bestDefense(pos, n) {
+    var replies = pos.legalMoves(), best = null, bestScore = -Infinity;
+    for (var i = 0; i < replies.length; i++) {
+      pos.makeMove(replies[i]);
+      var mates = mateIn(pos, n);
+      var quick = n > 1 ? mateIn(pos, 1).length : mates.length;
+      pos.unmakeMove();
+      // prefer replies that leave the attacker the fewest mating options, and no quick mate
+      var score = (quick ? 0 : 1000) - mates.length;
+      if (score > bestScore) { bestScore = score; best = replies[i]; }
+    }
+    return best;
+  }
+
+  // ---------- Notation ----------
+  var CN_NUM = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+  var PY_NUM = ['', 'yī', 'èr', 'sān', 'sì', 'wǔ', 'liù', 'qī', 'bā', 'jiǔ'];
+  var PIECE_CN = { r: ['帅', '仕', '相', '马', '车', '炮', '兵'], b: ['将', '士', '象', '马', '车', '炮', '卒'] };
+  var PIECE_PY = { r: ['shuài', 'shì', 'xiàng', 'mǎ', 'jū', 'pào', 'bīng'], b: ['jiàng', 'shì', 'xiàng', 'mǎ', 'jū', 'pào', 'zú'] };
+  var PIECE_EN = ['General', 'Advisor', 'Elephant', 'Horse', 'Chariot', 'Cannon', 'Soldier'];
+  function pieceCn(c) { return PIECE_CN[c < 8 ? 'r' : 'b'][typeOf(c) - 1]; }
+  function piecePy(c) { return PIECE_PY[c < 8 ? 'r' : 'b'][typeOf(c) - 1]; }
+  function pieceEn(c) { return PIECE_EN[typeOf(c) - 1]; }
+  function fileNum(x, side) { return side === RED ? 9 - x : x + 1; }
+  function numStr(n, side) { return side === RED ? CN_NUM[n] : String(n); }
+  // Chinese notation for move m in position pos (before the move is made)
+  function notation(pos, m) {
+    var from = m & 127, to = m >> 7, c = pos.b[from], side = sideOf(c), t = typeOf(c);
+    var x1 = fx(from), y1 = fy(from), x2 = fx(to), y2 = fy(to);
+    var pc = pieceCn(c), ppy = piecePy(c);
+    // disambiguation: same type, same side, same file
+    var same = [];
+    for (var y = 0; y < 10; y++) { var q = pos.b[sq(x1, y)]; if (q && q === c) same.push(y); }
+    var prefix = '', prefixPy = '', fileTok = numStr(fileNum(x1, side), side), filePy = PY_NUM[fileNum(x1, side)];
+    if (same.length > 1 && t !== K && t !== A && t !== B) {
+      // order from the mover's front: for red, smaller y is further forward
+      same.sort(function (a, b) { return side === RED ? a - b : b - a; });
+      var idx = same.indexOf(y1);
+      if (same.length === 2) { prefix = idx === 0 ? '前' : '后'; prefixPy = idx === 0 ? 'qián' : 'hòu'; }
+      else if (same.length === 3) { prefix = ['前', '中', '后'][idx]; prefixPy = ['qián', 'zhōng', 'hòu'][idx]; }
+      else { prefix = ['前', '二', '三', '四', '五'][idx]; prefixPy = ['qián', 'èr', 'sān', 'sì', 'wǔ'][idx]; }
+      fileTok = ''; filePy = '';
+    }
+    var act, actPy, num, numPy, en;
+    var forward = side === RED ? (y2 < y1) : (y2 > y1);
+    var fileTo = fileNum(x2, side);
+    if (y1 === y2) { act = '平'; actPy = 'píng'; num = numStr(fileTo, side); numPy = PY_NUM[fileTo]; en = 'sideways to file ' + fileTo; }
+    else {
+      act = forward ? '进' : '退'; actPy = forward ? 'jìn' : 'tuì';
+      if (t === N || t === B || t === A) { num = numStr(fileTo, side); numPy = PY_NUM[fileTo]; en = (forward ? 'forward' : 'back') + ' to file ' + fileTo; }
+      else { var steps = Math.abs(y2 - y1); num = numStr(steps, side); numPy = PY_NUM[steps]; en = (forward ? 'forward' : 'back') + ' ' + steps + (steps === 1 ? ' step' : ' steps'); }
+    }
+    var cn = prefix ? (prefix + pc + act + num) : (pc + fileTok + act + num);
+    var py = prefix ? (prefixPy + ' ' + ppy + ' ' + actPy + ' ' + numPy) : (ppy + ' ' + filePy + ' ' + actPy + ' ' + numPy);
+    var enFull = (prefix ? (prefix === '前' ? 'Front ' : prefix === '后' ? 'Rear ' : 'Middle ') : '') + pieceEn(c).toLowerCase() + (prefix ? '' : ' on file ' + fileNum(x1, side)) + ' ' + en;
+    if (pos.b[to]) enFull += ', capturing ' + pieceEn(pos.b[to]).toLowerCase();
+    return { cn: cn, py: py, en: enFull, capture: !!pos.b[to] };
+  }
+  // Parse Chinese notation (red or black) into a move for pos, or 0
+  function parseNotation(pos, str) {
+    var moves = pos.legalMoves();
+    for (var i = 0; i < moves.length; i++) if (notation(pos, moves[i]).cn === str) return moves[i];
+    return 0;
+  }
+  function moveToStr(m) { var f = m & 127, t = m >> 7; return String.fromCharCode(97 + fx(f)) + (9 - fy(f)) + String.fromCharCode(97 + fx(t)) + (9 - fy(t)); }
+  function strToMove(s) { var f = sq(s.charCodeAt(0) - 97, 9 - parseInt(s[1], 10)), t = sq(s.charCodeAt(2) - 97, 9 - parseInt(s[3], 10)); return f | (t << 7); }
+
+  // Flip a FEN vertically and swap colours (so a black-to-move puzzle becomes red-to-move)
+  function flipFen(fen) {
+    var parts = fen.trim().split(/\s+/), rows = parts[0].split('/').reverse();
+    var out = rows.map(function (r) { return r.split('').map(function (ch) { return /[a-z]/.test(ch) ? ch.toUpperCase() : /[A-Z]/.test(ch) ? ch.toLowerCase() : ch; }).join(''); }).join('/');
+    return out + ' ' + (parts[1] === 'b' ? 'w' : 'b');
+  }
+  function flipMove(m) { var f = m & 127, t = m >> 7; return sq(fx(f), 9 - fy(f)) | (sq(fx(t), 9 - fy(t)) << 7); }
+
+  var START_FEN = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w';
+
+  return {
+    EMPTY: EMPTY, K: K, A: A, B: B, N: N, R: R, C: C, P: P, RED: RED, BLACK: BLACK, MATE: MATE, WIN_BOUND: WIN_BOUND, MAT: MAT,
+    Position: Position, sq: sq, fx: fx, fy: fy, typeOf: typeOf, sideOf: sideOf, make: make,
+    IN_PALACE: IN_PALACE, OWN_SIDE: OWN_SIDE, ELEPHANT_OK: ELEPHANT_OK, ADVISOR_OK: ADVISOR_OK,
+    think: think, analyzeRoot: analyzeRoot, clearTT: clearTT, mateIn: mateIn, forcedMate: forcedMate, bestDefense: bestDefense,
+    notation: notation, parseNotation: parseNotation, moveToStr: moveToStr, strToMove: strToMove,
+    pieceCn: pieceCn, piecePy: piecePy, pieceEn: pieceEn, fileNum: fileNum, CN_NUM: CN_NUM, PY_NUM: PY_NUM,
+    flipFen: flipFen, flipMove: flipMove, START_FEN: START_FEN,
+    nodesSearched: function () { return nodes; }
+  };
+})();
+if (typeof module !== 'undefined' && module.exports) module.exports = XQ;
+
+</script>
+<script>
+window.XQ_PUZZLES=[{"fen":"3a1a3/4k4/b7b/4N4/9/9/9/7C1/9/3AKA3 w","n":1,"pattern":"mahoupao","hint":"The horse is already the screen. Where does the cannon need to be?","sol":["h2e2"],"src":"crafted","mirror":0},{"fen":"3a1a3/4k4/b7b/4N4/9/9/9/1C7/9/3AKA3 w","n":1,"pattern":"mahoupao","hint":"The horse is already the screen. Where does the cannon need to be?","sol":["b2e2"],"src":"crafted","mirror":1},{"fen":"R2aka3/9/b7b/7N1/9/9/9/9/4A4/3AK4 w","n":2,"pattern":"wocaoma","hint":"A horse check from the point beside the palace forces the general up. Then the chariot arrives.","sol":["h6g8 e9e8 a9a8"],"src":"crafted","mirror":0},{"fen":"3aka2R/9/b7b/1N7/9/9/9/9/4A4/4KA3 w","n":2,"pattern":"wocaoma","hint":"A horse check from the point beside the palace forces the general up. Then the chariot arrives.","sol":["b6c8 e9e8 i9i8"],"src":"crafted","mirror":1},{"fen":"3ak4/4a4/b7b/5R3/2N6/9/9/9/9/3AKA3 w","n":1,"pattern":"guajiaoma","hint":"The general's own advisors block two of its escapes and the chariot watches the third.","sol":["c5d7"],"src":"crafted","mirror":0},{"fen":"4ka3/4a4/b7b/3R5/6N2/9/9/9/9/3AKA3 w","n":1,"pattern":"guajiaoma","hint":"The general's own advisors block two of its escapes and the chariot watches the third.","sol":["g5f7"],"src":"crafted","mirror":1},{"fen":"3aka3/9/b7b/4C4/9/C8/9/9/9/3AKA3 w","n":1,"pattern":"chongpao","hint":"One cannon already eyes the file with no screen. A second cannon behind it turns the first into a screen, and an advisor interposing only hands the check back to the front cannon.","sol":["a4e4"],"src":"crafted","mirror":0},{"fen":"3aka3/9/b7b/4C4/9/8C/9/9/9/3AKA3 w","n":1,"pattern":"chongpao","hint":"One cannon already eyes the file with no screen. A second cannon behind it turns the first into a screen, and an advisor interposing only hands the check back to the front cannon.","sol":["i4e4"],"src":"crafted","mirror":1},{"fen":"3ak4/4a4/9/C8/2b3b2/9/9/9/9/3AKA3 w","n":1,"pattern":"mengong","hint":"Use the black advisor as your screen. The general is smothered by its own defenders.","sol":["a6a9"],"src":"crafted","mirror":0},{"fen":"4ka3/4a4/9/8C/2b3b2/9/9/9/9/3AKA3 w","n":1,"pattern":"mengong","hint":"Use the black advisor as your screen. The general is smothered by its own defenders.","sol":["i6i9"],"src":"crafted","mirror":1},{"fen":"4kab2/4a4/4b4/9/R8/9/4C4/9/9/3AKA3 w","n":1,"pattern":"tiemenshuan","hint":"The cannon has two screens, so the advisor and elephant are frozen. Sink the chariot.","sol":["a5a9"],"src":"crafted","mirror":0},{"fen":"2bak4/4a4/4b4/9/8R/9/4C4/9/9/3AKA3 w","n":1,"pattern":"tiemenshuan","hint":"The cannon has two screens, so the advisor and elephant are frozen. Sink the chariot.","sol":["i5i9"],"src":"crafted","mirror":1},{"fen":"4k4/9/9/R8/R8/8p/9/9/4A4/3AK4 w","n":2,"pattern":"shuangchecuo","hint":"One chariot checks from beside the general, protected by the other; the second finishes on the back rank.","sol":["a6e6 e9f9 a5f5","a5e5 e9f9 a6f6"],"src":"crafted","mirror":0},{"fen":"4k4/9/9/8R/8R/p8/9/9/4A4/4KA3 w","n":2,"pattern":"shuangchecuo","hint":"One chariot checks from beside the general, protected by the other; the second finishes on the back rank.","sol":["i6e6 e9f9 i5f5","i5e5 e9f9 i6f6"],"src":"crafted","mirror":1},{"fen":"3a4C/3k5/6NR1/9/9/9/9/9/3rA4/4KA3 w","n":2,"pattern":"chariot","sol":["g7f9 d8e8 h7h8"],"src":"mined"},{"fen":"3a1N2C/4k4/7R1/9/9/9/9/9/3rA4/4KA3 w","n":1,"pattern":"chariot","sol":["h7h8"],"src":"mined"},{"fen":"2b1ka1nr/4a4/2n4R1/p3p3p/9/9/c3r3P/4B4/2N6/RC1AKAB2 w","n":0,"pattern":"material","sol":["h7c7"],"gain":376,"src":"mined"},{"fen":"3R5/6CC1/4k4/9/9/9/9/5K3/9/4r4 w","n":2,"pattern":"stalemate","sol":["d9e9 e7d7 e9e0"],"src":"mined"},{"fen":"4R4/6CC1/3k5/9/9/9/9/5K3/9/4r4 w","n":1,"pattern":"stalemate","sol":["e9e0"],"src":"mined"},{"fen":"2b1ka1R1/4a4/4b3c/p1PrC4/9/9/9/4B4/9/r2AKAB2 w","n":0,"pattern":"material","sol":["c6d6"],"gain":704,"src":"mined"},{"fen":"R2a1kb2/9/4b4/9/9/9/P2p1c3/4B2r1/4A4/2BK1A3 w","n":0,"pattern":"material","sol":["a9d9"],"gain":375,"src":"mined"},{"fen":"2bn1k3/3R2N2/b8/2p6/4nC3/4C4/P3P3P/8B/6p2/2BAKA3 w","n":1,"pattern":"chongpao","sol":["e4f4"],"src":"mined"},{"fen":"2C1C4/3Ra4/5k3/9/9/8P/P8/9/3N5/3AKA3 w","n":1,"pattern":"stalemate","sol":["d8e8"],"src":"mined"},{"fen":"5k3/9/3P1P3/4R4/9/5r3/9/5C3/4A4/4KA3 w","n":1,"pattern":"soldier","sol":["f7f8"],"src":"mined"},{"fen":"1rn3R2/9/5k2C/9/4R4/1pP3P2/8r/4B4/3CA4/3AK1B2 w","n":1,"pattern":"shuangchecuo","sol":["g9f9"],"src":"mined"},{"fen":"3akab1r/9/8R/p3C1p1p/9/9/6r1P/4B4/9/2BAKA1R1 w","n":0,"pattern":"material","sol":["i7i9"],"gain":692,"src":"mined"},{"fen":"9/3R5/5k3/4C4/9/9/9/4B4/9/2BAKA3 w","n":1,"pattern":"stalemate","sol":["d8e8"],"src":"mined"},{"fen":"1nba1ab2/4k4/r1n6/p1C3p1r/8p/1R2C4/P1P1P1P1P/9/9/2BAKABR1 w","n":2,"pattern":"shuangchecuo","sol":["b4b8 e8e7 h0h7"],"src":"mined"},{"fen":"r2akab1r/7R1/b8/p5p2/2pn1n3/4C4/P1P1P1P1P/6C2/9/1RBAKAB2 w","n":2,"pattern":"double","sol":["b0b8 a9b9 b8e8"],"src":"mined"},{"fen":"r2akab2/7R1/b8/p5p2/2pn1n3/4C4/P1P1P1P1r/8C/9/1RBAKAB2 w","n":2,"pattern":"double","sol":["b0b8 a9b9 b8e8"],"src":"mined"},{"fen":"r2a1k2C/4a4/b7b/p8/2p1R1p2/1R5C1/P1n6/9/4A4/2B1K1B2 w","n":2,"pattern":"chongpao","sol":["b4f4 f9e9 h4h9"],"src":"mined"},{"fen":"r2a1k2C/9/b4a2b/p8/2p1R1p2/5R1C1/P1n6/9/4A4/2B1K1B2 w","n":1,"pattern":"shuangchecuo","sol":["f4f7"],"src":"mined"},{"fen":"2bak4/9/9/6N2/5P3/4r4/2R2c2P/8B/4n4/3AK4 w","n":0,"pattern":"material","sol":["d0e1"],"gain":276,"src":"mined"},{"fen":"2b1R4/3k5/9/3P4p/9/9/9/8c/4K4/2r6 w","n":2,"pattern":"chariot","sol":["d6d7 d8d7 e9d9"],"src":"mined"},{"fen":"2b1R4/9/3k5/8p/9/9/9/8c/4K4/2r6 w","n":1,"pattern":"chariot","sol":["e9d9"],"src":"mined"},{"fen":"3k2b2/4aN3/4b4/4r4/P8/9/9/4B4/9/2B1KA3 w","n":0,"pattern":"material","sol":["f8e6"],"gain":932,"src":"mined"},{"fen":"6b2/4R4/3k2C2/9/2b1r4/9/9/9/4A4/3A1KB2 w","n":0,"pattern":"material","sol":["e8e5"],"gain":1098,"src":"mined"},{"fen":"3k5/8R/9/9/9/6C2/9/9/4A4/3A1KB2 w","n":1,"pattern":"stalemate","sol":["i8e8"],"src":"mined"},{"fen":"4k1r2/4aP3/9/9/4R4/6B1P/1p2P4/6N2/9/2BAKA3 w","n":2,"pattern":"chariot","sol":["f8e8 e9f9 e5f5"],"src":"mined"},{"fen":"5kr2/4P4/9/9/4R4/6B1P/1p2P4/6N2/9/2BAKA3 w","n":1,"pattern":"chariot","sol":["e5f5"],"src":"mined"},{"fen":"1Rbk1a3/8r/n2a4b/p7p/3R5/9/P1P5P/B1N6/9/3AKAB2 w","n":2,"pattern":"shuangchecuo","sol":["d5d7 i8d8 b9c9"],"src":"mined"},{"fen":"1Rbk1a3/3r5/n2R4b/p7p/9/9/P1P5P/B1N6/9/3AKAB2 w","n":1,"pattern":"shuangchecuo","sol":["b9c9"],"src":"mined"},{"fen":"2b1kab2/7r1/3a5/p7p/9/6C2/4P1P1P/2p5R/9/c1BAKABN1 w","n":0,"pattern":"material","sol":["i2c2"],"gain":286,"src":"mined"},{"fen":"4ka3/4a4/bN7/9/4R4/6B2/P8/3A5/9/4KAB2 w","n":2,"pattern":"stalemate","sol":["e5d5 a7c5 b7c5"],"src":"mined"},{"fen":"2b1ka3/4a4/1N7/9/3R5/6B2/P8/3A5/9/4KAB2 w","n":1,"pattern":"stalemate","sol":["b7c9"],"src":"mined"},{"fen":"4k1c1R/4aR3/4b4/9/9/P3PC2P/9/3rc3B/9/4K4 w","n":2,"pattern":"shuangchecuo","sol":["i9g9 e8f9 g9f9"],"src":"mined"},{"fen":"4kaR2/5R3/4b4/9/9/P3PC2P/9/3rc3B/9/4K4 w","n":1,"pattern":"shuangchecuo","sol":["g9f9"],"src":"mined"},{"fen":"9/3k1N2R/9/9/6P1P/9/p8/3CB4/4A4/4KA3 w","n":2,"pattern":"chariot","sol":["f8e6 d8d7 i8i7"],"src":"mined"},{"fen":"3k5/8R/9/4N4/6P1P/9/p8/3CB4/4A4/4KA3 w","n":1,"pattern":"tiemenshuan","sol":["i8i9"],"src":"mined"},{"fen":"4kC3/R2R3N1/9/2p5p/6b2/6Pr1/9/4B4/9/4KAB2 w","n":1,"pattern":"shuangchecuo","sol":["a8a9"],"src":"mined"},{"fen":"R8/5k3/9/4P4/p5P2/9/P7P/4B4/4A4/4KABN1 w","n":2,"pattern":"stalemate","sol":["e6e7 a5a4 a3a4"],"src":"mined"},{"fen":"R8/5k3/4P4/9/6P2/p8/P7P/4B4/4A4/4KABN1 w","n":1,"pattern":"stalemate","sol":["a3a4"],"src":"mined"},{"fen":"4ka3/4a4/4b1r2/p3C3p/9/P3R3P/9/3RB4/9/3K1n3 w","n":1,"pattern":"tiemenshuan","sol":["d2d9"],"src":"mined"},{"fen":"r1b1ka2r/4a4/8b/2R5p/6p2/9/2nN2P1P/9/9/2BAKABNR w","n":0,"pattern":"material","sol":["c6c3"],"gain":330,"src":"mined"},{"fen":"9/2N2k3/4N4/9/9/9/9/4BA3/9/2BAK4 w","n":1,"pattern":"stalemate","sol":["c8d6"],"src":"mined"},{"fen":"R1baka3/9/2c1b1n2/p3p3p/6p2/3r5/P3P1P1P/BrN1B1N2/4A4/3AK4 w","n":0,"pattern":"material","sol":["c2d4"],"gain":1070,"src":"mined"},{"fen":"4k4/4aP3/3P5/9/9/9/6R1P/4B1n2/4A4/2BAK4 w","n":2,"pattern":"chariot","sol":["g3g9 e8f9 g9f9"],"src":"mined"},{"fen":"4kaR2/5P3/3P5/9/9/9/8P/4B1n2/4A4/2BAK4 w","n":1,"pattern":"chariot","sol":["g9f9"],"src":"mined"},{"fen":"2baka1nr/9/9/pR2n4/4c3p/6p2/P7P/2N6/4K4/2BA1AcN1 w","n":0,"pattern":"material","sol":["b6e6"],"gain":688,"src":"mined"},{"fen":"rn1a1Cb2/1R7/4bk2n/2p3p2/p8/6P2/c3Pr3/4C4/5R3/2BAKABN1 w","n":2,"pattern":"chongpao","sol":["f9f3 i7h5 e2f2"],"src":"mined"},{"fen":"rn1a2b2/1R7/4bk2n/2p3p2/p8/6P2/4Pc3/4C4/5R3/2BAKABN1 w","n":1,"pattern":"shuangchecuo","sol":["f1f3"],"src":"mined"},{"fen":"rnba1abr1/1R7/5k2n/2p2Cp2/p8/6P2/c3P4/4C4/9/2BAKABNR w","n":0,"pattern":"material","sol":["f6f9"],"gain":323,"src":"mined"},{"fen":"2R6/3k5/5P3/4nN3/P8/9/8P/8B/4A4/2BAK4 w","n":2,"pattern":"soldier","sol":["f7e7 e6c5 e7e8"],"src":"mined"},{"fen":"2R6/3k5/2n1P4/5N3/P8/9/8P/8B/4A4/2BAK4 w","n":1,"pattern":"soldier","sol":["e7d7"],"src":"mined"},{"fen":"4R4/3k5/9/3P5/9/9/9/9/5r3/4K4 w","n":2,"pattern":"chariot","sol":["d6d7 d8d7 e9d9"],"src":"mined"},{"fen":"4R4/9/3k5/9/9/9/9/9/5r3/4K4 w","n":1,"pattern":"chariot","sol":["e9d9"],"src":"mined"},{"fen":"4ka3/3R1r1P1/7C1/4p4/6p2/2P6/P3P4/4B4/1n1KA4/6B2 w","n":0,"pattern":"material","sol":["d8f8"],"gain":906,"src":"mined"},{"fen":"6R2/6P2/3P1k2C/2n1p4/9/9/4P4/4B4/4A4/4K1B2 w","n":1,"pattern":"chariot","sol":["g9f9"],"src":"mined"},{"fen":"6b2/2N1k4/3Rb4/p3p4/9/9/4r4/9/3K2p2/5Ac2 w","n":2,"pattern":"wocaoma","sol":["d7d8 e8e9 d8f8"],"src":"mined"},{"fen":"4k1b2/2NR5/4b4/p3p4/9/9/4r4/9/3K2p2/5Ac2 w","n":1,"pattern":"wocaoma","sol":["d8f8"],"src":"mined"},{"fen":"9/9/5k3/9/9/4R4/1p7/9/4K4/5p3 w","n":1,"pattern":"chariot","sol":["e4f4"],"src":"mined"},{"fen":"3a5/3R2P2/1C2ka3/4p4/9/2P6/n3Prp2/4B4/3KA4/5AB2 w","n":2,"pattern":"double","sol":["g8f8 d9e8 d8d7"],"src":"mined"},{"fen":"2bk1a1R1/3ra4/n8/p1p1C3r/3R5/9/P1P1P1p2/3C5/9/2BAKAB2 w","n":2,"pattern":"chongpao","sol":["d5d8 d9d8 e6d6"],"src":"mined"},{"fen":"rnbakabnr/9/9/p1p1p1p1p/c8/2P6/P3P3P/N3C1c2/8R/R1BAKABN1 w","n":0,"pattern":"material","sol":["h0g2"],"gain":346,"src":"mined"},{"fen":"2bak4/r3a4/4b4/p2np3p/2p2n3/8P/P1P1P4/2NR2N1r/9/2BAKAB2 w","n":0,"pattern":"material","sol":["g0i2"],"gain":886,"src":"mined"},{"fen":"2baka3/9/4b4/P1Rn5/3rN4/9/9/4B4/4A4/4KA3 w","n":2,"pattern":"chariot","sol":["e5d7 e9e8 c6c8"],"src":"mined"},{"fen":"5k3/3P5/9/4N4/N1P6/9/3n5/4BA3/4A4/2BK5 w","n":2,"pattern":"horse","sol":["d8e8 d3c1 e6g7"],"src":"mined"},{"fen":"2bk1a3/2N1a4/9/8p/9/3r5/3R5/4B4/4A4/4K1B2 w","n":2,"pattern":"chariot","sol":["d3d4 e8d7 d4d7"],"src":"mined"},{"fen":"r1bakabnr/9/2c6/2p3p1p/9/9/P3P1c1P/4B3N/4A4/RN2KAB1R w","n":0,"pattern":"material","sol":["i2g3"],"gain":434,"src":"mined"},{"fen":"3a1a2C/1Rr1k4/4bN2b/p8/3c5/2B3p2/4r3P/9/4A4/4KA3 w","n":0,"pattern":"material","sol":["b8c8"],"gain":1228,"src":"mined"},{"fen":"3akab2/2RC3N1/4b4/p8/9/2B3p2/8r/9/4A4/4KA3 w","n":2,"pattern":"chariot","sol":["h8f7 e9e8 d8d7"],"src":"mined"},{"fen":"2bakabr1/n1C6/8n/prp1p1pcp/9/2P3P1P/P3P4/Nc2C1N1B/9/1RBAKA1R1 w","n":0,"pattern":"material","sol":["h0h6"],"gain":268,"src":"mined"},{"fen":"r1baka3/9/n7b/p1p3p2/4p3p/4n4/P1P3P1P/2N1C3N/1c7/R1BAKABr1 w","n":0,"pattern":"material","sol":["i2h0"],"gain":898,"src":"mined"},{"fen":"1rb1ka3/4a4/n3c3b/p3p1prn/9/1Cp5R/PcP1P1PC1/2N6/6N2/1RBAKAB2 w","n":0,"pattern":"material","sol":["i4c4"],"gain":326,"src":"mined"},{"fen":"1r2ka3/4a4/n1R5b/p3p4/2b6/6pN1/P1P1C4/4B4/9/1RBAKA3 w","n":2,"pattern":"tiemenshuan","sol":["b0b9 a7b9 c7c9"],"src":"mined"},{"fen":"3ak1P2/4a4/9/4R4/2P6/9/2p6/B8/4A4/2BAK4 w","n":2,"pattern":"soldier","sol":["e0f0 c3c2 g9f9"],"src":"mined"}];
+</script>
+<script>
+(function () {
+'use strict';
+var P = XQ.Position, RED = XQ.RED, BLACK = XQ.BLACK;
+var $ = function (id) { return document.getElementById(id); };
+function el(tag, attrs, children) {
+  var e = document.createElement(tag);
+  if (attrs) for (var k in attrs) { var v = attrs[k]; if (v === false || v == null) continue; if (k === 'class') e.className = v; else if (k === 'html') e.innerHTML = v; else if (k.slice(0, 2) === 'on') e.addEventListener(k.slice(2), v); else e.setAttribute(k, v === true ? '' : v); }
+  if (children) (Array.isArray(children) ? children : [children]).forEach(function (c) { if (c == null) return; e.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+  return e;
+}
+function h(html) { var d = document.createElement('div'); d.innerHTML = html; return d; }
+function thead(html) { var t = document.createElement('table'); t.innerHTML = html; return t.firstElementChild; }
+function trow(html) { var t = document.createElement('tbody'); t.innerHTML = html; return t.firstElementChild; }
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function term(zh, py, en) { return '<span class="term"><span class="zh">' + zh + '</span><span class="py">' + py + '</span></span>' + (en ? ' (' + en + ')' : ''); }
+function rnd(n) { return Math.floor(Math.random() * n); }
+function pick(arr) { return arr[rnd(arr.length)]; }
+function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = rnd(i + 1); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+
+// ---------- persistent progress ----------
+var KEY = 'xq-trainer-v1';
+var defaults = function () { return {
+  settings: { pinyin: true, coords: true, legalDots: true, coachMode: 'after', threats: true, level: 2, side: 'red' },
+  learn: { seen: {} },
+  drill: { types: {} },
+  puzzles: { solved: {}, attempts: {} },
+  play: { games: [], verdicts: { fine: 0, inaccuracy: 0, mistake: 0, blunder: 0 }, undos: 0, moves: 0 },
+  meta: { created: Date.now() }
+}; };
+var progress = defaults();
+var store = { api: null, ok: false, lastSave: 0, lastError: null, dirty: false, writing: false, queued: false, loaded: false, waited: 0 };
+function deepMerge(base, over) { for (var k in over) { if (over[k] && typeof over[k] === 'object' && !Array.isArray(over[k]) && base[k] && typeof base[k] === 'object') deepMerge(base[k], over[k]); else base[k] = over[k]; } return base; }
+function findStorageApi() {
+  var cands = [];
+  try { if (window.storage) cands.push(window.storage); } catch (e) { }
+  try { if (window.parent && window.parent !== window && window.parent.storage) cands.push(window.parent.storage); } catch (e) { }
+  for (var i = 0; i < cands.length; i++) if (cands[i] && typeof cands[i].get === 'function' && typeof cands[i].set === 'function') return cands[i];
+  return null;
+}
+// Poll for the storage API for a while (it may be injected after our scripts run), then load.
+function loadProgress(onReady) {
+  var t0 = Date.now();
+  (function poll() {
+    var api = findStorageApi();
+    if (api) { store.api = api; loadFromApi(onReady); return; }
+    if (Date.now() - t0 > 6000) { store.loaded = true; store.lastError = 'storage API not found'; updateSaveState(); if (onReady) onReady(); return; }
+    setTimeout(poll, 150);
+  })();
+}
+function loadFromApi(onReady) {
+  var done = false;
+  function finish() { if (done) return; done = true; store.loaded = true; updateSaveState(); if (onReady) onReady(); }
+  var p;
+  try { p = store.api.get(KEY, false); } catch (e) { store.lastError = 'get threw: ' + e.message; finish(); return; }
+  Promise.resolve(p).then(function (r) {
+    if (r && r.value) {
+      try {
+        var stored = JSON.parse(r.value), mem = progress;
+        progress = deepMerge(defaults(), stored);
+        progress.learn.seen = Object.assign({}, progress.learn.seen, mem.learn.seen); // keep pages read while loading
+        store.returning = !!(Object.keys(stored.learn && stored.learn.seen || {}).length || Object.keys(stored.drill && stored.drill.types || {}).length || (stored.play && stored.play.games && stored.play.games.length));
+      } catch (e) { store.lastError = 'stored data unreadable'; }
+    }
+    store.ok = true; finish();
+    // confirm the round trip works by writing back once
+    saveProgress(true);
+  }).catch(function (e) {
+    // a missing key rejects on some implementations: treat as empty and confirm with a write
+    store.ok = true; finish(); saveProgress(true);
+  });
+  setTimeout(finish, 4000);
+}
+function saveProgress(now) {
+  store.dirty = true;
+  clearTimeout(store.timer);
+  store.timer = setTimeout(flush, now ? 0 : 150);
+}
+function flush() {
+  if (!store.dirty) return;
+  if (!store.api) { updateSaveState(); return; }
+  if (store.writing) { store.queued = true; return; }
+  store.dirty = false; store.writing = true;
+  var data = JSON.stringify(progress);
+  var p;
+  try { p = store.api.set(KEY, data, false); } catch (e) { store.writing = false; store.ok = false; store.lastError = 'set threw: ' + e.message; updateSaveState(); return; }
+  Promise.resolve(p).then(function (r) {
+    store.writing = false; store.ok = true; store.lastSave = Date.now(); store.lastError = null; updateSaveState();
+    if (store.queued) { store.queued = false; store.dirty = true; flush(); }
+  }).catch(function (e) {
+    store.writing = false; store.ok = false; store.lastError = 'save failed: ' + (e && e.message ? e.message : String(e)); updateSaveState();
+    if (store.queued) { store.queued = false; store.dirty = true; setTimeout(flush, 1000); }
+  });
+}
+document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') { clearTimeout(store.timer); flush(); } });
+window.addEventListener('pagehide', function () { clearTimeout(store.timer); flush(); });
+function resetProgress() { progress = defaults(); saveProgress(true); }
+function exportCode() { return btoa(unescape(encodeURIComponent(JSON.stringify(progress)))); }
+function importCode(code) {
+  var json = decodeURIComponent(escape(atob(code.trim())));
+  var obj = JSON.parse(json);
+  if (!obj || typeof obj !== 'object' || !obj.settings) throw new Error('not a progress code');
+  progress = deepMerge(defaults(), obj); saveProgress(true);
+}
+function updateSaveState() {
+  var e = document.getElementById('savestate'); if (!e) return;
+  var txt, cls, title;
+  if (!store.loaded) { txt = 'Loading progress'; cls = 'wait'; title = 'Looking for the storage API'; }
+  else if (store.api && store.ok && !store.lastError) { txt = store.lastSave ? 'Saved' : 'Saving on'; cls = 'ok'; title = 'Progress is written to your Claude artifact storage after every change' + (store.lastSave ? '. Last save ' + new Date(store.lastSave).toLocaleTimeString() : ''); }
+  else { txt = 'Not saving'; cls = 'bad'; title = (store.lastError || 'storage unavailable') + '. Use the progress code in the Progress room as a backup.'; }
+  e.textContent = txt; e.className = 'savestate ' + cls; e.title = title;
+}
+
+// ---------- engine bridge (worker with sync fallback) ----------
+var worker = null, reqId = 0, pending = {};
+function runSync(req) {
+  var p = new P().setFen(req.fen); req.moves.forEach(function (m) { p.makeMove(m); });
+  var o = Object.assign({}, req.opts || {}); if (o.timeMs) o.timeMs = Math.min(o.timeMs, 1500); if (o.depth) o.depth = Math.min(o.depth, 5);
+  return req.cmd === 'think' ? XQ.think(p, o) : req.cmd === 'root' ? XQ.analyzeRoot(p, o) : XQ.mateIn(p, o.n);
+}
+function failWorker() {
+  worker = null;
+  var ps = pending; pending = {};
+  Object.keys(ps).forEach(function (id) { var r = ps[id]; clearTimeout(r.timer); setTimeout(function () { r.resolve(runSync(r)); }, 10); });
+}
+function startWorker() {
+  try {
+    var src = document.getElementById('engine-src').textContent + '\n' +
+      'self.onmessage=function(e){var d=e.data;var pos=new XQ.Position().setFen(d.fen);(d.moves||[]).forEach(function(m){pos.makeMove(m);});var r;' +
+      'if(d.cmd==="think")r=XQ.think(pos,d.opts);else if(d.cmd==="root")r=XQ.analyzeRoot(pos,d.opts);else if(d.cmd==="mate")r=XQ.mateIn(pos,d.opts.n);' +
+      'self.postMessage({id:d.id,result:r});};';
+    var blob = new Blob([src], { type: 'application/javascript' });
+    worker = new Worker(URL.createObjectURL(blob));
+    worker.onmessage = function (e) { var r = pending[e.data.id]; delete pending[e.data.id]; if (r) { clearTimeout(r.timer); r.resolve(e.data.result); } };
+    worker.onerror = function () { failWorker(); };
+  } catch (e) { worker = null; }
+}
+// returns promise. cmd: think | root | mate
+function engine(cmd, pos, opts) {
+  return new Promise(function (resolve) {
+    var req = { cmd: cmd, fen: pos.baseFen || pos.fen(), moves: pos.baseMoves || [], opts: opts || {}, resolve: resolve };
+    if (worker) {
+      var id = ++reqId; req.id = id; pending[id] = req;
+      req.timer = setTimeout(function () { if (pending[id]) failWorker(); }, (req.opts.timeMs || 3000) + 8000);
+      worker.postMessage({ id: id, cmd: cmd, fen: req.fen, moves: req.moves, opts: req.opts });
+    } else setTimeout(function () { resolve(runSync(req)); }, 10);
+  });
+}
+
+// ---------- board ----------
+var CELL = 64, PAD = 62, W = 8 * CELL + 2 * PAD, H = 9 * CELL + 2 * PAD;
+var board = {
+  pos: new P().setFen(XQ.START_FEN), flipped: false, selected: -1, legalTargets: [], lastMove: 0, marks: {},
+  onSquare: null, hintMove: 0, arrows: [], labels: [], overlays: [], hideCoords: false, svg: null, dim: false
+};
+function screenXY(s) { var x = XQ.fx(s), y = XQ.fy(s); if (board.flipped) { x = 8 - x; y = 9 - y; } return [PAD + x * CELL, PAD + y * CELL]; }
+function svgEl(tag, attrs, text) { var e = document.createElementNS('http://www.w3.org/2000/svg', tag); for (var k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; return e; }
+function renderBoard() {
+  var wrap = $('boardwrap'); wrap.innerHTML = '';
+  var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Xiangqi board' });
+  board.svg = svg;
+  svg.appendChild(svgEl('rect', { x: 0, y: 0, width: W, height: H, fill: 'var(--board)', rx: 6 }));
+  var g = svgEl('g', { stroke: 'var(--board-line)', 'stroke-width': 1.6, fill: 'none' });
+  // horizontal lines
+  for (var y = 0; y < 10; y++) g.appendChild(svgEl('line', { x1: PAD, y1: PAD + y * CELL, x2: PAD + 8 * CELL, y2: PAD + y * CELL }));
+  // vertical lines with river gap
+  for (var x = 0; x < 9; x++) {
+    if (x === 0 || x === 8) g.appendChild(svgEl('line', { x1: PAD + x * CELL, y1: PAD, x2: PAD + x * CELL, y2: PAD + 9 * CELL }));
+    else { g.appendChild(svgEl('line', { x1: PAD + x * CELL, y1: PAD, x2: PAD + x * CELL, y2: PAD + 4 * CELL })); g.appendChild(svgEl('line', { x1: PAD + x * CELL, y1: PAD + 5 * CELL, x2: PAD + x * CELL, y2: PAD + 9 * CELL })); }
+  }
+  // outer frame
+  g.appendChild(svgEl('rect', { x: PAD - 32, y: PAD - 32, width: 8 * CELL + 64, height: 9 * CELL + 64, 'stroke-width': 2.5, rx: 4 }));
+  // palaces
+  [[3, 0, 5, 2], [3, 7, 5, 9]].forEach(function (p) {
+    g.appendChild(svgEl('line', { x1: PAD + p[0] * CELL, y1: PAD + p[1] * CELL, x2: PAD + p[2] * CELL, y2: PAD + p[3] * CELL }));
+    g.appendChild(svgEl('line', { x1: PAD + p[2] * CELL, y1: PAD + p[1] * CELL, x2: PAD + p[0] * CELL, y2: PAD + p[3] * CELL }));
+  });
+  // position marks at cannon and soldier points
+  var marks = [[1, 2], [7, 2], [1, 7], [7, 7], [0, 3], [2, 3], [4, 3], [6, 3], [8, 3], [0, 6], [2, 6], [4, 6], [6, 6], [8, 6]];
+  marks.forEach(function (m) {
+    var cx = PAD + m[0] * CELL, cy = PAD + m[1] * CELL, d = 5, l = 12;
+    [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(function (q) {
+      if ((m[0] === 0 && q[0] < 0) || (m[0] === 8 && q[0] > 0)) return;
+      g.appendChild(svgEl('path', { d: 'M' + (cx + q[0] * d) + ',' + (cy + q[1] * (d + l)) + ' L' + (cx + q[0] * d) + ',' + (cy + q[1] * d) + ' L' + (cx + q[0] * (d + l)) + ',' + (cy + q[1] * d), 'stroke-width': 1.3 }));
+    });
+  });
+  svg.appendChild(g);
+  // river text
+  var rt = svgEl('text', { x: PAD + 2 * CELL, y: PAD + 4.5 * CELL + 10, 'font-size': 28, fill: 'var(--board-line)', 'font-family': 'var(--cjk)', 'text-anchor': 'middle', opacity: .75 }, board.flipped ? '汉界' : '楚河');
+  var rt2 = svgEl('text', { x: PAD + 6 * CELL, y: PAD + 4.5 * CELL + 10, 'font-size': 28, fill: 'var(--board-line)', 'font-family': 'var(--cjk)', 'text-anchor': 'middle', opacity: .75 }, board.flipped ? '楚河' : '汉界');
+  svg.appendChild(rt); svg.appendChild(rt2);
+  // coordinates
+  if (progress.settings.coords && !board.hideCoords) {
+    for (var xx = 0; xx < 9; xx++) {
+      var bx = board.flipped ? 8 - xx : xx; // board x at screen column xx
+      var topLabel = board.flipped ? XQ.CN_NUM[9 - bx] : String(bx + 1);
+      var botLabel = board.flipped ? String(bx + 1) : XQ.CN_NUM[9 - bx];
+      svg.appendChild(svgEl('text', { x: PAD + xx * CELL, y: PAD - 41, 'font-size': 14, fill: 'var(--board-line)', 'text-anchor': 'middle', 'font-family': 'var(--cjk-ui)', opacity: .8 }, topLabel));
+      svg.appendChild(svgEl('text', { x: PAD + xx * CELL, y: PAD + 9 * CELL + 50, 'font-size': 16, fill: 'var(--board-line)', 'text-anchor': 'middle', 'font-family': 'var(--cjk-ui)', opacity: .8 }, botLabel));
+    }
+  }
+  // overlays (region highlights) drawn under pieces
+  board.overlays.forEach(function (o) { svg.appendChild(svgEl('rect', { x: PAD + o.x1 * CELL - CELL / 2, y: PAD + o.y1 * CELL - CELL / 2, width: (o.x2 - o.x1 + 1) * CELL, height: (o.y2 - o.y1 + 1) * CELL, fill: o.color || 'rgba(95,165,122,.28)', rx: 8 })); });
+  // last move
+  if (board.lastMove) {
+    [board.lastMove & 127, board.lastMove >> 7].forEach(function (s) { var xy = screenXY(s); svg.appendChild(svgEl('rect', { x: xy[0] - 30, y: xy[1] - 30, width: 60, height: 60, fill: 'rgba(224,169,58,.30)', rx: 8 })); });
+  }
+  // marks (drill selections, threats)
+  for (var s in board.marks) {
+    var mk = board.marks[s], xy = screenXY(+s);
+    if (mk === 'sel') svg.appendChild(svgEl('circle', { cx: xy[0], cy: xy[1], r: 13, fill: 'rgba(95,165,122,.75)' }));
+    else if (mk === 'missed') svg.appendChild(svgEl('circle', { cx: xy[0], cy: xy[1], r: 13, fill: 'none', stroke: 'var(--cinnabar)', 'stroke-width': 4 }));
+    else if (mk === 'wrong') svg.appendChild(svgEl('path', { d: 'M' + (xy[0] - 11) + ',' + (xy[1] - 11) + 'L' + (xy[0] + 11) + ',' + (xy[1] + 11) + 'M' + (xy[0] + 11) + ',' + (xy[1] - 11) + 'L' + (xy[0] - 11) + ',' + (xy[1] + 11), stroke: 'var(--cinnabar)', 'stroke-width': 4 }));
+    else if (mk === 'ok') svg.appendChild(svgEl('circle', { cx: xy[0], cy: xy[1], r: 13, fill: 'rgba(95,165,122,.9)' }));
+    else if (mk === 'hang') svg.appendChild(svgEl('circle', { cx: xy[0], cy: xy[1], r: 31, fill: 'none', stroke: 'var(--cinnabar)', 'stroke-width': 4, 'stroke-dasharray': '6 4' }));
+    else if (mk === 'att') svg.appendChild(svgEl('circle', { cx: xy[0], cy: xy[1], r: 31, fill: 'none', stroke: 'var(--amber)', 'stroke-width': 3, 'stroke-dasharray': '4 5' }));
+    else if (mk === 'check') svg.appendChild(svgEl('circle', { cx: xy[0], cy: xy[1], r: 33, fill: 'rgba(210,58,36,.35)' }));
+    else if (mk === 'focus') svg.appendChild(svgEl('circle', { cx: xy[0], cy: xy[1], r: 34, fill: 'none', stroke: 'var(--jade)', 'stroke-width': 3 }));
+    else if (mk === 'dot') svg.appendChild(svgEl('circle', { cx: xy[0], cy: xy[1], r: 9, fill: 'rgba(31,26,21,.55)' }));
+  }
+  // pieces
+  var pin = progress.settings.pinyin;
+  for (var sqi = 0; sqi < 90; sqi++) {
+    var c = board.pos.b[sqi]; if (!c) continue;
+    var xy2 = screenXY(sqi), red = c < 8;
+    var pg = svgEl('g', { class: 'piece', 'data-sq': sqi });
+    pg.appendChild(svgEl('circle', { cx: xy2[0], cy: xy2[1] + 2, r: 27, fill: 'rgba(0,0,0,.25)' }));
+    pg.appendChild(svgEl('circle', { cx: xy2[0], cy: xy2[1], r: 27, fill: 'var(--disc)', stroke: 'var(--disc-edge)', 'stroke-width': 2 }));
+    pg.appendChild(svgEl('circle', { cx: xy2[0], cy: xy2[1], r: 22.5, fill: 'none', stroke: red ? 'var(--red-piece)' : 'var(--black-piece)', 'stroke-width': 1.2, opacity: .7 }));
+    pg.appendChild(svgEl('text', { x: xy2[0], y: xy2[1] + (pin ? 5 : 10), 'font-size': pin ? 25 : 28, 'font-weight': 700, 'text-anchor': 'middle', fill: red ? 'var(--red-piece)' : 'var(--black-piece)', 'font-family': 'var(--cjk)' }, XQ.pieceCn(c)));
+    if (pin) pg.appendChild(svgEl('text', { x: xy2[0], y: xy2[1] + 17, 'font-size': 9, 'text-anchor': 'middle', fill: red ? 'var(--red-piece)' : 'var(--black-piece)', 'font-family': 'var(--sans)', opacity: .85 }, XQ.piecePy(c)));
+    if (board.dim && board.dimTest && !board.dimTest(sqi)) pg.setAttribute('opacity', '.35');
+    svg.appendChild(pg);
+  }
+  // selection + legal targets
+  if (board.selected >= 0) {
+    var sxy = screenXY(board.selected);
+    svg.appendChild(svgEl('circle', { cx: sxy[0], cy: sxy[1], r: 30, fill: 'none', stroke: 'var(--jade)', 'stroke-width': 3.5 }));
+    if (progress.settings.legalDots || board.forceDots) board.legalTargets.forEach(function (t) {
+      var txy = screenXY(t);
+      if (board.pos.b[t]) svg.appendChild(svgEl('circle', { cx: txy[0], cy: txy[1], r: 30, fill: 'none', stroke: 'rgba(95,165,122,.9)', 'stroke-width': 4 }));
+      else svg.appendChild(svgEl('circle', { cx: txy[0], cy: txy[1], r: 9, fill: 'rgba(95,165,122,.85)' }));
+    });
+  }
+  // hint move / arrows
+  var arrows = board.arrows.slice(); if (board.hintMove) arrows.push({ m: board.hintMove, color: 'rgba(95,165,122,.85)' });
+  arrows.forEach(function (a) {
+    var f = screenXY(a.m & 127), t = screenXY(a.m >> 7), dx = t[0] - f[0], dy = t[1] - f[1], len = Math.hypot(dx, dy); if (!len) return;
+    var ux = dx / len, uy = dy / len, ex = t[0] - ux * 22, ey = t[1] - uy * 22;
+    svg.appendChild(svgEl('line', { x1: f[0] + ux * 20, y1: f[1] + uy * 20, x2: ex - ux * 10, y2: ey - uy * 10, stroke: a.color, 'stroke-width': 7, 'stroke-linecap': 'round', opacity: .9 }));
+    var px = -uy, py = ux;
+    svg.appendChild(svgEl('path', { d: 'M' + ex + ',' + ey + ' L' + (ex - ux * 16 + px * 10) + ',' + (ey - uy * 16 + py * 10) + ' L' + (ex - ux * 16 - px * 10) + ',' + (ey - uy * 16 - py * 10) + 'Z', fill: a.color }));
+  });
+  // labels
+  board.labels.forEach(function (l) { var xy3 = screenXY(l.sq); svg.appendChild(svgEl('text', { x: xy3[0] + (l.dx || 0), y: xy3[1] + (l.dy || 0), 'font-size': l.size || 13, fill: l.color || '#3a2a12', 'text-anchor': 'middle', 'font-family': 'var(--sans)', 'font-weight': 600 }, l.text)); });
+  // hit targets
+  for (var hs = 0; hs < 90; hs++) {
+    var hxy = screenXY(hs);
+    var hit = svgEl('circle', { cx: hxy[0], cy: hxy[1], r: 31, fill: 'transparent', 'data-sq': hs, style: 'cursor:pointer' });
+    hit.addEventListener('click', (function (s) { return function () { if (board.onSquare) board.onSquare(s); }; })(hs));
+    svg.appendChild(hit);
+  }
+  wrap.appendChild(svg);
+}
+function setPosition(fenOrPos) {
+  board.pos = typeof fenOrPos === 'string' ? new P().setFen(fenOrPos) : fenOrPos;
+  board.selected = -1; board.legalTargets = []; board.lastMove = 0; board.marks = {}; board.hintMove = 0; board.arrows = []; board.labels = []; board.overlays = []; board.dim = false;
+}
+function clearDecor() { board.selected = -1; board.legalTargets = []; board.marks = {}; board.hintMove = 0; board.arrows = []; board.labels = []; board.overlays = []; }
+
+// ---------- navigation ----------
+var ROOMS = [['learn', 'Learn'], ['drill', 'Drill'], ['puzzles', 'Puzzles'], ['play', 'Play'], ['progress', 'Progress']];
+var rooms = {}; // room -> {enter()}
+var currentRoom = null;
+function renderNav() {
+  var nav = $('rooms'); nav.innerHTML = '';
+  ROOMS.forEach(function (r) {
+    var b = el('button', { class: r[0] === currentRoom ? 'active' : '', onclick: function () { go(r[0]); } }, r[1]);
+    if (r[0] === 'play' && !playUnlocked()) b.appendChild(el('span', { class: 'badge', title: 'Recommended after the first drills and puzzles' }, 'later'));
+    nav.appendChild(b);
+  });
+}
+function playUnlocked() {
+  var d = progress.drill.types, ok = 0;
+  ['K', 'A', 'B', 'N', 'R', 'C', 'P'].forEach(function (t) { var s = d['move_' + t]; if (s && s.correct >= 2) ok++; });
+  var solved = Object.keys(progress.puzzles.solved).length;
+  return progress.play.games.length > 0 || (ok >= 5 && solved >= 2) || progress.meta.playAnyway;
+}
+var interacted = false;
+document.addEventListener('click', function () { interacted = true; }, true);
+function go(room) {
+  currentRoom = room; board.onSquare = null; board.dim = false; board.hideCoords = false; board.forceDots = false;
+  $('underboard').innerHTML = '';
+  renderNav();
+  rooms[room].enter();
+}
+window.XQApp = { $: $, el: el, h: h, thead: thead, trow: trow, esc: esc, term: term, rnd: rnd, pick: pick, shuffle: shuffle, progress: function () { return progress; }, saveProgress: saveProgress, resetProgress: resetProgress, exportCode: exportCode, importCode: importCode, storeState: function () { return store; }, updateSaveState: updateSaveState, interacted: function () { return interacted; }, currentRoom: function () { return currentRoom; },
+  engine: engine, board: board, renderBoard: renderBoard, setPosition: setPosition, clearDecor: clearDecor, rooms: rooms, go: go, renderNav: renderNav, playUnlocked: playUnlocked, screenXY: screenXY, CELL: CELL, PAD: PAD, W: W, H: H, svgEl: svgEl,
+  startWorker: startWorker, loadProgress: loadProgress, storageOk: function () { return !!(store.api && store.ok && !store.lastError); }, hasWorker: function () { return !!worker; } };
+})();
+
+(function () {
+'use strict';
+var A = window.XQApp, $ = A.$, el = A.el, h = A.h, term = A.term, board = A.board, P = XQ.Position;
+var RED = XQ.RED, BLACK = XQ.BLACK;
+
+// mini board SVG (static) for galleries
+function miniBoard(fen, opts) {
+  opts = opts || {};
+  var pos = new P().setFen(fen), C = 22, PD = 14, w = 8 * C + 2 * PD, hh = 9 * C + 2 * PD;
+  var s = '<svg viewBox="0 0 ' + w + ' ' + hh + '"><rect width="' + w + '" height="' + hh + '" fill="#DDBD82" rx="3"/>';
+  s += '<g stroke="#5C3E1C" stroke-width="0.8" fill="none">';
+  for (var y = 0; y < 10; y++) s += '<line x1="' + PD + '" y1="' + (PD + y * C) + '" x2="' + (PD + 8 * C) + '" y2="' + (PD + y * C) + '"/>';
+  for (var x = 0; x < 9; x++) { if (x === 0 || x === 8) s += '<line x1="' + (PD + x * C) + '" y1="' + PD + '" x2="' + (PD + x * C) + '" y2="' + (PD + 9 * C) + '"/>'; else { s += '<line x1="' + (PD + x * C) + '" y1="' + PD + '" x2="' + (PD + x * C) + '" y2="' + (PD + 4 * C) + '"/><line x1="' + (PD + x * C) + '" y1="' + (PD + 5 * C) + '" x2="' + (PD + x * C) + '" y2="' + (PD + 9 * C) + '"/>'; } }
+  [[3, 0, 5, 2], [3, 7, 5, 9]].forEach(function (p) { s += '<line x1="' + (PD + p[0] * C) + '" y1="' + (PD + p[1] * C) + '" x2="' + (PD + p[2] * C) + '" y2="' + (PD + p[3] * C) + '"/><line x1="' + (PD + p[2] * C) + '" y1="' + (PD + p[1] * C) + '" x2="' + (PD + p[0] * C) + '" y2="' + (PD + p[3] * C) + '"/>'; });
+  s += '</g>';
+  if (opts.marks) opts.marks.forEach(function (m) { s += '<circle cx="' + (PD + XQ.fx(m) * C) + '" cy="' + (PD + XQ.fy(m) * C) + '" r="5" fill="rgba(95,165,122,.9)"/>'; });
+  for (var sq = 0; sq < 90; sq++) { var c = pos.b[sq]; if (!c) continue; var cx = PD + XQ.fx(sq) * C, cy = PD + XQ.fy(sq) * C, red = c < 8;
+    s += '<circle cx="' + cx + '" cy="' + cy + '" r="9.5" fill="#F3E4BF" stroke="#8A6132" stroke-width="0.8"/><text x="' + cx + '" y="' + (cy + 3.6) + '" font-size="10.5" font-weight="700" text-anchor="middle" fill="' + (red ? '#B4231A' : '#1F1A15') + '" font-family="var(--cjk)">' + XQ.pieceCn(c) + '</text>'; }
+  s += '</svg>';
+  return s;
+}
+A.miniBoard = miniBoard;
+
+var PIECES = [
+  { t: XQ.K, red: '帅', black: '将', py: ['shuài', 'jiàng'], en: 'General', value: 'the game', move: 'One point orthogonally (not diagonally), and it may never leave the palace.', special: 'The two generals may not face each other on an open file. Moving a piece out from between them is illegal, and a general that can "see" the other general attacks it, so the general becomes a long-range piece in endgames.', demo: '3k5/9/9/9/9/9/9/9/9/3AK4 w', focus: [4, 9] },
+  { t: XQ.A, red: '仕', black: '士', py: ['shì', 'shì'], en: 'Advisor', value: '2', move: 'One point diagonally, never leaving the palace. That gives it only five possible points.', special: 'Purely defensive. Two advisors and two elephants are the standard shield, and losing one usually means the palace has a hole.', demo: '3k5/9/9/9/9/9/9/9/4A4/4K4 w', focus: [4, 8] },
+  { t: XQ.B, red: '相', black: '象', py: ['xiàng', 'xiàng'], en: 'Elephant', value: '2', move: 'Exactly two points diagonally, and it may never cross the river. Seven points are available to it.', special: 'Blocked if the midpoint of its jump is occupied (塞象眼, sāi xiàng yǎn, "blocking the elephant\'s eye").', demo: '3k5/9/9/9/9/9/3p5/4B4/9/4K4 w', focus: [4, 7] },
+  { t: XQ.N, red: '马', black: '马', py: ['mǎ', 'mǎ'], en: 'Horse', value: '4', move: 'One point orthogonally, then one point diagonally outward (the same shape as a chess knight).', special: 'Unlike the knight, it can be blocked: if the orthogonal point next to it is occupied, the two moves in that direction are unavailable (蹩马腿, bié mǎ tuǐ, "hobbling the horse\'s leg").', demo: '3k5/9/9/9/9/4N4/4p4/9/9/4K4 w', focus: [4, 5] },
+  { t: XQ.R, red: '车', black: '车', py: ['jū', 'jū'], en: 'Chariot', value: '9', move: 'Any distance orthogonally, like a rook. Read the character as jū in chess, not chē.', special: 'The strongest piece by a wide margin, worth about two horses. Getting both chariots into play early is the first rule of the opening.', demo: '3k5/9/9/9/9/2p6/9/2R6/9/4K4 w', focus: [2, 7] },
+  { t: XQ.C, red: '炮', black: '炮', py: ['pào', 'pào'], en: 'Cannon', value: '4.5', move: 'Moves like a chariot, but captures differently: it must jump over exactly one piece (of either colour, called the screen) and land on the enemy piece beyond it.', special: 'Strong in the opening, when the board is full of screens, and weaker as pieces come off. A cannon behind a screen threatens whatever is beyond, so a check by cannon can be blocked by adding a second screen, or by removing the one screen.', demo: '3k5/9/9/9/2p6/9/2P6/2C6/9/4K4 w', focus: [2, 7] },
+  { t: XQ.P, red: '兵', black: '卒', py: ['bīng', 'zú'], en: 'Soldier', value: '1, then 2', move: 'One point forward. Once across the river it may also move one point sideways. It never moves backward and never promotes.', special: 'A soldier that reaches the enemy back rank can only move sideways and is nearly useless, so soldiers are strongest around the enemy palace, not beyond it.', demo: '3k5/9/9/9/2P6/9/6P2/9/9/4K4 w', focus: [2, 4] },
+];
+A.PIECES = PIECES;
+
+var PATTERNS = [
+  { id: 'wocaoma', zh: '卧槽马', py: 'wòcáo mǎ', en: 'horse in the trough', fen: '3a1a3/R3k1N2/b7b/9/9/9/9/9/4A4/3AK4 b', text: 'A horse on the point diagonally beside the enemy palace corner (from red\'s side, the third or seventh file, one rank short of the back rank) checks the general on its home point and also covers the point directly in front of it. With the advisors at home the general has only one escape, straight up, and a chariot arriving on that rank finishes. In the diagram the horse has already checked, the general has stepped up, and the chariot has delivered the final check along the rank. The horse move that reaches this point is one of the most common winning ideas in the whole game.' },
+  { id: 'guajiaoma', zh: '挂角马', py: 'guàjiǎo mǎ', en: 'horse hanging on the corner', fen: '3ak4/4a4/b2N4b/5R3/9/9/9/9/9/3AKA3 b', text: 'A horse on a front corner of the enemy palace checks the general at home. It works when the general\'s own advisors block its escapes: here the advisor on the middle point stops the general moving up, the other advisor blocks one side, and the chariot watches the last free point down its file.' },
+  { id: 'mahoupao', zh: '马后炮', py: 'mǎ hòu pào', en: 'cannon behind the horse', fen: '3a1a3/4k4/b7b/4N4/9/9/9/4C4/9/3AKA3 b', text: 'The horse sits in front of the general and the cannon checks through it, using the horse as its screen. The horse also covers the general\'s side escapes, so every point is either on the cannon\'s line or under the horse. So famous that the phrase became an idiom for advice that arrives too late, since the cannon\'s check comes after the horse has already sealed the palace.' },
+  { id: 'chongpao', zh: '重炮', py: 'chóng pào', en: 'stacked cannons', fen: '3aka3/9/b7b/4C4/9/4C4/9/9/9/3AKA3 b', text: 'Two cannons on the general\'s file. The front cannon is the screen for the rear one, so the rear cannon checks. If a defender interposes to block the rear cannon, it becomes the screen for the front cannon instead, and the check simply changes hands. With the side escapes blocked by the advisors, nothing can be done.' },
+  { id: 'mengong', zh: '闷宫', py: 'mèn gōng', en: 'smothered palace', fen: 'C2ak4/4a4/9/9/2b3b2/9/9/9/9/3AKA3 b', text: 'A cannon checks along the back rank using the enemy\'s own advisor as the screen. The general cannot step up because its other advisor occupies the middle point, and the remaining side point is still on the cannon\'s line. The defenders themselves form the coffin. Whenever the general is boxed in by its own pieces, look for a cannon.' },
+  { id: 'tiemenshuan', zh: '铁门栓', py: 'tiě mén shuān', en: 'iron door bolt', fen: 'R3kab2/4a4/4b4/9/9/9/4C4/9/9/3AKA3 b', text: 'A cannon on the central file with two black pieces between it and the general. Neither may leave the file, because with a single screen the cannon would be giving check, so the advisor and elephant are frozen in place like a bolt across a door. A chariot then drops onto the back rank: the general cannot move up (its own advisor is there), cannot move sideways (still on the chariot\'s rank), and the advisor cannot interpose because it is pinned by the cannon.' },
+  { id: 'shuangchecuo', zh: '双车错', py: 'shuāng chē cuò', en: 'staggered chariots', fen: '5k3/9/9/4R4/5R3/8p/9/9/4A4/3AK4 b', text: 'Two chariots on adjacent lines take turns checking. The first check on the central file drives the general to the side of the palace, the second arrives on that file from a distance, and each chariot covers the escapes the other leaves. Against a general without advisors this is a routine win, which is why trading off the advisors is so often the plan.' },
+];
+A.PATTERNS = PATTERNS;
+
+var pages = [
+  { id: 'board', title: 'The board' },
+  { id: 'pieces', title: 'The pieces' },
+  { id: 'special', title: 'Five special rules' },
+  { id: 'ending', title: 'How games end' },
+  { id: 'notation', title: 'Reading moves' },
+  { id: 'values', title: 'Values and first principles' },
+  { id: 'patterns', title: 'Mating patterns' },
+  { id: 'history', title: 'A little history' },
+];
+var page = 'board';
+var demoState = { fen: XQ.START_FEN };
+
+function markSeen(id) { var pr = A.progress(); if (!pr.learn.seen[id]) { pr.learn.seen[id] = Date.now(); A.saveProgress(); } }
+
+function enter() { render(); }
+function render() {
+  var panel = $('panel'); panel.innerHTML = '';
+  markSeen(page);
+  var nav = el('div', { class: 'subnav' });
+  var pr = A.progress();
+  pages.forEach(function (p) { nav.appendChild(el('button', { class: p.id === page ? 'on' : '', onclick: function () { page = p.id; render(); } }, [p.title, pr.learn.seen[p.id] ? el('span', { class: 'done' }, 'read') : null])); });
+  var content = el('div');
+  var wrap = el('div', { class: 'two-col' }, [nav, content]);
+  panel.appendChild(wrap);
+  A.clearDecor(); board.onSquare = null; board.dim = false; board.hideCoords = false; board.forceDots = false;
+  $('underboard').innerHTML = '';
+  ({ board: pageBoard, pieces: pagePieces, special: pageSpecial, ending: pageEnding, notation: pageNotation, values: pageValues, patterns: pagePatterns, history: pageHistory })[page](content);
+  A.renderNav();
+}
+
+// --- page: board ---
+function pageBoard(c) {
+  A.setPosition(XQ.START_FEN);
+  board.overlays = [{ x1: 0, y1: 4, x2: 8, y2: 5, color: 'rgba(60,110,170,.22)' }, { x1: 3, y1: 0, x2: 5, y2: 2, color: 'rgba(95,165,122,.28)' }, { x1: 3, y1: 7, x2: 5, y2: 9, color: 'rgba(95,165,122,.28)' }];
+  A.renderBoard();
+  c.appendChild(h('<h2>The board</h2>' +
+    '<p>Nine files by ten ranks, and the pieces sit on the <strong>intersections</strong>, not inside the squares. That makes 90 points. The starting position is shown on the left; red sits at the bottom and moves first.</p>' +
+    '<p>The blue band is the <strong>river</strong>, ' + term('河界', 'héjiè') + '. It separates the two camps. Elephants may never cross it, and soldiers gain their sideways move only after they have crossed it. Boards traditionally carry the inscription ' + term('楚河汉界', 'Chǔ hé Hàn jiè') + ', the border between the Chu and Han kingdoms during the civil war that ended with the founding of the Han dynasty in 202 BC.</p>' +
+    '<p>The two green boxes with diagonals are the <strong>palaces</strong>, ' + term('九宫', 'jiǔgōng', 'nine points') + '. The general and its two advisors never leave their palace. Everything in the game is aimed at the three by three box at the other end.</p>' +
+    '<p>Files are numbered from each player\'s own right, so the same file has two names. Red\'s files are written in Chinese numerals, ' + term('一', 'yī') + ' to ' + term('九', 'jiǔ') + ', shown along the bottom edge; black\'s are written 1 to 9, shown along the top. Red\'s file 一 is black\'s file 9. This matters when you read moves, which is a page of its own.</p>' +
+    '<p>Tap any point to see how it is named.</p>'));
+  var out = el('p', { class: 'hl' });
+  c.appendChild(out);
+  board.onSquare = function (s) {
+    var x = XQ.fx(s), y = XQ.fy(s);
+    var inPal = XQ.IN_PALACE[RED][s] ? 'inside the red palace' : XQ.IN_PALACE[BLACK][s] ? 'inside the black palace' : (y >= 5 ? 'in red\'s camp' : 'in black\'s camp');
+    out.innerHTML = 'Red calls this file ' + term(XQ.CN_NUM[9 - x], XQ.PY_NUM[9 - x]) + '; black calls it file ' + (x + 1) + '. Rank ' + (10 - y) + ' counted from red\'s side, ' + inPal + '.';
+    board.marks = {}; board.marks[s] = 'focus'; A.renderBoard();
+  };
+}
+
+// --- page: pieces ---
+var pieceSel = 4; // index into PIECES
+function pagePieces(c) {
+  c.appendChild(h('<h2>The pieces</h2><p>Sixteen pieces a side, seven kinds. Red and black use different characters for four of them; the pieces are the same, and the different characters were once the cheap way to tell the sides apart. Tap a row to put that piece on the board and see every point it can reach. Green dots are legal destinations. Where a rule blocks a move, the board shows why.</p>'));
+  var tbl = el('table', { class: 'plain' });
+  tbl.appendChild(A.thead('<thead><tr><th>Red</th><th>Black</th><th>Name</th><th>Value</th></tr></thead>'));
+  var tb = el('tbody');
+  PIECES.forEach(function (p, i) {
+    var tr = el('tr', { class: 'clickable' + (i === pieceSel ? ' on' : ''), onclick: function () { pieceSel = i; render(); } });
+    tr.innerHTML = '<td class="cn"><span class="piece-chip red">' + p.red + '</span><span class="tag">' + p.py[0] + '</span></td><td class="cn"><span class="piece-chip black">' + p.black + '</span><span class="tag">' + p.py[1] + '</span></td><td' + (i === pieceSel ? ' class="hl"' : '') + '>' + p.en + '</td><td>' + p.value + '</td>';
+    tb.appendChild(tr);
+  });
+  tbl.appendChild(tb); c.appendChild(tbl);
+  var p = PIECES[pieceSel];
+  c.appendChild(h('<h3>' + p.en + ' <span class="big-cn">' + p.red + '/' + p.black + '</span> <span class="muted small">' + p.py[0] + (p.py[0] !== p.py[1] ? ' / ' + p.py[1] : '') + '</span></h3><p><strong>Moves:</strong> ' + p.move + '</p><p>' + p.special + '</p><p class="small muted">Tap any red piece on the board to see its moves in this position; the demo positions put a piece where it blocks something.</p>'));
+  A.setPosition(p.demo);
+  var fs = XQ.sq(p.focus[0], p.focus[1]);
+  showTargets(fs);
+  board.onSquare = function (s) { var cc = board.pos.b[s]; if (cc && cc < 8) showTargets(s); };
+}
+function showTargets(s) {
+  board.selected = s; board.forceDots = true;
+  board.legalTargets = board.pos.pieceTargets(s);
+  board.labels = [];
+  var c = board.pos.b[s], t = XQ.typeOf(c), x = XQ.fx(s), y = XQ.fy(s);
+  // annotate blocks
+  if (t === XQ.N) {
+    [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(function (d) { var nx = x + d[0], ny = y + d[1]; if (nx < 0 || nx > 8 || ny < 0 || ny > 9) return; var ls = XQ.sq(nx, ny); if (board.pos.b[ls]) board.labels.push({ sq: ls, dy: 44, text: 'leg blocked', color: '#7a1f12' }); });
+  } else if (t === XQ.B) {
+    [[1, 1], [1, -1], [-1, 1], [-1, -1]].forEach(function (d) { var nx = x + d[0], ny = y + d[1]; if (nx < 0 || nx > 8 || ny < 0 || ny > 9) return; var ms = XQ.sq(nx, ny); if (board.pos.b[ms]) board.labels.push({ sq: ms, dy: 44, text: 'eye blocked', color: '#7a1f12' }); });
+  } else if (t === XQ.C) {
+    [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(function (d) { var nx = x + d[0], ny = y + d[1]; while (nx >= 0 && nx < 9 && ny >= 0 && ny < 10) { var ss = XQ.sq(nx, ny); if (board.pos.b[ss]) { board.labels.push({ sq: ss, dy: 44, text: 'screen', color: '#1f4a2f' }); break; } nx += d[0]; ny += d[1]; } });
+  }
+  A.renderBoard();
+}
+
+// --- page: special rules ---
+var SPECIALS = [
+  { id: 'horse', title: 'The hobbled horse', zh: '蹩马腿', py: 'bié mǎ tuǐ', fen: '3k5/9/9/9/9/4N4/4p4/9/9/4K4 w', focus: [4, 5], text: 'The horse moves one point straight, then one point diagonally outward. The first step is the leg. If the point one step straight from the horse is occupied, by either colour, the two destinations in that direction are unavailable. Here the black soldier directly below the horse removes both of its backward moves. Chess players lose more horses to this rule than to anything else: a knight cannot be blocked, a horse can, and a horse in the enemy camp is often trapped simply by placing a piece beside it.' },
+  { id: 'elephant', title: 'The blocked elephant', zh: '塞象眼', py: 'sāi xiàng yǎn', fen: '3k5/9/9/9/9/9/9/4B4/3p5/4K4 w', focus: [4, 7], text: 'The elephant jumps two points diagonally, and the point in between is its eye. Any piece on the eye blocks the jump. Attackers use this deliberately: a soldier or horse sitting on the elephant\'s eye can strip half of a palace\'s defence without capturing anything.' },
+  { id: 'cannon', title: 'The cannon needs a screen', zh: '炮打隔子', py: 'pào dǎ gé zǐ', fen: '3k5/9/2r6/9/2p6/9/9/2C6/9/4K4 w', focus: [2, 7], text: 'To capture, the cannon jumps over exactly one piece, called the screen, and takes the first piece beyond it. It moves without capturing like a chariot, only along empty points. Here the black soldier is the screen, so the chariot behind it is under attack, but the soldier itself is safe from the cannon. Two screens, or none, and there is no capture. A cannon check can therefore be parried three ways: move the general, remove the screen, or add a second screen.' },
+  { id: 'flying', title: 'The flying general', zh: '王不见王', py: 'wáng bù jiàn wáng', fen: '4k4/9/9/9/9/9/9/9/4N4/4K4 w', focus: [4, 8], text: 'The two generals may never face each other along an open file. Right now the red horse stands between them, so moving that horse is illegal. Turn it around: if the file were open, the red general would be attacking the black general, exactly as if it were a chariot. This is why a general that sits on an open file in the endgame is a real attacking piece, pinning enemy pieces to that file and taking away escape points. Try to move the horse and the board will refuse.' },
+  { id: 'soldier', title: 'The soldier after the river', zh: '过河卒', py: 'guò hé zú', fen: '3k5/9/9/9/2P6/9/6P2/9/9/4K4 w', focus: [2, 4], text: 'Before the river a soldier moves one point forward and nothing else. Across the river it gains one point sideways in either direction, and its value roughly doubles. It never moves backward and never promotes, and one that reaches the far edge can only shuffle sideways for the rest of the game. Tap the two red soldiers: the one across the river has three moves, the one at home has one.' },
+];
+var specialSel = 'horse';
+function pageSpecial(c) {
+  c.appendChild(h('<h2>Five special rules</h2><p>Everything that is not "moves like a rook" or "moves one step" lives here. These five rules decide most beginner games.</p>'));
+  var nav = el('div', { class: 'row' });
+  SPECIALS.forEach(function (s) { nav.appendChild(el('button', { class: 'btn small' + (s.id === specialSel ? ' primary' : ''), onclick: function () { specialSel = s.id; render(); } }, s.title)); });
+  c.appendChild(nav);
+  var s = SPECIALS.filter(function (q) { return q.id === specialSel; })[0];
+  c.appendChild(h('<h3>' + s.title + ' ' + term(s.zh, s.py) + '</h3><p>' + s.text + '</p>'));
+  A.setPosition(s.fen);
+  var fs = XQ.sq(s.focus[0], s.focus[1]);
+  board.forceDots = true;
+  if (s.id === 'flying') {
+    board.selected = fs; board.legalTargets = board.pos.legalTargets(fs);
+    board.arrows = [{ m: XQ.sq(4, 0) | (XQ.sq(4, 9) << 7), color: 'rgba(210,58,36,.5)' }];
+    A.renderBoard();
+    board.onSquare = function (sq) { var cc = board.pos.b[sq]; if (cc && cc < 8) { board.selected = sq; board.legalTargets = board.pos.legalTargets(sq); A.renderBoard(); } };
+  } else {
+    showTargets(fs);
+    board.onSquare = function (sq) { var cc = board.pos.b[sq]; if (cc && cc < 8) showTargets(sq); };
+  }
+}
+
+// --- page: ending ---
+var ENDINGS = [
+  { id: 'check', title: 'Check', zh: '将军', py: 'jiāngjūn', fen: '3ak4/4a4/9/9/9/9/9/9/4C4/4K4 b', text: 'The general is attacked and black must deal with it now. Here the red cannon checks through the black advisor, which is its screen. Black has two kinds of answer: move the general sideways off the file, or move the advisor off the file, because a cannon with no screen attacks nothing. Against other pieces the third answer is to capture the attacker or to interpose. Players announce a check aloud: ' + term('将', 'jiāng') + '.' },
+  { id: 'mate', title: 'Checkmate', zh: '将死', py: 'jiāng sǐ', fen: 'C2ak4/4a4/9/9/2b3b2/9/9/9/9/3AKA3 b', text: 'The general is in check and there is no legal reply. Black to move here: the cannon on the back rank checks through the black advisor beside the general. The general cannot step up because its other advisor is on that point, and the free point on the other side is still on the cannon\'s rank with the same single screen. Every mating pattern in the game is a way to arrange this.' },
+  { id: 'stalemate', title: 'Stalemate is a loss', zh: '困毙', py: 'kùn bì', fen: '3k5/9/1N7/9/9/9/9/9/4R4/4K4 b', text: 'Black to move, not in check, but with no legal move at all: the chariot covers the whole central file and the horse covers the only other point. In chess this is a draw. In xiangqi the side that cannot move <strong>loses</strong>. There is no safe haven in running out of moves, and endgames with a bare general are lost far more often than a chess player expects.' },
+  { id: 'perpetual', title: 'Perpetual check is illegal', zh: '长将', py: 'cháng jiāng', fen: '4k4/9/9/9/9/9/9/9/4A4/2r1K4 b', text: 'You may not check forever. If the same position repeats with one side giving check on every move of the cycle, that side must vary or lose the game. Repeating a position without checks (both sides shuffling) is a draw. The trainer enforces the check rule and treats other repetitions as draws. Tournament rules also forbid perpetually chasing an unprotected piece; those rules are intricate and vary between rulebooks, and you do not need them yet.' },
+  { id: 'sixty', title: 'The sixty-move rule', zh: '六十回合', py: 'liùshí huíhé', fen: XQ.START_FEN, text: 'Sixty moves each (120 plies) with no capture and the game is drawn. Insufficient material to mate is also a draw, but xiangqi has few such cases because the flying general rule lets even a lone general help attack.' },
+];
+var endingSel = 'check';
+function pageEnding(c) {
+  c.appendChild(h('<h2>How games end</h2><p>Two of these differ from chess and trip up every newcomer.</p>'));
+  var nav = el('div', { class: 'row' });
+  ENDINGS.forEach(function (s) { nav.appendChild(el('button', { class: 'btn small' + (s.id === endingSel ? ' primary' : ''), onclick: function () { endingSel = s.id; render(); } }, s.title)); });
+  c.appendChild(nav);
+  var s = ENDINGS.filter(function (q) { return q.id === endingSel; })[0];
+  c.appendChild(h('<h3>' + s.title + ' ' + term(s.zh, s.py) + '</h3><p>' + s.text + '</p>'));
+  A.setPosition(s.fen);
+  if (s.id === 'mate' || s.id === 'stalemate' || s.id === 'check') { board.marks[board.pos.kings[BLACK]] = s.id === 'stalemate' ? 'focus' : 'check'; }
+  if (s.id === 'stalemate') { var lm = board.pos.legalMoves(); c.appendChild(h('<p class="small muted">Legal moves for black in this position: ' + lm.length + '.</p>')); }
+  A.renderBoard();
+}
+
+// --- page: notation ---
+var notaPos = null, notaSel = -1;
+function pageNotation(c) {
+  c.appendChild(h('<h2>Reading moves</h2>' +
+    '<p>Every book, video and Chinese commentary writes moves in four characters: <strong>piece, file, direction, number</strong>. Files are counted from the mover\'s own right, red in Chinese numerals, black in Arabic numerals.</p>' +
+    '<ul><li>' + term('平', 'píng') + ' means a sideways move, and the number is the destination file.</li>' +
+    '<li>' + term('进', 'jìn') + ' means forward, ' + term('退', 'tuì') + ' means backward. For pieces that move straight (chariot, cannon, soldier, general) the number is how many points it moved. For pieces that move diagonally (horse, elephant, advisor) the number is the destination file, because the distance is fixed.</li>' +
+    '<li>When two identical pieces stand on the same file, ' + term('前', 'qián', 'front') + ' or ' + term('后', 'hòu', 'rear') + ' replaces the file: 前车进一.</li></ul>' +
+    '<p>So ' + term('炮二平五', 'pào èr píng wǔ') + ' is "cannon on file 2 sideways to file 5": the most common first move in the game. ' + term('马八进七', 'mǎ bā jìn qī') + ' is "horse on file 8 forward to file 7".</p>' +
+    '<p>Move any piece on the board to see its notation. The board resets when you press New position.</p>'));
+  var out = el('div', { class: 'feedback' }, 'Pick a piece.');
+  c.appendChild(out);
+  c.appendChild(el('div', { class: 'row' }, [el('button', { class: 'btn small', onclick: function () { notaPos = null; render(); } }, 'New position')]));
+  if (!notaPos) { notaPos = new P().setFen(XQ.START_FEN); var n = 4 + A.rnd(8); for (var i = 0; i < n; i++) { var lm = notaPos.legalMoves(); if (!lm.length) break; notaPos.makeMove(A.pick(lm)); } }
+  A.setPosition(notaPos); board.forceDots = true; A.renderBoard();
+  board.onSquare = function (s) {
+    var pos = board.pos, cc = pos.b[s];
+    if (board.selected >= 0 && board.legalTargets.indexOf(s) >= 0) {
+      var m = board.selected | (s << 7), n = XQ.notation(pos, m);
+      pos.makeMove(m); board.lastMove = m; board.selected = -1; board.legalTargets = []; A.renderBoard();
+      out.innerHTML = '<span class="big-cn">' + n.cn + '</span> <span class="muted">' + n.py + '</span><br><span class="small">' + n.en + '</span>';
+      return;
+    }
+    if (cc && XQ.sideOf(cc) === pos.side) { board.selected = s; board.legalTargets = pos.legalTargets(s); A.renderBoard(); }
+  };
+}
+
+// --- page: values ---
+function pageValues(c) {
+  A.setPosition(XQ.START_FEN); A.renderBoard();
+  c.appendChild(h('<h2>Values and first principles</h2>' +
+    '<table class="plain"><thead><tr><th>Piece</th><th>Rough value</th><th>Changes with the game</th></tr></thead><tbody>' +
+    '<tr><td>Chariot 车</td><td>9</td><td>Stable. Two chariots are the whole attack; one chariot against none is usually decisive.</td></tr>' +
+    '<tr><td>Cannon 炮</td><td>4.5</td><td>Strong early, when there are many screens to jump over. Loses value as the board empties.</td></tr>' +
+    '<tr><td>Horse 马</td><td>4</td><td>Weak early, when it is easily hobbled. Gains value in the endgame, where it can reach points no other piece can.</td></tr>' +
+    '<tr><td>Advisor 仕/士</td><td>2</td><td>Defensive only. The palace shield against chariots: the saying ' + term('缺士怕双车', 'quē shì pà shuāng jū') + ' says a side short of advisors fears the double chariot.</td></tr>' +
+    '<tr><td>Elephant 相/象</td><td>2</td><td>Defensive only. The outer shield against cannons and soldiers: ' + term('缺象怕炮', 'quē xiàng pà pào') + ', a side short of elephants fears the cannon.</td></tr>' +
+    '<tr><td>Soldier 兵/卒</td><td>1, then 2</td><td>Doubles across the river, then falls again on the enemy back rank.</td></tr>' +
+    '</tbody></table>' +
+    '<p>These numbers feed the coach\'s material bar. Treat them as a starting point, not a law.</p>' +
+    '<h3>What is different from chess</h3>' +
+    '<p>There is no pawn structure and nothing to hide behind: lines are open from the first move, so tempo and activity matter more than in chess. A game is often lost by move ten because one side got its chariots out and the other side was collecting soldiers.</p>' +
+    '<p>A classic on strategy, ' + term('《棋经十三篇》', 'Qí Jīng Shísān Piān') + ', put it this way: ' + term('宁输数子，勿失一先', 'nìng shū shù zǐ, wù shī yī xiān') + ', "rather lose several pieces than lose one tempo." It was written about weiqi, but nowhere is it truer than on this open board.</p>' +
+    '<h3>Three opening priorities</h3>' +
+    '<ol><li><strong>Chariots out.</strong> Open the files by moving a horse or cannon, then bring both chariots to the third or fourth rank where they see the whole board. The named taboo is ' + term('车迟开', 'chē chí kāi') + ', "the chariot opened late".</li>' +
+    '<li><strong>Central cannon or a solid shell.</strong> The most direct plan is ' + term('中炮', 'zhōng pào') + ': a cannon to the central file, eyeing the enemy soldier and, behind it, the general. The standard reply is ' + term('屏风马', 'píngfēng mǎ') + ', both horses developed beside the central soldier, forming a screen in front of the palace.</li>' +
+    '<li><strong>Do not grab.</strong> Taking an undefended soldier with a cannon on move three usually costs two tempi and a badly placed cannon. Ask what the capture gives up.</li></ol>' +
+    '<h3>The general is part of the fight</h3>' +
+    '<p>Because the generals may not face each other, a general on an open file controls it. In endgames, moving your general to the central file is often the winning move because it takes away the opponent\'s escape points and pins whatever stands on the file.</p>'));
+}
+
+// --- page: patterns ---
+function pagePatterns(c) {
+  c.appendChild(h('<h2>Mating patterns</h2><p>These seven shapes are the vocabulary of attack. Each one has a name that Chinese players use in ordinary speech. Each diagram shows the finished mate, black to move with no reply; tap one to see it large. The Puzzles room lets you find the moves that reach these positions.</p>'));
+  var grid = el('div', { class: 'mini-boards' });
+  PATTERNS.forEach(function (p) {
+    var mb = el('div', { class: 'mb', onclick: function () { A.setPosition(p.fen); A.renderBoard(); showPattern(c, p); } });
+    mb.innerHTML = miniBoard(p.fen) + '<div class="lab"><span class="cn">' + p.zh + '</span> ' + p.py + '</div>';
+    grid.appendChild(mb);
+  });
+  c.appendChild(grid);
+  var detail = el('div', { id: 'pattern-detail' });
+  c.appendChild(detail);
+  A.setPosition(PATTERNS[0].fen); A.renderBoard(); showPattern(c, PATTERNS[0]);
+}
+function showPattern(c, p) {
+  var d = $('pattern-detail'); if (!d) return;
+  d.innerHTML = '<h3>' + p.zh + ' <span class="muted">' + p.py + ', ' + p.en + '</span></h3><p>' + p.text + '</p>';
+  d.appendChild(el('div', { class: 'row' }, [el('button', { class: 'btn small primary', onclick: function () { A.go('puzzles'); A.rooms.puzzles.filterPattern(p.id); } }, 'Practise this pattern')]));
+}
+
+// --- page: history ---
+function pageHistory(c) {
+  A.setPosition(XQ.START_FEN); A.renderBoard();
+  c.appendChild(h('<h2>A little history</h2>' +
+    '<p>The mainstream view outside China is that ' + term('象棋', 'xiàngqí') + ' and chess share an ancestor in the Indian game chaturanga; many Chinese historians dispute this and trace the game to native board games of the Warring States period. What is not disputed is that the board with a river, the cannon, and the confinement of the general to a palace are Chinese developments, and that the modern form was settled during the Song dynasty (960 to 1279), when the game spread widely and its first treatises were written.</p>' +
+    '<p>The river inscription ' + term('楚河汉界', 'Chǔ hé Hàn jiè') + ' refers to the truce line between Xiang Yu of Chu and Liu Bang of Han in 203 BC, along the Hong Canal. Liu Bang broke the truce, won, and founded the Han dynasty; the board remembers the moment before the last battle.</p>' +
+    '<p>The red and black characters differ for four pieces (帅/将, 仕/士, 相/象, 兵/卒). They are the same pieces; the variant characters date from a time when coloured pigment was expensive and a different character was the cheap way to tell the sides apart. Red moves first by convention, as white does in chess.</p>' +
+    '<p>Today the game has professional leagues in China, Vietnam and Singapore, world championships since 1990, and engines, led by Pikafish, that are far beyond any human. The trainer\'s engine is nowhere near that; it is written to be beatable once you have learned what it is teaching.</p>'));
+}
+
+A.rooms.learn = { enter: enter, setPage: function (p) { page = p; } };
+})();
+
+(function () {
+'use strict';
+var A = window.XQApp, $ = A.$, el = A.el, h = A.h, term = A.term, board = A.board, P = XQ.Position, rnd = A.rnd, pick = A.pick, shuffle = A.shuffle;
+var RED = XQ.RED, BLACK = XQ.BLACK;
+var TYPES = ['K', 'A', 'B', 'N', 'R', 'C', 'P'];
+var TCODE = { K: XQ.K, A: XQ.A, B: XQ.B, N: XQ.N, R: XQ.R, C: XQ.C, P: XQ.P };
+var TNAME = { K: 'general', A: 'advisor', B: 'elephant', N: 'horse', R: 'chariot', C: 'cannon', P: 'soldier' };
+var mode = 'move'; // move | rules | notation
+var cur = null; // current drill
+var lastFeedback = null;
+
+function stat(key) { var d = A.progress().drill.types; if (!d[key]) d[key] = { n: 0, correct: 0, streak: 0, best: 0 }; return d[key]; }
+function record(key, ok) { var s = stat(key); s.n++; if (ok) { s.correct++; s.streak++; if (s.streak > s.best) s.best = s.streak; } else s.streak = 0; A.saveProgress(); }
+function weakestType() {
+  // sample piece type weighted by weakness; unseen types first
+  var ws = TYPES.map(function (t) { var s = A.progress().drill.types['move_' + t]; if (!s || s.n < 3) return 4; var acc = s.correct / s.n; return 0.5 + (1 - acc) * 4; });
+  var tot = ws.reduce(function (a, b) { return a + b; }, 0), r = Math.random() * tot;
+  for (var i = 0; i < TYPES.length; i++) { r -= ws[i]; if (r <= 0) return TYPES[i]; }
+  return TYPES[6];
+}
+
+// ---------- random position helpers ----------
+function emptyPos() { var p = new P(); p.b.fill(0); p.side = RED; p.kings = [XQ.sq(4, 9), XQ.sq(4, 0)]; p.computeHash(); p.keyLo = [p.lo]; p.keyHi = [p.hi]; return p; }
+function validSquares(side, t) {
+  var out = [];
+  for (var s = 0; s < 90; s++) {
+    var x = XQ.fx(s), y = XQ.fy(s);
+    if (t === XQ.K) { if (XQ.IN_PALACE[side][s]) out.push(s); }
+    else if (t === XQ.A) { if (XQ.ADVISOR_OK[side][s]) out.push(s); }
+    else if (t === XQ.B) { if (XQ.ELEPHANT_OK[side][s]) out.push(s); }
+    else if (t === XQ.P) { if (side === RED ? (y <= 6 && (y < 5 || x % 2 === 0)) : (y >= 3 && (y > 4 || x % 2 === 0))) out.push(s); }
+    else out.push(s);
+  }
+  return out;
+}
+function place(pos, side, t, avoid) {
+  var cands = validSquares(side, t).filter(function (s) { return !pos.b[s] && (!avoid || avoid.indexOf(s) < 0); });
+  if (!cands.length) return -1;
+  var s = pick(cands); pos.b[s] = XQ.make(side, t); if (t === XQ.K) pos.kings[side] = s; return s;
+}
+function finalize(pos) { pos.computeHash(); pos.keyLo = [pos.lo]; pos.keyHi = [pos.hi]; pos.checks = []; pos.stack = []; return pos; }
+
+// ---------- movement drill ----------
+function genMove() {
+  var t = weakestType(), tc = TCODE[t];
+  for (var tries = 0; tries < 200; tries++) {
+    var pos = emptyPos();
+    pos.b.fill(0);
+    var focus = place(pos, RED, tc);
+    if (focus < 0) continue;
+    var fx = XQ.fx(focus), fy = XQ.fy(focus);
+    // neighbours to create blocking situations
+    var near = [];
+    for (var s = 0; s < 90; s++) { if (s === focus) continue; var dx = Math.abs(XQ.fx(s) - fx), dy = Math.abs(XQ.fy(s) - fy); if (dx <= 2 && dy <= 2 && !(dx === 0 && dy === 0)) near.push(s); }
+    var nNear = t === 'K' || t === 'A' ? rnd(3) : 1 + rnd(3);
+    var others = [XQ.R, XQ.N, XQ.C, XQ.P, XQ.A, XQ.B];
+    for (var i = 0; i < nNear; i++) {
+      var s2 = pick(near); if (pos.b[s2]) continue;
+      var side = rnd(2), ot = pick(others);
+      if (validSquares(side, ot).indexOf(s2) < 0) { ot = XQ.R; if (rnd(2)) ot = XQ.C; }
+      pos.b[s2] = XQ.make(side, ot);
+    }
+    // a couple of far pieces
+    var nFar = rnd(4);
+    for (i = 0; i < nFar; i++) { var side2 = rnd(2), ot2 = pick(others); place(pos, side2, ot2, [focus]); }
+    // black general somewhere (needed for the general drill's facing rule; otherwise optional)
+    if (t === 'K' || rnd(2)) { place(pos, BLACK, XQ.K); }
+    else pos.kings[BLACK] = -1;
+    if (t !== 'K') pos.kings[RED] = -1;
+    finalize(pos);
+    var targets = pos.pieceTargets(focus);
+    if (t === 'K' && pos.kings[BLACK] >= 0) {
+      // apply facing rule only
+      targets = targets.filter(function (to) { var kx = XQ.fx(pos.kings[BLACK]); if (XQ.fx(to) !== kx) return true; for (var y = XQ.fy(pos.kings[BLACK]) + 1; y < XQ.fy(to); y++) if (pos.b[XQ.sq(kx, y)]) return true; return false; });
+    }
+    if (!targets.length && rnd(4)) continue;
+    return { kind: 'move', type: t, pos: pos, focus: focus, targets: targets, picked: {} };
+  }
+  return null;
+}
+function renderMove(c) {
+  var d = cur;
+  A.setPosition(d.pos); board.hideCoords = false; board.marks = {}; board.marks[d.focus] = 'focus';
+  if (d.done && d.marks) board.marks = d.marks; else for (var s in d.picked) board.marks[s] = 'sel';
+  A.renderBoard();
+  var name = TNAME[d.type], cn = XQ.pieceCn(XQ.make(RED, TCODE[d.type])), py = XQ.piecePy(XQ.make(RED, TCODE[d.type]));
+  c.appendChild(h('<h3>Where can the ' + name + ' go? <span class="big-cn">' + cn + '</span> <span class="muted">' + py + '</span></h3><p>Tap every point the outlined red ' + name + ' can move to or capture on, then check. Ignore checks and mates; this drill is about movement only' + (d.type === 'K' ? ', except the flying general rule, which does apply' : '') + '.</p>'));
+  var status = el('p', { class: 'muted small' }, Object.keys(d.picked).length + ' selected');
+  c.appendChild(status);
+  if (!d.done) {
+    var row = el('div', { class: 'row' });
+    row.appendChild(el('button', { class: 'btn primary', onclick: function () { gradeMove(); } }, 'Check answer'));
+    row.appendChild(el('button', { class: 'btn', onclick: function () { d.picked = {}; render(); } }, 'Clear'));
+    c.appendChild(row);
+  }
+  if (lastFeedback) c.appendChild(lastFeedback);
+  board.onSquare = function (s) {
+    if (d.done) return;
+    if (s === d.focus) return;
+    if (d.picked[s]) delete d.picked[s]; else d.picked[s] = 1;
+    board.marks = {}; board.marks[d.focus] = 'focus'; for (var k in d.picked) board.marks[k] = 'sel';
+    status.textContent = Object.keys(d.picked).length + ' selected';
+    A.renderBoard();
+  };
+}
+function explainBlock(d) {
+  var pos = d.pos, t = d.type, f = d.focus, x = XQ.fx(f), y = XQ.fy(f), notes = [];
+  if (t === 'N') [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(function (dd) { var nx = x + dd[0], ny = y + dd[1]; if (nx < 0 || nx > 8 || ny < 0 || ny > 9) return; if (pos.b[XQ.sq(nx, ny)]) notes.push('A piece sits on the horse\'s leg ' + dirName(dd) + ', so both jumps that way are blocked (蹩马腿, bié mǎ tuǐ).'); });
+  if (t === 'B') [[1, 1], [1, -1], [-1, 1], [-1, -1]].forEach(function (dd) { var nx = x + dd[0], ny = y + dd[1]; if (nx < 0 || nx > 8 || ny < 0 || ny > 9) return; var tx = x + 2 * dd[0], ty = y + 2 * dd[1]; if (tx < 0 || tx > 8 || ty < 0 || ty > 9) return; if (pos.b[XQ.sq(nx, ny)] && XQ.OWN_SIDE[RED][XQ.sq(tx, ty)]) notes.push('The elephant\'s eye ' + dirName(dd) + ' is occupied, so that jump is blocked (塞象眼, sāi xiàng yǎn).'); });
+  if (t === 'B' && y === 5) notes.push('The elephant is on the river bank and may not cross: no jumps forward.');
+  if (t === 'C') notes.push('The cannon moves along empty points only and captures by jumping over exactly one screen. A piece right behind a screen is capturable; a second piece behind two screens is not.');
+  if (t === 'P') notes.push(XQ.OWN_SIDE[RED][f] ? 'The soldier has not crossed the river yet: one point forward only.' : 'The soldier has crossed the river: forward or sideways, never back.');
+  if (t === 'K' && pos.kings[BLACK] >= 0) notes.push('The general may not move onto the black general\'s file if nothing stands between them (the flying general rule), and it never leaves the palace.');
+  if (t === 'A') notes.push('Advisors move one point diagonally and never leave the palace: only five points exist for them.');
+  if (t === 'R') notes.push('The chariot slides along empty points and stops at the first piece, capturing it if it is black.');
+  return notes;
+}
+function dirName(dd) { return dd[0] === 1 ? 'to the right' : dd[0] === -1 ? 'to the left' : dd[1] === -1 ? 'above it' : 'below it'; }
+function gradeMove() {
+  var d = cur; if (d.done) return; d.done = true;
+  var picked = Object.keys(d.picked).map(Number), missed = [], wrong = [];
+  d.targets.forEach(function (t) { if (picked.indexOf(t) < 0) missed.push(t); });
+  picked.forEach(function (p) { if (d.targets.indexOf(p) < 0) wrong.push(p); });
+  var ok = !missed.length && !wrong.length;
+  record('move_' + d.type, ok);
+  d.marks = {}; d.marks[d.focus] = 'focus';
+  d.targets.forEach(function (t) { d.marks[t] = 'ok'; });
+  missed.forEach(function (t) { d.marks[t] = 'missed'; });
+  wrong.forEach(function (t) { d.marks[t] = 'wrong'; });
+  var fb = el('div', { class: 'feedback ' + (ok ? 'good' : 'bad') });
+  fb.appendChild(h('<p><strong>' + (ok ? 'Correct.' : (missed.length ? missed.length + ' missed (red rings)' : '') + (missed.length && wrong.length ? ', ' : '') + (wrong.length ? wrong.length + ' wrong (crosses)' : '') + '.') + '</strong> Green dots are the full answer.</p>'));
+  explainBlock(d).forEach(function (n) { fb.appendChild(h('<p class="small">' + n + '</p>')); });
+  fb.appendChild(el('div', { class: 'row' }, [el('button', { class: 'btn primary', onclick: function () { next(); } }, 'Next drill')]));
+  lastFeedback = fb; render();
+}
+
+// ---------- rules drill ----------
+var STALEMATES = [
+  '3k5/9/1N7/9/9/9/9/9/4R4/4K4 b',
+  '5k3/9/7N1/9/9/9/9/9/4R4/4K4 b',
+  '4k4/4a4/9/9/9/9/9/9/3R1R3/4K4 b',
+];
+function genRules() {
+  var want = pick(['check', 'check', 'mate', 'stalemate', 'none', 'none']);
+  if (want === 'stalemate') { var f = pick(STALEMATES); if (rnd(2)) f = mirror(f); var pp = new P().setFen(f); if (!pp.inCheck(BLACK) && !pp.legalMoves().length && !pp.inCheck(RED)) return { kind: 'rules', pos: pp, answer: 'stalemate' }; }
+  for (var tries = 0; tries < 400; tries++) {
+    var pos = emptyPos(); pos.b.fill(0);
+    place(pos, BLACK, XQ.K); place(pos, RED, XQ.K);
+    var nDef = rnd(3);
+    for (var i = 0; i < nDef; i++) place(pos, BLACK, pick([XQ.A, XQ.B]));
+    var nAtt = 1 + rnd(3), farAvoid = [];
+    for (var q = 0; q < 90; q++) if (XQ.fy(q) > 4) farAvoid.push(q);
+    for (i = 0; i < nAtt; i++) { var t = pick([XQ.R, XQ.N, XQ.C, XQ.P, XQ.R, XQ.N]); place(pos, RED, t, rnd(4) ? farAvoid : null); }
+    pos.side = BLACK; finalize(pos);
+    if (pos.inCheck(RED)) continue; // illegal: red just moved and is in check
+    var inC = pos.inCheck(BLACK), legal = pos.legalMoves().length;
+    var ans = inC ? (legal ? 'check' : 'mate') : (legal ? 'none' : 'stalemate');
+    if (ans === want || (want === 'stalemate' && ans === 'mate')) return { kind: 'rules', pos: pos, answer: ans };
+  }
+  return null;
+}
+function mirror(fen) { var parts = fen.split(' '); return parts[0].split('/').map(function (r) { var cells = []; for (var i = 0; i < r.length; i++) { var ch = r[i]; if (/[1-9]/.test(ch)) for (var j = 0; j < +ch; j++) cells.push(''); else cells.push(ch); } cells.reverse(); var out = '', e = 0; cells.forEach(function (c) { if (!c) e++; else { if (e) { out += e; e = 0; } out += c; } }); if (e) out += e; return out; }).join('/') + ' ' + parts[1]; }
+var RULE_OPTS = [['check', 'Check: black must answer it', '将军 jiāngjūn'], ['mate', 'Checkmate: black has lost', '将死 jiāng sǐ'], ['stalemate', 'Stalemate: no legal move, black has lost', '困毙 kùn bì'], ['none', 'No check, black plays on', '无事 wú shì']];
+function renderRules(c) {
+  var d = cur;
+  A.setPosition(d.pos); board.marks = d.done && d.marks ? d.marks : {}; A.renderBoard();
+  c.appendChild(h('<h3>Black to move. What is this?</h3><p>Decide whether the black general is in check, and whether black has any legal move. Remember that having no legal move loses, check or not.</p>'));
+  var opts = el('div', { class: 'options' });
+  RULE_OPTS.forEach(function (o) {
+    opts.appendChild(el('button', { class: d.done ? (o[0] === d.answer ? 'correct' : o[0] === d.given ? 'wrong' : '') : '', onclick: function () { gradeRules(o[0], opts); } }, [o[1], ' ', el('span', { class: 'muted cn small' }, o[2])]));
+  });
+  c.appendChild(opts);
+  if (lastFeedback) c.appendChild(lastFeedback);
+}
+function gradeRules(ans, opts) {
+  var d = cur; if (d.done) return; d.done = true; d.given = ans;
+  var ok = ans === d.answer;
+  record('rules', ok);
+  var pos = d.pos, legal = pos.legalMoves(), inC = pos.inCheck(BLACK);
+  d.marks = {};
+  if (inC) { d.marks[pos.kings[BLACK]] = 'check'; pos.attackers(pos.kings[BLACK], RED).forEach(function (s) { d.marks[s] = 'focus'; }); }
+  else d.marks[pos.kings[BLACK]] = 'focus';
+  var expl = inC ? 'The black general is attacked by the outlined piece' + (pos.attackers(pos.kings[BLACK], RED).length > 1 ? 's' : '') + '. ' : 'Nothing attacks the black general. ';
+  expl += legal.length ? 'Black has ' + legal.length + ' legal move' + (legal.length > 1 ? 's' : '') + ', for example ' + XQ.notation(pos, legal[0]).cn + ' (' + XQ.notation(pos, legal[0]).py + ').' : 'Black has no legal move at all, so the game is over and black has lost.';
+  var fb = el('div', { class: 'feedback ' + (ok ? 'good' : 'bad') }, [h('<p><strong>' + (ok ? 'Correct.' : 'Not quite: it is ' + RULE_OPTS.filter(function (o) { return o[0] === d.answer; })[0][1].toLowerCase() + '.') + '</strong> ' + expl + '</p>').firstChild]);
+  fb.appendChild(el('div', { class: 'row' }, [el('button', { class: 'btn primary', onclick: function () { next(); } }, 'Next drill')]));
+  lastFeedback = fb; render();
+}
+
+// ---------- notation drill ----------
+function randomGamePos() {
+  var pos = new P().setFen(XQ.START_FEN), n = 2 + rnd(14);
+  for (var i = 0; i < n; i++) { var lm = pos.legalMoves(); if (!lm.length) break; var caps = lm.filter(function (m) { return pos.b[m >> 7]; }); pos.makeMove(rnd(3) ? pick(lm) : (caps.length ? pick(caps) : pick(lm))); }
+  return pos;
+}
+function genNotation() {
+  var sub = rnd(2) ? 'read' : 'write';
+  var pos = randomGamePos(), legal = pos.legalMoves();
+  if (!legal.length) return genNotation();
+  // prefer a diverse piece type, and prefer moves with 进/退 by diagonal pieces
+  var m = pick(legal);
+  var n = XQ.notation(pos, m);
+  var opts = null;
+  if (sub === 'write') {
+    // 3 distractors: other legal moves' notations, prefer same piece
+    var same = legal.filter(function (x) { return x !== m && XQ.typeOf(pos.b[x & 127]) === XQ.typeOf(pos.b[m & 127]); }).map(function (x) { return XQ.notation(pos, x); });
+    var others = legal.filter(function (x) { return x !== m; }).map(function (x) { return XQ.notation(pos, x); });
+    var pool = shuffle(same.concat(shuffle(others))).filter(function (o, i, arr) { return o.cn !== n.cn && arr.findIndex(function (q) { return q.cn === o.cn; }) === i; });
+    // fabricate close distractors if needed
+    opts = shuffle([n].concat(pool.slice(0, 3)));
+  }
+  return { kind: 'notation', sub: sub, pos: pos, move: m, nota: n, opts: opts };
+}
+function renderNotation(c) {
+  var d = cur;
+  A.setPosition(d.pos); board.marks = {};
+  if (d.done) board.arrows = d.arrows || [];
+  if (d.sub === 'read') {
+    A.renderBoard();
+    c.appendChild(h('<h3>Play this move: <span class="big-cn">' + d.nota.cn + '</span> <span class="muted">' + d.nota.py + '</span></h3><p>' + (d.pos.side === RED ? 'Red' : 'Black') + ' to move. Files count from ' + (d.pos.side === RED ? 'red' : 'black') + '\'s own right' + (d.pos.side === RED ? ' (the Chinese numerals along the bottom)' : ' (the Arabic numerals along the top)') + '. Tap the piece, then its destination.</p>'));
+    board.forceDots = false;
+    board.onSquare = function (s) {
+      if (d.done) return;
+      var pos = board.pos, cc = pos.b[s];
+      if (board.selected >= 0 && board.legalTargets.indexOf(s) >= 0) { gradeNotation(board.selected | (s << 7)); return; }
+      if (cc && XQ.sideOf(cc) === pos.side) { board.selected = s; board.legalTargets = pos.legalTargets(s); A.renderBoard(); }
+      else { board.selected = -1; board.legalTargets = []; A.renderBoard(); }
+    };
+  } else {
+    if (!d.done) board.arrows = [{ m: d.move, color: 'rgba(95,165,122,.85)' }]; A.renderBoard();
+    c.appendChild(h('<h3>How is the arrowed move written?</h3><p>' + (d.pos.side === RED ? 'Red' : 'Black') + ' moves. Pick the notation.</p>'));
+    var opts = el('div', { class: 'options' });
+    d.opts.forEach(function (o) { opts.appendChild(el('button', { class: d.done ? (o.cn === d.nota.cn ? 'correct' : o.cn === d.given ? 'wrong' : '') : '', onclick: function () { gradeNotation(o.cn, opts); } }, [el('span', { class: 'big-cn' }, o.cn), ' ', el('span', { class: 'muted small' }, o.py)])); });
+    c.appendChild(opts);
+  }
+  if (lastFeedback) c.appendChild(lastFeedback);
+}
+function gradeNotation(answer, opts) {
+  var d = cur; if (d.done) return; d.done = true; d.given = answer;
+  var ok = d.sub === 'read' ? answer === d.move : answer === d.nota.cn;
+  record('notation', ok);
+  d.arrows = [{ m: d.move, color: 'rgba(95,165,122,.85)' }];
+  if (d.sub === 'read' && !ok) d.arrows.push({ m: answer, color: 'rgba(210,58,36,.7)' });
+  var fb = el('div', { class: 'feedback ' + (ok ? 'good' : 'bad') }, [h('<p><strong>' + (ok ? 'Correct.' : 'Not that one.') + '</strong> <span class="big-cn">' + d.nota.cn + '</span> <span class="muted">' + d.nota.py + '</span>: ' + d.nota.en + '.</p>').firstChild]);
+  if (d.sub === 'read' && !ok) fb.appendChild(h('<p class="small">Your move (red arrow) was ' + XQ.notation(d.pos, answer).cn + ', ' + XQ.notation(d.pos, answer).en + '.</p>'));
+  fb.appendChild(el('div', { class: 'row' }, [el('button', { class: 'btn primary', onclick: function () { next(); } }, 'Next drill')]));
+  lastFeedback = fb; render();
+}
+
+// ---------- room ----------
+function next() { lastFeedback = null; cur = mode === 'move' ? genMove() : mode === 'rules' ? genRules() : genNotation(); if (!cur) cur = genNotation(); render(); }
+function enter() { if (!cur || cur.kind !== ({ move: 'move', rules: 'rules', notation: 'notation' })[mode]) next(); else render(); }
+function render() {
+  var panel = $('panel'); panel.innerHTML = '';
+  var pr = A.progress();
+  var seg = el('div', { class: 'row' });
+  var sg = el('div', { class: 'seg' });
+  [['move', 'Movement'], ['rules', 'Check or mate?'], ['notation', 'Notation']].forEach(function (m) { sg.appendChild(el('button', { class: mode === m[0] ? 'on' : '', onclick: function () { mode = m[0]; next(); } }, m[1])); });
+  seg.appendChild(sg);
+  seg.appendChild(el('span', { class: 'spacer' }));
+  seg.appendChild(el('button', { class: 'btn small ghost', onclick: function () { next(); } }, 'Skip'));
+  panel.appendChild(el('h2', null, 'Drill'));
+  panel.appendChild(seg);
+  var scoreline = el('p', { class: 'small muted' });
+  var key = cur.kind === 'move' ? 'move_' + cur.type : cur.kind;
+  var s = pr.drill.types[key];
+  scoreline.textContent = s ? (cur.kind === 'move' ? TNAME[cur.type] + ' drills: ' : (cur.kind === 'rules' ? 'rule drills: ' : 'notation drills: ')) + s.correct + '/' + s.n + ' correct, streak ' + s.streak : 'First attempt at this drill type.';
+  panel.appendChild(scoreline);
+  board.onSquare = null; board.forceDots = false; A.clearDecor();
+  if (cur.kind === 'move') renderMove(panel); else if (cur.kind === 'rules') renderRules(panel); else renderNotation(panel);
+  A.renderNav();
+}
+A.rooms.drill = { enter: enter, setMode: function (m) { mode = m; cur = null; } };
+})();
+
+(function () {
+'use strict';
+var A = window.XQApp, $ = A.$, el = A.el, h = A.h, term = A.term, board = A.board, P = XQ.Position;
+var RED = XQ.RED, BLACK = XQ.BLACK;
+var LABELS = {
+  wocaoma: ['卧槽马', 'wòcáo mǎ', 'horse in the trough'], guajiaoma: ['挂角马', 'guàjiǎo mǎ', 'horse on the corner'], mahoupao: ['马后炮', 'mǎ hòu pào', 'cannon behind the horse'],
+  chongpao: ['重炮', 'chóng pào', 'stacked cannons'], mengong: ['闷宫', 'mèn gōng', 'smothered palace'], tiemenshuan: ['铁门栓', 'tiě mén shuān', 'iron door bolt'], shuangchecuo: ['双车错', 'shuāng chē cuò', 'staggered chariots'],
+  chariot: ['车杀', 'jū shā', 'chariot mate'], cannon: ['炮杀', 'pào shā', 'cannon mate'], horse: ['马杀', 'mǎ shā', 'horse mate'], soldier: ['小卒建功', 'xiǎo zú jiàn gōng', 'the humble soldier'], double: ['双将', 'shuāng jiāng', 'double check'],
+  stalemate: ['困毙', 'kùn bì', 'leave black no move'], lushuai: ['露帅', 'lù shuài', 'exposed general'], other: ['杀', 'shā', 'mate'], material: ['得子', 'dé zǐ', 'win material']
+};
+var PUZZLES = (window.XQ_PUZZLES || []).map(function (p, i) { p.id = 'p' + i; return p; });
+// order: crafted patterns first (by pattern), then mined by kind
+var filter = { kind: 'all', pattern: null };
+var curIdx = -1, state = null; // state: {stage, attempts, hintLevel, pos, base}
+
+function kindOf(p) { return p.n === 0 ? 'material' : p.pattern === 'stalemate' ? 'stalemate' : p.n === 1 ? 'mate1' : 'mate2'; }
+function kindName(p) { return p.n === 0 ? 'Win material' : p.pattern === 'stalemate' ? (p.n === 1 ? 'Win in 1 (no moves)' : 'Win in 2 (no moves)') : 'Mate in ' + p.n; }
+function list() {
+  return PUZZLES.filter(function (p) {
+    if (filter.pattern && p.pattern !== filter.pattern) return false;
+    if (filter.kind !== 'all' && kindOf(p) !== filter.kind) return false;
+    return true;
+  });
+}
+function enter() { if (curIdx < 0) { var l = list(); if (l.length) load(PUZZLES.indexOf(l[0])); } render(); }
+function load(i) {
+  curIdx = i; var p = PUZZLES[i];
+  state = { stage: 0, attempts: 0, hint: 0, pos: new P().setFen(p.fen), msg: null, done: false };
+  var pr = A.progress(); pr.puzzles.attempts[p.id] = (pr.puzzles.attempts[p.id] || 0); A.saveProgress();
+}
+function render() {
+  var panel = $('panel'); panel.innerHTML = '';
+  var pr = A.progress();
+  panel.appendChild(el('h2', null, 'Puzzles'));
+  var row = el('div', { class: 'row' });
+  var sg = el('div', { class: 'seg' });
+  [['all', 'All'], ['mate1', 'Mate in 1'], ['mate2', 'Mate in 2'], ['stalemate', '困毙'], ['material', 'Material']].forEach(function (k) { sg.appendChild(el('button', { class: filter.kind === k[0] ? 'on' : '', onclick: function () { filter.kind = k[0]; filter.pattern = null; var l = list(); if (l.length) load(PUZZLES.indexOf(l[0])); render(); } }, k[1])); });
+  row.appendChild(sg);
+  if (filter.pattern) row.appendChild(el('button', { class: 'btn small', onclick: function () { filter.pattern = null; render(); } }, 'Pattern: ' + LABELS[filter.pattern][0] + ' (clear)'));
+  var solvedN = Object.keys(pr.puzzles.solved).length;
+  row.appendChild(el('span', { class: 'muted small' }, solvedN + ' of ' + PUZZLES.length + ' solved'));
+  panel.appendChild(row);
+  var l = list(), lst = el('div', { class: 'puzzle-list' });
+  l.forEach(function (p) {
+    var i = PUZZLES.indexOf(p), lab = LABELS[p.pattern] || LABELS.other;
+    var b = el('button', { class: i === curIdx ? 'on' : '', onclick: function () { load(i); render(); } }, [el('span', { class: 't' }, [el('span', { class: 'cn' }, lab[0] + ' '), el('span', { class: 'muted small' }, lab[2] + ', ' + kindName(p).toLowerCase() + (p.mirror ? ', mirrored' : ''))]), pr.puzzles.solved[p.id] ? el('span', { class: 's' }, 'solved') : null]);
+    lst.appendChild(b);
+  });
+  panel.appendChild(lst);
+  if (curIdx < 0 || !state) { panel.appendChild(h('<p class="muted">No puzzles match this filter.</p>')); A.setPosition(XQ.START_FEN); A.renderBoard(); return; }
+  var p = PUZZLES[curIdx], lab = LABELS[p.pattern] || LABELS.other;
+  panel.appendChild(h('<h3>' + kindName(p) + ' <span class="muted">' + (p.src === 'crafted' ? lab[0] + ' ' + lab[1] : '') + '</span></h3>' +
+    '<p>Red to move. ' + (p.n === 0 ? 'Find the move that wins material by force. The engine judged it worth at least ' + (p.gain / 100).toFixed(1) + ' soldiers more than any other move.' : p.pattern === 'stalemate' ? 'Find the move' + (p.n === 2 ? 's' : '') + ' that leave' + (p.n === 2 ? '' : 's') + ' black with no legal reply. It need not be check: a side with no move loses.' : (p.n === 1 ? 'Find the single move that checkmates.' : 'Find the forcing first move. Black will play its best defence, then you finish the mate.')) + '</p>'));
+  if (p.src !== 'crafted') panel.appendChild(h('<p class="small muted">Position from an engine game. Pattern recognised: <span class="cn">' + lab[0] + '</span> ' + lab[1] + ', ' + lab[2] + '.</p>'));
+  var msg = el('div', { id: 'pz-msg' });
+  if (state.msg) msg.appendChild(state.msg);
+  panel.appendChild(msg);
+  var controls = el('div', { class: 'row' });
+  if (!state.done) {
+    controls.appendChild(el('button', { class: 'btn small', onclick: function () { hint(); } }, state.hint === 0 ? 'Hint' : state.hint === 1 ? 'Show the piece' : 'Show the move'));
+    controls.appendChild(el('button', { class: 'btn small ghost', onclick: function () { load(curIdx); render(); } }, 'Restart'));
+  } else {
+    controls.appendChild(el('button', { class: 'btn small primary', onclick: function () { nextPuzzle(); } }, 'Next puzzle'));
+    controls.appendChild(el('button', { class: 'btn small ghost', onclick: function () { load(curIdx); render(); } }, 'Replay'));
+  }
+  panel.appendChild(controls);
+  // board
+  A.setPosition(state.pos); board.flipped = false;
+  if (state.lastMove) board.lastMove = state.lastMove;
+  if (state.pos.inCheck(BLACK)) board.marks[state.pos.kings[BLACK]] = 'check';
+  if (state.hint >= 1 && !state.done) { var hm = hintMove(); if (state.hint === 1) board.marks[hm & 127] = 'focus'; else board.hintMove = hm; }
+  A.renderBoard();
+  board.onSquare = onSquare;
+  A.renderNav();
+}
+function hintMove() {
+  var p = PUZZLES[curIdx];
+  if (state.stage === 0) return XQ.strToMove(p.sol[0].split(' ')[0]);
+  var mates = XQ.mateIn(state.pos, 1); return mates.length ? mates[0] : 0;
+}
+function hint() { state.hint = Math.min(2, state.hint + 1); if (state.hint === 1 && PUZZLES[curIdx].hint) state.msg = el('div', { class: 'feedback' }, PUZZLES[curIdx].hint); render(); }
+function onSquare(s) {
+  if (state.done || state.pos.side !== RED) return;
+  var pos = state.pos, cc = pos.b[s];
+  if (board.selected >= 0 && board.legalTargets.indexOf(s) >= 0) { attempt(board.selected | (s << 7)); return; }
+  if (cc && cc < 8) { board.selected = s; board.legalTargets = pos.legalTargets(s); A.renderBoard(); }
+  else { board.selected = -1; board.legalTargets = []; A.renderBoard(); }
+}
+function attempt(m) {
+  var p = PUZZLES[curIdx], pos = state.pos, pr = A.progress();
+  state.attempts++; pr.puzzles.attempts[p.id]++;
+  var n = XQ.notation(pos, m);
+  if (p.n === 0) {
+    var target = XQ.strToMove(p.sol[0]);
+    if (m === target) { pos.makeMove(m); state.lastMove = m; solved('That wins. ' + n.cn + ' (' + n.py + '): ' + n.en + '.'); }
+    else { state.msg = feedbackBad('Not the strongest. ' + n.cn + ' (' + n.py + ') does not win enough. Look for a capture, a fork (one move attacking two pieces), or a piece that can be taken for free.'); render(); }
+    return;
+  }
+  // mate puzzles (stalemate counts: no legal moves)
+  pos.makeMove(m); state.lastMove = m;
+  var blackMoves = pos.legalMoves();
+  if (!blackMoves.length) { // finished
+    var how = pos.inCheck(BLACK) ? 'Checkmate' : 'Black has no legal move and loses (困毙, kùn bì)';
+    solved(how + '. ' + n.cn + ' (' + n.py + '): ' + n.en + '.');
+    return;
+  }
+  if (state.stage === 0 && p.n === 2) {
+    var firsts = p.sol.map(function (l) { return XQ.strToMove(l.split(' ')[0]); });
+    if (firsts.indexOf(m) >= 0) {
+      // black's best defence
+      var d = XQ.bestDefense(pos, 1);
+      var dn = XQ.notation(pos, d);
+      pos.makeMove(d); state.lastMove = d; state.stage = 1;
+      state.msg = el('div', { class: 'feedback good' }, 'Good. Black defends with ' + dn.cn + ' (' + dn.py + '). Now finish it.');
+      render(); return;
+    }
+  }
+  // not a solution: explain what black would do
+  pos.unmakeMove(); state.lastMove = null;
+  var why;
+  pos.makeMove(m);
+  var inC = pos.inCheck(BLACK);
+  var reply = blackMoves[0];
+  // pick the most instructive reply: a capture of the moved piece if possible, else a general move
+  var capReply = blackMoves.filter(function (r) { return (r >> 7) === (m >> 7); })[0];
+  if (capReply) reply = capReply;
+  var rn = XQ.notation(pos, reply);
+  pos.unmakeMove();
+  why = (inC ? 'That is check, but not mate: ' : 'That is not even check: ') + 'black answers ' + rn.cn + ' (' + rn.py + '), ' + rn.en + '.';
+  state.msg = feedbackBad(why + (state.attempts >= 2 ? ' Use the hint if you are stuck.' : ''));
+  render();
+}
+function feedbackBad(t) { return el('div', { class: 'feedback bad' }, t); }
+function solved(text) {
+  var p = PUZZLES[curIdx], pr = A.progress();
+  state.done = true;
+  if (!pr.puzzles.solved[p.id]) pr.puzzles.solved[p.id] = { at: Date.now(), attempts: state.attempts, hints: state.hint };
+  A.saveProgress();
+  var lab = LABELS[p.pattern] || LABELS.other;
+  var pat = A.PATTERNS.filter(function (q) { return q.id === p.pattern; })[0];
+  var d = el('div', { class: 'feedback good' });
+  d.appendChild(h('<p><strong>Solved.</strong> ' + text + '</p>'));
+  if (pat) d.appendChild(h('<p class="small">This is <span class="cn">' + pat.zh + '</span> ' + pat.py + ', ' + pat.en + '. ' + pat.text.split('. ').slice(0, 2).join('. ') + '.</p>'));
+  else if (p.n > 0) d.appendChild(h('<p class="small">Pattern: <span class="cn">' + lab[0] + '</span> ' + lab[1] + ', ' + lab[2] + '.</p>'));
+  state.msg = d; render();
+}
+function nextPuzzle() {
+  var l = list(), pr = A.progress();
+  var i = l.indexOf(PUZZLES[curIdx]);
+  // next unsolved after current, else next
+  for (var k = 1; k <= l.length; k++) { var q = l[(i + k) % l.length]; if (!pr.puzzles.solved[q.id]) { load(PUZZLES.indexOf(q)); render(); return; } }
+  if (l.length) { load(PUZZLES.indexOf(l[(i + 1) % l.length])); render(); }
+}
+A.rooms.puzzles = { enter: enter, filterPattern: function (pid) { filter.kind = 'all'; filter.pattern = pid; var l = list(); if (l.length) load(PUZZLES.indexOf(l[0])); render(); }, count: function () { return PUZZLES.length; } };
+})();
+
+(function () {
+'use strict';
+var A = window.XQApp, $ = A.$, el = A.el, h = A.h, term = A.term, board = A.board, P = XQ.Position;
+var RED = XQ.RED, BLACK = XQ.BLACK, MATE = XQ.MATE, WIN = XQ.WIN_BOUND;
+var LEVELS = [
+  { name: 'Novice', desc: 'Sees one move ahead and often misjudges. Learn the moves against it.', opts: { depth: 1, timeMs: 300, noise: 220 } },
+  { name: 'Casual', desc: 'Two moves ahead, some blunders. Beats most first-week players.', opts: { depth: 2, timeMs: 500, noise: 90 } },
+  { name: 'Club', desc: 'Four moves ahead. Punishes hanging pieces and simple forks.', opts: { depth: 4, timeMs: 1200, noise: 25 } },
+  { name: 'Strong', desc: 'Six moves ahead, no noise. Solid tactical play.', opts: { depth: 6, timeMs: 2500, noise: 0 } },
+  { name: 'Full', desc: 'As deep as it can go in five seconds.', opts: { depth: 10, timeMs: 5000, noise: 0 } },
+];
+var COACH = { depth: 6, timeMs: 1500, noise: 0 };
+var game = null, token = 0;
+function settings() { return A.progress().settings; }
+
+function newGame() {
+  var s = settings();
+  var pos = new P().setFen(XQ.START_FEN);
+  game = { pos: pos, moves: [], notas: [], userSide: s.side === 'black' ? BLACK : RED, level: s.level, over: null, thinking: false, verdicts: {}, pre: null, preP: null, hint: 0, lastVerdict: null, undos: 0, started: Date.now(), userMoves: 0 };
+  pos.baseFen = XQ.START_FEN; pos.baseMoves = game.moves;
+  board.flipped = game.userSide === BLACK;
+  A.progress().meta.playAnyway = true; A.saveProgress();
+  token++;
+  render();
+  if (pos.side !== game.userSide) engineTurn(); else startUserTurn();
+}
+function enter() { if (!game) { renderSetup(); A.setPosition(XQ.START_FEN); A.renderBoard(); } else render(); }
+
+// ---------- setup ----------
+function renderSetup() {
+  var panel = $('panel'); panel.innerHTML = ''; var s = settings();
+  panel.appendChild(el('h2', null, 'Play against the coach'));
+  if (!A.playUnlocked()) panel.appendChild(h('<div class="gate"><p><strong>Recommended first:</strong> a few movement drills for each piece and two puzzles. The trainer teaches the rules through the game itself as well, so start whenever you like.</p></div>'));
+  var side = el('div', { class: 'row' }, [el('span', { class: 'muted' }, 'You play')]);
+  var sg = el('div', { class: 'seg' });
+  [['red', 'Red (moves first)'], ['black', 'Black']].forEach(function (o) { sg.appendChild(el('button', { class: s.side === o[0] ? 'on' : '', onclick: function () { s.side = o[0]; A.saveProgress(); renderSetup(); } }, o[1])); });
+  side.appendChild(sg); panel.appendChild(side);
+  panel.appendChild(el('h3', null, 'Level'));
+  var opts = el('div', { class: 'options' });
+  LEVELS.forEach(function (L, i) { opts.appendChild(el('button', { class: s.level === i + 1 ? 'correct' : '', onclick: function () { s.level = i + 1; A.saveProgress(); renderSetup(); } }, [el('strong', null, (i + 1) + '. ' + L.name), ' ', el('span', { class: 'muted small' }, L.desc)])); });
+  panel.appendChild(opts);
+  panel.appendChild(el('h3', null, 'Coach'));
+  var cg = el('div', { class: 'row' });
+  var cs = el('div', { class: 'seg' });
+  [['before', 'Suggests before you move'], ['after', 'Judges after you move'], ['silent', 'Silent']].forEach(function (o) { cs.appendChild(el('button', { class: s.coachMode === o[0] ? 'on' : '', onclick: function () { s.coachMode = o[0]; A.saveProgress(); renderSetup(); } }, o[1])); });
+  cg.appendChild(cs); panel.appendChild(cg);
+  var chk = el('div', { class: 'row' });
+  chk.appendChild(checkbox('Show threats to my pieces', s.threats, function (v) { s.threats = v; }));
+  chk.appendChild(checkbox('Legal move dots', s.legalDots, function (v) { s.legalDots = v; }));
+  chk.appendChild(checkbox('Pinyin on pieces', s.pinyin, function (v) { s.pinyin = v; A.renderBoard(); }));
+  chk.appendChild(checkbox('File numbers', s.coords, function (v) { s.coords = v; A.renderBoard(); }));
+  panel.appendChild(chk);
+  panel.appendChild(el('div', { class: 'row' }, [el('button', { class: 'btn primary', onclick: newGame }, 'Start game')]));
+  panel.appendChild(h('<p class="small muted">The coach searches six moves deep for every judgement, whatever level you play. Verdicts are measured in soldiers of evaluation lost: under 0.3 is fine, under 0.9 an inaccuracy, under 2.5 a mistake, beyond that a blunder.</p>'));
+}
+function checkbox(label, val, on) { var i = el('input', { type: 'checkbox' }); i.checked = !!val; i.addEventListener('change', function () { on(i.checked); A.saveProgress(); }); return el('label', { class: 'chk' }, [i, label]); }
+
+// ---------- turn logic ----------
+function startUserTurn() {
+  if (!game || game.over) return;
+  var t = token;
+  var snap = new P().setFen(XQ.START_FEN); game.moves.forEach(function (m) { snap.makeMove(m); }); snap.baseFen = XQ.START_FEN; snap.baseMoves = game.moves.slice();
+  game.pre = null; game.hint = 0;
+  game.preP = A.engine('think', snap, COACH).then(function (r) { if (t !== token) return null; game.pre = r; if (settings().coachMode === 'before' && !game.over && game.pos.side === game.userSide) { game.hint = r.move; render(); } return r; });
+  render();
+}
+function userMove(m) {
+  if (!game || game.over || game.thinking || game.pos.side !== game.userSide) return;
+  var pos = game.pos, n = XQ.notation(pos, m);
+  var before = snapshot();
+  pos.makeMove(m); game.moves.push(m); game.notas.push(n); game.userMoves++;
+  A.progress().play.moves++;
+  board.selected = -1; board.legalTargets = []; board.lastMove = m; board.hintMove = 0; game.hint = 0;
+  if (checkOver()) { render(); return; }
+  game.thinking = true; render();
+  var t = token, moveIdx = game.moves.length - 1;
+  var after = snapshot();
+  var preP = game.preP || Promise.resolve(null);
+  var postP = A.engine('think', after, COACH);
+  Promise.all([preP, postP]).then(function (rs) {
+    if (t !== token) return;
+    var pre = rs[0], post = rs[1];
+    if (pre && post) judge(before, m, pre, post, moveIdx);
+    return engineMove(t);
+  });
+}
+function snapshot() { var s = new P().setFen(XQ.START_FEN); game.moves.forEach(function (m) { s.makeMove(m); }); s.baseFen = XQ.START_FEN; s.baseMoves = game.moves.slice(); return s; }
+function engineTurn() { game.thinking = true; render(); var t = token; setTimeout(function () { engineMove(t); }, 50); }
+function engineMove(t) {
+  if (t !== token || !game || game.over) return;
+  var L = LEVELS[game.level - 1];
+  return A.engine('think', snapshot(), L.opts).then(function (r) {
+    if (t !== token || !game || game.over) return;
+    game.thinking = false;
+    if (!r.move) { checkOver(); render(); return; }
+    var n = XQ.notation(game.pos, r.move);
+    game.pos.makeMove(r.move); game.moves.push(r.move); game.notas.push(n);
+    board.lastMove = r.move;
+    game.engineScore = r.score; // from engine (side that moved) perspective
+    if (checkOver()) { render(); return; }
+    startUserTurn();
+  });
+}
+function checkOver() {
+  var pos = game.pos, legal = pos.legalMoves();
+  var stm = pos.side, who = stm === RED ? 'Red' : 'Black', other = stm === RED ? 'Black' : 'Red';
+  if (!legal.length) {
+    game.over = pos.inCheck(stm) ? { winner: stm ^ 1, text: other + ' wins by checkmate (将死, jiāng sǐ).' } : { winner: stm ^ 1, text: other + ' wins: ' + who.toLowerCase() + ' has no legal move (困毙, kùn bì). In xiangqi that is a loss, not a draw.' };
+  } else {
+    var rep = pos.repetition(3);
+    if (rep) {
+      if (rep.result === 'draw') game.over = { winner: -1, text: 'Draw by repetition: the same position three times with neither side giving perpetual check.' };
+      else { var loser = rep.result === 'redLoses' ? RED : BLACK; game.over = { winner: loser ^ 1, text: (loser === RED ? 'Red' : 'Black') + ' loses for perpetual check (长将, cháng jiāng): checking forever is illegal, the checking side must vary.' }; }
+    } else if (pos.halfmove >= 120) game.over = { winner: -1, text: 'Draw: sixty moves each without a capture.' };
+  }
+  if (game.over) { game.thinking = false; finishGame(); return true; }
+  return false;
+}
+function finishGame() {
+  var pr = A.progress(), v = { fine: 0, inaccuracy: 0, mistake: 0, blunder: 0 };
+  for (var k in game.verdicts) v[game.verdicts[k].cls]++;
+  var res = game.over.winner === -1 ? 'draw' : game.over.winner === game.userSide ? 'win' : 'loss';
+  pr.play.games.push({ result: res, level: game.level, moves: game.moves.length, verdicts: v, undos: game.undos, date: Date.now(), side: game.userSide === RED ? 'red' : 'black' });
+  if (pr.play.games.length > 200) pr.play.games.shift();
+  A.saveProgress();
+}
+function resign() { if (!game || game.over) return; token++; game.over = { winner: game.userSide ^ 1, text: 'You resigned.' }; game.thinking = false; finishGame(); render(); }
+function undo() {
+  if (!game || !game.moves.length) return;
+  token++; game.thinking = false;
+  var n = game.pos.side === game.userSide ? 2 : 1; // take back engine reply and my move
+  if (game.over) { n = game.pos.side === game.userSide ? 2 : 1; game.over = null; }
+  n = Math.min(n, game.moves.length);
+  for (var i = 0; i < n; i++) { game.pos.unmakeMove(); game.moves.pop(); game.notas.pop(); delete game.verdicts[game.moves.length]; }
+  game.undos++; A.progress().play.undos++; A.saveProgress();
+  board.lastMove = game.moves.length ? game.moves[game.moves.length - 1] : 0; board.selected = -1; board.legalTargets = [];
+  game.lastVerdict = null;
+  if (game.pos.side === game.userSide) startUserTurn(); else engineTurn();
+}
+
+// ---------- judging ----------
+function pvText(pos, pv, max) {
+  var p = pos.clone ? pos.clone() : pos, out = [];
+  var q = new P().setFen(p.fen()); q.keyLo = [q.lo]; q.keyHi = [q.hi];
+  for (var i = 0; i < Math.min(pv.length, max || 6); i++) { var m = pv[i]; if (!q.isLegal(m)) break; var n = XQ.notation(q, m); out.push(n.cn); q.makeMove(m); }
+  return out.join(' ');
+}
+function pieceName(c) { return XQ.pieceEn(c).toLowerCase(); }
+function judge(before, m, pre, post, moveIdx) {
+  var preScore = pre.score, afterScore = -post.score; // both from the user's perspective
+  var loss = preScore - afterScore;
+  var cls = loss < 30 ? 'fine' : loss < 90 ? 'inaccuracy' : loss < 250 ? 'mistake' : 'blunder';
+  if (pre.move === m && post.score < WIN) { cls = 'fine'; loss = Math.min(loss, 0); }
+  var n = XQ.notation(before, m), reasons = [];
+  var after = before.clone(); after.makeMove(m);
+  var me = game.userSide, them = me ^ 1;
+  // forced mates
+  if (preScore > WIN && afterScore < WIN) reasons.push('You had a forced mate: ' + pvText(before, pre.pv, 5) + '.');
+  if (post.score > WIN) { cls = 'blunder'; reasons.push('This allows a forced mate: ' + pvText(after, post.pv, 5) + '.'); }
+  // hanging pieces after the move (new ones)
+  var hangBefore = {}, hangAfter = [];
+  for (var s = 0; s < 90; s++) { var c = before.b[s]; if (c && XQ.sideOf(c) === me && before.hanging(s)) hangBefore[s] = 1; }
+  for (s = 0; s < 90; s++) { var c2 = after.b[s]; if (c2 && XQ.sideOf(c2) === me) { var hg = after.hanging(s); if (hg) hangAfter.push({ s: s, c: c2, h: hg }); } }
+  var to = m >> 7, movedHang = hangAfter.filter(function (x) { return x.s === to; })[0];
+  if (movedHang) {
+    var att = after.b[movedHang.h.attackers[0]];
+    reasons.push('The ' + pieceName(after.b[to]) + ' you moved can be captured by the ' + pieceName(att) + (movedHang.h.free ? ' for nothing' : ' at a profit') + '.');
+  }
+  hangAfter.filter(function (x) { return x.s !== to && !hangBefore[x.s]; }).forEach(function (x) {
+    var att2 = after.b[x.h.attackers[0]];
+    reasons.push('Your ' + pieceName(x.c) + ' on ' + squareName(x.s, me) + ' is now attacked by the ' + pieceName(att2) + (x.h.free ? ' and undefended' : ' which is worth less') + ': you moved away a defender or opened a line.');
+  });
+  // engine reply consequences: fork
+  if (post.pv && post.pv.length) {
+    var rep = after.clone(); if (rep.isLegal(post.pv[0])) {
+      var rn = XQ.notation(rep, post.pv[0]); rep.makeMove(post.pv[0]);
+      var hangs = [];
+      for (s = 0; s < 90; s++) { var c3 = rep.b[s]; if (c3 && XQ.sideOf(c3) === me && XQ.typeOf(c3) !== XQ.K && rep.hanging(s)) hangs.push(pieceName(c3)); }
+      var chk = rep.inCheck(me);
+      if (hangs.length >= 2) reasons.push('Black\'s reply ' + rn.cn + (chk ? ' gives check and' : '') + ' attacks two pieces at once (' + hangs.join(' and ') + '), a fork; you can only save one.');
+      else if (chk && hangs.length === 1) reasons.push('Black\'s reply ' + rn.cn + ' is check and also attacks your ' + hangs[0] + '.');
+    }
+  }
+  // missed capture
+  if (pre.move && pre.move !== m && before.b[pre.move >> 7] && cls !== 'fine') {
+    var cap = before.b[pre.move >> 7], bn = XQ.notation(before, pre.move);
+    reasons.push('The engine preferred ' + bn.cn + ' (' + bn.py + '), capturing the ' + pieceName(cap) + '.');
+  } else if (pre.move && pre.move !== m && cls !== 'fine') {
+    var bn2 = XQ.notation(before, pre.move);
+    reasons.push('The engine preferred ' + bn2.cn + ' (' + bn2.py + '): ' + pvText(before, pre.pv, 4) + '.');
+  }
+  if (cls === 'fine' && pre.move === m) reasons.push('That was also the engine\'s choice.');
+  else if (cls === 'fine') reasons.push('Close to the best move; the engine\'s ' + XQ.notation(before, pre.move).cn + ' is only marginally different.');
+  var v = { cls: cls, loss: loss, cn: n.cn, py: n.py, reasons: reasons, score: afterScore };
+  game.verdicts[moveIdx] = v; game.lastVerdict = v;
+  var pr = A.progress(); pr.play.verdicts[cls]++; A.saveProgress();
+}
+function squareName(s, side) { return 'file ' + (side === RED ? XQ.CN_NUM[XQ.fileNum(XQ.fx(s), RED)] : XQ.fileNum(XQ.fx(s), BLACK)); }
+
+// ---------- opening names ----------
+function openingName() {
+  if (!game.notas.length) return '';
+  var first = game.notas[0].cn, name = '';
+  var m = { '炮二平五': '中炮 zhōng pào (central cannon)', '炮八平五': '中炮 zhōng pào (central cannon)', '兵三进一': '仙人指路 xiānrén zhǐlù (the immortal points the way)', '兵七进一': '仙人指路 xiānrén zhǐlù (the immortal points the way)', '相三进五': '飞相局 fēi xiàng jú (flying elephant)', '相七进五': '飞相局 fēi xiàng jú (flying elephant)', '马二进三': '起马局 qǐ mǎ jú (horse opening)', '马八进七': '起马局 qǐ mǎ jú (horse opening)', '炮二平四': '士角炮 shìjiǎo pào (advisor-corner cannon)', '炮八平六': '士角炮 shìjiǎo pào (advisor-corner cannon)', '炮二平六': '过宫炮 guò gōng pào (cannon across the palace)', '炮八平四': '过宫炮 guò gōng pào (cannon across the palace)' };
+  if (m[first]) name = m[first];
+  if (game.moves.length >= 4) {
+    var b = game.pos.b;
+    var horses = b[XQ.sq(2, 2)] === XQ.make(BLACK, XQ.N) && b[XQ.sq(6, 2)] === XQ.make(BLACK, XQ.N);
+    var cannonCenter = b[XQ.sq(4, 2)] === XQ.make(BLACK, XQ.C);
+    if (horses && (b[XQ.sq(3, 2)] === XQ.make(BLACK, XQ.C) || b[XQ.sq(5, 2)] === XQ.make(BLACK, XQ.C))) name += (name ? ' vs ' : '') + '反宫马 fǎngōng mǎ (reversed palace horses)';
+    else if (horses) name += (name ? ' vs ' : '') + '屏风马 píngfēng mǎ (screen horses)';
+    else if (cannonCenter && (first === '炮二平五' || first === '炮八平五')) {
+      var redFromRight = first === '炮二平五'; // red cannon came from x=7
+      var blackLeftGone = !b[XQ.sq(1, 2)], blackRightGone = !b[XQ.sq(7, 2)];
+      var same = redFromRight ? blackRightGone : blackLeftGone;
+      name += ' vs ' + (same ? '顺炮 shùn pào (same-side cannons)' : '列炮 liè pào (opposite cannons)');
+    }
+  }
+  return name;
+}
+
+// ---------- render ----------
+function render() {
+  var panel = $('panel'); panel.innerHTML = '';
+  if (!game) { renderSetup(); return; }
+  var s = settings(), pos = game.pos, myTurn = !game.over && pos.side === game.userSide && !game.thinking;
+  A.setPosition(pos); board.flipped = game.userSide === BLACK;
+  if (game.moves.length) board.lastMove = game.moves[game.moves.length - 1];
+  if (pos.inCheck(pos.side)) board.marks[pos.kings[pos.side]] = 'check';
+  if (s.threats && myTurn) for (var sq = 0; sq < 90; sq++) { var c = pos.b[sq]; if (c && XQ.sideOf(c) === game.userSide && XQ.typeOf(c) !== XQ.K) { var hg = pos.hanging(sq); if (hg) board.marks[sq] = hg.free ? 'hang' : 'att'; else if (pos.attackers(sq, game.userSide ^ 1).length) board.marks[sq] = board.marks[sq] || 'att'; } }
+  if (game.hint && myTurn && s.coachMode === 'before') board.hintMove = game.hint;
+  A.renderBoard();
+  board.onSquare = function (sqr) {
+    if (!myTurn) return;
+    var cc = pos.b[sqr];
+    if (board.selected >= 0 && board.legalTargets.indexOf(sqr) >= 0) { userMove(board.selected | (sqr << 7)); return; }
+    if (cc && XQ.sideOf(cc) === game.userSide) { board.selected = sqr; board.legalTargets = pos.legalTargets(sqr); A.renderBoard(); }
+    else { board.selected = -1; board.legalTargets = []; A.renderBoard(); }
+  };
+  // under board: status + controls
+  var ub = $('underboard'); ub.innerHTML = '';
+  var mat = pos.material(), diff = (mat.red - mat.black) / 100;
+  var status = game.over ? game.over.text : game.thinking ? 'Coach is thinking' : (pos.side === game.userSide ? 'Your move' + (pos.inCheck(pos.side) ? ', you are in check' : '') : 'Waiting');
+  ub.appendChild(el('span', null, [game.thinking ? el('span', { class: 'thinking' }) : null, status]));
+  ub.appendChild(el('span', { class: 'spacer' }));
+  ub.appendChild(el('span', { title: 'Material, red minus black, in soldiers' }, 'Material ' + (diff > 0 ? '+' : '') + diff.toFixed(1)));
+  ub.appendChild(el('button', { class: 'btn small', onclick: function () { board.flipped = !board.flipped; A.renderBoard(); } }, 'Flip'));
+  ub.appendChild(el('button', { class: 'btn small', onclick: undo, disabled: !game.moves.length }, 'Undo'));
+  ub.appendChild(el('button', { class: 'btn small', onclick: resign, disabled: !!game.over }, 'Resign'));
+  ub.appendChild(el('button', { class: 'btn small', onclick: function () { token++; game = null; enter(); } }, 'New game'));
+  // panel
+  panel.appendChild(el('h2', null, 'Play'));
+  var on = openingName(); if (on && game.moves.length <= 12) panel.appendChild(h('<p class="small muted">Opening: <span class="cn">' + on + '</span></p>'));
+  if (game.over) { var over = el('div', { class: 'verdict ' + (game.over.winner === game.userSide ? 'fine' : game.over.winner === -1 ? 'inaccuracy' : 'blunder') }, [el('div', { class: 'head' }, game.over.winner === game.userSide ? 'You won' : game.over.winner === -1 ? 'Draw' : 'You lost'), el('p', null, game.over.text)]); panel.appendChild(over); }
+  // coach
+  if (s.coachMode !== 'silent') {
+    if (s.coachMode === 'before' && myTurn) {
+      if (game.hint) { var hn = XQ.notation(pos, game.hint); panel.appendChild(el('div', { class: 'verdict fine' }, [el('div', { class: 'head' }, 'Coach suggests ' + hn.cn + ' ' + hn.py), el('p', null, hn.en + '. Play it, or try your own idea and see the verdict.')])); }
+      else panel.appendChild(el('p', { class: 'muted small' }, [el('span', { class: 'thinking' }), 'Coach is looking at the position']));
+    }
+    var v = game.lastVerdict;
+    if (v) {
+      var vd = el('div', { class: 'verdict ' + v.cls });
+      var heads = { fine: 'Fine', inaccuracy: 'Inaccuracy', mistake: 'Mistake', blunder: 'Blunder' };
+      vd.appendChild(el('div', { class: 'head' }, heads[v.cls] + ': ' + v.cn + ' ' + v.py + (v.loss >= 5 ? ' (lost ' + (v.loss / 100).toFixed(1) + ' soldiers of evaluation)' : '')));
+      v.reasons.forEach(function (r) { vd.appendChild(el('p', null, r)); });
+      panel.appendChild(vd);
+    }
+  }
+  // eval bar from the coach's latest score (red perspective)
+  var sc = null;
+  if (game.lastVerdict) sc = game.userSide === RED ? game.lastVerdict.score : -game.lastVerdict.score;
+  if (game.pre && myTurn) sc = game.userSide === RED ? game.pre.score : -game.pre.score;
+  if (sc !== null) { var pct = 100 / (1 + Math.exp(-sc / 350)); var eb = el('div', { class: 'evalbar', title: 'Coach evaluation, red share' }); eb.style.setProperty('--pct', pct.toFixed(0) + '%'); panel.appendChild(eb); panel.appendChild(el('p', { class: 'small muted' }, 'Coach evaluation: ' + (Math.abs(sc) > WIN ? (sc > 0 ? 'red' : 'black') + ' has a forced mate' : (sc > 0 ? 'red' : 'black') + ' ahead by ' + (Math.abs(sc) / 100).toFixed(1) + ' soldiers'))); }
+  // move list
+  panel.appendChild(el('h3', null, 'Moves'));
+  var ml = el('div', { class: 'moves' });
+  for (var i = 0; i < game.notas.length; i += 2) {
+    var r = game.notas[i], b = game.notas[i + 1];
+    var row = el('div', { class: 'mv' }, [el('span', { class: 'n' }, (i / 2 + 1) + '.'), mvCell(r, i, RED), b ? mvCell(b, i + 1, BLACK) : el('span')]);
+    ml.appendChild(row);
+  }
+  if (!game.notas.length) ml.appendChild(el('span', { class: 'muted small' }, 'No moves yet.'));
+  panel.appendChild(ml);
+  ml.scrollTop = ml.scrollHeight;
+  panel.appendChild(h('<p class="small muted" style="margin-top:8px">Dashed red ring: that piece can be taken for free or at a profit. Dashed amber ring: attacked but defended. Green arrow: the coach\'s suggestion.</p>'));
+  A.renderNav();
+}
+function mvCell(n, idx, side) {
+  var v = game.verdicts[idx];
+  var c = el('span', { class: 'm ' + (side === RED ? 'red' : 'black') + (idx === game.notas.length - 1 ? ' cur' : ''), title: n.en }, [el('span', { class: 'zh' }, n.cn + (v ? ({ fine: '', inaccuracy: ' ?!', mistake: ' ?', blunder: ' ??' })[v.cls] : '')), el('span', { class: 'py' }, n.py)]);
+  return c;
+}
+A.rooms.play = { enter: enter, newGame: newGame, _game: function () { return game; }, _userMove: userMove, _undo: undo, _levels: LEVELS };
+})();
+
+(function () {
+'use strict';
+var A = window.XQApp, $ = A.$, el = A.el, h = A.h, board = A.board, thead = A.thead, trow = A.trow;
+var TNAME = { K: 'General', A: 'Advisor', B: 'Elephant', N: 'Horse', R: 'Chariot', C: 'Cannon', P: 'Soldier' };
+function enter() {
+  var panel = $('panel'); panel.innerHTML = '';
+  var pr = A.progress();
+  A.setPosition(XQ.START_FEN); A.renderBoard();
+  panel.appendChild(el('h2', null, 'Progress'));
+  var st = A.storeState();
+  if (!A.storageOk()) panel.appendChild(h('<div class="notice"><strong>Not saving automatically.</strong> ' + (st.lastError ? 'Reason: ' + A.esc(st.lastError) + '. ' : '') + 'Copy your progress code below before you close this, and paste it back next time.</div>'));
+  else panel.appendChild(h('<p class="small muted">Saving automatically to your Claude storage' + (st.lastSave ? ', last saved ' + new Date(st.lastSave).toLocaleTimeString() : '') + '. The progress code below is a backup that also moves your progress into a newer version of the trainer.</p>'));
+  // learn
+  var seen = Object.keys(pr.learn.seen).length;
+  panel.appendChild(h('<h3>Learn</h3><p>' + seen + ' of 8 pages read.</p>'));
+  // drills
+  panel.appendChild(el('h3', null, 'Drills'));
+  var tbl = el('table', { class: 'plain' }); tbl.appendChild(thead('<thead><tr><th>Drill</th><th>Attempts</th><th>Accuracy</th><th>Best streak</th></tr></thead>'));
+  var tb = el('tbody'), weakest = [];
+  ['K', 'A', 'B', 'N', 'R', 'C', 'P'].forEach(function (t) { var s = pr.drill.types['move_' + t]; addRow(tb, TNAME[t] + ' movement', s); if (!s || s.n < 3 || s.correct / s.n < 0.8) weakest.push(TNAME[t].toLowerCase() + ' movement'); });
+  addRow(tb, 'Check or mate?', pr.drill.types.rules); if (!pr.drill.types.rules || pr.drill.types.rules.n < 5) weakest.push('check-or-mate');
+  addRow(tb, 'Notation', pr.drill.types.notation); if (!pr.drill.types.notation || pr.drill.types.notation.n < 5) weakest.push('notation');
+  tbl.appendChild(tb); panel.appendChild(tbl);
+  // puzzles
+  var solved = Object.keys(pr.puzzles.solved).length, total = A.rooms.puzzles.count();
+  var hintsUsed = 0, firstTry = 0; for (var k in pr.puzzles.solved) { if (pr.puzzles.solved[k].hints) hintsUsed++; if (pr.puzzles.solved[k].attempts === 1) firstTry++; }
+  panel.appendChild(h('<h3>Puzzles</h3><p>' + solved + ' of ' + total + ' solved, ' + firstTry + ' on the first try, ' + hintsUsed + ' with a hint.</p>'));
+  var bar = el('div', { class: 'bar' }); var bi = el('i'); bi.style.width = (total ? 100 * solved / total : 0).toFixed(0) + '%'; bar.appendChild(bi); panel.appendChild(bar);
+  // play
+  var g = pr.play.games, wins = g.filter(function (x) { return x.result === 'win'; }).length, draws = g.filter(function (x) { return x.result === 'draw'; }).length;
+  var v = pr.play.verdicts, vt = v.fine + v.inaccuracy + v.mistake + v.blunder;
+  panel.appendChild(el('h3', null, 'Games'));
+  var stats = el('div');
+  [[g.length, 'games'], [wins, 'wins'], [draws, 'draws'], [g.length - wins - draws, 'losses'], [pr.play.undos, 'undos']].forEach(function (s) { stats.appendChild(el('div', { class: 'stat' }, [el('b', null, String(s[0])), el('span', null, s[1])])); });
+  panel.appendChild(stats);
+  if (vt) panel.appendChild(h('<p>Coach verdicts on your ' + vt + ' judged moves: ' + pct(v.fine, vt) + ' fine, ' + pct(v.inaccuracy, vt) + ' inaccuracies, ' + pct(v.mistake, vt) + ' mistakes, ' + pct(v.blunder, vt) + ' blunders.</p>'));
+  if (g.length) {
+    var gt = el('table', { class: 'plain' }); gt.appendChild(thead('<thead><tr><th>When</th><th>Side</th><th>Level</th><th>Result</th><th>Moves</th><th>Blunders</th><th>Undos</th></tr></thead>'));
+    var gb = el('tbody');
+    g.slice(-10).reverse().forEach(function (x) { gb.appendChild(trow('<tr><td>' + new Date(x.date).toLocaleDateString() + '</td><td>' + x.side + '</td><td>' + x.level + '</td><td>' + x.result + '</td><td>' + Math.ceil(x.moves / 2) + '</td><td>' + x.verdicts.blunder + '</td><td>' + x.undos + '</td></tr>')); });
+    gt.appendChild(gb); panel.appendChild(gt);
+  }
+  // next up
+  panel.appendChild(el('h3', null, 'Next up'));
+  var next = [];
+  if (seen < 8) next.push('Read the remaining Learn pages (' + (8 - seen) + ' left).');
+  if (weakest.length) next.push('Drills that need work: ' + weakest.slice(0, 4).join(', ') + '.');
+  if (solved < total) next.push('Unsolved puzzles: ' + (total - solved) + '.');
+  if (!g.length) next.push('Play a first game at level 1 or 2 with the coach judging after each move.');
+  else if (vt && v.blunder / vt > 0.15) next.push('More than one move in seven is a blunder. Before each move, ask what the opponent\'s best reply captures.');
+  else if (wins >= 3 && pr.settings.level < 5) next.push('You have won at level ' + pr.settings.level + '. Try level ' + (pr.settings.level + 1) + '.');
+  if (!next.length) next.push('Everything here is done. Openings and endgames are the next rooms to build.');
+  var ul = el('ul'); next.forEach(function (n) { ul.appendChild(el('li', null, n)); }); panel.appendChild(ul);
+  // backup
+  panel.appendChild(el('h3', null, 'Backup'));
+  var code = el('textarea', { class: 'code', readonly: true, 'aria-label': 'Progress code' }); code.value = A.exportCode();
+  var copyBtn = el('button', { class: 'btn small primary', onclick: function () { code.select(); var ok = false; try { ok = document.execCommand('copy'); } catch (e) { } if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code.value).then(function () { copyBtn.textContent = 'Copied'; }, function () { copyBtn.textContent = ok ? 'Copied' : 'Select and copy the text above'; }); else copyBtn.textContent = ok ? 'Copied' : 'Select and copy the text above'; } }, 'Copy progress code');
+  panel.appendChild(h('<p class="small">Your progress as a code. Copy it somewhere safe (a note, a message to yourself); paste it back here to restore.</p>'));
+  panel.appendChild(code);
+  panel.appendChild(el('div', { class: 'row' }, [copyBtn, el('button', { class: 'btn small ghost', onclick: function () { if (confirm('Erase all progress?')) { A.resetProgress(); enter(); } } }, 'Reset progress')]));
+  var paste = el('textarea', { class: 'code', placeholder: 'Paste a progress code here', 'aria-label': 'Paste progress code' });
+  var restoreMsg = el('span', { class: 'small muted' });
+  var restoreBtn = el('button', { class: 'btn small', onclick: function () { try { A.importCode(paste.value); restoreMsg.textContent = 'Restored.'; enter(); } catch (e) { restoreMsg.textContent = 'That is not a valid progress code.'; } } }, 'Restore from code');
+  panel.appendChild(paste);
+  panel.appendChild(el('div', { class: 'row' }, [restoreBtn, restoreMsg]));
+  A.renderNav();
+}
+function addRow(tb, name, s) { tb.appendChild(trow('<tr><td>' + name + '</td><td>' + (s ? s.n : 0) + '</td><td>' + (s && s.n ? Math.round(100 * s.correct / s.n) + '%' : '–') + '</td><td>' + (s ? s.best : 0) + '</td></tr>')); }
+function pct(a, b) { return Math.round(100 * a / b) + '%'; }
+A.rooms.progress = { enter: enter };
+
+// ---------- boot ----------
+A.startWorker();
+A.updateSaveState();
+A.renderBoard();
+A.go('learn');
+A.loadProgress(function () {
+  var st = A.storeState();
+  if (st.returning && !A.interacted()) A.go(A.playUnlocked() ? 'play' : 'drill');
+  else A.go(A.currentRoom() || 'learn');
+});
+$('savestate').addEventListener('click', function () { A.go('progress'); });
+})();
+
+
+</script>
+</body>
+</html>
