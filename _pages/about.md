@@ -125,3 +125,4 @@ Some games that I wish existed but didn't, so I made them with Claude Code
 - [Blackjack trainer](/games/blackjack/)
 - [Beginner xiangqi (Chinese chess) trainer](/games/xiangqi/)
 - [The Floating Cup (for learning classical Chinese phrases)](/games/the-floating-cup/)
+- [Model Parallelism](/games/parallelism/)
