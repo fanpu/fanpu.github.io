@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Parallelism analyzer</title>
+<style>
+:root{
+  --bg:#0e131a; --panel:#151d27; --panel2:#1b2531; --rule:#27333f; --rule2:#334353;
+  --ink:#dbe5f0; --ink2:#a8bbcd; --muted:#7a8fa4; --faint:#54677a;
+  --tp:#e6a94e; --pp:#6fa8d6; --cp:#a68bd0; --ep:#5cbf9a; --dp:#dd7f8c;
+  --params:#6fa8d6; --grads:#a68bd0; --opt:#e6a94e; --acts:#5cbf9a; --logits:#dd7f8c; --buf:#455767;
+  --warn:#e05a4f; --ok:#5cbf9a; --mono:ui-monospace,'SF Mono',SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.5;
+  font-variant-numeric:tabular-nums;padding-bottom:64px}
+h1,h2,h3{font-weight:600;margin:0}
+.mono{font-family:var(--mono)}
+header{padding:14px 16px 10px;border-bottom:1px solid var(--rule);position:sticky;top:0;background:var(--bg);z-index:20}
+.brand{display:flex;align-items:baseline;gap:10px}
+.brand .cn{font-size:16px;font-weight:600;letter-spacing:.01em;color:var(--ink)}
+.brand .en{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em}
+nav{display:flex;gap:2px;margin-top:11px;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{background:none;border:0;border-bottom:2px solid transparent;color:var(--muted);
+  font-family:var(--mono);font-size:12px;padding:5px 10px;cursor:pointer;white-space:nowrap}
+nav button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--tp)}
+nav button:focus-visible{outline:2px solid var(--pp);outline-offset:2px}
+main{padding:14px 16px 40px;max-width:940px;margin:0 auto}
+.panel{background:var(--panel);border:1px solid var(--rule);border-radius:3px;padding:13px;margin-bottom:12px}
+.panel>h3{font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.07em;margin-bottom:10px}
+.sub{color:var(--muted);font-size:12.5px}
+.tiny{font-size:11.5px;color:var(--faint);line-height:1.5}
+select,input[type=text],input[type=number]{background:var(--panel2);color:var(--ink);border:1px solid var(--rule2);
+  border-radius:2px;padding:6px 8px;font-family:var(--mono);font-size:12.5px;width:100%}
+label{display:block;font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-bottom:3px;letter-spacing:.05em}
+.grid{display:grid;gap:9px}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:560px){.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}}
+.readout{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:3px;overflow:hidden}
+@media(max-width:560px){.readout{grid-template-columns:repeat(2,1fr)}}
+.readout div{background:var(--panel);padding:10px 11px}
+.readout .k{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.06em}
+.readout .v{font-family:var(--mono);font-size:20px;margin-top:2px}
+.readout .n{font-size:11px;color:var(--faint);font-family:var(--mono)}
+.chip{display:inline-block;font-family:var(--mono);font-size:9.5px;padding:1px 4px;border-radius:2px;
+  border:1px solid var(--rule2);color:var(--muted);vertical-align:middle;margin-left:5px}
+.chip.P{border-color:#3f6b52;color:#7fcaa2}.chip.S{border-color:#4a5f7a;color:#8fb0d6}
+.chip.D{border-color:#6b5a3a;color:#d3ab6b}.chip.U{border-color:#6b3f3f;color:#e08b84}
+table{width:100%;table-layout:fixed;border-collapse:collapse;font-family:var(--mono);font-size:11.5px}
+th{text-align:left;color:var(--muted);font-weight:400;padding:5px 7px 5px 0;border-bottom:1px solid var(--rule);font-size:10.5px;letter-spacing:.05em}
+td{padding:6px 7px 6px 0;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink2);overflow-wrap:anywhere;white-space:normal}
+th{overflow-wrap:anywhere}
+tr.hl td{background:rgba(230,169,78,.05)}
+.axisdot{display:inline-block;width:7px;height:7px;border-radius:1px;margin-right:5px;vertical-align:middle}
+button.act{background:var(--panel2);color:var(--ink);border:1px solid var(--rule2);border-radius:2px;
+  padding:8px 14px;font-family:var(--mono);font-size:12px;cursor:pointer}
+button.act:hover{border-color:var(--tp)}
+button.act.primary{background:var(--tp);color:#181206;border-color:var(--tp);font-weight:600}
+.bar{height:9px;background:var(--panel2);border-radius:1px;overflow:hidden;display:flex}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:9px;font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+svg{display:block;width:100%;max-width:100%;height:auto;overflow:visible}
+.oom{color:var(--warn)}.good{color:var(--ok)}
+details{border-top:1px solid var(--rule);padding-top:9px;margin-top:9px}
+summary{cursor:pointer;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+summary:hover{color:var(--ink)}
+.note{border-left:2px solid var(--rule2);padding:2px 0 2px 10px;color:var(--ink2);font-size:12.5px;margin:8px 0}
+.note.warn{border-left-color:var(--warn)}
+.cn-line{font-size:16px;letter-spacing:.08em;line-height:1.7}
+.py{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-bottom:6px}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px;margin-bottom:4px}
+.tcard{background:var(--panel2);border:1px solid var(--rule);border-radius:3px;padding:8px 6px 9px}
+.tcard svg{margin:0 auto}
+.tname{font-family:var(--mono);font-size:10px;color:var(--ink);margin-bottom:2px;overflow-wrap:anywhere}
+.tcoll{font-family:var(--mono);font-size:9px;color:var(--ink2);margin-top:5px;overflow-wrap:anywhere}
+.tnote{font-size:10px;color:var(--faint);line-height:1.45;margin-top:5px}
+.deckcard{border:1px solid var(--rule);border-radius:3px;padding:12px;margin-bottom:10px;background:var(--panel)}
+.deckcard.frontier{border-left:2px solid var(--cp)}
+.deckcard.closed-form{border-left:2px solid var(--ok)}
+</style></head><body>
+<header>
+  <div class="brand"><span class="cn">Parallelism analyzer</span><span class="en">memory · sharding · comms · roofline</span></div>
+  <nav id="nav"></nav>
+</header>
+<main id="main"></main>
+<script>
+/* ============================================================
+   analyzer core.
+   Pure functions. No DOM. Same object feeds every view AND the grader.
+   ============================================================ */
+
+const GB = 1024 ** 3;
+
+/* ---------- hardware ---------- */
+const HW = {
+  h100_sxm: {
+    name: "H100 SXM5", vendor: "NVIDIA",
+    hbm: 80 * GB, hbmBW: 3.35e12,
+    peak: { bf16: 989.5e12, fp8: 1979e12, fp4: 1979e12 },
+    scaleUp: { size: 8, bw: 450e9, tech: "NVLink 4 / NVSwitch" }, // per-GPU unidirectional
+    scaleOut: { bw: 50e9, tech: "400 Gb/s RoCE or IB" },
+    note: "peak is dense; the 1979 TFLOP/s BF16 figure NVIDIA quotes is with 2:4 sparsity"
+  },
+  h800: {
+    name: "H800", vendor: "NVIDIA",
+    hbm: 80 * GB, hbmBW: 3.35e12,
+    peak: { bf16: 989.5e12, fp8: 1979e12, fp4: 1979e12 },
+    scaleUp: { size: 8, bw: 160e9, tech: "NVLink (export-limited)" },
+    scaleOut: { bw: 50e9, tech: "400 Gb/s InfiniBand" },
+    note: "same compute as H100, roughly a third of the NVLink bandwidth. That gap is the reason DeepSeek's design looks the way it does."
+  },
+  tpuv4: {
+    name: "TPU v4", vendor: "Google",
+    hbm: 32 * GB, hbmBW: 1.228e12,
+    peak: { bf16: 275e12, fp8: 275e12, fp4: 275e12 },
+    scaleUp: { size: 3072, bw: 90e9, tech: "ICI, 3D torus, one pod" },
+    scaleOut: { bw: 6.25e9, tech: "data-centre network between pods" },
+    note: "the whole pod is one high-bandwidth domain, which is why PaLM needed no pipeline parallelism"
+  },
+  ascend910: {
+    name: "Ascend 910-class NPU", vendor: "Huawei",
+    hbm: 64 * GB, hbmBW: 1.6e12,
+    peak: { bf16: 400e12, fp8: 800e12, fp4: 800e12 },
+    scaleUp: { size: 8, bw: 56e9, tech: "HCCS" },
+    scaleOut: { bw: 25e9, tech: "RoCE" },
+    note: "PLACEHOLDER NUMBERS. Ascend generation and per-part specs for the GLM-5 run are not established in what I have verified. Treat every number on this card as unverified."
+  }
+};
+
+const BYTES = { fp32: 4, bf16: 2, fp8: 1, fp4: 0.5 };
+
+/* ---------- parameter accounting ---------- */
+function attnParams(m) {
+  const h = m.dModel, dh = m.headDim;
+  if (m.mla) {
+    const L = m.mla;
+    const qkDim = L.qkNopeDim + L.qkRopeDim;
+    return h * L.qLoraRank                                  // W_DQ, compress the query
+         + L.qLoraRank * (m.heads * qkDim)                  // W_UQ, expand per head
+         + h * (L.kvLoraRank + L.qkRopeDim)                 // W_DKV, one shared latent + decoupled RoPE key
+         + L.kvLoraRank * (m.heads * (L.qkNopeDim + L.vDim)) // W_UK and W_UV together
+         + (m.heads * L.vDim) * h                           // W_O
+         + 3 * h;                                           // norms, including the latent norms
+  }
+  return h * (m.heads * dh) + 2 * h * (m.kvHeads * dh) + (m.heads * dh) * h + 2 * h;
+}
+
+function paramBreakdown(m) {
+  const h = m.dModel, dh = m.headDim;
+  const attn = attnParams(m);
+  const denseMlp = 3 * h * m.ffn;        // SwiGLU: gate, up, down
+  const nMoe = m.moe ? m.moe.moeLayers : 0;
+  const nDense = m.layers - nMoe;
+
+  let routed = 0, shared = 0, router = 0;
+  if (m.moe) {
+    routed = nMoe * m.moe.experts * 3 * h * m.moe.expertFfn;
+    shared = nMoe * m.moe.sharedExperts * 3 * h * m.moe.expertFfn;
+    router = nMoe * h * m.moe.experts;
+  }
+  const embed = m.vocab * h * (m.tiedEmbeddings ? 1 : 2);
+
+  return {
+    attn: attn * m.layers,
+    denseMlp: denseMlp * nDense,
+    routed, shared, router, embed,
+    total: attn * m.layers + denseMlp * nDense + routed + shared + router + embed
+  };
+}
+
+/* active params per token: routed experts only contribute top-k of them */
+function activeParams(m) {
+  const p = paramBreakdown(m);
+  if (!m.moe) return p.total;
+  const perExpert = p.routed / (m.moe.moeLayers * m.moe.experts);
+  return p.attn + p.denseMlp + p.embed + p.router + p.shared
+       + perExpert * m.moe.topK * m.moe.moeLayers;
+}
+
+/* ---------- sharding map: one row per named tensor ----------
+   Each row carries a `cut` descriptor so the view can draw it:
+   dim: "cols" | "rows" | "expert" | "seq" | "none"; deg; axis. */
+function shardingMap(m, c) {
+  const h = m.dModel, dh = m.headDim, t = c.tp, e = c.ep;
+  const sp = c.sequenceParallel;
+  const rows = [];
+  const R = (name, shape, dims, cut, coll, note) => rows.push({ name, shape, dims, cut, coll, note });
+  const none = { dim: "none", deg: 1, axis: null };
+  const col = (deg) => ({ dim: "cols", deg, axis: "TP" });
+  const row = (deg) => ({ dim: "rows", deg, axis: "TP" });
+
+  R("embedding", [m.vocab, h], ["vocab", "d_model"],
+    t > 1 ? { dim: "rows", deg: t, axis: "TP" } : none,
+    t > 1 ? "all-reduce after lookup" : "none",
+    "vocab-parallel: each rank owns a slice of the vocabulary, looks up what it owns, zeroes the rest, and the all-reduce stitches the embedding back together.");
+
+  R("input RMSNorm", [1, h], ["1", "d_model"],
+    sp ? { dim: "cols", deg: t, axis: "TP" } : none,
+    sp ? "all-gather along the sequence before the next matmul" : "none",
+    sp ? "sequence parallelism cuts the activation along the sequence for the cheap elementwise ops, so the replicated copy shrinks by the tensor-parallel degree too." : "replicated across tensor-parallel ranks, so every rank stores the same activation.");
+
+  if (m.mla) {
+    const L = m.mla, qk = L.qkNopeDim + L.qkRopeDim;
+    R("W_DQ  query down-projection", [h, L.qLoraRank], ["d_model", "q_rank"], none, "none",
+      "compresses the query to rank " + L.qLoraRank + " before any head exists. There is no head axis here yet, so there is nothing for tensor parallelism to cut along.");
+    R("W_UQ  query up-projection", [L.qLoraRank, m.heads * qk], ["q_rank", "heads × " + qk], col(t), "none (column-parallel)",
+      "expands the latent into " + m.heads + " heads. The head axis appears here, so this is the first tensor tensor parallelism can split.");
+    R("W_DKV  KV down-projection", [h, L.kvLoraRank + L.qkRopeDim], ["d_model", "latent " + (L.kvLoraRank + L.qkRopeDim)], none, "none",
+      "the tensor that defines this architecture. One latent of width " + (L.kvLoraRank + L.qkRopeDim) + " per token replaces " + (2 * m.heads * L.vDim) + " values of K and V, about " + ((2 * m.heads * L.vDim) / (L.kvLoraRank + L.qkRopeDim)).toFixed(0) + "× less to cache or ship. Shared by every head, so it stays replicated.");
+    R("W_UK / W_UV", [L.kvLoraRank, m.heads * (L.qkNopeDim + L.vDim)], ["kv_rank", "heads × " + (L.qkNopeDim + L.vDim)], col(t), "none",
+      "expands the shared latent back into per-head keys and values. At inference this can be folded into the neighbouring projections so the latent never expands at all.");
+    if (c.cp > 1) R("latent blocks in flight", [1, L.kvLoraRank + L.qkRopeDim], ["seq", "latent"],
+      { dim: "seq", deg: c.cp, axis: "CP" }, "ring: " + (c.cp - 1) + " hops per layer",
+      "context parallelism cuts the sequence. Here the ring circulates the compressed latent, which is why long context is far cheaper on this architecture than on a grouped-query one.");
+    R("W_O  output projection", [m.heads * L.vDim, h], ["heads × " + L.vDim, "d_model"], row(t),
+      sp ? "reduce-scatter" : "all-reduce", "row-parallel: the input dimension is cut, so each rank holds a partial sum and they must be added together.");
+  } else {
+    R("W_Q", [h, m.heads * dh], ["d_model", "heads × " + dh], col(t), "none (column-parallel)",
+      "column-parallel: the output columns are cut, so each rank owns whole heads and nothing has to be communicated on the way in.");
+    R("W_K", [h, m.kvHeads * dh], ["d_model", "kv_heads × " + dh],
+      { dim: "cols", deg: Math.min(t, m.kvHeads), axis: "TP" }, "none",
+      m.kvHeads < t ? "only " + m.kvHeads + " KV heads exist, so tensor parallelism past " + m.kvHeads + " has to replicate them. You pay the communication without getting the memory saving." : "cut alongside the query projection, one group of KV heads per rank.");
+    R("W_V", [h, m.kvHeads * dh], ["d_model", "kv_heads × " + dh],
+      { dim: "cols", deg: Math.min(t, m.kvHeads), axis: "TP" }, "none", "cut exactly as W_K is.");
+    if (c.cp > 1) R("K,V blocks in flight", [1, 2 * m.kvHeads * dh], ["seq", "2 × kv"],
+      { dim: "seq", deg: c.cp, axis: "CP" }, "ring: " + (c.cp - 1) + " hops per layer",
+      "context parallelism cuts the sequence and each rank passes its block of keys and values around the ring until every query has seen every key.");
+    R("W_O  output projection", [m.heads * dh, h], ["heads × " + dh, "d_model"], row(t),
+      sp ? "reduce-scatter" : "all-reduce", "row-parallel: the input dimension is cut, so each rank produces a partial sum that has to be added across ranks.");
+  }
+
+  if (m.moe) {
+    R("router", [h, m.moe.experts], ["d_model", "experts"], none, "none",
+      "tiny and replicated, but its output decides which expert every token goes to, and therefore the entire all-to-all pattern for this layer.");
+    R("expert weights ×" + m.moe.experts, [h, m.moe.expertFfn], ["d_model", "expert_ffn"],
+      { dim: "expert", deg: e, total: m.moe.experts, axis: "EP" }, "all-to-all dispatch and combine",
+      m.moe.experts + " separate experts spread over " + e + " ranks, so " + Math.ceil(m.moe.experts / e) + " per rank. Tokens travel to their expert and the results travel back, which is what the all-to-all is.");
+  } else {
+    R("W_gate", [h, m.ffn], ["d_model", "ffn"], col(t), "none", "column-parallel.");
+    R("W_up", [h, m.ffn], ["d_model", "ffn"], col(t), "none", "column-parallel, paired with the gate to form SwiGLU.");
+    R("W_down", [m.ffn, h], ["ffn", "d_model"], row(t),
+      sp ? "reduce-scatter" : "all-reduce", "row-parallel, and the second of the two sums each layer owes.");
+  }
+
+  R("LM head", [h, m.vocab], ["d_model", "vocab"], t > 1 ? col(t) : none,
+    t > 1 ? "all-gather for the loss" : "none",
+    "lives only on the last pipeline stage, next to the fp32 logits that are usually the largest single tensor in the whole run.");
+
+  rows.forEach(r2 => {
+    r2.pp = Math.ceil(m.layers / c.pp);
+    r2.zero = c.zero >= 3 ? c.dp : 1;
+  });
+  return rows;
+}
+
+/* ---------- memory, per pipeline stage ---------- */
+function memory(m, hw, ph, c) {
+  const P = paramBreakdown(m);
+  const pB = BYTES[c.paramDtype], gB = BYTES[c.gradDtype];
+  const optB = c.optimizer === "muon" ? 8 : 12; // Muon: fp32 master + one momentum for matrices
+
+  const layersPerStage = m.layers / c.pp;
+  const layersHeavy = Math.ceil(m.layers / c.pp);
+  const nMoePerStage = m.moe ? m.moe.moeLayers / c.pp : 0;
+  const perLayerAttn = P.attn / m.layers;
+  const perLayerDense = m.moe ? 0 : P.denseMlp / m.layers;
+  const perLayerRouted = m.moe ? P.routed / m.moe.moeLayers : 0;
+  const perLayerShared = m.moe ? P.shared / m.moe.moeLayers : 0;
+
+  const stages = [];
+  for (let i = 0; i < c.pp; i++) {
+    // dense-ish params on this stage, sharded by TP
+    const Lst = (i === 0 || i === c.pp - 1) ? layersHeavy : layersPerStage;
+    let nonExpert = (perLayerAttn + perLayerDense) * Lst / c.tp;
+    if (m.moe) nonExpert += (perLayerShared + P.router / m.moe.moeLayers) * nMoePerStage / c.tp;
+    let expert = m.moe ? perLayerRouted * nMoePerStage / c.ep : 0;
+    if (i === 0) nonExpert += (m.tiedEmbeddings ? P.embed : P.embed / 2) / c.tp;
+    if (i === c.pp - 1 && !m.tiedEmbeddings) nonExpert += (P.embed / 2) / c.tp;
+
+    let owned = nonExpert + expert;
+    const zeroDivParam = c.zero >= 3 ? c.dp : 1;
+    const zeroDivGrad = c.zero >= 2 ? c.dp : 1;
+    const zeroDivOpt = c.zero >= 1 ? c.dp : 1;
+
+    const params = owned * pB / zeroDivParam;
+    const grads = owned * gB / zeroDivGrad;
+    const opt = owned * optB / zeroDivOpt;
+
+    // activations. Korthikanti per layer per microbatch, with TP+SP folded in.
+    const s = ph.seqLen / c.cp;
+    const b = c.microBatch;
+    const h = m.dModel;
+    const attnTerm = c.flashAttention ? 0 : 5 * m.heads * s / h;
+    let perLayerAct = s * b * h * (34 + attnTerm) / c.tp;
+    if (c.recompute === "full") perLayerAct = 2 * s * b * h / c.tp;
+    else if (c.recompute === "selective") perLayerAct = s * b * h * 24 / c.tp;
+
+    // 1F1B: stage i keeps (pp - i) microbatches in flight, capped by microbatch count
+    const inFlight = Math.min(c.pp - i, c.microBatchCount);
+    const acts = perLayerAct * Lst * inFlight;
+
+    // fp32 logits + softmax scratch on the last stage. Often the single biggest tensor.
+    const logits = (i === c.pp - 1) ? 2 * b * s * m.vocab * 4 / c.tp : 0;
+
+    const buffers = 0.06 * (params + grads + opt) + 1.5 * GB; // comms buffers + allocator slack
+    const total = params + grads + opt + acts + logits + buffers;
+    stages.push({ stage: i, params, grads, opt, acts, logits, buffers, total,
+                  fits: total <= hw.hbm, headroom: hw.hbm - total });
+  }
+  return { stages, peak: Math.max(...stages.map(s => s.total)),
+           fits: stages.every(s => s.fits), hbm: hw.hbm };
+}
+
+/* ---------- FLOPs ---------- */
+function flops(m, ph, c) {
+  const N = activeParams(m);
+  const tokens = ph.globalBatchTokens;
+  const dense = 6 * N * tokens;
+  // causal attention: 6 * s * (heads*headDim) per token per layer, fwd+bwd
+  const scoreDim = m.mla ? (m.mla.qkNopeDim + m.mla.qkRopeDim) : m.headDim;
+  const valDim = m.mla ? m.mla.vDim : m.headDim;
+  const attnPerToken = 3 * ph.seqLen * m.heads * (scoreDim + valDim) * m.layers;
+  const attn = attnPerToken * tokens;
+  const model = dense + attn;
+  const recomputeMult = c.recompute === "full" ? 4 / 3 : c.recompute === "selective" ? 1.08 : 1;
+  return { dense, attn, model, hardware: model * recomputeMult, recomputeMult };
+}
+
+/* ---------- communication, per axis, per step ---------- */
+function comms(m, hw, ph, c) {
+  const h = m.dModel, b = c.microBatch, s = ph.seqLen / c.cp;
+  const mb = c.microBatchCount;
+  const eB = BYTES[c.actDtype];
+  const tiers = tierMap(hw, c);
+  const out = [];
+
+  // tensor parallel: 2 collectives per layer forward, 2 backward
+  if (c.tp > 1) {
+    const perColl = 2 * (c.tp - 1) / c.tp * b * s * h * eB;
+    const collPerLayer = m.parallelBlock ? 2 : 4;
+    const bytes = perColl * collPerLayer * (m.layers / c.pp) * mb;
+    out.push({ axis: "TP", label: c.sequenceParallel ? "all-gather + reduce-scatter" : "all-reduce",
+      bytes, tier: tiers.tp, overlap: 0.15,
+      why: "activation-sized and on the critical path of every layer, which is why it wants the fattest link you have" });
+  }
+  // context parallel ring
+  if (c.cp > 1) {
+    const perTok = m.mla ? (m.mla.kvLoraRank + m.mla.qkRopeDim) : 2 * m.kvHeads * m.headDim;
+    const kv = b * s * perTok * eB;
+    const bytes = kv * (c.cp - 1) * 2 * (m.layers / c.pp) * mb;
+    out.push({ axis: "CP", label: "ring KV exchange", bytes, tier: tiers.cp, overlap: 0.7,
+      why: m.mla ? "carries only the compressed latent, so the ring is far cheaper than it would be on a grouped-query model" : "overlaps well with the attention compute it feeds, as long as the blocks are big enough" });
+  }
+  // expert parallel all-to-all
+  if (m.moe && c.ep > 1) {
+    const tok = b * s;
+    const perLayer = 4 * m.moe.topK * tok * h * eB * (c.ep - 1) / c.ep;
+    const bytes = perLayer * (m.moe.moeLayers / c.pp) * mb;
+    out.push({ axis: "EP", label: "all-to-all dispatch + combine", bytes, tier: tiers.ep, overlap: 0.6,
+      why: "latency-sensitive and straggler-prone: one slow rank stalls the whole exchange" });
+  }
+  // pipeline point-to-point
+  if (c.pp > 1) {
+    const bytes = 2 * b * s * h * eB * mb * c.virtualStages;
+    out.push({ axis: "PP", label: "point-to-point activations", bytes, tier: tiers.pp, overlap: 0.85,
+      why: "small per hop, which is why pipelining is what you reach for across a thin link" });
+  }
+  // data parallel
+  if (c.dp > 1) {
+    const P = paramBreakdown(m);
+    const owned = P.total / (c.tp * c.pp) / c.pp * c.pp; // params this rank participates in reducing
+    const gradBytes = (P.total / (c.tp)) / c.pp * BYTES[c.gradDtype];
+    const f = (c.dp - 1) / c.dp;
+    const bytes = c.zero >= 3 ? 3 * f * gradBytes : 2 * f * gradBytes;
+    out.push({ axis: "DP", label: c.zero >= 3 ? "all-gather ×2 + reduce-scatter" : "gradient all-reduce",
+      bytes, tier: tiers.dp, overlap: c.zero >= 3 ? 0.7 : 0.9,
+      why: (c.zero >= 3 ? "ZeRO-3 all-gathers sit on the forward critical path, so they hide far less well than a plain gradient all-reduce" : "once per step rather than once per layer, and it hides behind the backward pass if the buckets are sized well") });
+  }
+  out.forEach(o => {
+    o.seconds = o.bytes / o.tier.bw;
+    o.exposed = o.seconds * (1 - o.overlap);
+  });
+  return out;
+}
+
+/* which interconnect tier does each axis land on? */
+function tierMap(hw, c) {
+  const su = { name: hw.scaleUp.tech, bw: hw.scaleUp.bw, inDomain: true };
+  const so = { name: hw.scaleOut.tech, bw: hw.scaleOut.bw, inDomain: false };
+  const D = hw.scaleUp.size;
+  // axes are laid out innermost-first: TP, then CP, then EP, then PP, then DP
+  const order = [["tp", c.tp], ["cp", c.cp], ["ep", c.ep], ["pp", c.pp], ["dp", c.dp]];
+  const map = {};
+  let cursor = 1;
+  for (const [k, deg] of order) {
+    map[k] = (cursor * deg <= D) ? su : so;
+    cursor *= deg;
+  }
+  return map;
+}
+
+/* ---------- step time, MFU, roofline ---------- */
+function analyze(card, phaseIdx, cfg) {
+  const m = card.model, hw = HW[card.hardware.key], ph = card.phases[phaseIdx];
+  const c = normaliseConfig(card, ph, cfg);
+  const mem = memory(m, hw, ph, c);
+  const F = flops(m, ph, c);
+  const C = comms(m, hw, ph, c);
+
+  const world = c.world;
+  const peak = hw.peak[c.computeDtype];
+  const rf = roofline(m, hw, ph, c);
+  // small local matmuls lose efficiency. Tie it to the same roofline the user is looking at.
+  const shapeFactor = Math.min(1, (rf.points[0].intensity / (rf.points[0].intensity + rf.ridge)) / 0.80);
+  const effEff = c.kernelEfficiency * shapeFactor;
+  c.effectiveKernelEfficiency = effEff; c.shapeFactor = shapeFactor;
+  const computeSec = F.hardware / world / (peak * effEff);
+  const bubbleFrac = c.pp > 1 ? (c.pp - 1) / (c.microBatchCount * c.virtualStages) : 0;
+  const exposedSec = C.reduce((a, o) => a + o.exposed, 0);
+  const stepTime = computeSec * (1 + bubbleFrac) + exposedSec;
+
+  const achieved = F.model / world / stepTime;
+  const mfu = achieved / peak;
+  const hfu = (F.hardware / world / stepTime) / peak;
+
+  return {
+    card, phase: ph, cfg: c, hw, mem, flops: F, comms: C,
+    time: { computeSec, bubbleFrac, bubbleSec: computeSec * bubbleFrac, exposedSec, stepTime },
+    perf: { achievedFlops: achieved, mfu, hfu, tokensPerSec: ph.globalBatchTokens / stepTime },
+    sharding: shardingMap(m, c),
+    roofline: rf,
+    valid: mem.fits && c.divides
+  };
+}
+
+function normaliseConfig(card, ph, cfg) {
+  const c = Object.assign({
+    tp: 1, pp: 1, cp: 1, ep: 1, virtualStages: 1, zero: 1,
+    microBatch: 1, recompute: "selective", sequenceParallel: true,
+    flashAttention: true, optimizer: "adamw",
+    paramDtype: "bf16", gradDtype: "bf16", actDtype: "bf16", computeDtype: "bf16",
+    kernelEfficiency: 0.55
+  }, cfg);
+  c.world = card.hardware.count;
+  c.dp = Math.max(1, Math.floor(c.world / (c.tp * c.pp * c.cp)));
+  const seqs = ph.globalBatchTokens / ph.seqLen;
+  c.microBatchCount = Math.max(1, Math.round(seqs / c.dp / c.microBatch));
+  c.tokensPerCpRank = ph.seqLen / c.cp;
+  c.layersPerStage = card.model.layers / c.pp;
+  c.divides = (c.tp * c.pp * c.cp * c.dp === c.world)
+    && (c.ep <= c.dp * c.tp)
+    && (c.tokensPerCpRank >= 1024)
+    && (c.layersPerStage >= 1)
+    && (c.microBatchCount >= c.pp / c.virtualStages);
+  c.unevenStages = card.model.layers % c.pp !== 0;
+  c.layersOnFattestStage = Math.ceil(card.model.layers / c.pp);
+  return c;
+}
+
+function roofline(m, hw, ph, c) {
+  const ridge = hw.peak[c.computeDtype] / hw.hbmBW;
+  const pts = [];
+  const b = c.microBatch, s = ph.seqLen / c.cp, h = m.dModel, eB = BYTES[c.actDtype];
+  const gemm = (name, M, K, N, note) => {
+    const f = 2 * M * K * N;
+    const bytes = (M * K + K * N + M * N) * eB;
+    pts.push({ name, intensity: f / bytes, flops: f, note });
+  };
+  const tokens = b * s;
+  const ffnLocal = (m.moe ? m.moe.expertFfn : m.ffn) / (m.moe ? 1 : c.tp);
+  gemm("FFN up-projection", tokens, h, ffnLocal, "the biggest single consumer of compute in a dense step");
+  if (m.mla) {
+    gemm("query up-projection", tokens, m.mla.qLoraRank, m.heads * (m.mla.qkNopeDim + m.mla.qkRopeDim) / c.tp,
+      "reads a narrow latent, so its K dimension is small and its intensity is lower than a normal QKV projection");
+    gemm("KV up-projection", tokens, m.mla.kvLoraRank, m.heads * (m.mla.qkNopeDim + m.mla.vDim) / c.tp,
+      "the price MLA pays for its cache saving: an extra expansion matmul in the training forward pass");
+    gemm("output projection", tokens, m.heads * m.mla.vDim / c.tp, h, "row-parallel, so TP cuts K not N");
+  } else {
+  gemm("attention QKV", tokens, h, (m.heads + 2 * m.kvHeads) * m.headDim / c.tp, "shrinks as TP grows");
+  gemm("output projection", tokens, m.heads * m.headDim / c.tp, h, "row-parallel, so TP cuts K not N");
+  }
+  pts.push({ name: "RMSNorm", intensity: 0.25, flops: 6 * tokens * h,
+             note: "memory-bound no matter what you do to it; this is why fusion matters" });
+  pts.push({ name: "SwiGLU activation", intensity: 0.5, flops: 4 * tokens * ffnLocal,
+             note: "elementwise, so it lives at the far left of the roof" });
+  pts.forEach(p => {
+    p.attainable = Math.min(hw.peak[c.computeDtype], p.intensity * hw.hbmBW);
+    p.bound = p.intensity < ridge ? "memory" : "compute";
+  });
+  return { ridge, peak: hw.peak[c.computeDtype], bw: hw.hbmBW, points: pts };
+}
+
+/* ---------- search: the grader's own optimum ---------- */
+function search(card, phaseIdx, base) {
+  const m = card.model, world = card.hardware.count;
+  const best = [];
+  const divisors = n => { const d = []; for (let i = 1; i <= n; i++) if (n % i === 0) d.push(i); return d; };
+  for (const tp of divisors(world).filter(x => x <= 64))
+    for (const pp of divisors(world).filter(x => x <= 64 && x <= m.layers))
+      for (const cp of [1, 2, 4, 8, 16, 32]) {
+        if (tp * pp * cp > world) continue;
+        if (world % (tp * pp * cp) !== 0) continue;
+        for (const ep of (m.moe ? [1, 8, 16, 32, 64, 128] : [1])) {
+          const cfg = Object.assign({}, base, { tp, pp, cp, ep });
+          let r; try { r = analyze(card, phaseIdx, cfg); } catch (e) { continue; }
+          if (!r.valid) continue;
+          best.push({ tp, pp, cp, ep, dp: r.cfg.dp, mfu: r.perf.mfu, peakMem: r.mem.peak });
+        }
+      }
+  best.sort((a, b) => b.mfu - a.mfu);
+  return best;
+}
+
+
+
+/* Provenance tiers, shown in the UI on every field:
+   P = stated in the primary technical report
+   S = secondary systems paper, talk or vendor doc
+   D = derived by the analyzer from other published numbers
+   U = unknown / unverified. Never used as an answer key. */
+
+const CARDS = [
+{
+  id: "llama3-405b",
+  name: "Llama 3.1 405B",
+  lab: "Meta", released: "July 2024", tier: "closed-form",
+  blurb: "The reference card. Meta published the fleet, the fabric, the parallelism table and the throughput, which makes it the only card that can calibrate everything else.",
+  model: {
+    layers: 126, dModel: 16384, heads: 128, kvHeads: 8, headDim: 128,
+    ffn: 53248, vocab: 128256, tiedEmbeddings: false, moe: null,
+    attention: "GQA, 8 KV heads", params: 405e9
+  },
+  modelProv: { layers: "S", dModel: "D", heads: "D", kvHeads: "D", ffn: "D", vocab: "D",
+    _note: "126 layers is from the Llama 3 systems paper (ISCA'25). The rest is the published HF config, which I have not re-verified in this session, so treat the shape fields as D." },
+  hardware: {
+    key: "h100_sxm", count: 16384, clusterCount: 24576,
+    prov: { count: "S", clusterCount: "P" },
+    note: "16K of a 24K-GPU cluster were used for pretraining."
+  },
+  network: {
+    scaleUp: "NVLink inside an 8-GPU server",
+    scaleOut: "RoCE v2, Arista 7800 + Minipack2 OCP switches, three-layer Clos, 400 Gb/s per GPU",
+    prov: { scaleUp: "S", scaleOut: "P" },
+    note: "Smaller Llama 3 models used Quantum2 InfiniBand instead; Meta tuned both fabrics to equivalent performance. 16 GPUs per rack, split across two servers under one Minipack2 top-of-rack switch."
+  },
+  phases: [
+    { name: "Pretraining, 8K context", seqLen: 8192, globalBatchTokens: 16e6,
+      tokenBudget: 15.6e12, precision: "bf16",
+      published: { tp: 8, cp: 1, pp: 16, ep: 1, dp: 128, tflops: 400, mfu: 0.404 },
+      prov: { seqLen: "S", globalBatchTokens: "S", published: "S", tokenBudget: "S" },
+      rationale: "TP is pinned at 8 because that is the NVLink domain: past 8 the two all-reduces per layer would cross the RoCE fabric and the layer would become communication-bound. PP16 then reduces per-device parameter memory without adding activation-sized traffic, because point-to-point hops are cheap on a thin link. FSDP fills the remaining 128 ranks.",
+      unverified: ["batch-size ramp (I recall 4M to 8M to 16M with a sequence-length step, but did not verify it here)", "microbatch size", "interleaved virtual-stage count"] },
+    { name: "Long-context extension, 128K", seqLen: 131072, globalBatchTokens: 16e6,
+      tokenBudget: 800e9, precision: "bf16",
+      published: { tp: 8, cp: 16, pp: 16, ep: 1, dp: 8, tflops: 380, mfu: 0.384 },
+      prov: { seqLen: "S", globalBatchTokens: "S", published: "S", tokenBudget: "U" },
+      rationale: "Same TP and PP, same token batch, same fleet. The only thing that changes is CP going from 1 to 16, because at 131K the attention activations no longer fit however you shard the parameters. Throughput drops from about 400 to about 380 TFLOP/s per GPU, which is the price of the ring exchange.",
+      unverified: ["the 800B token budget for the long-context stage", "the six-stage length curriculum"] }
+  ],
+  reveal: "Reported MFU across the run sits between 38 and 43 percent. Note what did NOT change between the two phases: the parallelism config is the same except for one axis. Interviewers like this card because the transition is the answer, not the tuple."
+},
+{
+  id: "deepseek-v3",
+  name: "DeepSeek-V3",
+  lab: "DeepSeek", released: "December 2024", tier: "closed-form",
+  blurb: "671B total, 37B active, trained without tensor parallelism at all. The interesting question is not what they chose but what constraint made the choice forced.",
+  model: {
+    layers: 61, dModel: 7168, heads: 128, kvHeads: 128, headDim: 128,
+    ffn: 18432, vocab: 129280, tiedEmbeddings: false,
+    attention: "Multi-head Latent Attention (MLA)",
+    mla: { qLoraRank: 1536, kvLoraRank: 512, qkNopeDim: 128, qkRopeDim: 64, vDim: 128 },
+    moe: { experts: 256, sharedExperts: 1, topK: 8, expertFfn: 2048, moeLayers: 58 },
+    params: 671e9
+  },
+  modelProv: { layers: "D", dModel: "D", experts: "D", topK: "D", mla: "D",
+    _note: "Architecture shape is from the released config, recalled rather than re-verified in this session, hence tier D throughout. Multi-head Latent Attention is now modelled properly: a rank-1536 query latent and a rank-512 KV latent with 64 decoupled RoPE dimensions. That the resulting parameter counts land on 671B total and 37.5B active against a published 671B and 37B is a check the analyzer had to pass before this card was allowed to grade anything." },
+  hardware: { key: "h800", count: 2048, clusterCount: 2048, prov: { count: "P" },
+    note: "2048 H800s, 8 per node. Total cost 2.788M H800-hours for the full training." },
+  network: {
+    scaleUp: "NVLink + NVSwitch inside the 8-GPU node",
+    scaleOut: "InfiniBand across nodes",
+    prov: { scaleUp: "P", scaleOut: "P" },
+    note: "The H800 is the export-limited part: same compute as an H100, substantially less NVLink bandwidth. Every unusual thing about this run traces back to that one number."
+  },
+  phases: [
+    { name: "Pretraining", seqLen: 4096, globalBatchTokens: 62.9e6, tokenBudget: 14.8e12,
+      precision: "fp8 (with fp32 accumulation on the critical paths)",
+      published: { tp: 1, cp: 1, pp: 16, ep: 64, dp: 128, tflops: null, mfu: null },
+      prov: { seqLen: "D", globalBatchTokens: "U", published: "P", tokenBudget: "P" },
+      rationale: "16-way pipeline parallelism with DualPipe, 64-way expert parallelism spanning 8 nodes, and ZeRO-1 data parallelism. No tensor parallelism: with only 37B active parameters and aggressive recomputation, they could fit without paying for TP's per-layer all-reduces, which on an H800's narrowed NVLink would have been the dominant cost. DualPipe overlaps the cross-node all-to-all with compute so that both it and the pipeline traffic are effectively hidden.",
+      unverified: ["global batch size and its ramp", "microbatch count", "per-GPU throughput (not reported as TFLOP/s)"] }
+  ],
+  reveal: "The lesson is inversion. Most candidates reach for TP first because Megatron taught them to. DeepSeek's constraint made TP the most expensive axis available, so they spent engineering effort on memory instead and bought the freedom to skip it. Ask yourself what your cluster's cheapest axis is before you pick a layout."
+},
+{
+  id: "palm-540b",
+  name: "PaLM 540B",
+  lab: "Google", released: "April 2022", tier: "closed-form",
+  blurb: "6144 TPU v4 chips, no pipeline parallelism whatsoever. The card exists to break the GPU-shaped assumption that PP is unavoidable at scale.",
+  model: {
+    layers: 118, dModel: 18432, heads: 48, kvHeads: 1, headDim: 384,
+    ffn: 73728, vocab: 256000, tiedEmbeddings: true, moe: null,
+    attention: "multi-query attention, parallel attention/FFN blocks", parallelBlock: true, params: 540e9
+  },
+  modelProv: { layers: "S", dModel: "S", heads: "S", _note: "Architecture from the PaLM paper; shape fields recalled, tier S." },
+  hardware: { key: "tpuv4", count: 6144, clusterCount: 6144, prov: { count: "P" },
+    note: "Two TPU v4 pods of 3072 chips each, 768 hosts per pod." },
+  network: {
+    scaleUp: "ICI within a pod, 3D torus, 3072 chips",
+    scaleOut: "data-centre network between the two pods",
+    prov: { scaleUp: "P", scaleOut: "P" },
+    note: "A whole pod is one high-bandwidth domain. That single fact is what removes the need for pipelining."
+  },
+  phases: [
+    { name: "Pretraining", seqLen: 2048, globalBatchTokens: 4e6, tokenBudget: 780e9,
+      precision: "bf16",
+      published: { tp: 12, cp: 1, pp: 1, ep: 1, dp: 512, tflops: 127, mfu: 0.462 },
+      prov: { published: "S", seqLen: "S", globalBatchTokens: "U", tokenBudget: "S" },
+      rationale: "Model and data parallelism only. Each pod holds a full copy of the weights; the client dispatches half the batch to each pod, they compute gradients locally, exchange them over the data-centre network, and apply bitwise-identical updates. Pipelining was rejected explicitly: it costs a bubble and reloads weights per microbatch, and with a 3072-chip scale-up domain there was no need to pay for it.",
+      unverified: ["the exact model-parallel degree, given as 12-way in secondary sources", "global batch size and its ramp"] }
+  ],
+  reveal: "46.2% MFU against 57.8% hardware FLOPs utilisation. The gap between those two numbers is activation rematerialisation plus the cross-pod gradient reduction, and being able to explain a HFU-MFU gap out loud is worth more in an interview than any config tuple."
+},
+{
+  id: "deepseek-v4-pro",
+  name: "DeepSeek-V4-Pro (preview)",
+  lab: "DeepSeek", released: "2026", tier: "frontier",
+  blurb: "1.6T total, 49B active, one-million-token context, Muon instead of AdamW. No parallelism tuple was published, so this card is graded on reasoning, not recall.",
+  model: {
+    layers: 61, dModel: 7168, heads: 128, kvHeads: 128, headDim: 128,
+    ffn: 18432, vocab: 129280, tiedEmbeddings: false,
+    attention: "hybrid Compressed Sparse Attention + Heavily Compressed Attention",
+    moe: { experts: 256, sharedExperts: 1, topK: 8, expertFfn: 2048, moeLayers: 58 },
+    params: 1.6e12
+  },
+  modelProv: { layers: "U", dModel: "U", experts: "U",
+    _note: "The architecture SHAPE is not established. The fields above are V3's, scaled only in headline parameter count, and are placeholders so the analyzer runs. Everything the analyzer computes for this card is illustrative. This is exactly the kind of field that should stay blank rather than be guessed, and it is marked U for that reason." },
+  hardware: { key: "h800", count: 2048, clusterCount: null, prov: { count: "U" },
+    note: "UNKNOWN. No cluster size or accelerator is established in what I verified. 2048 H800s is carried over from V3 purely so the analyzer has something to run on." },
+  network: { scaleUp: "unknown", scaleOut: "unknown", prov: { scaleUp: "U", scaleOut: "U" },
+    note: "Not established." },
+  phases: [
+    { name: "Pretraining", seqLen: 4096, globalBatchTokens: 62.9e6, tokenBudget: 33e12,
+      precision: "fp8, with fp4 for routed expert weights",
+      published: { tp: null, cp: null, pp: null, ep: null, dp: null, tflops: null, mfu: null },
+      prov: { tokenBudget: "P", precision: "P", seqLen: "U", globalBatchTokens: "U", published: "U" },
+      rationale: "The report describes the strategy without giving degrees: a hybrid ZeRO scheme for the Muon optimizer, two-stage contextual parallelism to handle compressed attention, tensor-level checkpointing for fine-grained recompute control, and a single fused MoE kernel that overlaps compute, communication and memory access. They also removed V3's constraint on the number of routing target nodes and redesigned the parallelism accordingly.",
+      unverified: ["every parallelism degree", "cluster size and accelerator", "sequence length and batch schedule", "throughput"] }
+  ],
+  defaultCfg: { tp: 1, pp: 16, cp: 1, ep: 64, virtualStages: 2, zero: 1, optimizer: "muon", paramDtype: "fp4" },
+  reveal: "Three things on this card break the standard drill arithmetic. Muon carries a single momentum for matrix parameters rather than Adam's two moments plus master weights, so bytes-per-parameter is no longer 16. FP4 routed experts halve the parameter bytes again. And compressed sparse attention makes the attention FLOP count data-dependent, so 'what is the MFU' stops having one answer. Say that out loud in an interview and you are ahead of the room."
+},
+{
+  id: "kimi-k3",
+  name: "Kimi K3",
+  lab: "Moonshot AI", released: "July 2026", tier: "frontier",
+  blurb: "2.8T total, 104B active, 16 of 896 routed experts per token, 1M context, linear-attention hybrid. The card that breaks context parallelism as you learned it.",
+  model: {
+    layers: 61, dModel: 7168, heads: 64, kvHeads: 64, headDim: 128,
+    ffn: 18432, vocab: 160000, tiedEmbeddings: false,
+    attention: "Kimi Delta Attention (linear) + Attention Residuals",
+    moe: { experts: 896, sharedExperts: 1, topK: 16, expertFfn: 2048, moeLayers: 58 },
+    params: 2.8e12
+  },
+  modelProv: { layers: "U", dModel: "U", ffn: "U", vocab: "U", experts: "P", topK: "P",
+    _note: "Expert count (896) and top-k (16) and the headline parameter counts are stated. Layer count, hidden size and vocabulary are NOT established; the values above are placeholders." },
+  hardware: { key: "h800", count: 2048, clusterCount: null, prov: { count: "U" },
+    note: "UNKNOWN. The training fleet is not established in what I verified. Moonshot recommend deploying on supernodes of 64 or more accelerators, but that is a serving recommendation, not the training cluster." },
+  network: { scaleUp: "unknown; 64+ accelerator supernodes recommended for serving",
+    scaleOut: "unknown", prov: { scaleUp: "U", scaleOut: "U" },
+    note: "Not established." },
+  phases: [
+    { name: "Pretraining", seqLen: 4096, globalBatchTokens: 62.9e6, tokenBudget: null,
+      precision: "MXFP4 weights with MXFP8 activations, quantization-aware from SFT onward",
+      published: { tp: null, cp: null, pp: null, ep: null, dp: null, tflops: null, mfu: null },
+      prov: { precision: "P", published: "U", seqLen: "U", globalBatchTokens: "U", tokenBudget: "U" },
+      rationale: "Pipeline parallelism, expert parallelism and context parallelism, with MoonEP providing perfectly balanced expert execution using static computation shapes, dynamic redundant experts, online planning and zero-copy communication, with no host synchronisation on the critical path. Custom context parallelism for the recurrent Kimi Delta Attention formulation.",
+      unverified: ["all parallelism degrees", "cluster size", "token budget", "sequence and batch schedule"] }
+  ],
+  defaultCfg: { tp: 1, pp: 16, cp: 8, ep: 64, virtualStages: 2, zero: 1, paramDtype: "fp4" },
+  reveal: "Two structural lessons. First, a 2.8T-parameter model with 104B active is the sharpest possible illustration that memory uses total parameters and FLOPs use active ones. Second, context parallelism for a linear-attention layer is not ring attention: there is no KV block to circulate, there is a recurrent state to hand along, which is why Moonshot had to build their own. If a card makes you reach for Ring Attention reflexively, this is the one that should stop you."
+},
+{
+  id: "glm-5",
+  name: "GLM-5",
+  lab: "Zhipu AI", released: "February 2026", tier: "frontier",
+  blurb: "744B total, 44B active, trained end to end on Huawei Ascend with MindSpore. No CUDA, no NCCL, no NVLink. The vocabulary you have been drilling does not transfer, and that is the point.",
+  model: {
+    layers: 92, dModel: 6144, heads: 96, kvHeads: 8, headDim: 128,
+    ffn: 14336, vocab: 151552, tiedEmbeddings: false,
+    attention: "DeepSeek Sparse Attention",
+    moe: { experts: 160, sharedExperts: 1, topK: 8, expertFfn: 1536, moeLayers: 89 },
+    params: 744e9
+  },
+  modelProv: { _note: "Architecture shape is NOT established. All shape fields are placeholders so the analyzer runs. Only 744B total / 44B active, 28.5T pretraining tokens, DSA and the Ascend + MindSpore stack are attested." },
+  hardware: { key: "ascend910", count: 4096, clusterCount: null, prov: { count: "U" },
+    note: "UNKNOWN. Cluster size, Ascend generation and per-part specifications are all unverified. Every hardware number on this card is a placeholder." },
+  network: { scaleUp: "HCCS within the node (placeholder)", scaleOut: "RoCE (placeholder)",
+    prov: { scaleUp: "U", scaleOut: "U" }, note: "Not established." },
+  phases: [
+    { name: "Pretraining", seqLen: 4096, globalBatchTokens: 32e6, tokenBudget: 28.5e12,
+      precision: "unverified",
+      published: { tp: null, cp: null, pp: null, ep: null, dp: null, tflops: null, mfu: null },
+      prov: { tokenBudget: "S", published: "U", seqLen: "U", globalBatchTokens: "U" },
+      rationale: "Not published in what I verified. The transferable question this card asks is what changes when the scale-up domain is HCCS rather than NVLink and the collectives library is HCCL rather than NCCL: the reasoning is identical, the constants and the API names are not.",
+      unverified: ["everything about the parallelism layout", "cluster size", "all hardware constants"] }
+  ],
+  defaultCfg: { tp: 4, pp: 8, cp: 1, ep: 32, virtualStages: 2, zero: 1 },
+  reveal: "Worth naming honestly: the Chinese labs in 2026 disclose architecture and algorithms lavishly and fleet size sparingly. Export-control sensitivity is a plausible reason but that is my inference, not a claim any of these reports makes. For interview purposes the useful move is to treat the gap as the exercise: given a token budget and a rough MFU assumption, what fleet must have been behind it?"
+}
+];
+
+
+
+/* ================= UI ================= */
+const $ = s => document.querySelector(s);
+const el = (t, a = {}, h = "") => { const e = document.createElement(t); Object.assign(e, a); if (h) e.innerHTML = h; return e; };
+const fmtB = b => b >= GB ? (b / GB).toFixed(1) + " GB" : (b / 1024 / 1024).toFixed(0) + " MB";
+const fmtN = n => n == null ? "—" : n >= 1e12 ? (n / 1e12).toFixed(2) + "T" : n >= 1e9 ? (n / 1e9).toFixed(1) + "B" : n >= 1e6 ? (n / 1e6).toFixed(1) + "M" : n.toLocaleString();
+const pct = x => (x * 100).toFixed(1) + "%";
+const sec = s => s >= 1 ? s.toFixed(2) + " s" : (s * 1000).toFixed(0) + " ms";
+const prov = t => t ? `<span class="chip ${t}">${t}</span>` : "";
+const AXC = { TP: "#e6a94e", PP: "#6fa8d6", CP: "#a68bd0", EP: "#5cbf9a", DP: "#dd7f8c" };
+const MEMC = { params: "#6fa8d6", grads: "#a68bd0", opt: "#e6a94e", acts: "#5cbf9a", logits: "#dd7f8c", buffers: "#455767" };
+const MEMLABEL = { params: "parameters", grads: "gradients", opt: "optimizer state", acts: "activations", logits: "fp32 logits", buffers: "buffers + slack" };
+
+const VW = () => (typeof window !== "undefined" && window.innerWidth && window.innerWidth < 620) ? 360 : 700;
+const S = {
+  room: "analyze", cardId: "llama3-405b", phase: 0,
+  cfg: { tp: 8, pp: 16, cp: 1, ep: 1, virtualStages: 8, zero: 3, microBatch: 1,
+         recompute: "selective", sequenceParallel: true, flashAttention: true,
+         optimizer: "adamw", paramDtype: "bf16", gradDtype: "bf16", actDtype: "bf16",
+         computeDtype: "bf16", kernelEfficiency: 0.55 },
+  guess: null, drill: null, drillScore: { n: 0, ok: 0 }
+};
+const card = () => CARDS.find(c => c.id === S.cardId);
+
+const ROOMS = [["analyze", "analyze"], ["design", "design"], ["drill", "drill"],
+               ["deck", "deck"], ["calib", "calibration"], ["about", "how to read this"]];
+
+function nav() {
+  const n = $("#nav"); n.innerHTML = "";
+  ROOMS.forEach(([k, lbl]) => {
+    const b = el("button", { textContent: lbl }); b.setAttribute("aria-selected", S.room === k);
+    b.onclick = () => { S.room = k; render(); }; n.appendChild(b);
+  });
+}
+function render() { nav(); const m = $("#main"); m.innerHTML = ""; ({ analyze: roomAnalyze, design: roomDesign, drill: roomDrill, deck: roomDeck, calib: roomCalib, about: roomAbout })[S.room](m); window.scrollTo(0, 0); }
+
+/* ---------- shared: card + phase picker ---------- */
+function picker(host, onchange, hidePhaseConfig) {
+  const c = card(), p = el("div", { className: "panel" });
+  p.innerHTML = `<h3>run under analysis</h3>
+    <div class="grid g2">
+      <div><label>model</label><select id="pc">${CARDS.map(x => `<option value="${x.id}" ${x.id === S.cardId ? "selected" : ""}>${x.name}</option>`).join("")}</select></div>
+      <div><label>phase</label><select id="pp">${c.phases.map((x, i) => `<option value="${i}" ${i === S.phase ? "selected" : ""}>${x.name}</option>`).join("")}</select></div>
+    </div>`;
+  const ph = c.phases[S.phase], hw = HW[c.hardware.key];
+  const rows = [
+    ["accelerator", `${hw.name} × ${fmtN(c.hardware.count)}`, c.hardware.prov.count],
+    ["scale-up domain", `${c.network.scaleUp}`, c.network.prov.scaleUp],
+    ["scale-out fabric", `${c.network.scaleOut}`, c.network.prov.scaleOut],
+    ["sequence length", ph.seqLen.toLocaleString() + " tokens", ph.prov.seqLen],
+    ["global batch", fmtN(ph.globalBatchTokens) + " tokens", ph.prov.globalBatchTokens],
+    ["token budget", ph.tokenBudget ? fmtN(ph.tokenBudget) : "unknown", ph.prov.tokenBudget],
+    ["precision", ph.precision, ph.prov.precision || "P"],
+    ["parameters", `${fmtN(c.model.params)} total, ${fmtN(activeParams(c.model))} active by the analyzer`, "D"]
+  ];
+  p.appendChild(el("table", {}, "<tbody>" + rows.map(r =>
+    `<tr><td style="color:#7a8fa4;width:38%">${r[0]}</td><td>${r[1]}${prov(r[2])}</td></tr>`).join("") + "</tbody>"));
+  if (c.hardware.note) p.appendChild(el("div", { className: "tiny", style: "margin-top:8px" }, c.hardware.note));
+  if (c.network.note) p.appendChild(el("div", { className: "tiny", style: "margin-top:4px" }, c.network.note));
+  const un = ph.unverified || [];
+  if (un.length) p.appendChild(el("details", {}, `<summary>${un.length} field${un.length > 1 ? "s" : ""} left blank rather than guessed</summary>
+    <ul class="tiny" style="margin:7px 0 0 16px;padding:0">${un.map(u => `<li>${u}</li>`).join("")}</ul>`));
+  host.appendChild(p);
+  p.querySelector("#pc").onchange = e => { S.cardId = e.target.value; S.phase = 0; S.guess = null; adoptPublished(); onchange(); };
+  p.querySelector("#pp").onchange = e => { S.phase = +e.target.value; adoptPublished(); onchange(); };
+}
+function adoptPublished() {
+  const pub = card().phases[S.phase].published;
+  const c = card();
+  if (pub && pub.tp) Object.assign(S.cfg, { tp: pub.tp, pp: pub.pp, cp: pub.cp, ep: pub.ep || 1 });
+  else if (c.defaultCfg) Object.assign(S.cfg, c.defaultCfg);
+  const fp8 = /fp8|MXFP|FP4/i.test(c.phases[S.phase].precision || "");
+  const d = fp8 ? "fp8" : "bf16";
+  Object.assign(S.cfg, { computeDtype: d, actDtype: d, paramDtype: d });
+  if (c.defaultCfg) Object.assign(S.cfg, c.defaultCfg);
+}
+
+/* ---------- config controls ---------- */
+function controls(host, onchange) {
+  const c = card(), p = el("div", { className: "panel" });
+  const sl = (k, label, opts) => `<div><label>${label}</label><select data-k="${k}">${
+    opts.map(o => `<option value="${o}" ${String(S.cfg[k]) === String(o) ? "selected" : ""}>${o}</option>`).join("")}</select></div>`;
+  p.innerHTML = `<h3>your layout — every view below is the same numbers seen from a different side</h3>
+    <div class="grid g4">
+      ${sl("tp", "TP tensor", [1, 2, 4, 8, 16, 32, 64])}
+      ${sl("pp", "PP pipeline", [1, 2, 4, 8, 16, 32])}
+      ${sl("cp", "CP context", [1, 2, 4, 8, 16, 32])}
+      ${sl("ep", "EP expert", [1, 8, 16, 32, 64, 128])}
+      ${sl("zero", "ZeRO stage", [0, 1, 2, 3])}
+      ${sl("virtualStages", "interleave v", [1, 2, 4, 8])}
+      ${sl("microBatch", "micro-batch", [1, 2, 4, 8])}
+      ${sl("recompute", "recompute", ["none", "selective", "full"])}
+      ${sl("optimizer", "optimizer", ["adamw", "muon"])}
+      ${sl("paramDtype", "weights", ["bf16", "fp8", "fp4"])}
+      ${sl("computeDtype", "matmul", ["bf16", "fp8"])}
+      ${sl("kernelEfficiency", "kernel eff.", [0.45, 0.5, 0.55, 0.6, 0.65])}
+    </div>`;
+  p.querySelectorAll("select").forEach(s => s.onchange = e => {
+    const k = e.target.dataset.k, v = e.target.value;
+    S.cfg[k] = isNaN(+v) ? v : +v; onchange();
+  });
+  host.appendChild(p);
+}
+
+/* ---------- room: analyze ---------- */
+function roomAnalyze(m) {
+  picker(m, () => render());
+  controls(m, () => render());
+  let r; try { r = analyze(card(), S.phase, S.cfg); } catch (e) {
+    m.appendChild(el("div", { className: "panel" }, `<div class="oom mono">config rejected: ${e.message}</div>`)); return; }
+  readout(m, r); viewMesh(m, r); viewMemory(m, r); viewSharding(m, r); viewLayerFlow(m, r); viewTimeline(m, r); viewComms(m, r); viewRoofline(m, r);
+  const pub = r.phase.published;
+  if (pub && pub.tp) {
+    const d = el("div", { className: "panel" });
+    d.innerHTML = `<h3>what the lab actually ran</h3>
+      <div class="mono" style="font-size:15px">TP ${pub.tp} · CP ${pub.cp} · PP ${pub.pp}${pub.ep > 1 ? " · EP " + pub.ep : ""} · DP ${pub.dp}${prov(r.phase.prov.published)}</div>
+      ${pub.tflops ? `<div class="mono sub" style="margin-top:4px">${pub.tflops} TFLOP/s per device reported · analyzer says ${(r.perf.achievedFlops / 1e12).toFixed(0)}</div>` : ""}
+      <div class="note">${r.phase.rationale}</div>
+      <div class="tiny">${card().reveal}</div>`;
+    m.appendChild(d);
+  } else {
+    m.appendChild(el("div", { className: "panel" }, `<h3>no published tuple</h3>
+      <div class="note warn">This report describes the strategy without giving degrees, so there is no answer key. The analyzer's optimum is the only score available, and the reasoning is the deliverable.</div>
+      <div class="note">${r.phase.rationale}</div><div class="tiny">${card().reveal}</div>`));
+  }
+}
+
+function readout(m, r) {
+  const d = el("div", { className: "readout" });
+  const fit = r.mem.fits;
+  d.innerHTML = `
+    <div><div class="k">MFU</div><div class="v ${r.perf.mfu > 0.35 ? "good" : ""}">${pct(r.perf.mfu)}</div><div class="n">HFU ${pct(r.perf.hfu)}</div></div>
+    <div><div class="k">ACHIEVED</div><div class="v">${(r.perf.achievedFlops / 1e12).toFixed(0)}</div><div class="n">TFLOP/s per device</div></div>
+    <div><div class="k">STEP TIME</div><div class="v">${sec(r.time.stepTime)}</div><div class="n">${r.cfg.microBatchCount} micro-batches</div></div>
+    <div><div class="k">PEAK MEMORY</div><div class="v ${fit ? "" : "oom"}">${(r.mem.peak / GB).toFixed(1)}</div><div class="n">${fit ? "GB of " + (r.mem.hbm / GB).toFixed(0) : "GB — OVER CAPACITY"}</div></div>`;
+  m.appendChild(d);
+  if (r.cfg.unevenStages) m.appendChild(el("div", { className: "panel" },
+    `<div class="note">${card().model.layers} layers do not divide evenly by PP ${r.cfg.pp}, so the stages are uneven at about ${(card().model.layers / r.cfg.pp).toFixed(2)} layers each. This is not a mistake: Meta's published Llama 3 layout is exactly this case, and they modified the pipeline schedule to take a layer off the first and last stages, because those two already carry the embedding and the logits. A tool that rejected uneven splits would reject the real answer.</div>`));
+  if (!r.cfg.divides) m.appendChild(el("div", { className: "panel" },
+    `<div class="oom mono">TP×PP×CP×DP = ${r.cfg.tp * r.cfg.pp * r.cfg.cp * r.cfg.dp} does not equal the world size ${r.cfg.world}, or the layer count does not divide by PP. Fix the factorization before reading anything below.</div>`));
+}
+
+/* ---------- view 1: memory per pipeline stage ---------- */
+function viewMemory(m, r) {
+  const p = el("div", { className: "panel" });
+  const stages = r.mem.stages, cap = r.mem.hbm;
+  const maxV = Math.max(cap, r.mem.peak) * 1.04;
+  const W = VW(), rowH = stages.length > 8 ? 16 : 24, H = stages.length * rowH + 26;
+  const lab = 26, plot = W - lab - 46;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" preserveAspectRatio="xMinYMin meet" role="img" aria-label="per-stage memory">`;
+  const capX = lab + cap / maxV * plot;
+  svg += `<line x1="${capX}" y1="0" x2="${capX}" y2="${H - 20}" stroke="#e05a4f" stroke-dasharray="3 3" opacity=".8"/>`;
+  svg += `<text x="${capX + 4}" y="10" fill="#e05a4f" font-size="9" font-family="ui-monospace,Menlo,Consolas,monospace">HBM ${(cap / GB).toFixed(0)}GB</text>`;
+  stages.forEach((s, i) => {
+    const y = 16 + i * rowH; let x = lab;
+    svg += `<text x="0" y="${y + rowH * .62}" fill="#7a8fa4" font-size="9" font-family="ui-monospace,Menlo,Consolas,monospace">s${s.stage}</text>`;
+    ["params", "grads", "opt", "acts", "logits", "buffers"].forEach(k => {
+      if (s[k] <= 0) return;
+      const raw = s[k] / maxV * plot, w = Math.max(raw, 0.9); // keep thin segments visible on a phone
+      svg += `<rect x="${x.toFixed(1)}" y="${y}" width="${w.toFixed(1)}" height="${rowH - 5}" fill="${MEMC[k]}" opacity=".88"><title>${MEMLABEL[k]}: ${fmtB(s[k])}</title></rect>`;
+      x += raw;
+    });
+    svg += `<text x="${x + 5}" y="${y + rowH * .62}" fill="${s.fits ? "#a8bbcd" : "#e05a4f"}" font-size="9" font-family="ui-monospace,Menlo,Consolas,monospace">${(s.total / GB).toFixed(1)}</text>`;
+  });
+  svg += `</svg>`;
+  const worst = stages.reduce((a, b) => b.total > a.total ? b : a);
+  p.innerHTML = `<h3>memory per pipeline stage</h3>${svg}
+    <div class="legend">${Object.keys(MEMC).map(k => `<span><i class="axisdot" style="background:${MEMC[k]}"></i>${MEMLABEL[k]}</span>`).join("")}</div>
+    <div class="note">Stage ${worst.stage} is the binding one at ${(worst.total / GB).toFixed(1)} GB. Under 1F1B, stage <em>i</em> holds up to ${r.cfg.pp} − <em>i</em> micro-batches of activations in flight, so the earliest stage carries the most, while the last stage carries the fp32 logits at batch × seq × vocab. If a run OOMs it usually OOMs on one stage, not on average.</div>
+    <details><summary>the arithmetic behind these bars</summary><div class="tiny" style="margin-top:7px">
+      Activations use the Korthikanti form, s·b·h·(34 + 5as/h) bytes per layer per micro-batch with tensor and sequence parallelism folded in, dropping the 5as/h term when FlashAttention or selective recompute is on.
+      Optimizer state is ${S.cfg.optimizer === "muon" ? "8 bytes per parameter for Muon: one fp32 master copy plus a single momentum for matrix parameters" : "12 bytes per parameter for AdamW: fp32 master, first moment, second moment"}, divided by DP${r.cfg.dp} at ZeRO stage ${r.cfg.zero} or above.
+      Weights are ${BYTES[r.cfg.paramDtype]} bytes each at ${r.cfg.paramDtype}. Effective kernel efficiency is ${(r.cfg.effectiveKernelEfficiency * 100).toFixed(1)}%, which is your ${(r.cfg.kernelEfficiency * 100).toFixed(0)}% base scaled by a shape factor of ${r.cfg.shapeFactor.toFixed(2)} derived from where the local FFN matmul sits relative to the roofline ridge: shard it thin enough and the kernels themselves stop being efficient. Buffers are a 6% allowance plus 1.5 GB of allocator slack, which is a guess, not a measurement.
+    </div></details>`;
+  m.appendChild(p);
+}
+
+/* ---------- view 2: sharding, drawn ---------- */
+/* ---------- tensor cut diagram ---------- */
+function tensorSVG(t) {
+  const W = 152, H = 108, bx = 26, by = 16, bw = 110, bh = 56;
+  const cut = t.cut, ax = cut.axis, col = ax ? AXC[ax] : "#7a8fa4";
+  const MONO = "ui-monospace,Menlo,Consolas,monospace";
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" preserveAspectRatio="xMinYMin meet">`;
+  const txt = (x, y, str, fill, size, anchor, rot) =>
+    `<text x="${x}" y="${y}" fill="${fill}" font-size="${size || 8.5}" font-family="${MONO}"${anchor ? ` text-anchor="${anchor}"` : ""}${rot ? ` transform="rotate(-90 ${x} ${y})"` : ""}>${str}</text>`;
+
+  if (cut.dim === "none") {
+    // replicated: ghost copies stacked behind
+    s += `<rect x="${bx + 7}" y="${by - 7}" width="${bw}" height="${bh}" fill="none" stroke="#334353" stroke-width="1"/>`;
+    s += `<rect x="${bx + 3.5}" y="${by - 3.5}" width="${bw}" height="${bh}" fill="#1b2531" stroke="#334353" stroke-width="1"/>`;
+    s += `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" fill="#2a3a4a" stroke="#54677a" stroke-width="1.2"/>`;
+    s += txt(bx + bw / 2, by + bh / 2 + 3, "replicated", "#a8bbcd", 9, "middle");
+  } else if (cut.dim === "expert") {
+    const groups = Math.min(cut.deg, 8), gw = bw / groups;
+    s += `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" fill="#1b2531" stroke="#334353"/>`;
+    for (let i = 0; i < groups; i++) {
+      s += `<rect x="${(bx + i * gw).toFixed(1)}" y="${by}" width="${(gw - 1.5).toFixed(1)}" height="${bh}" fill="${col}" opacity="${i === 0 ? .55 : .13}"/>`;
+    }
+    for (let i = 1; i < groups; i++)
+      s += `<line x1="${(bx + i * gw).toFixed(1)}" y1="${by - 3}" x2="${(bx + i * gw).toFixed(1)}" y2="${by + bh + 3}" stroke="${col}" stroke-width="1" stroke-dasharray="2 2"/>`;
+    s += txt(bx + bw / 2, by + bh + 15, `${cut.total} experts over ${cut.deg} ranks`, col, 8, "middle");
+    s += txt(bx + gw / 2, by - 5, "this rank", col, 7.5, "middle");
+  } else {
+    const n = Math.min(cut.deg, 8), vertical = (cut.dim === "cols" || cut.dim === "seq");
+    s += `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" fill="#1b2531" stroke="#334353"/>`;
+    for (let i = 0; i < n; i++) {
+      const o = i === 0 ? .5 : .12;
+      if (vertical) s += `<rect x="${(bx + i * bw / n).toFixed(1)}" y="${by}" width="${(bw / n).toFixed(1)}" height="${bh}" fill="${col}" opacity="${o}"/>`;
+      else s += `<rect x="${bx}" y="${(by + i * bh / n).toFixed(1)}" width="${bw}" height="${(bh / n).toFixed(1)}" fill="${col}" opacity="${o}"/>`;
+    }
+    for (let i = 1; i < n; i++) {
+      if (vertical) s += `<line x1="${(bx + i * bw / n).toFixed(1)}" y1="${by - 4}" x2="${(bx + i * bw / n).toFixed(1)}" y2="${by + bh + 4}" stroke="${col}" stroke-width="1.1" stroke-dasharray="3 2"/>`;
+      else s += `<line x1="${bx - 4}" y1="${(by + i * bh / n).toFixed(1)}" x2="${bx + bw + 4}" y2="${(by + i * bh / n).toFixed(1)}" stroke="${col}" stroke-width="1.1" stroke-dasharray="3 2"/>`;
+    }
+    s += `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" fill="none" stroke="#54677a" stroke-width="1.2"/>`;
+    const where = cut.dim === "seq" ? "sequence" : cut.dim === "cols" ? "columns" : "rows";
+    s += txt(bx + bw / 2, by + bh + 15, `${where} ÷ ${cut.axis} ${cut.deg}${cut.deg > 8 ? " (8 shown)" : ""}`, col, 8, "middle");
+    s += txt(vertical ? bx + bw / n / 2 : bx + bw / 2, vertical ? by - 5 : by + bh / n / 2 + 3, "this rank", col, 7.5, "middle");
+  }
+  s += txt(bx + bw / 2, H - 3, t.dims[1], "#54677a", 8, "middle");
+  s += txt(9, by + bh / 2, t.dims[0], "#54677a", 8, "middle", true);
+  s += `</svg>`;
+  return s;
+}
+
+function viewSharding(m, r) {
+  const p = el("div", { className: "panel" });
+  const cards = r.sharding.map(t => `<div class="tcard">
+      <div class="tname">${t.name}</div>
+      ${tensorSVG(t)}
+      <div class="tcoll">${t.coll === "none" ? "<span style='color:#54677a'>no collective</span>" : "→ " + t.coll}</div>
+      <div class="tnote">${t.note}</div>
+    </div>`).join("");
+  p.innerHTML = `<h3>how each tensor is cut</h3>
+    <div class="sub" style="margin-bottom:11px">Solid slice is what this device holds. Dashed lines are where the tensor is split, coloured by the axis doing the splitting.</div>
+    <div class="tgrid">${cards}</div>
+    <div class="legend"><span><i class="axisdot" style="background:${AXC.TP}"></i>tensor parallel</span><span><i class="axisdot" style="background:${AXC.CP}"></i>context parallel</span><span><i class="axisdot" style="background:${AXC.EP}"></i>expert parallel</span><span><i class="axisdot" style="background:#54677a"></i>replicated</span></div>
+    <div class="note">Read the collective lines downward and you have this layer's communication schedule. It is not chosen; it falls out of the cuts. Cutting the output columns needs nothing on the way in. Cutting the input rows leaves every rank holding a partial sum, so those must be added. That asymmetry is why the column-parallel and row-parallel pair is always drawn together: one sum serves both.</div>
+    ${r.cfg.tp > (card().model.kvHeads || 1) && !card().model.mla ? `<div class="note warn">Tensor parallelism is ${r.cfg.tp} but there are only ${card().model.kvHeads} KV heads, so the K and V projections above show fewer slices than the others. Those ranks replicate instead of splitting: full communication cost, no memory saving.</div>` : ""}`;
+  m.appendChild(p);
+}
+
+/* ---------- device mesh: where each axis physically lives ---------- */
+function viewMesh(m, r) {
+  const p = el("div", { className: "panel" });
+  const MONO = "ui-monospace,Menlo,Consolas,monospace";
+  const axes = [["TP", r.cfg.tp], ["CP", r.cfg.cp], ["EP", r.cfg.ep], ["PP", r.cfg.pp], ["DP", r.cfg.dp]].filter(a => a[1] > 1);
+  const W = VW(), H = 168, pad = 8;
+  const totalLog = axes.reduce((a, x) => a + Math.log2(x[1]), 0) || 1;
+  const usable = W - pad * 2;
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" preserveAspectRatio="xMinYMin meet">`;
+  let x = pad, cum = 1, boundaryX = null;
+  axes.forEach(([name, deg]) => {
+    const w = Math.log2(deg) / totalLog * usable;
+    const inside = cum * deg <= r.hw.scaleUp.size;
+    s += `<rect x="${x.toFixed(1)}" y="34" width="${(w - 2).toFixed(1)}" height="34" fill="${AXC[name]}" opacity="${inside ? .82 : .3}"/>`;
+    if (w > 34) {
+      s += `<text x="${(x + w / 2).toFixed(1)}" y="49" fill="#0e131a" font-size="11" font-weight="700" font-family="${MONO}" text-anchor="middle">${name} ${deg}</text>`;
+      s += `<text x="${(x + w / 2).toFixed(1)}" y="62" fill="${inside ? "#0e131a" : AXC[name]}" font-size="8" font-family="${MONO}" text-anchor="middle">${inside ? "scale-up" : "scale-out"}</text>`;
+    } else s += `<text x="${(x + w / 2).toFixed(1)}" y="80" fill="${AXC[name]}" font-size="8.5" font-family="${MONO}" text-anchor="middle">${name}${deg}</text>`;
+    if (boundaryX === null && cum * deg > r.hw.scaleUp.size) {
+      const frac = (Math.log2(r.hw.scaleUp.size / cum)) / Math.log2(deg);
+      boundaryX = x + Math.max(0, Math.min(1, frac)) * w;
+    }
+    x += w; cum *= deg;
+  });
+  if (boundaryX !== null) {
+    s += `<line x1="${boundaryX.toFixed(1)}" y1="22" x2="${boundaryX.toFixed(1)}" y2="90" stroke="#e05a4f" stroke-width="1.6" stroke-dasharray="4 3"/>`;
+    s += `<text x="${Math.min(boundaryX + 5, W - 4).toFixed(1)}" y="18" fill="#e05a4f" font-size="8.5" font-family="${MONO}" text-anchor="${boundaryX > W * .6 ? "end" : "start"}">${r.hw.scaleUp.size} devices — ${r.hw.scaleUp.tech} ends here</text>`;
+  } else {
+    s += `<text x="${pad}" y="18" fill="#5cbf9a" font-size="8.5" font-family="${MONO}">every axis fits inside the ${r.hw.scaleUp.size}-device ${r.hw.scaleUp.tech} domain</text>`;
+  }
+  s += `<text x="${pad}" y="28" fill="#54677a" font-size="8" font-family="${MONO}">innermost axis (fastest link) ————————————————→ outermost (slowest link)</text>`;
+  // one scale-up domain, drawn concretely
+  const nSq = Math.min(r.hw.scaleUp.size, 16), sq = Math.min(20, (usable - (nSq - 1) * 3) / nSq);
+  const inner = axes.length ? axes[0] : ["—", 1];
+  s += `<text x="${pad}" y="110" fill="#7a8fa4" font-size="8.5" font-family="${MONO}">one ${r.hw.scaleUp.tech} domain (${r.hw.scaleUp.size} devices${r.hw.scaleUp.size > 16 ? ", 16 shown" : ""}):</text>`;
+  for (let i = 0; i < nSq; i++) {
+    const fill = i < inner[1] ? AXC[inner[0]] : "#1b2531";
+    s += `<rect x="${(pad + i * (sq + 3)).toFixed(1)}" y="118" width="${sq.toFixed(1)}" height="${sq.toFixed(1)}" fill="${fill}" opacity="${i < inner[1] ? .8 : 1}" stroke="#334353"/>`;
+  }
+  s += `<text x="${pad}" y="${118 + sq + 13}" fill="#54677a" font-size="8" font-family="${MONO}">coloured squares vary along ${inner[0]}; the ${(r.comms.find(c2 => !c2.tier.inDomain) || {}).axis || "outer"} axis is what leaves this box</text>`;
+  s += `</svg>`;
+  p.innerHTML = `<h3>where each axis physically lives</h3>${s}
+    <div class="note">Axes are nested innermost first, and the product of everything to the left of a given axis decides whether that axis still fits in the fast domain. Push tensor parallelism past the red line and its two collectives per layer start crossing ${r.hw.scaleOut.tech}, which is the single most common way a layout goes wrong. Everything in the timeline and communication views below follows from where this line falls.</div>`;
+  m.appendChild(p);
+}
+
+/* ---------- one layer, end to end ---------- */
+function viewLayerFlow(m, r) {
+  const p = el("div", { className: "panel" }), mo = card().model;
+  const MONO = "ui-monospace,Menlo,Consolas,monospace";
+  const sp = r.cfg.sequenceParallel, t = r.cfg.tp;
+  const steps = [];
+  const op = (l, sub) => steps.push({ k: "op", l, sub });
+  const co = (l, ax) => steps.push({ k: "coll", l, ax });
+  op("norm", sp && t > 1 ? "seq-sharded" : "replicated");
+  if (sp && t > 1) co("all-gather", "TP");
+  op(mo.mla ? "down-proj" : "QKV", mo.mla ? "replicated" : "col-parallel");
+  if (mo.mla) op("up-proj", "col-parallel");
+  op("attention", r.cfg.cp > 1 ? "ring over CP" : "flash");
+  if (r.cfg.cp > 1) co("ring KV", "CP");
+  op("W_O", "row-parallel");
+  if (t > 1) co(sp ? "reduce-scatter" : "all-reduce", "TP");
+  op("norm", sp && t > 1 ? "seq-sharded" : "replicated");
+  if (mo.moe) { co("all-to-all", "EP"); op("experts", `top-${mo.moe.topK}`); co("all-to-all", "EP"); }
+  else { op("gate / up", "col-parallel"); op("down", "row-parallel"); if (t > 1) co(sp ? "reduce-scatter" : "all-reduce", "TP"); }
+  const W = VW(), n = steps.length, gap = 4, bw = (W - 12 - gap * (n - 1)) / n, H = 92;
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" preserveAspectRatio="xMinYMin meet">`;
+  s += `<line x1="6" y1="40" x2="${W - 6}" y2="40" stroke="#334353" stroke-width="1"/>`;
+  steps.forEach((st, i) => {
+    const x = 6 + i * (bw + gap);
+    if (st.k === "op") {
+      s += `<rect x="${x.toFixed(1)}" y="26" width="${bw.toFixed(1)}" height="28" rx="2" fill="#2a3a4a" stroke="#54677a"/>`;
+      s += `<text x="${(x + bw / 2).toFixed(1)}" y="42" fill="#dbe5f0" font-size="${bw < 40 ? 6.5 : 8}" font-family="${MONO}" text-anchor="middle">${st.l}</text>`;
+      s += `<text x="${(x + bw / 2).toFixed(1)}" y="66" fill="#54677a" font-size="6.5" font-family="${MONO}" text-anchor="middle">${st.sub}</text>`;
+    } else {
+      s += `<rect x="${x.toFixed(1)}" y="18" width="${bw.toFixed(1)}" height="44" rx="2" fill="${AXC[st.ax]}" opacity=".85"/>`;
+      s += `<text x="${(x + bw / 2).toFixed(1)}" y="38" fill="#0e131a" font-size="${bw < 40 ? 6.5 : 7.5}" font-weight="700" font-family="${MONO}" text-anchor="middle">${st.ax}</text>`;
+      s += `<text x="${(x + bw / 2).toFixed(1)}" y="48" fill="#0e131a" font-size="6" font-family="${MONO}" text-anchor="middle">${st.l}</text>`;
+    }
+  });
+  s += `<text x="6" y="86" fill="#54677a" font-size="8" font-family="${MONO}">forward pass through one layer; the backward pass fires the same collectives again</text></svg>`;
+  const nColl = steps.filter(x => x.k === "coll").length;
+  p.innerHTML = `<h3>one layer, forward</h3>${s}
+    <div class="note">Grey boxes are compute, coloured boxes are communication. This layout fires ${nColl} collective${nColl === 1 ? "" : "s"} per layer in the forward pass and roughly the same again in the backward, times ${Math.ceil(mo.layers / r.cfg.pp)} layers on this pipeline stage, times ${r.cfg.microBatchCount} micro-batches. That multiplication is why per-layer traffic dominates per-step traffic even though a gradient all-reduce moves more bytes in one go.</div>`;
+  m.appendChild(p);
+}
+
+/* ---------- view 3: step timeline ---------- */
+function viewTimeline(m, r) {
+  const p = el("div", { className: "panel" });
+  const T = r.time.stepTime, W = VW(), H = 132;
+  const sc = x => x / T * W;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" preserveAspectRatio="xMinYMin meet">`;
+  const compute = r.time.computeSec, bub = r.time.bubbleSec;
+  svg += `<rect x="0" y="14" width="${sc(compute)}" height="26" fill="#33465a"/>
+    <text x="6" y="31" fill="#dbe5f0" font-size="10" font-family="ui-monospace,Menlo,Consolas,monospace">compute ${sec(compute)}</text>`;
+  svg += `<rect x="${sc(compute)}" y="14" width="${sc(bub)}" height="26" fill="none" stroke="#6fa8d6" stroke-dasharray="2 2"/>`;
+  if (sc(bub) > 46) svg += `<text x="${sc(compute) + 5}" y="31" fill="#6fa8d6" font-size="10" font-family="ui-monospace,Menlo,Consolas,monospace">bubble ${pct(r.time.bubbleFrac)}</text>`;
+  let x = sc(compute + bub), y = 48;
+  r.comms.forEach(c => {
+    const wTot = sc(c.seconds), wExp = sc(c.exposed);
+    svg += `<rect x="0" y="${y}" width="${Math.max(wTot, 1)}" height="13" fill="${AXC[c.axis]}" opacity=".2"/>`;
+    svg += `<rect x="${x.toFixed(1)}" y="${y}" width="${Math.max(wExp, 1).toFixed(1)}" height="13" fill="${AXC[c.axis]}" opacity=".95"/>`;
+    svg += `<text x="${W}" y="${y + 10}" fill="${AXC[c.axis]}" font-size="9" font-family="ui-monospace,Menlo,Consolas,monospace" text-anchor="end" opacity=".9">${c.axis} ${sec(c.exposed)} exposed</text>`;
+    x += wExp; y += 16;
+  });
+  svg += `<line x1="${W}" y1="8" x2="${W}" y2="${H - 6}" stroke="#334353"/>
+    <text x="${W}" y="${H - 12}" fill="#7a8fa4" font-size="9" font-family="ui-monospace,Menlo,Consolas,monospace" text-anchor="end">step ${sec(T)}</text></svg>`;
+  p.innerHTML = `<h3>where the step time goes</h3>${svg}
+    <div class="note">Faint bars are total communication on that axis, solid bars are the part that stays exposed after overlap. Bubble fraction is (PP − 1) / (micro-batches × interleave) = (${r.cfg.pp} − 1) / (${r.cfg.microBatchCount} × ${r.cfg.virtualStages}) = ${pct(r.time.bubbleFrac)}.
+    Note the coupling: global batch ÷ sequence ÷ DP ÷ micro-batch size sets the micro-batch count, so raising DP starves the pipeline and widens the bubble. Those two knobs fight, and the fight is only visible here.</div>`;
+  m.appendChild(p);
+}
+
+/* ---------- view 4: communication budget ---------- */
+function viewComms(m, r) {
+  const p = el("div", { className: "panel" });
+  const rows = r.comms.map(c => `<tr>
+    <td><i class="axisdot" style="background:${AXC[c.axis]}"></i>${c.axis} ${c.label}</td>
+    <td>${(c.bytes / 1e9).toFixed(1)} GB</td>
+    <td style="${c.tier.inDomain ? "" : "color:#e05a4f"}">${c.tier.name}</td>
+    <td>${sec(c.seconds)}</td><td>${sec(c.exposed)}</td></tr>
+    <tr><td colspan="5" class="tiny" style="padding-top:0">${c.why}</td></tr>`).join("");
+  const crossing = r.comms.filter(c => !c.tier.inDomain);
+  const MONO2 = "ui-monospace,Menlo,Consolas,monospace";
+  const Wc = VW(), maxS = Math.max(...r.comms.map(c2 => c2.seconds), r.time.computeSec);
+  let bars = `<svg viewBox="0 0 ${Wc} ${r.comms.length * 26 + 26}" width="${Wc}" height="${r.comms.length * 26 + 26}" preserveAspectRatio="xMinYMin meet">`;
+  bars += `<rect x="34" y="4" width="${((r.time.computeSec / maxS) * (Wc - 44)).toFixed(1)}" height="10" fill="#33465a"/>`;
+  bars += `<text x="0" y="13" fill="#54677a" font-size="8" font-family="${MONO2}">compute</text>`;
+  r.comms.forEach((c2, i) => {
+    const y = 24 + i * 26, full = (c2.seconds / maxS) * (Wc - 44), exp = (c2.exposed / maxS) * (Wc - 44);
+    bars += `<text x="0" y="${y + 11}" fill="${AXC[c2.axis]}" font-size="9" font-family="${MONO2}">${c2.axis}</text>`;
+    bars += `<rect x="34" y="${y}" width="${Math.max(full, 1).toFixed(1)}" height="14" fill="${AXC[c2.axis]}" opacity=".22"/>`;
+    bars += `<rect x="34" y="${y}" width="${Math.max(exp, 1).toFixed(1)}" height="14" fill="${AXC[c2.axis]}" opacity=".95"/>`;
+    bars += `<text x="${(38 + Math.max(full, 1)).toFixed(1)}" y="${y + 11}" fill="${c2.tier.inDomain ? "#54677a" : "#e05a4f"}" font-size="7.5" font-family="${MONO2}">${(c2.bytes / 1e9).toFixed(1)}GB on ${c2.tier.name}</text>`;
+  });
+  bars += `</svg>`;
+  p.innerHTML = `<h3>bytes moved per device per step</h3>${bars}
+    <div class="sub" style="margin-bottom:9px">Faint bar is total traffic on that axis, solid bar is the part still exposed after overlap. Only the solid part costs you step time.</div>
+    <table><thead><tr><th>axis</th><th>volume</th><th>link it lands on</th><th>time</th><th>exposed</th></tr></thead><tbody>${rows}</tbody></table>
+    <div class="note">Axes are laid out innermost first: TP, then CP, then EP, then PP, then DP. An axis fits in the scale-up domain only while the product of everything inside it stays under ${r.hw.scaleUp.size}. ${crossing.length ? `Right now ${crossing.map(c => c.axis).join(", ")} ${crossing.length > 1 ? "cross" : "crosses"} onto the slower fabric.` : "Everything that wants the fat link currently has it."}</div>
+    ${r.comms.some(c => c.axis === "TP" && !c.tier.inDomain) ? `<div class="note warn">Tensor parallelism has left the scale-up domain. It is activation-sized and fires twice per layer per direction, so it is the last axis you want on a thin link. This is the single most common way a layout goes wrong.</div>` : ""}`;
+  m.appendChild(p);
+}
+
+/* ---------- view 5: roofline ---------- */
+function viewRoofline(m, r) {
+  const p = el("div", { className: "panel" }), R = r.roofline;
+  const W = VW(), H = W < 500 ? 230 : 260, L = 40, B = 30;
+  const xmin = 0.1, xmax = 4000, ymin = R.peak / 3000, ymax = R.peak * 1.5;
+  const X = v => L + (Math.log10(Math.max(v, xmin)) - Math.log10(xmin)) / (Math.log10(xmax) - Math.log10(xmin)) * (W - L - 10);
+  const Y = v => H - B - (Math.log10(Math.max(v, ymin)) - Math.log10(ymin)) / (Math.log10(ymax) - Math.log10(ymin)) * (H - B - 12);
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" preserveAspectRatio="xMinYMin meet">`;
+  [0.1, 1, 10, 100, 1000].forEach(v => {
+    svg += `<line x1="${X(v)}" y1="12" x2="${X(v)}" y2="${H - B}" stroke="#27333f"/>
+      <text x="${X(v)}" y="${H - B + 13}" fill="#54677a" font-size="9" font-family="ui-monospace,Menlo,Consolas,monospace" text-anchor="middle">${v}</text>`;
+  });
+  [R.peak, R.peak / 10, R.peak / 100].forEach(v => {
+    svg += `<line x1="${L}" y1="${Y(v)}" x2="${W - 10}" y2="${Y(v)}" stroke="#27333f"/>
+      <text x="${L - 5}" y="${Y(v) + 3}" fill="#54677a" font-size="9" font-family="ui-monospace,Menlo,Consolas,monospace" text-anchor="end">${(v / 1e12).toFixed(0)}T</text>`;
+  });
+  svg += `<path d="M ${X(xmin)} ${Y(xmin * R.bw)} L ${X(R.ridge)} ${Y(R.peak)} L ${X(xmax)} ${Y(R.peak)}" fill="none" stroke="#a8bbcd" stroke-width="1.6"/>`;
+  svg += `<line x1="${X(R.ridge)}" y1="${Y(R.peak)}" x2="${X(R.ridge)}" y2="${H - B}" stroke="#334353" stroke-dasharray="2 3"/>
+    <text x="${X(R.ridge)}" y="${Y(R.peak) - 6}" fill="#7a8fa4" font-size="9" font-family="ui-monospace,Menlo,Consolas,monospace" text-anchor="middle">ridge ${R.ridge.toFixed(0)} FLOP/byte</text>`;
+  R.points.forEach((pt, i) => {
+    const cx = X(pt.intensity), cy = Y(pt.attainable);
+    const col = pt.bound === "memory" ? "#dd7f8c" : "#5cbf9a";
+    svg += `<circle cx="${cx}" cy="${cy}" r="4.5" fill="${col}"><title>${pt.name}: ${pt.intensity.toFixed(1)} FLOP/byte, ${pt.bound}-bound</title></circle>
+      <text x="${cx + 7}" y="${cy + (i % 2 ? 12 : -6)}" fill="${col}" font-size="9" font-family="ui-monospace,Menlo,Consolas,monospace">${pt.name}</text>`;
+  });
+  svg += `<text x="${W / 2}" y="${H - 4}" fill="#7a8fa4" font-size="9" font-family="ui-monospace,Menlo,Consolas,monospace" text-anchor="middle">arithmetic intensity, FLOP per byte of HBM traffic</text></svg>`;
+  const gemm = R.points[0];
+  p.innerHTML = `<h3>roofline — every operator in this step, on one roof</h3>${svg}
+    <div class="note">Green points are compute-bound, red are memory-bound. The interesting motion is what happens to the GEMMs when you change TP: a local matmul of [M,K]×[K,N] has intensity MKN / (MK + KN + MN), so cutting N by the tensor-parallel degree drags the point leftward toward the slope. Push TP far enough and your biggest matmul stops being compute-bound at all, which is the real reason tensor parallelism does not scale past the fat link. Right now the FFN projection sits at ${gemm.intensity.toFixed(0)} FLOP/byte against a ridge of ${R.ridge.toFixed(0)}.</div>
+    <div class="tiny">RMSNorm and the SwiGLU activation sit permanently at the far left. No parallelism strategy moves them; only fusion does.</div>`;
+  m.appendChild(p);
+}
+
+/* ---------- room: design (the game) ---------- */
+function roomDesign(m) {
+  const c = card(), ph = c.phases[S.phase];
+  picker(m, () => { S.guess = null; render(); });
+  if (!S.guess) {
+    const p = el("div", { className: "panel" });
+    p.innerHTML = `<h3>design the layout</h3>
+      <div class="sub" style="margin-bottom:11px">Give the degrees, then the working. Both are scored, because the working is what an interviewer actually hears.</div>
+      <div class="grid g4">
+        ${["tp", "pp", "cp", "ep"].map(k => `<div><label>${k.toUpperCase()}</label><input type="number" id="g_${k}" value="1" min="1"></div>`).join("")}
+      </div>
+      <div class="grid g3" style="margin-top:9px">
+        <div><label>peak memory per device, GB</label><input type="number" id="g_mem" step="0.1"></div>
+        <div><label>bubble fraction, %</label><input type="number" id="g_bub" step="0.1"></div>
+        <div><label>your MFU estimate, %</label><input type="number" id="g_mfu" step="0.1"></div>
+      </div>
+      <div style="margin-top:9px"><label>why this layout, in one or two sentences</label><input type="text" id="g_why" placeholder="which axis is on which link, and what forced it"></div>
+      <div style="margin-top:12px"><button class="act primary" id="submit">score it</button></div>`;
+    m.appendChild(p);
+    p.querySelector("#submit").onclick = () => {
+      const v = k => +p.querySelector("#g_" + k).value || 0;
+      S.guess = { tp: v("tp") || 1, pp: v("pp") || 1, cp: v("cp") || 1, ep: v("ep") || 1,
+                  mem: v("mem"), bub: v("bub"), mfu: v("mfu"), why: p.querySelector("#g_why").value };
+      render();
+    };
+    return;
+  }
+  const g = S.guess;
+  const cfg = Object.assign({}, S.cfg, { tp: g.tp, pp: g.pp, cp: g.cp, ep: g.ep });
+  let mine; try { mine = analyze(c, S.phase, cfg); } catch (e) { mine = null; }
+  const best = search(c, S.phase, S.cfg)[0];
+  const p = el("div", { className: "panel" });
+  const score = mine && mine.valid && best ? mine.perf.mfu / best.mfu : 0;
+  const grade = !mine || !mine.valid ? "invalid" : score > .95 ? "excellent" : score > .85 ? "solid" : score > .7 ? "workable" : "off";
+  const cmp = (label, yours, truth, unit, tol) => {
+    if (truth == null) return `<tr><td>${label}</td><td>${yours || "—"}${unit}</td><td class="sub">not published</td><td>—</td></tr>`;
+    const ok = yours && Math.abs(yours - truth) / truth < tol;
+    return `<tr><td>${label}</td><td>${yours || "—"}${unit}</td><td>${truth.toFixed(1)}${unit}</td><td class="${ok ? "good" : "oom"}">${ok ? "within tolerance" : "off"}</td></tr>`;
+  };
+  p.innerHTML = `<h3>score</h3>
+    <div class="readout" style="margin-bottom:11px">
+      <div><div class="k">EFFICIENCY VS OPTIMUM</div><div class="v ${score > .85 ? "good" : "oom"}">${mine && mine.valid ? pct(score) : "—"}</div><div class="n">${grade}</div></div>
+      <div><div class="k">YOUR LAYOUT</div><div class="v" style="font-size:14px">TP${g.tp} PP${g.pp} CP${g.cp}${g.ep > 1 ? " EP" + g.ep : ""}</div><div class="n">DP ${mine ? mine.cfg.dp : "—"}</div></div>
+      <div><div class="k">ANALYZER OPTIMUM</div><div class="v" style="font-size:14px">${best ? `TP${best.tp} PP${best.pp} CP${best.cp}${best.ep > 1 ? " EP" + best.ep : ""}` : "—"}</div><div class="n">${best ? pct(best.mfu) + " MFU" : ""}</div></div>
+      <div><div class="k">PUBLISHED</div><div class="v" style="font-size:14px">${ph.published.tp ? `TP${ph.published.tp} PP${ph.published.pp} CP${ph.published.cp}${ph.published.ep > 1 ? " EP" + ph.published.ep : ""}` : "not published"}</div><div class="n">${ph.published.mfu ? pct(ph.published.mfu) + " MFU" : ""}</div></div>
+    </div>
+    <table><thead><tr><th>quantity</th><th>your working</th><th>analyzer</th><th></th></tr></thead><tbody>
+      ${mine ? cmp("peak memory", g.mem, mine.mem.peak / GB, " GB", .2) : ""}
+      ${mine ? cmp("bubble fraction", g.bub, mine.time.bubbleFrac * 100, "%", .3) : ""}
+      ${mine ? cmp("MFU", g.mfu, mine.perf.mfu * 100, "%", .25) : ""}
+    </tbody></table>
+    ${g.why ? `<div class="note"><span class="sub">your reasoning:</span> ${g.why}</div>` : ""}
+    ${mine && !mine.mem.fits ? `<div class="note warn">This layout does not fit. Peak stage memory is ${(mine.mem.peak / GB).toFixed(1)} GB against ${(mine.mem.hbm / GB).toFixed(0)} GB of HBM. In an interview, stating that a layout OOMs before defending it is worth more than the layout.</div>` : ""}
+    ${best && ph.published.tp && (best.tp !== ph.published.tp || best.pp !== ph.published.pp || best.cp !== ph.published.cp) ? `<div class="note">The analyzer's optimum is not the published layout, and that gap is the most useful thing on this screen. A cost model optimises a cost model. The lab was also optimising around what its codebase could compose, how the batch size was pinned, what had already been validated at smaller scale, and what would still be debuggable at three in the morning. Treat the published tuple as the answer to a harder question than the one this tool asks, and be ready to say so out loud.</div>` : ""}
+    <div class="note">${ph.rationale}</div>
+    <div class="tiny">${c.reveal}</div>
+    <div style="margin-top:12px"><button class="act" id="again">try another layout</button>
+      <button class="act" id="insp">open it in analyze</button></div>`;
+  m.appendChild(p);
+  p.querySelector("#again").onclick = () => { S.guess = null; render(); };
+  p.querySelector("#insp").onclick = () => { Object.assign(S.cfg, { tp: g.tp, pp: g.pp, cp: g.cp, ep: g.ep }); S.room = "analyze"; S.guess = null; render(); };
+}
+
+/* ---------- room: drill ---------- */
+const DRILLS = [
+  { q: r => `${r.card.name}, ${r.phase.name}. AdamW, no ZeRO sharding, bf16 weights. How many bytes per parameter does the optimizer state alone cost?`,
+    a: () => 12, unit: "bytes", why: "fp32 master copy (4) + first moment (4) + second moment (4). The weights and gradients are on top of that, which is where the familiar 16-bytes-per-parameter figure comes from at bf16. Swap in Muon and the matrix parameters drop to about 8." },
+  { q: r => `${r.card.name}: PP ${r.cfg.pp}, ${r.cfg.microBatchCount} micro-batches, interleave factor ${r.cfg.virtualStages}. What is the bubble fraction?`,
+    a: r => r.time.bubbleFrac * 100, unit: "%", tol: .12,
+    why: "(p − 1) / (m · v). Interleaving is the cheapest way to shrink a bubble you cannot fix by raising the micro-batch count, and the micro-batch count is usually pinned by the global batch and the DP degree." },
+  { q: r => `${r.card.name}, ${r.phase.name}, your current layout. Peak memory on the worst pipeline stage, in GB?`,
+    a: r => r.mem.peak / GB, unit: "GB", tol: .25,
+    why: "Parameters, gradients and optimizer state divided by the sharding, plus activations scaled by how many micro-batches that stage holds in flight, plus fp32 logits if it is the last stage." },
+  { q: r => `${r.card.name}: what fraction of total parameters is active per token?`,
+    a: r => activeParams(r.card.model) / paramBreakdown(r.card.model).total * 100, unit: "%", tol: .2,
+    why: "Memory bills you for total parameters, FLOPs bill you for active ones. On a sparse model those two numbers can differ by more than an order of magnitude, and mixing them up is the fastest way to fail a memory question." },
+  { q: r => `${r.card.name} on ${r.hw.name}: at ${(r.perf.achievedFlops / 1e12).toFixed(0)} TFLOP/s per device against a ${(r.hw.peak[r.cfg.computeDtype] / 1e12).toFixed(0)} TFLOP/s peak, what is the MFU?`,
+    a: r => r.perf.mfu * 100, unit: "%", tol: .1,
+    why: "Achieved model FLOPs over peak. Not hardware FLOPs: recomputation inflates HFU without producing any more model. The gap between the two is a question you should expect." },
+  { q: r => `Your layout puts TP at ${r.cfg.tp} on a machine whose scale-up domain is ${r.hw.scaleUp.size}. How many all-reduce-equivalent collectives does tensor parallelism fire per transformer layer per training step, counting both directions?`,
+    a: () => 4, unit: "collectives", why: "Two in the forward pass, one after the attention block and one after the MLP block, and two more in the backward. With sequence parallelism each becomes an all-gather and reduce-scatter pair, moving the same total bytes. That per-layer frequency is why TP must stay on the fattest link you have." }
+];
+function roomDrill(m) {
+  picker(m, () => { S.drill = null; render(); });
+  let r; try { r = analyze(card(), S.phase, S.cfg); } catch (e) { m.appendChild(el("div", { className: "panel" }, "config invalid; fix it in analyze first")); return; }
+  if (!S.drill) S.drill = { i: Math.floor(Math.random() * DRILLS.length), t: Date.now(), ans: null };
+  const d = DRILLS[S.drill.i];
+  const p = el("div", { className: "panel" });
+  p.innerHTML = `<h3>drill — target is under two minutes, talking while you write</h3>
+    <div style="font-size:15px;margin-bottom:12px">${d.q(r)}</div>
+    ${S.drill.ans == null ? `<div class="grid g2"><div><label>your answer (${d.unit})</label><input type="number" id="ans" step="0.01" autofocus></div>
+      <div style="align-self:end"><button class="act primary" id="go">check</button></div></div>`
+    : (() => {
+      const truth = d.a(r), tol = d.tol || .05;
+      const ok = Math.abs(S.drill.ans - truth) / Math.abs(truth) <= tol;
+      return `<div class="readout"><div><div class="k">YOURS</div><div class="v">${S.drill.ans}</div><div class="n">${d.unit}</div></div>
+        <div><div class="k">ANALYZER</div><div class="v">${truth.toFixed(2)}</div><div class="n">${d.unit}</div></div>
+        <div><div class="k">VERDICT</div><div class="v ${ok ? "good" : "oom"}">${ok ? "pass" : "miss"}</div><div class="n">±${(tol * 100).toFixed(0)}% tolerance</div></div>
+        <div><div class="k">SESSION</div><div class="v">${S.drillScore.ok}/${S.drillScore.n}</div><div class="n">this sitting</div></div></div>
+        <div class="note">${d.why}</div>
+        <div style="margin-top:11px"><button class="act primary" id="next">next</button></div>`;
+    })()}`;
+  m.appendChild(p);
+  if (S.drill.ans == null) {
+    p.querySelector("#go").onclick = () => {
+      S.drill.ans = +p.querySelector("#ans").value;
+      const truth = d.a(r), tol = d.tol || .05;
+      S.drillScore.n++; if (Math.abs(S.drill.ans - truth) / Math.abs(truth) <= tol) S.drillScore.ok++;
+      render();
+    };
+    p.querySelector("#ans").addEventListener("keydown", e => { if (e.key === "Enter") p.querySelector("#go").click(); });
+  } else p.querySelector("#next").onclick = () => { S.drill = null; render(); };
+}
+
+/* ---------- room: deck ---------- */
+function roomDeck(m) {
+  m.appendChild(el("div", { className: "panel" }, `<h3>the deck</h3>
+    <div class="sub">Two classes. <span style="color:#5cbf9a">Closed-form</span> cards published a parallelism tuple, so there is an answer key. <span style="color:#a68bd0">Frontier</span> cards published the reasoning but not the degrees, so the analyzer's optimum is the only score and the reasoning is the deliverable.</div>
+    <div class="tiny" style="margin-top:9px">Every field carries a provenance tier. <span class="chip P">P</span> stated in the primary report · <span class="chip S">S</span> secondary systems paper, talk or vendor doc · <span class="chip D">D</span> derived by the analyzer · <span class="chip U">U</span> unknown, never used as an answer key.</div>`));
+  CARDS.forEach(c => {
+    const d = el("div", { className: "deckcard " + c.tier });
+    const uCount = c.phases.reduce((a, p) => a + (p.unverified || []).length, 0);
+    d.innerHTML = `<div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline">
+        <h3 style="font-size:15px;font-family:system-ui,sans-serif;color:#dbe5f0">${c.name}</h3>
+        <span class="tiny">${c.lab} · ${c.released}</span></div>
+      <div class="sub" style="margin:6px 0 8px">${c.blurb}</div>
+      <div class="tiny">${fmtN(c.model.params)} params${c.model.moe ? ` · ${fmtN(activeParams(c.model))} active by the analyzer · ${c.model.moe.experts} experts, top-${c.model.moe.topK}` : " dense"} · ${c.model.attention}</div>
+      <div class="tiny" style="margin-top:3px">${HW[c.hardware.key].name} × ${fmtN(c.hardware.count)}${prov(c.hardware.prov.count)} · ${c.phases.length} phase${c.phases.length > 1 ? "s" : ""} · ${uCount} unverified field${uCount === 1 ? "" : "s"}</div>
+      ${c.modelProv._note ? `<details><summary>provenance note</summary><div class="tiny" style="margin-top:6px">${c.modelProv._note}</div></details>` : ""}
+      <div style="margin-top:10px"><button class="act" data-id="${c.id}">open</button></div>`;
+    d.querySelector("button").onclick = () => { S.cardId = c.id; S.phase = 0; S.guess = null; adoptPublished(); S.room = "analyze"; render(); };
+    m.appendChild(d);
+  });
+}
+
+/* ---------- room: calibration ---------- */
+function roomCalib(m) {
+  const tests = [
+    { id: "llama3-405b", ph: 0, cfg: { tp: 8, pp: 16, cp: 1, virtualStages: 8, zero: 3, microBatch: 1, recompute: "selective" }, target: 400, unit: "TFLOP/s", label: "Llama 3 405B, 8K context" },
+    { id: "llama3-405b", ph: 1, cfg: { tp: 8, pp: 16, cp: 16, virtualStages: 8, zero: 3, microBatch: 1, recompute: "selective" }, target: 380, unit: "TFLOP/s", label: "Llama 3 405B, 128K context" },
+    { id: "palm-540b", ph: 0, cfg: { tp: 12, pp: 1, cp: 1, zero: 3, microBatch: 1, recompute: "selective" }, target: 46.2, unit: "% MFU", label: "PaLM 540B on TPU v4", mfu: true }
+  ];
+  const rows = tests.map(t => {
+    const r = analyze(CARDS.find(c => c.id === t.id), t.ph, Object.assign({}, S.cfg, t.cfg));
+    const got = t.mfu ? r.perf.mfu * 100 : r.perf.achievedFlops / 1e12;
+    const err = (got - t.target) / t.target * 100;
+    const ok = Math.abs(err) < 10;
+    return `<tr><td>${t.label}</td><td>${t.target}${t.unit === "% MFU" ? "%" : ""}</td><td>${got.toFixed(1)}</td>
+      <td class="${ok ? "good" : "oom"}">${err > 0 ? "+" : ""}${err.toFixed(1)}%</td></tr>`;
+  }).join("");
+  const pTests = [
+    { id: "llama3-405b", label: "Llama 3 405B, total", pub: 405, get: c => paramBreakdown(c.model).total / 1e9 },
+    { id: "deepseek-v3", label: "DeepSeek-V3, total", pub: 671, get: c => paramBreakdown(c.model).total / 1e9 },
+    { id: "deepseek-v3", label: "DeepSeek-V3, active per token", pub: 37, get: c => activeParams(c.model) / 1e9 }
+  ];
+  const paramRows = pTests.map(t => {
+    const got = t.get(CARDS.find(c => c.id === t.id));
+    const err = (got - t.pub) / t.pub * 100;
+    return `<tr><td>${t.label}</td><td>${t.pub}B</td><td>${got.toFixed(1)}B</td>
+      <td class="${Math.abs(err) < 3 ? "good" : "oom"}">${err > 0 ? "+" : ""}${err.toFixed(1)}%</td></tr>`;
+  }).join("");
+  m.appendChild(el("div", { className: "panel" }, `<h3>regression against published runs</h3>
+    <div class="sub" style="margin-bottom:11px">The analyzer is not allowed to grade anything it cannot reproduce. This is where it is checked, and where it fails.</div>
+    <table><thead><tr><th>run</th><th>published</th><th>analyzer</th><th>error</th></tr></thead><tbody>${rows}</tbody></table>
+    <div class="note">Both Llama 3 phases land within about two percent, with one shared constant: a kernel efficiency of 0.55. That the same constant fits both the 8K and the 128K phase, whose configs differ only in the context-parallel degree, is the reason I am willing to let this model grade anything at all.</div>
+    <div class="note warn">PaLM comes in badly low and I have deliberately not tuned it into line. Four reasons I can name: the TPU v4 inter-chip interconnect bandwidth in this model is a guess and not a verified figure; the real run sharded weights two-dimensionally across both the model and data axes under GSPMD rather than the ZeRO approximation used here; the data-parallel degree should be 256 within each pod with a two-way exchange across pods, not a flat 512; and the overlap fraction for sharded data parallelism here is a single global constant tuned on GPU runs, where a compiler-scheduled collective on a torus behaves quite differently. Until those are fixed, treat every TPU number in this tool as indicative only. Reporting the miss is more useful to you than tuning a constant until the miss disappears.</div>
+    <h3 style="margin-top:18px">parameter accounting</h3>
+    <div class="sub" style="margin-bottom:11px">A second and independent class of check. Throughput depends on a dozen fitted constants; a parameter count depends on none of them, so if the shapes are wrong this catches it cleanly.</div>
+    <table><thead><tr><th>quantity</th><th>published</th><th>analyzer</th><th>error</th></tr></thead><tbody>${paramRows}</tbody></table>
+    <div class="note">Multi-head Latent Attention was the reason to build this table. Modelled as ordinary multi-head attention, DeepSeek's attention block came out at 28.7B parameters and the active count at about 55B against a published 37B. Modelled properly, with a rank-1536 query latent and a rank-512 key-value latent carrying 64 decoupled rotary dimensions, the attention block is 11.4B and the totals land on 671.0B and 37.6B. Nothing in the throughput calibration moved when this was fixed, which is exactly why it was worth having a second check: the first one could not see the error at all.</div>
+    <div class="note">Known modelling gaps that remain, stated rather than hidden: expert parallelism is a sub-axis of data parallelism rather than an independent mesh dimension; compressed and linear attention are not modelled, so Kimi K3 and DeepSeek-V4 produce dense-equivalent numbers; and the architecture shapes on all three frontier cards are placeholders marked U.</div>`));
+}
+
+/* ---------- room: about ---------- */
+function roomAbout(m) {
+  m.appendChild(el("div", { className: "panel" }, `<h3>what this is</h3>
+    <div class="sub">One function takes a model, a cluster, a training phase and a parallelism layout, and returns a single breakdown object. Every view here is a projection of that object, and the grader scores against the same object. There is no second cost model hiding behind the game.</div>
+    <div class="note">The habit worth building: change one knob and watch four things move. Take tensor parallelism past the scale-up domain and the memory bars shrink, the communication row jumps to the slow fabric and turns red, the roofline point slides left toward the memory-bound slope, and the timeline sprouts exposed communication. Four consequences, one cause. That co-movement is the intuition an interviewer is probing when they ask why you cannot simply raise TP.</div>
+    <h3 style="margin-top:16px">reading the provenance tiers</h3>
+    <div class="tiny"><span class="chip P">P</span> stated in the primary technical report. <span class="chip S">S</span> from a secondary systems paper, conference talk or vendor document. <span class="chip D">D</span> derived by the analyzer from other published numbers. <span class="chip U">U</span> unknown. Only P and S fields are ever used as an answer key, and a U field is left blank rather than filled with a plausible guess.</div>
+    <div class="note">The 2026 frontier reports disclose architecture and algorithms lavishly and fleet size sparingly, so several cards carry more U than P. That is not a defect in the deck. Recovering a missing fleet size from a token budget and a GPU-hour count is a better exercise than looking up a tuple, and it is closer to what the job actually is.</div>
+    <div style="margin-top:18px;border-top:1px solid #27333f;padding-top:14px">
+      <div class="cn-line">多闻阙疑，慎言其余</div>
+      <div class="py">duō wén quē yí, shèn yán qí yú</div>
+      <div class="tiny">Hear much, leave the doubtful parts blank, speak carefully about the rest. 阙 (quē) means to leave a gap, the same character as a gate-tower's opening. From 《论语·为政》. Confucius elsewhere says he could still remember when scribes left blanks in a text rather than filling in a graph they were unsure of, and mourns that the habit had died out. That is a two-and-a-half-thousand-year-old argument for the U tier.</div>
+    </div>`));
+}
+
+adoptPublished(); render();
+let _rt; window.addEventListener("resize", () => { clearTimeout(_rt); _rt = setTimeout(render, 180); });
+
+</script></body></html>
