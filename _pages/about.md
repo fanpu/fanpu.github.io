@@ -121,5 +121,7 @@ Some of my more popular posts:
 
 Some games that I wish existed but didn't, so I made them with Claude Code
 
-- [Beginner xiangqi (Chinese chess) trainer](/games/xiangqi/)
+- [Poker trainer](/games/poker/)
 - [Blackjack trainer](/games/blackjack/)
+- [Beginner xiangqi (Chinese chess) trainer](/games/xiangqi/)
+- [The Floating Cup (for learning classical Chinese phrases)](/games/the-floating-cup/)
