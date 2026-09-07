@@ -688,6 +688,58 @@ copy and its gradient are counted. The recompute transients scale the same way,
 so 128k fits with 19 GB to spare, and the only new running cost is the K and V
 exchange that CP adds to every layer, 16.8 MB per rank per tensor at these
 degrees.
+
+**(d)** It reverses TP = 8, i.e the decision to hand the whole NVLink domain to
+tensor parallelism. The two activation all-reduces per layer are the one
+collective nothing overlaps, so their cost is inversely proportional to the
+NVLink bandwidth, and 450 GB/s down to 200 GB/s multiplies it by 2.25.
+
+One all-reduce moves $$[t, d_{\text{model}}]$$ in bf16, i.e
+$$8192 \times 8192 \times 2 = 134$$ MB, and a ring all-reduce over $$T$$ ranks
+has every GPU send $$2(T-1)/T$$ times that, 1.75 at $$T = 8$$. A B2 rank sees
+$$512/(4 \times 16) = 8$$ sequences per step and every layer all-reduces twice
+forward and twice backward:
+
+$$
+8 \times 80 \times 4 \times 1.75 \times 134\ \text{MB} = 601\ \text{GB}
+$$
+
+against $$8ND/(512 \times 989\times 10^{12}) = 4.63$$ s of per-GPU compute, which
+is the A3 floor without the attention term. At 450 GB/s the all-reduces are 1.34
+s, i.e 28% of the compute added to the step, and at 200 GB/s they are 3.00 s, i.e
+65%.
+
+Halving TP buys the 2.25 back twice over. The ring factor falls from 1.75 to 1.5,
+and, since the data-parallel width doubles, a rank now sees 4 sequences per step
+rather than 8. Taking TP = 4, FSDP = 8, DP = 16 keeps
+$$\text{TP} \times \text{FSDP} = 32$$ and so keeps the model state at 35 GB per
+rank, and the same count gives
+
+$$
+4 \times 80 \times 4 \times 1.5 \times 134\ \text{MB} = 257\ \text{GB},
+\quad \frac{257}{200} = 1.29\ \text{s}
+$$
+
+i.e the H800 pays roughly what the H100 was paying. A TP group of 4 is half a
+node, so the other factor of 2 can go to FSDP inside the node and keep that much
+of its traffic off InfiniBand as well.
+
+The 4 sequences run as 2 micro-steps of 2, and they fit only because
+vocab-parallel cross-entropy is on: at TP = 4 a micro-batch of two costs 21.5 GB
+of layer checkpoints, 5.2 GB of logits and 1.9 GB of transients on top of the 35
+GB of state, i.e 64 GB. A micro-batch of 4 adds another 29 GB and OOMs. That
+matters because the micro-step count is what decides whether the wider FSDP axis
+still hides. One all-gather of a TP shard at FSDP = 8 is
+$$N \times \tfrac{7}{8} \times 2\ \text{bytes} / 4 = 30.6$$ GB, and two
+micro-steps want an all-gather in each pass plus the reduce-scatter at the end:
+
+$$
+30.6 \times \frac{2 \times 2 + 1}{50} = 3.06\ \text{s}
+$$
+
+which is under the 4.63 s of compute, and still under it at 3.7 s if the
+reduce-scatter fires every micro-step the way B2(d) counted it. So the wider FSDP
+axis is free, and TP = 4 is paid for entirely by the all-reduces it does not do.
 {% endanswer %}
 
 ## D1. GQA
@@ -902,3 +954,61 @@ $$S = 257$$ against a chunk size of 32 leaves a ragged final chunk of one row,
 where off-by-one slicing shows up. The $$O(S)$$ constraint is on you to check,
 since concatenating the chunks and calling `torch.softmax` once also passes.
 {% endanswer %}
+
+## E1. What you ship, and what it costs
+
+{% include theorem.md
+  type="exercise"
+  name="Metric inventory"
+  statement="
+    <p>Give a table of the metrics you would ship for this run, with a column
+    each for the metric, its cardinality (how many distinct time series), how
+    often you sample it in steps, and the specific failure it is there to catch.
+    A metric with no failure attached to it should be cut, and say why you cut
+    it.</p>
+    <p>Then three numbers, with the arithmetic shown:</p>
+    <ol type='a'>
+      <li>The total number of time series, and points per hour at your sampling
+          periods. Take 300 steps/hour.</li>
+      <li>The storage rate in bytes per day, stating what you assume a point
+          costs.</li>
+      <li>Scale the cluster 10x to 5120 GPUs with everything else fixed. Which
+          per-rank metrics survive as they are, which have to be aggregated
+          before they leave the node, and what diagnostic power you give up for
+          each one you aggregate. Name the operator you aggregate with, not just
+          that you aggregate.</li>
+    </ol>
+  "
+%}
+
+## E2. What detection latency costs
+
+{% include theorem.md
+  type="exercise"
+  name="Pricing the time to notice"
+  statement="
+    <p>A GPU-hour costs $2.50 for this exercise, and if you need a checkpoint
+    interval, pick one and say what it is rather than leaving it implied. Start
+    with the burn rate, i.e dollars per hour and tokens per hour for this run
+    from the numbers above.</p>
+    <p>Then take each of the five failures below and give a row with the
+    earliest signal in your E1 inventory that fires, the detection latency in
+    steps and in minutes (which should follow from your own sampling period and
+    whatever smoothing window you specified), what that latency costs, and
+    whether the damage is reversible, along with what the reversal costs if it
+    is. The cost is not only wall-clock burn: split it into what you burn while
+    detecting, and any finished work that recovery throws away.</p>
+    <ol type='a'>
+      <li>A GPU dies hard, XID 79, falls off the bus.</li>
+      <li>A node's NIC degrades to roughly half bandwidth, with nothing logged
+          anywhere.</li>
+      <li>SDC on one rank, silently corrupting that rank's gradient
+          contribution.</li>
+      <li>The data pipeline starts serving a shard with the wrong mixture
+          weights at step $$T$$.</li>
+      <li>Loss diverges after a config change at step $$T$$.</li>
+    </ol>
+    <p>Rank the five by severity at the end and say what principle you ranked
+    them by. The ordering matters more than any individual cell.</p>
+  "
+%}
