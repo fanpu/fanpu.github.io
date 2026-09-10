@@ -2,7 +2,7 @@
 layout: about
 title: About
 permalink: /
-subtitle: ML Research Engineer at <a href='https://www.janestreet.com/'>Jane Street</a> based in New York
+subtitle: ML Research Engineer, based in New York
 
 profile:
   align: left
@@ -17,9 +17,9 @@ latest_posts: false # includes a list of the newest posts
 social: true # includes social icons at the bottom of the page
 ---
 
-Hello! I am Fan Pu (曾繁朴), and I work on LLM research at Jane Street.
-I previously worked on training foundation models to be good at writing OCaml 
-and perform valuable trading tasks.
+Hello! I am Fan Pu (曾繁朴). I am currently on a personal research sabbatical.
+Previously, I spent 3 happy years at Jane Street, where I worked on LLM research and training,
+and developing on our in-house coding models and evals.
 
 I graduated with a B.S (2022) and M.S (2023) in Computer
 Science from [Carnegie Mellon University](https://www.cmu.edu/).
