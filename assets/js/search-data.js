@@ -44,7 +44,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/reading-list/";
           },
-        },{id: "post-concise-introduction-to-gated-deltanets",
+        },{id: "post-day-1-verifying-the-flash-linear-attention-gated-deltanet-kernel-on-gb10-dgx-spark",
+      
+        title: "Day 1 - Verifying the flash-linear-attention Gated DeltaNet kernel on GB10 (DGX Spark)...",
+      
+      description: "A concise introduction to understanding Gated DeltaNets (used in Qwen3, Kimi K3, Olmo Hybrid)",
+      section: "Posts",
+      handler: () => {
+        
+          window.location.href = "/blog/2026/gdn-baselines/";
+        
+      },
+    },{id: "post-concise-introduction-to-gated-deltanets",
       
         title: "Concise Introduction to Gated DeltaNets",
       
