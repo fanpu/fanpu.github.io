@@ -86,7 +86,12 @@ d-article {
   d-contents {
     align-self: start;
     grid-column: 1 / 4;
-    grid-row: auto / span 4;
+    // The TOC is a grid item spanning N implicit rows of d-article. Any height
+    // it has beyond the natural height of those rows is distributed equally
+    // between them, which shows up as large gaps between the first few
+    // paragraphs. Span enough rows that the article is always taller than the
+    // TOC, so there is no surplus to distribute.
+    grid-row: auto / span 30;
     justify-self: end;
     margin-top: 0em;
     padding-left: 2em;
