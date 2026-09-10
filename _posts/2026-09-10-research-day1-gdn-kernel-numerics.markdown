@@ -15,7 +15,7 @@ authors:
 toc: true
 ---
 
-I'm doing a 30 day research sprint on linear attention. Today is day 1.
+I'm doing a 30 day research sprint on linear attention. Today is day 1. All code lives in [this repository](https://github.com/fanpu/linear-attn).
 
 The rough research plan is to run small-scale controlled experiments on sequence mixers between 30M to 125M parameters on my GB10 DGX Spark. 
 
