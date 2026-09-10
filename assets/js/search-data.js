@@ -48,11 +48,11 @@ ninja.data = [{
       
         title: "Day 1 - Verifying the flash-linear-attention Gated DeltaNet kernel on GB10 (DGX Spark)...",
       
-      description: "A concise introduction to understanding Gated DeltaNets (used in Qwen3, Kimi K3, Olmo Hybrid)",
+      description: "Checking that flash-linear-attention&#39;s chunked Gated DeltaNet kernel matches a naive recurrence on GB10. It agrees to within roundoff in bf16 and TF32, but &#39;fp32&#39; turns out to silently mean TF32",
       section: "Posts",
       handler: () => {
         
-          window.location.href = "/blog/2026/gdn-baselines/";
+          window.location.href = "/blog/2026/research-day1-gdn-kernel-numerics/";
         
       },
     },{id: "post-concise-introduction-to-gated-deltanets",
