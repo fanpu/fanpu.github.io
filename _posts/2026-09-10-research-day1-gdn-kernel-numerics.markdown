@@ -2,7 +2,7 @@
 title: "Day 1 - Verifying the flash-linear-attention Gated DeltaNet kernel on GB10 (DGX Spark)"
 layout: distill
 tags: [machine-learning, linear-attention]
-cover: whitney_ascent.JPG
+cover: whitney_ascent.webp
 cover_preview: whitney_ascent.webp
 caption: Mt. Tumanguya (Whitney), Sierra Nevada, California, U.S
 class: post-template
@@ -19,7 +19,10 @@ I'm doing a 30 day research sprint on linear attention. Today is day 1.
 
 The rough research plan is to run small-scale controlled experiments on sequence mixers between 30M to 125M parameters on my GB10 DGX Spark. 
 
-Before I am able to interpret the significance of any experiments, I need to understand the effect of precision differences, seed noise, and correctness of kernels on my hardware. So the first test is to check if the chunked GDN kernel agrees numerically with a naive looped implementation.
+Before I'm able to interpret the significance of any experiments, I need to
+understand the effect of precision differences, seed noise, and correctness of
+kernels on my hardware. So the first test is to check if the chunked GDN kernel
+agrees numerically with a naive looped implementation.
 
 The GDN update:
 
