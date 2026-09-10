@@ -1,5 +1,5 @@
 ---
-title: "Day 1 - Verifying the flash-linear-attention Gated DeltaNet kernel on GB10 (DGX Spark)"
+title: "Research Sprint Day 1 - Verifying the flash-linear-attention Gated DeltaNet kernel on GB10 (DGX Spark)"
 layout: distill
 tags: [machine-learning, linear-attention]
 cover: whitney_ascent.webp
