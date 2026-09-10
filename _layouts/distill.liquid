@@ -25,16 +25,16 @@
               {% for author in page.authors %}
               {
                 "author": "{{ author.name }}",
-                "authorURL": "{{ author.url }}",
+                "authorURL": "{{ author.url }}"{% if author.affiliations.name %},
                 "affiliations": [
                   {
                     "name": "{{ author.affiliations.name }}",
                     "url": "{{ author.affiliations.url }}"
                   }
-                ]
+                ]{% endif %}
               }{% if forloop.last == false %},{% endif %}
               {% endfor %}
-            ],
+            ]{% unless site.enable_math %},
             "katex": {
               "delimiters": [
                 {
@@ -48,7 +48,7 @@
                   "display": true
                 }
               ]
-            }
+            }{% endunless %}
           }
     </script>
   </d-front-matter>
@@ -62,6 +62,16 @@
       <d-title>
         <h1>{{ page.title }}</h1>
         <p>{{ page.description }}</p>
+        {%- if page.cover %}
+          {% assign image_url = page.cover | prepend: '/assets/img/posts/' | relative_url %}
+          <div class="l-page cover">
+            {% include figure.liquid path=image_url alt="post.cover" width="100%"
+            height="450px" class="preview z-depth-1 rounded" %}
+            {% if page.caption %}
+              <div class="caption">{{ page.caption }}</div>
+            {% endif %}
+          </div>
+        {% endif %}
       </d-title>
       {% if page.authors %}
         <d-byline></d-byline>
@@ -72,20 +82,26 @@
           <d-contents>
             <nav class="l-text figcaption">
               <h3>Contents</h3>
-              {% for section in page.toc %}
-                <div>
-                  <a href="#{{ section.name | slugify }}">{{ section.name }}</a>
-                </div>
-                {% if section.subsections %}
-                  <ul>
-                    {% for subsection in section.subsections %}
-                      <li>
-                        <a href="#{{ subsection.name | slugify }}">{{ subsection.name }}</a>
-                      </li>
-                    {% endfor %}
-                  </ul>
-                {% endif %}
-              {% endfor %}
+              {% if page.toc.first %}
+                {% comment %} `toc` is an explicit list of sections in the page front matter. {% endcomment %}
+                {% for section in page.toc %}
+                  <div>
+                    <a href="#{{ section.name | slugify }}">{{ section.name }}</a>
+                  </div>
+                  {% if section.subsections %}
+                    <ul>
+                      {% for subsection in section.subsections %}
+                        <li>
+                          <a href="#{{ subsection.name | slugify }}">{{ subsection.name }}</a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+                {% comment %} `toc: true` derives the contents from the headings via jekyll-toc. {% endcomment %}
+                {% toc %}
+              {% endif %}
             </nav>
           </d-contents>
         {% endif %}

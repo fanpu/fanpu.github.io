@@ -1,17 +1,19 @@
 ---
 title: "Concise Introduction to Gated DeltaNets"
-layout: post
+layout: distill
 tags: [machine-learning, linear-attention]
-cover: whitney_morning.webp
+cover: whitney_morning.JPG
 cover_preview: whitney_morning.webp
 caption: Mt. Tumanguya (Whitney), Sierra Nevada, California, U.S
 class: post-template
 author: fanpu
-toc:
-  sidebar: left
 giscus_comments: true
-description: >
-  A concise introduction to understanding Gated DeltaNets (used in Qwen3, Kimi K3, Olmo Hybrid)
+description: "A concise introduction to understanding Gated DeltaNets (used in Qwen3, Kimi K3, Olmo Hybrid)"
+authors:
+  - name: Fan Pu Zeng
+    url: "https://fanpu.io"
+bibliography: 2026-09-09-gated-deltanet.bib
+toc: true
 ---
 
 LLM inference workloads have been moving towards longer context lengths,
@@ -19,15 +21,11 @@ stemming from usage from long-running agents and requiring working in large
 codebases/contexts. This results in two problems: KV cache size grows as $O(T)$ with
 the length of the sequence $T$, and each decoded token costs $O(T)$.
 
-Linear attention methods have been gaining prominence recently as it avoids both problems entirely. 
+Linear attention methods have been gaining prominence recently as it avoids both problems entirely.
 This post is a short introduction to understanding how a recent linear attention
-technique, [Gated DeltaNets](https://arxiv.org/abs/2412.06464) (GDN) from Songlin Yang et al. works.
+technique, Gated DeltaNets (GDN) <d-cite key="yang2025gated"></d-cite> from Songlin Yang et al. works.
 
-<!-- ## Linear Attention
-
-Recall that in softmax attention, we have: -->
-
-# Linear Attention
+## Linear Attention
 
 Recall that in softmax attention:
 
@@ -37,7 +35,7 @@ $$
 
 With this, we must keep all $k_i, v_i$ around (KV cache). This grows linearly with sequence length.
 
-## Removing the softmax
+### Removing the softmax
 
 Suppose we remove the softmax:
 
@@ -56,7 +54,7 @@ $$
 \end{aligned}
 $$
 
-where $v_i k_i^\top$ is a $D_v \times D_k$ outer product. 
+where $v_i k_i^\top$ is a $D_v \times D_k$ outer product.
 
 This gives:
 
@@ -64,7 +62,7 @@ $$
 o_t = \underbrace{\left( \sum_{i \le t} v_i k_i^\top \right)}_{S_t} q_t
 $$
 
-where $S_t$ is the state, of shape $D_v \times D_k$. 
+where $S_t$ is the state, of shape $D_v \times D_k$.
 
 Now our state recurrence becomes
 
@@ -73,9 +71,9 @@ S_t = S_{t-1} + v_t k_t^\top,
 $$
 
 which is a $O(1)$ update, and we also no longer have to carry the KV cache around.
-This is known as [linear attention](https://arxiv.org/abs/2006.16236).
+This is known as linear attention <d-cite key="katharopoulos2020transformers"></d-cite>.
 
-## Associative Memory
+### Associative memory
 
 $S$ behaves like an associative memory: if you assume all keys added to the state are orthogonal unit vectors, then for query $q = k_j$:
 
@@ -90,7 +88,7 @@ Of course, since you are limited to $D_k$ dimensions, storing more than $D_k$ ke
 
 ## Problems with linear attention
 
-### 1. No forgetting
+### No forgetting
 
 $$
 S_t = S_{t-1} + v_t k_t^\top
@@ -106,7 +104,7 @@ $$
 
 Note that $\alpha_t$ can depend on the current token.
 
-### 2. Writes are blind
+### Writes are blind
 
 Suppose we write key $k$ with value $v_{\text{old}}$, and now we want to update it to $v_{\text{new}}$.
 
@@ -114,7 +112,7 @@ The update causes $k$ to become: $v_{\text{old}} + v_{\text{new}}$ (or $\text{de
 
 What if we want to be able to revise the value directly?
 
-**Fix:** what is known as the delta rule.
+**Fix:** what is known as the delta rule <d-cite key="yang2024deltanet"></d-cite>.
 
 First, query what the memory currently stores about $k_t$:
 
@@ -130,9 +128,9 @@ $$
 
 where $\beta_t$ is another gating factor that can be input-dependent.
 
-## Correctness: why is this update good?
+## Why is this update good?
 
-### 1. Test-time regression
+### Test-time regression
 
 Define the loss to be "how badly do I recall $v_t$ from $k_t$":
 
@@ -150,21 +148,21 @@ $$
 
 So this is like running online gradient descent on this regression objective in the forward pass of the state update, with $\beta_t$ as a per-token learning rate, i.e. "test-time regression".
 
-### 2. Erase-then-write
+### Erase-then-write
 
 See that the update can be rewritten as:
+
 $$
 \begin{aligned}
 S_t &= \tilde{S} + \beta_t (v_t - \tilde{S} k_t)\, k_t^\top \\
 &= \tilde{S} - \beta_t \tilde{S} k_t k_t^\top + \beta_t v_t k_t^\top \\
-&= \tilde{S} (I - \beta_t k_t k_t^\top) + \beta_t v_t k_t^\top
 &= \tilde{S} (I - \beta_t k_t k_t^\top) + \beta_t v_t k_t^\top
 \end{aligned}
 $$
 
 Suppose keys are $\ell_2$-normalized, so $\lVert k_t \rVert = 1$.
 
-**Claim:** $(I - \beta k k^\top)$ is a matrix that scales the $k$ direction by a factor of $1 - \beta$.
+**Claim:** $(I - \beta k k^\top)$ is a matrix that scales the $k$ direction by a factor of $1 - \beta$.<d-footnote>This is a Householder-type transform.</d-footnote>
 
 **Proof.** For some vector $x$, decompose it into directions parallel to and perpendicular to $k$, where $k$ has unit norm:
 
@@ -191,8 +189,6 @@ $$
 
 $\blacksquare$
 
-(Note: this is a Householder-type transform.)
-
 This means that querying the new state with $k_t$ returns
 
 $$
@@ -201,7 +197,8 @@ $$
 
 So, the update uses $\beta_t \in [0, 1]$, to control how much of the old readout is erased, whilst adding the new value.
 
-# Gated DeltaNet
+## Gated DeltaNet
+
 Putting everything together, here's our update:
 
 1. **Decay old state:**
