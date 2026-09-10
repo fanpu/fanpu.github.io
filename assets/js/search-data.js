@@ -44,7 +44,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/reading-list/";
           },
-        },{id: "post-neural-networks-from-maximizing-rate-reduction",
+        },{id: "post-concise-introduction-to-gated-deltanets",
+      
+        title: "Concise Introduction to Gated DeltaNets",
+      
+      description: "A concise introduction to understanding Gated DeltaNets (used in Qwen3, Kimi K3, Olmo Hybrid)",
+      section: "Posts",
+      handler: () => {
+        
+          window.location.href = "/blog/2026/gated-deltanet/";
+        
+      },
+    },{id: "post-neural-networks-from-maximizing-rate-reduction",
       
         title: "Neural Networks from Maximizing Rate Reduction",
       
