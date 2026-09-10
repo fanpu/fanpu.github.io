@@ -44,9 +44,9 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/reading-list/";
           },
-        },{id: "post-day-1-verifying-the-flash-linear-attention-gated-deltanet-kernel-on-gb10-dgx-spark",
+        },{id: "post-research-sprint-day-1-verifying-the-flash-linear-attention-gated-deltanet-kernel-on-gb10-dgx-spark",
       
-        title: "Day 1 - Verifying the flash-linear-attention Gated DeltaNet kernel on GB10 (DGX Spark)...",
+        title: "Research Sprint Day 1 - Verifying the flash-linear-attention Gated DeltaNet kernel on GB10...",
       
       description: "Checking that flash-linear-attention&#39;s chunked Gated DeltaNet kernel matches a naive recurrence on GB10. It agrees to within roundoff in bf16 and TF32, but &#39;fp32&#39; turns out to silently mean TF32",
       section: "Posts",
