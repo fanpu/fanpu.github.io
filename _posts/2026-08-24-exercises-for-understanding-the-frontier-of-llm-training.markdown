@@ -1012,3 +1012,33 @@ since concatenating the chunks and calling `torch.softmax` once also passes.
     them by. The ordering matters more than any individual cell.</p>
   "
 %}
+
+## F0. PyTorch semantics diagnostic
+
+Everything so far has been pen and paper. However, knowing where the memory
+goes is quite a different skill from being able to sit down and write the
+reshape, and the second one fails in ways that arithmetic never warns you
+about.
+
+This one is a notebook, in three parts, and takes about 45 minutes. Part 1
+gives you twelve snippets and asks you to predict the exact output, shape, or
+error before running them. Part 2 is five functions to implement from
+primitives in a blank editor, each checked against the real builtin over
+randomized shapes. Part 3 gives you a correct and a buggy implementation of the
+same function, and asks for the assertion you would have written to catch the
+bug.
+
+The cells are deliberately unexecuted, since Part 1 only works if you commit to
+a prediction first. The `reveal` answers are base64 for the same reason, so
+you will need to actually run it to see them. You can download the notebook
+[here](https://github.com/fanpu/fanpu.github.io/raw/main/assets/jupyter/F0_torch_semantics_diagnostic.ipynb).
+
+{::nomarkdown}
+{% assign jupyter_path = "assets/jupyter/F0_torch_semantics_diagnostic.ipynb" | relative_url %}
+{% capture notebook_exists %}{% file_exists assets/jupyter/F0_torch_semantics_diagnostic.ipynb %}{% endcapture %}
+{% if notebook_exists == "true" %}
+    {% jupyter_notebook jupyter_path %}
+{% else %}
+    <p>Sorry, the notebook you are looking for does not exist.</p>
+{% endif %}
+{:/nomarkdown}
