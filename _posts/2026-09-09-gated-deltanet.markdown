@@ -158,12 +158,13 @@ $$
 S_t &= \tilde{S} + \beta_t (v_t - \tilde{S} k_t)\, k_t^\top \\
 &= \tilde{S} - \beta_t \tilde{S} k_t k_t^\top + \beta_t v_t k_t^\top \\
 &= \tilde{S} (I - \beta_t k_t k_t^\top) + \beta_t v_t k_t^\top
+&= \tilde{S} (I - \beta_t k_t k_t^\top) + \beta_t v_t k_t^\top
 \end{aligned}
 $$
 
 Suppose keys are $\ell_2$-normalized, so $\lVert k_t \rVert = 1$.
 
-**Claim:** $(I - \beta k k^\top)$ is a matrix that shrinks the $k$ direction by a factor of $\beta$.
+**Claim:** $(I - \beta k k^\top)$ is a matrix that scales the $k$ direction by a factor of $1 - \beta$.
 
 **Proof.** For some vector $x$, decompose it into directions parallel to and perpendicular to $k$, where $k$ has unit norm:
 
@@ -192,7 +193,13 @@ $\blacksquare$
 
 (Note: this is a Householder-type transform.)
 
-So, the update essentially uses $\beta_t \in [0, 1]$, to control how much of the old readout is erased, whilst adding the new value.
+This means that querying the new state with $k_t$ returns
+
+$$
+S_t k_t = (1-\beta_t)\,\tilde{S} k_t + \beta_t v_t = (1-\beta_t)\, v_{\text{old}} + \beta_t v_t,
+$$
+
+So, the update uses $\beta_t \in [0, 1]$, to control how much of the old readout is erased, whilst adding the new value.
 
 # Gated DeltaNet
 Putting everything together, here's our update:
