@@ -207,6 +207,29 @@ exclude:
   - README.md
   - readme_preview/
   - vendor
+
+  # Raw originals. Every one of these has a .webp/.avif sibling that the site
+  # actually references; imagemagick is disabled below, so figure.liquid emits a
+  # single <img src> and the originals are never served. They stay in assets/ for
+  # re-encoding, they just don't get copied into _site. ~541 MB.
+  - "assets/img/**/*.jpg"
+  - "assets/img/**/*.jpeg"
+  - "assets/img/**/*.png"
+  - "assets/img/**/*.JPG"
+  - "assets/img/*.jpg"
+  - "assets/img/*.jpeg"
+  - "assets/img/*.png"
+
+  # Source files and superseded encodings that nothing on the site links to. ~137 MB.
+  - "assets/presentations/*.key" # Keynote sources; the .pdf exports stay published
+  - "assets/presentations/NTK.pdf" # superseded by "Neural Tangent Kernels and Beyond.pdf"
+  - "assets/img/posts/sdvx/*.mov" # the post embeds the .webm versions
+  - "assets/video/" # al-folio template demo clips
+  - "assets/audio/epicaly-short-113909.mp3"
+  - "assets/pdf/Gradient methods for the minimisation of functionals.pdf"
+  - "assets/jupyter/gaussian-processes/gp-prediction.ipynb"
+  - "assets/jupyter/gaussian-processes/prior-and-posterior.ipynb"
+  - "assets/**/.ipynb_checkpoints/"
 keep_files:
   - CNAME
   - .nojekyll

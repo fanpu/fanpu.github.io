@@ -94,6 +94,14 @@ jobs:
         run: |
           npm install -g purgecss
           purgecss -c purgecss.config.js
+      - name: Check published size 📏
+        run: |
+          SIZE=$(du -sm _site | cut -f1)
+          echo "_site is ${SIZE} MiB"
+          if [ "$SIZE" -gt 900 ]; then
+            echo "::error::_site is ${SIZE} MiB; GitHub Pages hard-limits published sites to 1 GB"
+            exit 1
+          fi
       - name: Deploy 🚀
         if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4

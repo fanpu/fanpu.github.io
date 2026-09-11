@@ -2,7 +2,7 @@
 title: "Concise Introduction to Gated DeltaNets"
 layout: distill
 tags: [machine-learning, linear-attention]
-cover: whitney_morning.JPG
+cover: whitney_morning.webp
 cover_preview: whitney_morning.webp
 caption: Mt. Tumanguya (Whitney), Sierra Nevada, California, U.S
 class: post-template

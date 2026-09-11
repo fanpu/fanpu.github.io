@@ -2,7 +2,7 @@
 title: "Score-Based Diffusion Models"
 layout: post
 tags: [machine-learning]
-cover: santorini_oia_2.jpg
+cover: santorini_oia_2.webp
 cover_preview: santorini_oia_2.webp
 caption: Oia, Santorini, Greece
 class: post-template
