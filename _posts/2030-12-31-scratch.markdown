@@ -1,0 +1,15 @@
+---
+title: "Research Sprint Day 2 - Rooflines"
+layout: distill
+tags: [machine-learning, linear-attention]
+cover: whitney_lake.webp
+cover_preview: whitney_lake.webp
+caption: Mt. Tumanguya (Whitney), Sierra Nevada, California, U.S
+class: post-template
+author: fanpu
+giscus_comments: true
+authors:
+  - name: Fan Pu Zeng
+    url: "https://fanpu.io"
+published: false
+---
