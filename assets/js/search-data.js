@@ -44,7 +44,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/reading-list/";
           },
-        },{id: "post-research-sprint-day-1-verifying-the-flash-linear-attention-gated-deltanet-kernel-on-gb10-dgx-spark",
+        },{id: "post-research-sprint-day-2-rooflines",
+      
+        title: "Research Sprint Day 2 - Rooflines",
+      
+      description: "",
+      section: "Posts",
+      handler: () => {
+        
+          window.location.href = "/blog/2026/research-day2-rooflines/";
+        
+      },
+    },{id: "post-research-sprint-day-1-verifying-the-flash-linear-attention-gated-deltanet-kernel-on-gb10-dgx-spark",
       
         title: "Research Sprint Day 1 - Verifying the flash-linear-attention Gated DeltaNet kernel on GB10...",
       
