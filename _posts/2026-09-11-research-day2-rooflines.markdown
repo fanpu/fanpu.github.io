@@ -8,7 +8,7 @@ caption: Mt. Tumanguya (Whitney), Sierra Nevada, California, U.S
 class: post-template
 author: fanpu
 giscus_comments: true
-description: ""
+description: "Measuring the GB10's roofline and benchmarking attention against Gated DeltaNet from 30M to 250M, where GDN costs 1.5× the time for the same FLOPs"
 authors:
   - name: Fan Pu Zeng
     url: "https://fanpu.io"
@@ -204,6 +204,8 @@ Attention MFU is much higher than GDN, which may be due to GDN utilizing many
 elementwise ops (L2 norm on Q/k, sigmoids for $\beta$, softplus for $\alpha$,
 SiLU after convolutions, etc) which hasn't been torch compiled. 
 
+#### Chinchilla optimal training times 
+
 If we are to train the GDN Chinchilla-optimal (20 tokens/param), the tok/s readings from the benchmark would imply the following time to train:
 
 | size | $N$ (body) | tokens | time | $N$ (total) | tokens | time |
@@ -216,6 +218,7 @@ If we are to train the GDN Chinchilla-optimal (20 tokens/param), the tok/s readi
 This seems pretty sad for iteration speed. We may have to either undertrain it, or
 find ways to acquire more compute.
 
+#### tokens/s comparison
 {% include figure.liquid
     path="/assets/img/posts/linear_attention/day2/throughput_comparison.webp"
     class="z-depth-1"
@@ -223,9 +226,13 @@ find ways to acquire more compute.
 %}
 
 In the left plot, the GDN and attention lines are almost parallel of each other
-in the plot above, which implies that they are only a multiplicative factor
-apart in this setup. Since this is size-independent, it may be some constant overhead that doesn't scale with width or depth. 
+in the plot above, which in the log-log plot implies they are a constant ratio 
+apart. 
 
+Since the gap is not size-independent, it is some overhead that scales with the
+size of the model, which is consistent with overhead from elementwise operations.
+
+#### Arithmetic intensity vs observed
 In the previous table, we also saw that neither MFU nor bandwidth was being saturated. Let's look at the arithmetic intensity for each mixer across the model ladder:
 
 | mixer | size | $F$ MFLOP/tok | $B$ kB/tok | $I$ = F/B | $I/I^*$ | MFU % | BW % |
@@ -239,7 +246,15 @@ In the previous table, we also saw that neither MFU nor bandwidth was being satu
 | attn | 250M | 1864 | 2464 | 756 | 1.76 | 40.2 | 22.8 |
 | gdn | 250M | 2041 | 1976 | 1033 | 2.41 | 27.9 | 11.6 |
 
-All of them exceed the ridge point, so they are compute-bound.
+All of them exceed the ridge point, but MFU and BW are both far from their ceiling.
+
+#### GDN takes longer despite being similar in FLOPs
+| size | FLOP ratio (gdn/attn) | time ratio (µs/tok) |
+|---|---:|---:|
+| 30M | 1.04 | 1.50 |
+| 60M | 1.07 | 1.56 |
+| 125M | 1.08 | 1.62 |
+| 250M | 1.09 | 1.58 |
 
 ## Next steps
 
