@@ -1,5 +1,5 @@
 ---
-title: "Research Sprint Day 2 - Rooflines"
+title: "Research Sprint Day 2 - Benchmarking"
 layout: distill
 tags: [machine-learning, linear-attention]
 cover: whitney_lake.webp
