@@ -8,7 +8,7 @@ caption: Mt. Tumanguya (Whitney), Sierra Nevada, California, U.S
 class: post-template
 author: fanpu
 giscus_comments: true
-description: "Checking that flash-linear-attention's chunked Gated DeltaNet kernel matches a naive recurrence on GB10. It agrees to within roundoff in bf16 and TF32, but 'fp32' turns out to silently mean TF32"
+description: ""
 authors:
   - name: Fan Pu Zeng
     url: "https://fanpu.io"
@@ -224,7 +224,22 @@ find ways to acquire more compute.
 
 In the left plot, the GDN and attention lines are almost parallel of each other
 in the plot above, which implies that they are only a multiplicative factor
-apart in this setup. Since this is size-independent, it may be some constant overhead that doesn't scale with width or depth.
+apart in this setup. Since this is size-independent, it may be some constant overhead that doesn't scale with width or depth. 
+
+In the previous table, we also saw that neither MFU nor bandwidth was being saturated. Let's look at the arithmetic intensity for each mixer across the model ladder:
+
+| mixer | size | $F$ MFLOP/tok | $B$ kB/tok | $I$ = F/B | $I/I^*$ | MFU % | BW % |
+|---|---|---|---|---|---|---|---|
+| attn | 30M | 334 | 602 | 555 | 1.29 | 27.2 | 21.0 |
+| gdn | 30M | 347 | 474 | 731 | 1.70 | 18.7 | 11.0 |
+| attn | 60M | 572 | 836 | 684 | 1.59 | 35.7 | 22.4 |
+| gdn | 60M | 611 | 667 | 915 | 2.13 | 24.4 | 11.5 |
+| attn | 125M | 997 | 1621 | 615 | 1.43 | 34.4 | 24.0 |
+| gdn | 125M | 1074 | 1284 | 836 | 1.95 | 22.8 | 11.7 |
+| attn | 250M | 1864 | 2464 | 756 | 1.76 | 40.2 | 22.8 |
+| gdn | 250M | 2041 | 1976 | 1033 | 2.41 | 27.9 | 11.6 |
+
+All of them exceed the ridge point, so they are compute-bound.
 
 ## Next steps
 
