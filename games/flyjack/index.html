@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FlyJack</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --page: #050607; --surface: #1a1a19; --glass: rgba(18, 18, 17, 0.78); --ink: #ffffff; --ink-2: #c3c2b7;
+    --muted: #898781; --grid: #2c2c2a; --axis: #383835; --ring: rgba(255, 255, 255, 0.10);
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
+    --good: #0ca30c; --critical: #d03b3b; --warm: #f1c27d;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--page); color: var(--ink); overflow: hidden;
+         font: 13px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  button, select { font: inherit; color: var(--ink); background: rgba(56, 56, 53, 0.9); border: 1px solid var(--ring);
+                   border-radius: 6px; padding: 5px 11px; cursor: pointer; }
+  button:disabled { opacity: 0.45; cursor: default; }
+  button.primary { background: var(--s1); border-color: transparent; font-weight: 600; }
+  button.small { padding: 2px 8px; font-size: 12px; }
+  button:focus-visible, select:focus-visible, .term:focus-visible, .node:focus-visible { outline: 2px solid var(--warm); outline-offset: 2px; }
+  .panel { background: var(--glass); border: 1px solid var(--ring); border-radius: 10px; backdrop-filter: blur(8px); }
+  #stageWrap { position: fixed; inset: 0; }
+  #stage { width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+
+  header { position: fixed; top: 0; left: 0; right: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+           padding-block: 10px; padding-inline: 16px; background: linear-gradient(rgba(5, 6, 7, 0.92), rgba(5, 6, 7, 0)); z-index: 5; }
+  header h1 { font-size: 18px; margin: 0 10px 0 0; letter-spacing: 0.02em; }
+  header h1 span { color: var(--warm); }
+  header label { display: flex; align-items: center; gap: 5px; color: var(--ink-2); }
+  header .spacer { flex: 1; }
+  #status { position: fixed; top: 52px; left: 16px; right: 16px; color: var(--ink-2); z-index: 4; pointer-events: none; }
+
+  .label3d { position: fixed; left: 0; top: 0; z-index: 3; pointer-events: none; white-space: nowrap; transition: opacity 0.25s;
+             padding: 2px 8px; border-radius: 10px; background: rgba(10, 10, 10, 0.7); border: 1px solid var(--ring); font-weight: 600; }
+  #lblBrain { color: var(--ink-2); font-weight: 500; font-size: 12px; }
+
+  #hud { position: fixed; left: 16px; bottom: 16px; width: min(400px, calc(100vw - 32px)); padding: 12px; z-index: 4; }
+  #hud .top { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 8px; color: var(--ink-2); flex-wrap: wrap; }
+  #phaseChip { color: var(--warm); font-weight: 600; }
+  #trialChip, #modelChip { color: var(--muted); font-size: 11px; }
+  #inputChip { display: flex; gap: 10px; flex-wrap: wrap; color: var(--ink-2); font-size: 12px; margin-bottom: 8px; }
+  #inputChip b { color: var(--ink); font-variant-numeric: tabular-nums; }
+  .qgrid { display: grid; grid-template-columns: 64px minmax(0, 1fr) 54px; gap: 6px 8px; align-items: center; }
+  .qtrack { height: 14px; position: relative; background: var(--grid); border-radius: 3px; }
+  .qzero { position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--axis); }
+  .qbar { position: absolute; top: 2px; bottom: 2px; background: var(--s1); transition: all 0.4s; width: 0; left: 50%; }
+  .qbar.pos { border-radius: 0 4px 4px 0; }
+  .qbar.neg { border-radius: 4px 0 0 4px; }
+  .qopt { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--ink); display: none; }
+  .qval { font-variant-numeric: tabular-nums; text-align: right; }
+  .qkey { color: var(--muted); font-size: 11px; margin-top: 5px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .key-bar { display: inline-block; width: 14px; height: 8px; background: var(--s1); border-radius: 0 3px 3px 0; margin-right: 4px; vertical-align: middle; }
+  .key-tick { display: inline-block; width: 2px; height: 11px; background: var(--ink); margin-right: 4px; vertical-align: middle; }
+  #verdict { margin-top: 8px; font-size: 14px; }
+  .badge { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 12px; margin-left: 4px; }
+  .badge.good { background: rgba(12, 163, 12, 0.18); border: 1px solid var(--good); }
+  .badge.bad { background: rgba(208, 59, 59, 0.2); border: 1px solid var(--critical); }
+  .wait { color: var(--muted); }
+
+  #bankHud { position: fixed; right: 16px; top: 56px; padding: 10px 14px; z-index: 4; display: flex; gap: 14px; align-items: baseline; }
+  #bankHud span { color: var(--ink-2); }
+  #bankHud b { color: var(--ink); font-size: 16px; }
+  #bankHud .big { font-size: 22px; }
+  .chip-result { position: fixed; left: 50%; top: 96px; transform: translateX(-50%); z-index: 5; font-size: 20px; font-weight: 700;
+                 padding: 6px 18px; border-radius: 20px; background: var(--glass); border: 1px solid var(--ring); }
+  .chip-result.good { border-color: var(--good); }
+  .chip-result.bad { border-color: var(--critical); }
+
+  #counters { position: fixed; left: 16px; top: 88px; padding: 10px 12px; z-index: 4; min-width: 170px; font-size: 12px; color: var(--ink-2); }
+  #counters b { color: var(--ink); font-size: 15px; font-variant-numeric: tabular-nums; }
+  #counters .row { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  #caption { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); width: min(560px, calc(100vw - 460px)); min-width: 280px; z-index: 4; padding: 10px 14px; }
+  #captionList { list-style: none; margin: 0; padding: 0; }
+  #captionList li { margin: 4px 0; animation: rise 0.35s ease-out; }
+  #captionList li:not(:last-child) { color: var(--muted); }
+  #captionList .t { display: inline-block; min-width: 50px; color: var(--warm); font-variant-numeric: tabular-nums; font-weight: 600; }
+  #clock { color: var(--muted); font-size: 11px; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  #disclaimer { position: fixed; right: 16px; bottom: 16px; z-index: 4; color: var(--muted); font-size: 11px; text-align: right; max-width: 280px; pointer-events: none; }
+  #fps { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+
+  #drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(440px, 100vw); z-index: 8; transform: translateX(100%);
+            transition: transform 0.3s ease; display: flex; flex-direction: column; border-radius: 0; background: rgba(22, 22, 21, 0.96); }
+  #drawer.open { transform: none; }
+  #drawer .head { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px 0; }
+  #drawer h2 { margin: 0; font-size: 15px; }
+  #tabs { display: flex; gap: 4px; padding: 10px 14px; border-bottom: 1px solid var(--grid); flex-wrap: wrap; }
+  #tabs button { background: transparent; border-color: transparent; color: var(--ink-2); }
+  #tabs button[aria-selected="true"] { background: var(--axis); color: var(--ink); }
+  .tabpanel { overflow: auto; padding: 12px 14px 24px; flex: 1; }
+  .tabpanel h3 { font-size: 13px; margin: 16px 0 6px; color: var(--ink); }
+  .note { color: var(--muted); font-size: 12px; }
+  #howFlow { width: 100%; height: auto; display: block; margin: 8px 0 2px; }
+  #howFlow .box { fill: #222221; stroke: var(--axis); }
+  #howFlow .box.brain { fill: rgba(57, 135, 229, 0.12); stroke: var(--s1); }
+  #howFlow .box.trained { fill: rgba(201, 133, 0, 0.14); stroke: var(--s4); }
+  #howFlow .t { fill: var(--ink); font-size: 12px; font-weight: 600; }
+  #howFlow .d { fill: var(--muted); font-size: 10.5px; }
+  #howFlow .arrow { stroke: var(--axis); stroke-width: 1.5; fill: none; marker-end: url(#howArrow); }
+  .howkey { display: flex; flex-wrap: wrap; gap: 4px 16px; color: var(--ink-2); font-size: 12px; margin-bottom: 4px; }
+  .howkey i { display: inline-block; width: 11px; height: 11px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+  .howkey i.frozen { background: rgba(57, 135, 229, 0.12); border: 1px solid var(--s1); }
+  .howkey i.trained { background: rgba(201, 133, 0, 0.14); border: 1px solid var(--s4); }
+  .howsteps { padding-left: 20px; margin: 12px 0; }
+  .howsteps li { margin: 10px 0; }
+  details summary { cursor: pointer; margin: 10px 0 4px; }
+  .headline { font-size: 14px; line-height: 1.5; }
+  #circuitSvg { width: 100%; display: block; }
+  #circuitSvg text { fill: var(--ink-2); font-size: 10px; paint-order: stroke; stroke: #161615; stroke-width: 3px; stroke-linejoin: round; }
+  #circuitSvg .col-head { fill: var(--muted); }
+  #circuitSvg .node { cursor: pointer; }
+  #circuitSvg .node.selected circle { stroke: #fff; stroke-width: 2; }
+  .irow { display: grid; grid-template-columns: 110px minmax(0, 1fr) 54px; gap: 8px; align-items: center; margin: 8px 0; }
+  .irow .name small { display: block; color: var(--muted); font-size: 10px; }
+  .track { height: 10px; background: var(--grid); border-radius: 0 4px 4px 0; position: relative; }
+  .fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--s1); border-radius: 0 4px 4px 0; transition: width 0.3s; }
+  .irow .val { text-align: right; font-variant-numeric: tabular-nums; }
+  #legendGroups label { display: flex; align-items: center; gap: 6px; margin: 3px 0; }
+  table.strat { border-collapse: separate; border-spacing: 2px; margin: 4px 0 14px; font-size: 11px; }
+  table.strat caption { text-align: left; color: var(--muted); padding-bottom: 4px; }
+  table.strat th { color: var(--muted); font-weight: 500; padding: 0 3px; font-variant-numeric: tabular-nums; }
+  table.strat td { width: 28px; height: 18px; text-align: center; border-radius: 3px; background: #242423; color: var(--ink); font-weight: 600; }
+  table.strat td.hit { background: rgba(57, 135, 229, 0.75); }
+  table.strat td.stick { background: #2f2f2d; color: var(--ink-2); }
+  table.strat td.differs { background: rgba(208, 59, 59, 0.28); color: #fff; box-shadow: inset 0 0 0 1px var(--critical); }
+  table.strat td.agrees { background: #2a2a28; }
+  table.strat td.current { box-shadow: 0 0 0 2px #fff; }
+  #strategyModes { display: flex; gap: 4px; margin-bottom: 8px; }
+  #strategyModes button[aria-pressed="true"] { background: var(--s1); border-color: transparent; }
+  .swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: middle; margin: 0 4px 0 8px; }
+  .swatch.hit { background: rgba(57, 135, 229, 0.75); }
+  .swatch.stick { background: #2f2f2d; border: 1px solid var(--axis); }
+  #strategyLegend { color: var(--ink-2); font-size: 12px; }
+  .chart svg { width: 100%; height: auto; display: block; }
+  .chart .tick { fill: var(--muted); font-size: 10px; font-variant-numeric: tabular-nums; }
+  .chart .axis-label { fill: var(--muted); font-size: 11px; }
+  .chart .pt { cursor: default; }
+  .legend-row { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 6px 0; font-size: 12px; color: var(--ink-2); }
+  .lg { display: inline-flex; align-items: center; gap: 6px; }
+  .lgline { display: inline-block; width: 16px; height: 2px; border-radius: 1px; }
+  table.data { border-collapse: collapse; width: 100%; font-size: 12px; margin: 4px 0; }
+  table.data th { text-align: left; color: var(--muted); font-weight: 500; border-bottom: 1px solid var(--grid); padding: 3px 4px; }
+  table.data td { padding: 3px 4px; border-bottom: 1px solid var(--grid); }
+  table.data .num { text-align: right; font-variant-numeric: tabular-nums; }
+  table.data tr.ref td { color: var(--muted); }
+  .facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .fact { background: #222221; border: 1px solid var(--ring); border-radius: 8px; padding: 10px; }
+  .fact-value { font-size: 20px; font-weight: 600; }
+  .fact-label { color: var(--ink-2); }
+  .term { border-bottom: 1px dotted var(--ink-2); cursor: help; }
+  #tooltip { position: fixed; left: 0; top: 0; z-index: 20; max-width: 300px; padding: 8px 10px; font-size: 12px; pointer-events: none;
+             background: #262625; border: 1px solid var(--ring); border-radius: 8px; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5); }
+  #notice { position: fixed; left: 50%; top: 40%; transform: translate(-50%, -50%); z-index: 30; padding: 18px 20px; max-width: 420px; text-align: center; }
+  #notice a { color: var(--s1); }
+  #tour { position: fixed; inset: 0; z-index: 25; }
+  #tourSpot { position: fixed; border-radius: 12px; box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.55); border: 2px solid var(--warm); pointer-events: none; transition: all 0.25s; }
+  #tourBox { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(440px, calc(100vw - 32px)); padding: 16px 18px; }
+  #tourBox h2 { margin: 0 0 6px; font-size: 16px; }
+  #tourBox .row { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; gap: 8px; }
+  #tourStep { color: var(--muted); }
+  @media (max-width: 720px) {
+    #caption { left: 16px; right: 16px; transform: none; width: auto; bottom: 236px; min-width: 0; }
+    #counters { top: auto; bottom: 236px; display: none; }
+    #bankHud { top: 96px; }
+    #disclaimer { display: none; }
+    header .hide-narrow { display: none; }
+  }
+</style>
+</head>
+<body data-phase="loading">
+<div id="stageWrap"><canvas id="stage" aria-label="3D blackjack table with the fly and its brain"></canvas></div>
+<div id="lblPlayer" class="label3d"></div>
+<div id="lblDealer" class="label3d"></div>
+<div id="lblBrain" class="label3d">brain, magnified ≈10×</div>
+
+<header>
+  <h1>Fly<span>Jack</span></h1>
+  <button id="dealBtn" class="primary" disabled>Deal</button>
+  <label><input type="checkbox" id="autoplay"> Auto-play</label>
+  <label class="hide-narrow">Speed <select id="animSpeed"><option value="1">1×</option><option value="2">2×</option><option value="4">4×</option></select></label>
+  <button id="skipBtn">Skip</button>
+  <button id="soundBtn" aria-pressed="false">Sound off</button>
+  <span class="spacer"></span>
+  <span id="fps"></span>
+  <button id="tourBtn" aria-label="Guided tour">?</button>
+  <button id="drawerBtn" aria-expanded="false">Explore ▸</button>
+</header>
+<div id="status">Loading the fly, the table and 138,639 neurons…</div>
+
+<section id="bankHud" class="panel" aria-label="Bankroll">
+  <span>Bankroll <b class="big" id="bankroll">100</b></span>
+  <span>W <b id="wins">0</b></span><span>D <b id="draws">0</b></span><span>L <b id="losses">0</b></span>
+</section>
+<div id="resultChip" class="chip-result" hidden></div>
+
+<section id="counters" class="panel" hidden aria-live="off"></section>
+
+<section id="hud" class="panel" aria-label="Decision">
+  <div class="top"><span id="phaseChip">Loading</span><span id="trialChip"></span></div>
+  <div id="inputChip" title="Firing rates of the three stimulated smell-receptor channels"></div>
+  <div class="qgrid">
+    <span>Q(stick)</span><div class="qtrack"><div class="qzero"></div><div class="qbar" id="qStick"></div><div class="qopt" id="qOptStick"></div></div><span class="qval" id="qStickVal">—</span>
+    <span>Q(hit)</span><div class="qtrack"><div class="qzero"></div><div class="qbar" id="qHit"></div><div class="qopt" id="qOptHit"></div></div><span class="qval" id="qHitVal">—</span>
+  </div>
+  <div class="qkey"><span><span class="key-bar"></span>fly’s readout (−1 … +1)</span><span><span class="key-tick"></span>optimal play</span></div>
+  <div id="verdict"><span class="wait">Deal a hand to start</span></div>
+  <div id="modelChip" style="margin-top:6px"></div>
+</section>
+
+<section id="caption" class="panel" hidden aria-live="polite">
+  <ol id="captionList"></ol>
+  <div id="clock"></div>
+</section>
+
+<div id="disclaimer">Leg gestures are scripted animations selected by the model’s decision. Brain activity is a cached simulation of the FlyWire connectome, magnified ≈10×. Input is smell; visual input did not reach the central brain.</div>
+
+<aside id="drawer" class="panel" aria-label="Explore">
+  <div class="head"><h2>Explore</h2><button id="drawerClose" aria-label="Close">✕</button></div>
+  <div id="tabs" role="tablist">
+    <button data-tab="how" role="tab" aria-selected="true">How it works</button>
+    <button data-tab="circuit" role="tab" aria-selected="false">Circuit</button>
+    <button data-tab="input" role="tab" aria-selected="false">Input</button>
+    <button data-tab="strategy" role="tab" aria-selected="false">Strategy</button>
+    <button data-tab="science" role="tab" aria-selected="false">Science</button>
+    <button data-tab="about" role="tab" aria-selected="false">About</button>
+  </div>
+  <div id="tab-how" class="tabpanel"><div id="how"></div></div>
+  <div id="tab-circuit" class="tabpanel" hidden>
+    <p class="note" id="circuitNote">Top 30 cell types by spikes in the current decision. Columns are synaptic hops from the stimulated smell receptors; edges are synapse counts (≥ 20). Nodes glow on the playback clock. Click a type to highlight its neurons in the brain.</p>
+    <svg id="circuitSvg" height="120"></svg>
+    <h3>Brain view groups</h3>
+    <div id="legendGroups">
+      <label><input type="checkbox" data-group="2" checked><span class="dot" style="background:#3987e5"></span>central brain</label>
+      <label><input type="checkbox" data-group="3" checked><span class="dot" style="background:#d95926"></span>mushroom body</label>
+      <label><input type="checkbox" data-group="4" checked><span class="dot" style="background:#199e70"></span>descending neurons</label>
+      <label><input type="checkbox" data-group="1" checked><span class="dot" style="background:#c3c2b7"></span>optic lobe</label>
+      <label><input type="checkbox" data-group="0" checked><span class="dot" style="background:#c3c2b7"></span>photoreceptors</label>
+      <label><input type="checkbox" data-group="5" checked><span class="dot" style="background:#c3c2b7"></span>other (incl. smell receptors, shown white when stimulated)</label>
+    </div>
+  </div>
+  <div id="tab-input" class="tabpanel" hidden>
+    <div id="obsText" class="note">Deal a hand to see the input.</div>
+    <div id="inputRows"></div>
+    <p class="note">Each channel is one type of olfactory receptor neuron driven with Poisson spikes. A rate code maps the player total and the dealer card to 20–150 Hz; the usable ace is on (150 Hz) or off.</p>
+    <p class="note" id="visualNote"></p>
+  </div>
+  <div id="tab-strategy" class="tabpanel" hidden>
+    <div id="strategyModes">
+      <button data-mode="optimal" aria-pressed="true">Optimal</button>
+      <button data-mode="fly" aria-pressed="false">The fly</button>
+      <button data-mode="diff" aria-pressed="false">Where they differ</button>
+    </div>
+    <p id="strategyLegend"></p>
+    <div id="strategyGrid"></div>
+    <p class="note">The white outline marks the current hand.</p>
+  </div>
+  <div id="tab-science" class="tabpanel" hidden><div id="science"></div></div>
+  <div id="tab-about" class="tabpanel" hidden>
+    <div id="facts" class="facts"></div>
+    <h3>What is real, and what is not</h3>
+    <ul>
+      <li><b>Real:</b> the wiring (FlyWire connectome), the spiking simulation of that wiring (a whole-brain leaky integrate-and-fire model), the cards and rules, and the trained readout’s numbers.</li>
+      <li><b>Cached:</b> each decision replays one of five pre-computed simulation trials; nothing is simulated live.</li>
+      <li><b>Scripted:</b> leg gestures and reactions are hand-authored motions played back from a physics body model; the brain model has no nerve cord.</li>
+      <li><b>Frozen:</b> synapse weights never change. Only the linear readout was trained.</li>
+      <li><b>Magnified:</b> the brain is drawn about 10× its real size.</li>
+    </ul>
+    <h3>Credits</h3>
+    <p class="note">FlyWire whole-brain connectome (Dorkenwald et al., Nature 2024) · whole-brain LIF model (Shiu et al., Nature 2024) with a PyTorch port by Eon · NeuroMechFly body model via FlyGym and MuJoCo · three.js.</p>
+  </div>
+</aside>
+
+<div id="notice" class="panel" hidden><p id="noticeText"></p><p><button id="newGameBtn" class="primary">New game</button></p></div>
+<div id="tour" hidden><div id="tourSpot"></div><div id="tourBox" class="panel" role="dialog" aria-labelledby="tourTitle">
+  <h2 id="tourTitle"></h2><div id="tourText"></div>
+  <div class="row"><span id="tourStep"></span><span><button id="tourClose">Skip tour</button> <button id="tourBack">Back</button> <button id="tourNext" class="primary">Next</button></span></div>
+</div></div>
+<div id="tooltip" hidden></div>
+
+<script>window.FLYJACK_STATIC = { base: "/flyjack/data/", bundle: "83700dff79e9" };</script>
+<script defer src="/assets/js/game-analytics.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="audio.js"></script>
+<script src="game.js"></script>
+<script src="api.js"></script>
+<script src="stage.js"></script>
+<script src="learn.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
