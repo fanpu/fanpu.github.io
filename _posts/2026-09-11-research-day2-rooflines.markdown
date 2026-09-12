@@ -8,7 +8,7 @@ caption: Mt. Tumanguya (Whitney), Sierra Nevada, California, U.S
 class: post-template
 author: fanpu
 giscus_comments: true
-description: "Measuring the GB10's roofline and benchmarking attention against Gated DeltaNet from 30M to 250M, where GDN costs 1.5× the time for the same FLOPs"
+description: "Benchmarking attention against Gated DeltaNet from 30M to 250M, where at this scale GDN costs 1.5× the time for roughly the same FLOPs"
 authors:
   - name: Fan Pu Zeng
     url: "https://fanpu.io"
