@@ -256,7 +256,7 @@ All of them exceed the ridge point, but MFU and BW are both far from their ceili
 | 125M | 1.08 | 1.62 |
 | 250M | 1.09 | 1.58 |
 
-## Next steps
+## Future work
 
-- Run it at $T=8192$, comfortably above the crossover point.
+- Sweep $T$ across both intermixers at the same size
 - `torch.compile` might help GDN decently
