@@ -1,14 +1,14 @@
 ---
-title: "Research Sprint Day 3 - LLM Training"
+title: "Research Sprint Day 3 - Seed Noise and Transformer Baselines"
 layout: distill
 tags: [machine-learning, linear-attention]
 cover: kearsarge_pass.webp
 cover_preview: kearsarge_pass.webp
-caption: Rio Tinto Borax Mine, Boron, California, U.S
+caption: Kearsarge Pass, Sierra Nevada, California, U.S
 class: post-template
 author: fanpu
 giscus_comments: true
-description: ""
+description: "Training transformer baselines at 30M, 60M, and 125M to measure how much random seed alone moves final validation loss. Pooled seed noise comes out at 0.003 nats, which sets the minimum effect size for every architecture comparison to follow"
 authors:
   - name: Fan Pu Zeng
     url: "https://fanpu.io"
@@ -20,8 +20,8 @@ I'm doing a 30 day research sprint on linear attention. Today is day 3. All code
 Yesterday, we performed some performance benchmarking to get a sense of what MFU to expect across various model sizes between both attention and GDN.
 
 Today, we investigate seed noise in transformer models (before proceeding with
-GDN subsequently), so we know what's the minimum detectable size of an effect
-before we can claim an improvement.
+GDN subsequently), so we know what's the minimum detectable difference of an
+effect before we can claim an improvement.
 
 ## Setup
 
@@ -258,11 +258,9 @@ Computing seed noise of final validation loss at each level, and pooled:
 | 125M | 3.2558  | 3.2616  | 0.0041           | 1     | [0.0025, 0.0325]       |
 | **Pooled** | | | **0.0031** | **3** | **[0.0022, 0.0070]** |
 
-The pooled seed noise was within a magnitude off from my prediction of 0.01. My previous prediction that seed noise decreases with model size does not seem resolvable with the current $\nu=1$.
-
-
-The minimum MDD (2 seeds per arm) = 0.0078 nats
-
+The pooled seed noise of 0.003 was within a magnitude off from my prediction of 0.01. My
+previous prediction that seed noise decreases with model size does not seem
+resolvable with the current $\nu=1$.
 
 ### Verifying predictions: non-determinism floor
 
