@@ -60,7 +60,7 @@ take prohibitively long on the compute I have). The models will be undertrained
 | 60M  | 768 | 9   | 12    | 63.7M       | $2 \times 38.6$M | 600M       |
 | 125M | 768 | 18  | 12    | 127.4M      | $2 \times 38.6$M | 1.2B       |
 
-Benchmarked numbers from [day 2](/blog/2026/research-day2-rooflines/) (:
+Benchmarked numbers from [day 2](/blog/2026/research-day2-rooflines/):
 
 | Size | tok/s  | MFU % | BW % |
 |------|--------|-------|------|
@@ -115,7 +115,7 @@ excluding evaluation and checkpointing overhead.
 
 The throughput measurement at 30M yesterday peaked at 9.3 GB with `V=32_000`.
 
-Let's estimate how much it would increase at today's `V=50_304`, 
+Let's estimate how much it would increase at today's `V=50_304`.
 
 The difference in memory usage would come from: fp32 weights, fp32 optimizer states for Adam, fp32 gradients, and logits. 
 
@@ -168,8 +168,8 @@ Guess: 0.01 in same-seed max absolute difference in loss after 300 steps of trai
 
 Validation loss on untrained 30M model (d=512) is 10.9294.
 
-The standard analysis would claim that, in expectation roughly each head logit 
-is kind of $z_i=0$, and hence cross entropy loss for each token simplifies to $\log \sum_j e^{z_j} - z_y = \log V - 0 = \log V $. At vocab size 50304, this gives $\ln 50304 = 10.826$, which is slightly smaller than what we saw.
+The standard analysis would claim that each head logit has mean zero,
+and hence cross entropy loss for each token simplifies to $\log \sum_j e^{z_j} - z_y = \log V - 0 = \log V $. At vocab size 50304, this gives $\ln 50304 = 10.826$, which is slightly smaller than what we saw.
 
 Of course, the logits are only 0 in expectation, so this analysis is a  rough approximation that doesn't hold up in practice, evidenced by the gap.
 
@@ -247,7 +247,7 @@ Under the assumption of homoscedasticity, i.e that seed noise doesn't vary acros
 
 $$\hat{s}^2_{\text{pooled}} = \frac{\sum_{i \in \text{sizes}} \sum_{j \in \text{seeds}} \left( x_{ij} - \bar{x}_i \right)^2}{\sum_{i} \left( n_i - 1 \right)}$$
 
-Here $n_i$ is the number of seeds at a particular model size, and so $n_i- 1$ represents the degere of freedom $\nu$.
+Here $n_i$ is the number of seeds at a particular model size, and so $n_i- 1$ represents the degrees of freedom $\nu$.
 
 Computing seed noise of final validation loss at each level, and pooled:
 
@@ -363,7 +363,7 @@ higher loss. We can use bits per byte to remove the tokenizer confounder.
 
 When I saw these plots, I initially felt quite confused due to how close all the lines were. It seemed to imply loss was
 a function of dataset size and didn't seem to be affected by model size. Scaling
-law theory would've predict that they should be a constant size apart. 
+law theory would've predicted that they should be a constant size apart. 
 
 Computing the $AN^{-\alpha}$ term for each model size:
 
