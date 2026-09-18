@@ -44,7 +44,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/reading-list/";
           },
-        },{id: "post-research-sprint-day-3-seed-noise-and-transformer-baselines",
+        },{id: "post-research-sprint-day-4",
+      
+        title: "Research Sprint Day 4 - ???",
+      
+      description: "",
+      section: "Posts",
+      handler: () => {
+        
+          window.location.href = "/blog/2026/research-day4-gdn-baselines/";
+        
+      },
+    },{id: "post-research-sprint-day-3-seed-noise-and-transformer-baselines",
       
         title: "Research Sprint Day 3 - Seed Noise and Transformer Baselines",
       
@@ -52,7 +63,7 @@ ninja.data = [{
       section: "Posts",
       handler: () => {
         
-          window.location.href = "/blog/2026/research-day3-llm-training/";
+          window.location.href = "/blog/2026/research-day3-seed-noise-and-transformer-baselines/";
         
       },
     },{id: "post-research-sprint-day-2-benchmarking",
