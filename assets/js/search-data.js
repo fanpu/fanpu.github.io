@@ -44,11 +44,22 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/reading-list/";
           },
-        },{id: "post-research-sprint-day-2-rooflines",
+        },{id: "post-research-sprint-day-3-llm-training",
       
-        title: "Research Sprint Day 2 - Rooflines",
+        title: "Research Sprint Day 3 - LLM Training",
       
       description: "",
+      section: "Posts",
+      handler: () => {
+        
+          window.location.href = "/blog/2026/research-day3-llm-training/";
+        
+      },
+    },{id: "post-research-sprint-day-2-benchmarking",
+      
+        title: "Research Sprint Day 2 - Benchmarking",
+      
+      description: "Benchmarking attention against Gated DeltaNet from 30M to 250M, where at this scale GDN costs 1.5× the time for roughly the same FLOPs",
       section: "Posts",
       handler: () => {
         
