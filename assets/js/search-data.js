@@ -44,11 +44,11 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/reading-list/";
           },
-        },{id: "post-research-sprint-day-3-llm-training",
+        },{id: "post-research-sprint-day-3-seed-noise-and-transformer-baselines",
       
-        title: "Research Sprint Day 3 - LLM Training",
+        title: "Research Sprint Day 3 - Seed Noise and Transformer Baselines",
       
-      description: "",
+      description: "Training transformer baselines at 30M, 60M, and 125M to measure how much random seed alone moves final validation loss. Pooled seed noise comes out at 0.003 nats, which sets the minimum effect size for every architecture comparison to follow",
       section: "Posts",
       handler: () => {
         
