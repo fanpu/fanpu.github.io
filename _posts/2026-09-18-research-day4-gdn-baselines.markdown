@@ -15,6 +15,13 @@ authors:
 toc: true
 ---
 
+I'm doing a 30 day research sprint on linear attention. Today is (logically speaking) day 4. All code lives in [this repository](https://github.com/fanpu/linear-attn).
+
+Yesterday, we investigate seed noise in transformer models, so we know what's the minimum detectable difference of an
+effect before we can claim an improvement.
+
+Today, we replicate published numbers on multi-query associative recall tasks on state space mixers.
+
 ## MQAR
 
 MQAR (multi-query associative recall) is a synthetic task from the [Zoology paper](https://arxiv.org/abs/2312.04927) that tests whether a model can bind a key to a value and look it up later. Each sequence starts with a block of key-value pairs, and the rest of the sequence is filler with those keys sprinkled back in as queries. Whenever a key shows up again, the model has to output the value it was paired with. We only compute loss at the query positions and mask out everything else.

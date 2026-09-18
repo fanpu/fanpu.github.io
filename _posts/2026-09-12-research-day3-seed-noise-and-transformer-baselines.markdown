@@ -19,8 +19,7 @@ I'm doing a 30 day research sprint on linear attention. Today is day 3. All code
 
 Yesterday, we performed some performance benchmarking to get a sense of what MFU to expect across various model sizes between both attention and GDN.
 
-Today, we investigate seed noise in transformer models (before proceeding with
-GDN subsequently), so we know what's the minimum detectable difference of an
+Today, we investigate seed noise in transformer models, so we know what's the minimum detectable difference of an
 effect before we can claim an improvement.
 
 ## Setup
