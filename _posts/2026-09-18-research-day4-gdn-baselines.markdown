@@ -38,7 +38,11 @@ The model sees `c` at position 10 and has to predict `6`, recovering the binding
 
 ## Toy experiments
 
-Additive linear attention:
+We first build some intuition on how the delta rule helps with interference from naive linear attention.
+
+Recall their updates:
+
+#### Additive linear attention:
 $$
 % Additive linear attention
 \begin{align}
@@ -46,6 +50,21 @@ S_t &= S_{t-1} + v_t k_t^\top, \qquad S_0 = 0, \\
 o_t &= S_t q_t = \sum_{i=1}^{t} v_i \,(k_i^\top q_t).
 \end{align}
 $$
+
+#### Delta-rule linear attention:
+
+$$
+\begin{align}
+S_t &= S_{t-1} - \beta_t \left( S_{t-1} k_t - v_t \right) k_t^\top \\
+    &= S_{t-1} \left( I - \beta_t k_t k_t^\top \right) + \beta_t v_t k_t^\top, \\
+o_t &= S_t q_t, \qquad \beta_t \in (0, 1).
+\end{align}
+$$
+
+The linear update performs poorly due to progressive interference from subsequently added key-value state.
+The delta-rule update makes it such that the most recent key that was added would have minimal retrieval error (but at the cost of interfering with previously added keys). 
+
+A fun widget to play around with:
 
 <iframe id="retrieval-toy" src="{{ '/assets/html/research_sprint/retrieval_toy.html' | relative_url }}" title="Additive vs delta rule retrieval toy" width="100%" height="1500" style="border:0; display:block;" loading="lazy"></iframe>
 <script>
