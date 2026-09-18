@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Additive vs Delta Retrieval</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  --page: #f6f7f5;
+  --surface: #fcfcfb;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --muted: #898781;
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --ring: rgba(11,11,11,0.10);
+  --add: #2a78d6;
+  --del: #eb6834;
+  --guide: #a9a79f;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0f0f0e; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7;
+    --muted: #898781; --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+    --add: #3987e5; --del: #d95926; --guide: #5f5e59;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0f0f0e; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7;
+  --muted: #898781; --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+  --add: #3987e5; --del: #d95926; --guide: #5f5e59;
+}
+[hidden] { display: none !important; }
+html, body { margin: 0; }
+body { background: transparent; color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1040px; margin: 0 auto; padding-inline: 20px; padding-block: 8px 16px; display: grid; gap: 22px; }
+header { display: grid; gap: 8px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+h1 { font-size: 26px; font-weight: 600; margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+.lede { color: var(--ink-2); max-width: 68ch; margin: 0; }
+.rules { display: flex; flex-wrap: wrap; gap: 8px 28px; font-family: var(--mono); font-size: 13.5px; }
+.rules span { display: inline-flex; align-items: center; gap: 8px; }
+.key { width: 18px; height: 2px; border-radius: 1px; display: inline-block; }
+.key.add { background: var(--add); } .key.del { background: var(--del); }
+
+.controls { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: end; padding-block: 14px; border-block: 1px solid var(--grid); }
+.ctl { display: grid; gap: 4px; min-width: 0; }
+.ctl label { font-size: 12px; color: var(--ink-2); letter-spacing: .02em; }
+.ctl output { font-family: var(--mono); font-size: 13px; color: var(--ink); font-variant-numeric: tabular-nums; }
+.ctl .row { display: flex; align-items: center; gap: 10px; }
+input[type=range] { width: 180px; max-width: 60vw; accent-color: var(--ink-2); }
+select, button { font: inherit; font-size: 13px; color: var(--ink); background: var(--surface); border: 1px solid var(--axis); border-radius: 6px; padding: 5px 10px; }
+button { cursor: pointer; } button:hover { border-color: var(--muted); }
+:focus-visible { outline: 2px solid var(--add); outline-offset: 2px; }
+
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 12px 14px; display: grid; gap: 2px; }
+.tile .lbl { font-size: 12px; color: var(--ink-2); display: flex; gap: 8px; align-items: center; }
+.tile .val { font-size: 24px; font-weight: 500; font-family: var(--mono); letter-spacing: -0.02em; }
+.tile .sub { font-size: 12px; color: var(--muted); }
+@media (max-width: 720px) { .tiles { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+
+.card { background: var(--surface); border: 1px solid var(--ring); border-radius: 12px; padding: 16px 18px 12px; display: grid; gap: 6px; position: relative; }
+.card h2 { font-size: 15px; font-weight: 600; margin: 0; }
+.card p.cap { margin: 0; color: var(--ink-2); font-size: 13.5px; max-width: 80ch; }
+.legend { display: flex; gap: 18px; font-size: 12.5px; color: var(--ink-2); flex-wrap: wrap; }
+.legend span { display: inline-flex; gap: 6px; align-items: center; }
+.chart { width: 100%; position: relative; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart text { font-family: var(--mono); font-size: 11px; fill: var(--muted); }
+.chart .dlabel { font-family: var(--sans); font-size: 12px; font-weight: 500; fill: var(--ink-2); }
+.tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--ring); box-shadow: 0 4px 16px rgba(0,0,0,.12); border-radius: 8px; padding: 8px 10px; font-size: 12px; display: grid; gap: 3px; min-width: 150px; z-index: 2; }
+.tip .hd { color: var(--muted); font-family: var(--mono); font-size: 11px; }
+.tip .r { display: flex; align-items: center; gap: 8px; }
+.tip .r b { font-family: var(--mono); font-weight: 500; color: var(--ink); min-width: 48px; }
+.tip .r span.n { color: var(--ink-2); }
+.tip[hidden] { display: none; }
+details { font-size: 13px; color: var(--ink-2); }
+details summary { cursor: pointer; }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums; margin-top: 8px; }
+th, td { padding: 3px 12px 3px 0; text-align: right; border-bottom: 1px solid var(--grid); }
+th { color: var(--muted); font-weight: 400; }
+.note { font-size: 12.5px; color: var(--muted); max-width: 80ch; }
+code { font-family: var(--mono); font-size: .92em; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="rules">
+    <span><i class="key add"></i>additive&nbsp; S += k vᵀ</span>
+    <span><i class="key del"></i>delta&nbsp; S += β k (v − Sᵀk)ᵀ</span>
+  </div>
+
+  <div class="controls" role="group" aria-label="Experiment settings">
+    <div class="ctl">
+      <label for="n">pairs written, n</label>
+      <div class="row"><input id="n" type="range" min="1" max="64" value="12"><output id="nOut">12</output></div>
+    </div>
+    <div class="ctl">
+      <label for="beta">delta step, β</label>
+      <div class="row"><input id="beta" type="range" min="0.05" max="1" step="0.05" value="1"><output id="betaOut">1.00</output></div>
+    </div>
+    <div class="ctl">
+      <label for="d">state width, d</label>
+      <select id="d"><option>8</option><option selected>16</option><option>32</option></select>
+    </div>
+    <div class="ctl">
+      <label for="seed">draw (seed <output id="seedOut">0</output>)</label>
+      <button id="seed" type="button">Draw new keys</button>
+    </div>
+  </div>
+
+  <div class="tiles">
+    <div class="tile"><div class="lbl"><i class="key add"></i>additive · mean error</div><div class="val" id="tAdd">–</div><div class="sub">over all n keys</div></div>
+    <div class="tile"><div class="lbl"><i class="key del"></i>delta · mean error</div><div class="val" id="tDel">–</div><div class="sub">over all n keys</div></div>
+    <div class="tile"><div class="lbl"><i class="key del"></i>delta · newest key</div><div class="val" id="tLast">–</div><div class="sub" id="tLastSub">additive: –</div></div>
+    <div class="tile"><div class="lbl">largest |kᵢ·kⱼ|</div><div class="val" id="tOv">–</div><div class="sub">keys are unit, not orthogonal</div></div>
+  </div>
+
+  <section class="card">
+    <h2>Retrieval error per key, in write order</h2>
+    <p class="cap">One draw, exactly what the script prints. Relative error ‖Sᵀkᵢ − vᵢ‖ / ‖vᵢ‖; 0 is exact recall, 1 is as bad as returning nothing. The delta rule at β = 1 recalls the newest key exactly and older keys get progressively overwritten; the additive rule is uniformly noisy because every key's crosstalk accumulates.</p>
+    <div class="legend"><span><i class="key add"></i>additive</span><span><i class="key del"></i>delta</span></div>
+    <div class="chart" id="c1"></div>
+    <details><summary>Show as table</summary><div class="tbl" id="t1"></div></details>
+  </section>
+
+  <section class="card">
+    <h2>Mean retrieval error as more pairs are written</h2>
+    <p class="cap">Averaged over 32 draws at the current d and β. The dashed rule marks n = d, where the keys stop being linearly independent; the solid rule is the n you picked above.</p>
+    <div class="legend"><span><i class="key add"></i>additive</span><span><i class="key del"></i>delta</span></div>
+    <div class="chart" id="c2"></div>
+  </section>
+
+  <section class="card">
+    <h2>Error by age of the key</h2>
+    <p class="cap">Same sweep, but grouped by how many writes ago a key went in (0 = newest), at the current n and averaged over 32 draws. This is the delta rule's recency profile; the additive rule has none.</p>
+    <div class="legend"><span><i class="key add"></i>additive</span><span><i class="key del"></i>delta</span></div>
+    <div class="chart" id="c3"></div>
+  </section>
+
+  <p class="note">Recomputed in the browser with a seeded Gaussian generator, so individual numbers differ from the numpy run (<code>default_rng(0)</code>), but the shapes are the same. Reference numpy run at d = 16, n = 12: mean error additive 0.86, delta 0.49; newest key additive 0.95, delta 3.4e-16.</p>
+</div>
+
+<script>
+(() => {
+  // ---------- math ----------
+  function rng(seed) {
+    let a = (seed * 2654435761 + 0x9e3779b9) >>> 0, spare = null;
+    const u = () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+    return () => {
+      if (spare !== null) { const s = spare; spare = null; return s; }
+      let x, y, r; do { x = 2*u()-1; y = 2*u()-1; r = x*x + y*y; } while (r >= 1 || r === 0);
+      const f = Math.sqrt(-2*Math.log(r)/r); spare = y*f; return x*f;
+    };
+  }
+  function run(d, n, beta, seed) {
+    const g = rng(seed);
+    const K = [], V = [];
+    for (let i = 0; i < n; i++) { const k = Array.from({length: d}, g); const s = Math.hypot(...k); K.push(k.map(x => x/s)); }
+    for (let i = 0; i < n; i++) V.push(Array.from({length: d}, g));
+    const Sa = new Float64Array(d*d), Sd = new Float64Array(d*d);   // row-major S[i][j], S is d x d with S^T k = readout
+    const read = (S, k) => { const o = new Float64Array(d); for (let i = 0; i < d; i++) { const ki = k[i]; if (!ki) continue; for (let j = 0; j < d; j++) o[j] += ki * S[i*d+j]; } return o; };
+    for (let t = 0; t < n; t++) {
+      const k = K[t], v = V[t], r = read(Sd, k);
+      for (let i = 0; i < d; i++) for (let j = 0; j < d; j++) {
+        Sa[i*d+j] += k[i]*v[j];
+        Sd[i*d+j] += beta * k[i]*(v[j]-r[j]);
+      }
+    }
+    const err = S => K.map((k, i) => { const r = read(S, k); let e = 0, nv = 0; for (let j = 0; j < d; j++) { e += (r[j]-V[i][j])**2; nv += V[i][j]**2; } return Math.sqrt(e/nv); });
+    let ov = 0; for (let i = 0; i < n; i++) for (let j = i+1; j < n; j++) { let s = 0; for (let q = 0; q < d; q++) s += K[i][q]*K[j][q]; ov = Math.max(ov, Math.abs(s)); }
+    return { add: err(Sa), del: err(Sd), ov };
+  }
+  const mean = a => a.reduce((s, x) => s + x, 0) / a.length;
+
+  // ---------- formatting ----------
+  const fmt = x => (x !== 0 && Math.abs(x) < 1e-3) ? x.toExponential(1).replace('e-', 'e−') : x.toFixed(2);
+
+  // ---------- chart ----------
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+  function niceMax(v) { const steps = [0.5, 1, 1.5, 2, 2.5, 3, 4, 5]; for (const s of steps) if (v <= s) return s; return Math.ceil(v); }
+
+  // opts: xs (numbers), series [{name, cls, ys}], xLabel, xFmt, guides [{x, dash, label}], dots bool, labelEnds bool, tipHead(x)
+  function lineChart(host, opts) {
+    host.textContent = '';
+    const W = Math.max(280, host.clientWidth || 960), H = Math.round(Math.max(220, Math.min(300, W * 0.42))), m = { l: 44, r: 78, t: 14, b: 38 };
+    const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': opts.aria }, host);
+    const xs = opts.xs, x0 = xs[0], x1 = xs[xs.length-1];
+    const ymax = niceMax(Math.max(0.5, ...opts.series.flatMap(s => s.ys)) * 1.04);
+    const X = v => m.l + (x1 === x0 ? (W-m.l-m.r)/2 : (v-x0)/(x1-x0)*(W-m.l-m.r));
+    const Y = v => H - m.b - v/ymax*(H-m.t-m.b);
+    const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+    // grid + y ticks
+    const yStep = ymax <= 1 ? 0.25 : ymax <= 3 ? 0.5 : 1;
+    for (let v = 0; v <= ymax + 1e-9; v += yStep) {
+      el('line', { x1: m.l, x2: W-m.r, y1: Y(v), y2: Y(v), stroke: v === 0 ? css('--axis') : css('--grid'), 'stroke-width': 1 }, svg);
+      el('text', { x: m.l-8, y: Y(v)+4, 'text-anchor': 'end' }, svg).textContent = v.toFixed(yStep < 1 ? 2 : 0);
+    }
+    // x ticks
+    const span = x1 - x0, want = W < 500 ? 5 : 8;
+    const xStep = [1,2,4,5,8,10,16,20].find(s => span/s <= want) || 32;
+    for (let v = Math.ceil(x0/xStep)*xStep; v <= x1; v += xStep) {
+      el('text', { x: X(v), y: H-m.b+16, 'text-anchor': 'middle' }, svg).textContent = opts.xFmt ? opts.xFmt(v) : v;
+    }
+    el('text', { x: (m.l + W-m.r)/2, y: H-4, 'text-anchor': 'middle' }, svg).textContent = opts.xLabel;
+    // guides
+    let lastGx = -Infinity, gRow = 0;
+    for (const gd of [...(opts.guides || [])].sort((p, q) => p.x - q.x)) {
+      if (gd.x < x0 || gd.x > x1 || !gd.label) continue;
+      gRow = X(gd.x) - lastGx < 90 ? gRow + 1 : 0; lastGx = X(gd.x);
+      el('line', { x1: X(gd.x), x2: X(gd.x), y1: m.t, y2: H-m.b, stroke: css('--guide'), 'stroke-width': 1, 'stroke-dasharray': gd.dash ? '4 4' : 'none' }, svg);
+      el('text', { x: X(gd.x)+5, y: m.t+10+gRow*14, 'text-anchor': 'start' }, svg).textContent = gd.label;
+    }
+    // series
+    for (const s of opts.series) {
+      const col = css(s.cls === 'add' ? '--add' : '--del');
+      const d = s.ys.map((y, i) => `${i ? 'L' : 'M'}${X(xs[i]).toFixed(1)},${Y(y).toFixed(1)}`).join('');
+      el('path', { d, fill: 'none', stroke: col, 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
+      if (opts.dots) s.ys.forEach((y, i) => el('circle', { cx: X(xs[i]), cy: Y(y), r: 4, fill: col, stroke: css('--surface'), 'stroke-width': 2 }, svg));
+      if (opts.labelEnds) {
+        const yl = s.ys[s.ys.length-1];
+        s._ly = Y(yl);
+      }
+    }
+    if (opts.labelEnds) {  // direct end labels, nudged apart
+      const [a, b] = opts.series; let ya = a._ly, yb = b._ly;
+      if (Math.abs(ya-yb) < 14) { const mid = (ya+yb)/2; if (ya <= yb) { ya = mid-7; yb = mid+7; } else { ya = mid+7; yb = mid-7; } }
+      el('text', { x: W-m.r+8, y: ya+4, class: 'dlabel' }, svg).textContent = a.name;
+      el('text', { x: W-m.r+8, y: yb+4, class: 'dlabel' }, svg).textContent = b.name;
+    }
+    // hover layer
+    const cross = el('line', { y1: m.t, y2: H-m.b, stroke: css('--muted'), 'stroke-width': 1, visibility: 'hidden' }, svg);
+    const rings = opts.series.map(s => el('circle', { r: 5, fill: css(s.cls === 'add' ? '--add' : '--del'), stroke: css('--surface'), 'stroke-width': 2, visibility: 'hidden' }, svg));
+    const hit = el('rect', { x: m.l-10, y: m.t, width: W-m.l-m.r+20, height: H-m.t-m.b, fill: 'transparent', tabindex: 0 }, svg);
+    const tip = document.createElement('div'); tip.className = 'tip'; tip.hidden = true; host.appendChild(tip);
+    let cur = xs.length-1;
+    function show(i) {
+      cur = i;
+      const px = X(xs[i]);
+      cross.setAttribute('x1', px); cross.setAttribute('x2', px); cross.setAttribute('visibility', 'visible');
+      opts.series.forEach((s, k) => { rings[k].setAttribute('cx', px); rings[k].setAttribute('cy', Y(s.ys[i])); rings[k].setAttribute('visibility', 'visible'); });
+      tip.textContent = '';
+      const hd = document.createElement('div'); hd.className = 'hd'; hd.textContent = opts.tipHead(xs[i], i); tip.appendChild(hd);
+      opts.series.forEach(s => {
+        const r = document.createElement('div'); r.className = 'r';
+        const k = document.createElement('i'); k.className = 'key ' + s.cls;
+        const b = document.createElement('b'); b.textContent = fmt(s.ys[i]);
+        const nm = document.createElement('span'); nm.className = 'n'; nm.textContent = s.name;
+        r.append(k, b, nm); tip.appendChild(r);
+      });
+      tip.hidden = false;
+      const scale = host.clientWidth / W, left = px*scale;
+      const tw = tip.offsetWidth;
+      tip.style.left = (left + 14 + tw > host.clientWidth ? left - 14 - tw : left + 14) + 'px';
+      tip.style.top = (m.t*scale + 4) + 'px';
+    }
+    function hide() { cross.setAttribute('visibility', 'hidden'); rings.forEach(r => r.setAttribute('visibility', 'hidden')); tip.hidden = true; }
+    hit.addEventListener('pointermove', e => {
+      const r = svg.getBoundingClientRect(), vx = (e.clientX - r.left) / r.width * W;
+      let best = 0, bd = Infinity; xs.forEach((x, i) => { const dd = Math.abs(X(x)-vx); if (dd < bd) { bd = dd; best = i; } });
+      show(best);
+    });
+    hit.addEventListener('pointerleave', hide);
+    hit.addEventListener('focus', () => show(cur));
+    hit.addEventListener('blur', hide);
+    hit.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') { show(Math.min(xs.length-1, cur+1)); e.preventDefault(); }
+      if (e.key === 'ArrowLeft') { show(Math.max(0, cur-1)); e.preventDefault(); }
+    });
+  }
+
+  // ---------- state ----------
+  const $ = id => document.getElementById(id);
+  let seed = 0;
+  const DRAWS = 32, NMAX = 64;
+  let sweepCache = { key: '', data: null };
+
+  function sweep(d, beta) {
+    const key = d + '|' + beta;
+    if (sweepCache.key === key) return sweepCache.data;
+    const ns = [], add = [], del = [];
+    const runs = {};  // n -> array of draws (kept for age profile)
+    for (let n = 1; n <= NMAX; n++) {
+      let sa = 0, sd = 0; const rs = [];
+      for (let s = 0; s < DRAWS; s++) { const r = run(d, n, beta, 1000 + s); sa += mean(r.add); sd += mean(r.del); rs.push(r); }
+      ns.push(n); add.push(sa/DRAWS); del.push(sd/DRAWS); runs[n] = rs;
+    }
+    sweepCache = { key, data: { ns, add, del, runs } };
+    return sweepCache.data;
+  }
+
+  function render() {
+    const n = +$('n').value, beta = +$('beta').value, d = +$('d').value;
+    $('nOut').value = n; $('betaOut').value = beta.toFixed(2); $('seedOut').value = seed;
+    const r = run(d, n, beta, seed);
+    $('tAdd').textContent = fmt(mean(r.add));
+    $('tDel').textContent = fmt(mean(r.del));
+    $('tLast').textContent = fmt(r.del[n-1]);
+    $('tLastSub').textContent = 'additive: ' + fmt(r.add[n-1]);
+    $('tOv').textContent = n > 1 ? r.ov.toFixed(2) : '–';
+
+    const idx = r.add.map((_, i) => i);
+    lineChart($('c1'), {
+      aria: `Per-key retrieval error for ${n} keys`,
+      xs: idx, xLabel: 'key index (order written, oldest → newest)',
+      series: [{ name: 'additive', cls: 'add', ys: r.add }, { name: 'delta', cls: 'del', ys: r.del }],
+      dots: n <= 40, labelEnds: true,
+      tipHead: x => `key ${x}${x === n-1 ? ' · newest' : x === 0 ? ' · oldest' : ''}`,
+    });
+    // table
+    const t = document.createElement('table');
+    const hr = t.insertRow(); ['key', 'additive', 'delta'].forEach(h => { const th = document.createElement('th'); th.textContent = h; hr.appendChild(th); });
+    idx.forEach(i => { const tr = t.insertRow(); [i, fmt(r.add[i]), fmt(r.del[i])].forEach(v => { tr.insertCell().textContent = v; }); });
+    $('t1').textContent = ''; $('t1').appendChild(t);
+
+    const sw = sweep(d, beta);
+    lineChart($('c2'), {
+      aria: 'Mean retrieval error versus number of pairs written',
+      xs: sw.ns, xLabel: 'pairs written, n',
+      series: [{ name: 'additive', cls: 'add', ys: sw.add }, { name: 'delta', cls: 'del', ys: sw.del }],
+      guides: [{ x: d, dash: true, label: `n = d = ${d}` }, { x: n, dash: false, label: n === d ? '' : `n = ${n}` }],
+      labelEnds: true,
+      tipHead: x => `n = ${x}  (mean of ${DRAWS} draws)`,
+    });
+
+    // age profile at current n
+    const rs = sw.runs[n], ages = [], ea = [], ed = [];
+    for (let a = 0; a < n; a++) {
+      ages.push(a);
+      ea.push(mean(rs.map(q => q.add[n-1-a])));
+      ed.push(mean(rs.map(q => q.del[n-1-a])));
+    }
+    lineChart($('c3'), {
+      aria: `Mean retrieval error by key age at n = ${n}`,
+      xs: ages, xLabel: 'age: writes since the key was stored (0 = newest)',
+      series: [{ name: 'additive', cls: 'add', ys: ea }, { name: 'delta', cls: 'del', ys: ed }],
+      dots: n <= 40, labelEnds: true,
+      tipHead: x => `age ${x}  (mean of ${DRAWS} draws)`,
+    });
+  }
+
+  ['n', 'beta', 'd'].forEach(id => $(id).addEventListener('input', render));
+  $('seed').addEventListener('click', () => { seed++; render(); });
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', render);
+  new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  let rz; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(render, 120); });
+  render();
+
+  // embedding protocol (snippet lives in the blog post):
+  //   we -> parent: {type: 'retrieval-toy-height', height}
+  //   parent -> us: {type: 'retrieval-toy-theme', theme: 'light' | 'dark'}
+  const wrap = document.querySelector('.wrap');
+  const post = () => parent.postMessage({ type: 'retrieval-toy-height', height: Math.ceil(wrap.getBoundingClientRect().height) }, '*');
+  new ResizeObserver(post).observe(wrap);
+  addEventListener('load', post);
+  addEventListener('message', e => {
+    if (e.data && e.data.type === 'retrieval-toy-theme' && (e.data.theme === 'light' || e.data.theme === 'dark'))
+      document.documentElement.setAttribute('data-theme', e.data.theme);
+  });
+  post();
+})();
+</script>
+</body>
+</html>

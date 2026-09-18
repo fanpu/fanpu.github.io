@@ -46,3 +46,19 @@ S_t &= S_{t-1} + v_t k_t^\top, \qquad S_0 = 0, \\
 o_t &= S_t q_t = \sum_{i=1}^{t} v_i \,(k_i^\top q_t).
 \end{align}
 $$
+
+<iframe id="retrieval-toy" src="{{ '/assets/html/research_sprint/retrieval_toy.html' | relative_url }}" title="Additive vs delta rule retrieval toy" width="100%" height="1500" style="border:0; display:block;" loading="lazy"></iframe>
+<script>
+  (function () {
+    var frame = document.getElementById("retrieval-toy");
+    function sendTheme() {
+      var t = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+      frame.contentWindow && frame.contentWindow.postMessage({ type: "retrieval-toy-theme", theme: t }, "*");
+    }
+    window.addEventListener("message", function (e) {
+      if (e.source === frame.contentWindow && e.data && e.data.type === "retrieval-toy-height") frame.style.height = e.data.height + "px";
+    });
+    frame.addEventListener("load", sendTheme);
+    new MutationObserver(sendTheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  })();
+</script>
