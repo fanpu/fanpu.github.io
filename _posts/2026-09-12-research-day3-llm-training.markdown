@@ -2,9 +2,9 @@
 title: "Research Sprint Day 3 - LLM Training"
 layout: distill
 tags: [machine-learning, linear-attention]
-cover: whitney_lake.webp
-cover_preview: whitney_lake.webp
-caption: Mt. Tumanguya (Whitney), Sierra Nevada, California, U.S
+cover: kearsarge_pass.webp
+cover_preview: kearsarge_pass.webp
+caption: Rio Tinto Borax Mine, Boron, California, U.S
 class: post-template
 author: fanpu
 giscus_comments: true
@@ -25,6 +25,31 @@ before we can claim an improvement.
 
 ## Setup
 
+### Data
+
+All runs train on [FineWeb-Edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu),
+the educational-quality filtered subset of FineWeb, using its `sample-10BT`
+split. The text is tokenized with the GPT-2 tokenizer and written in the
+[llm.c](https://github.com/karpathy/llm.c) shard format as 16 shards of 100M
+tokens each. Shard 0 is held out for validation and never trained on; shards 1
+to 15 (1.5B tokens) are the training pool. The largest budget today is 1.2B
+tokens, so no run sees a token twice.
+
+Training examples are aligned windows of $T = 1024$ tokens cut from the training
+shards. The set of windows is fixed across runs; what the seed changes is the
+initialization and the order in which those windows are visited.
+
+The GPT-2 tokenizer has 50,257 tokens, which we pad to $V = 50{,}304$ (a multiple
+of 64) for the embedding and LM head. Note that yesterday's throughput
+benchmarks used $V = 32{,}000$, chosen so that the LM head would not dominate the
+FLOPs of the smaller models during benchmarking. Today's vocabulary is the real
+one, so the day 2 throughput numbers need a correction before they can be used
+for time estimates (see Predictions below).
+
+
+
+### Models
+
 We'll be training at 3 different model sizes (excluding the 250M as it would
 take prohibitively long on the compute I have). The models will be undertrained
 (only ~10x) due to compute limitations.
@@ -34,11 +59,6 @@ take prohibitively long on the compute I have). The models will be undertrained
 | 30M  | 512 | 10  | 8     | 34.1M       | $2 \times 25.8$M | 300M       |
 | 60M  | 768 | 9   | 12    | 63.7M       | $2 \times 38.6$M | 600M       |
 | 125M | 768 | 18  | 12    | 127.4M      | $2 \times 38.6$M | 1.2B       |
-
-In addition, vocab size is 50304 instead of 32000 previously (where it was
-reduced to avoid LM head dominating FLOPs for benchmarking purposes in the
-smaller models).
-
 
 Benchmarked numbers from [day 2](/blog/2026/research-day2-rooflines/) (:
 
@@ -146,7 +166,7 @@ Guess: 0.01 in same-seed max absolute difference in loss after 300 steps of trai
 
 ## Validating setup
 
-Validation loss on untrained model is 10.9294.
+Validation loss on untrained 30M model (d=512) is 10.9294.
 
 The standard analysis would claim that, in expectation roughly each head logit 
 is kind of $z_i=0$, and hence cross entropy loss for each token simplifies to $\log \sum_j e^{z_j} - z_y = \log V - 0 = \log V $. At vocab size 50304, this gives $\ln 50304 = 10.826$, which is slightly smaller than what we saw.
@@ -211,11 +231,15 @@ Results:
 
 | Run | Size | Seed | Steps | Tokens | Val loss @ step 0 | Final val loss | Train tok/s | Peak mem (GB) | Hours |
 |---|---|---|---|---|---|---|---|---|---|
-| attn_30M_s0 | 30M | 0 | 9,155 | 300M | 10.929 | 3.7418 | 71,733 | 11.1 | 0.53 |
-| attn_30M_s1 | 30M | 1 | 9,155 | 300M | 10.932 | 3.7465 | 71,709 | 10.8 | 1.29 |
-| attn_60M_s0 | 60M | 0 | 18,310 | 600M | 11.011 | 3.4870 | 54,014 | 13.4 | 3.26 |
-| attn_60M_s1 | 60M | 1 | 18,310 | 600M | 10.957 | 3.4886 | 53,809 | 13.4 | 3.28 |
-| attn_125M_s0 | 125M | 0 | 26,700 | 875M | 10.980 | *(running)* | 30,823 | 23.1 | 1.42 |
+| attn_30M_s0  | 30M  | 0 | 9,155  | 300M | 10.929 | 3.7418 | 71,733 | 11.1 | 0.53$^*$ |
+| attn_30M_s1  | 30M  | 1 | 9,155  | 300M | 10.932 | 3.7465 | 71,709 | 10.8 | 1.29 |
+| attn_60M_s0  | 60M  | 0 | 18,310 | 600M | 11.011 | 3.4870 | 54,014 | 13.4 | 3.26 |
+| attn_60M_s1  | 60M  | 1 | 18,310 | 600M | 10.957 | 3.4886 | 53,809 | 13.4 | 3.28 |
+| attn_125M_s0 | 125M | 0 | 36,621 | 1.2B | 10.980 | 3.2558 | 30,908 | 23.1 | 2.26$^*$ |
+| attn_125M_s1 | 125M | 1 | 36,621 | 1.2B | 10.964 | 3.2616 | 30,637 | 22.2 | 11.31 |
+
+$*$: wall-clock of the final segment only. These runs died from thermal shutdown partway through and were resumed from a checkpoint, and the hours field does not add up the time across segments.
+
 
 ## Measuring seed noise
 
@@ -234,7 +258,10 @@ Computing seed noise of final validation loss at each level, and pooled:
 | 125M | 3.2558  | 3.2616  | 0.0041           | 1     | [0.0025, 0.0325]       |
 | **Pooled** | | | **0.0031** | **3** | **[0.0022, 0.0070]** |
 
-The pooled seed noise was within a magnitude off from my prediction of 0.01.
+The pooled seed noise was within a magnitude off from my prediction of 0.01. My previous prediction that seed noise decreases with model size does not seem resolvable with the current $\nu=1$.
+
+
+The minimum MDD (2 seeds per arm) = 0.0078 nats
 
 
 ### Verifying predictions: non-determinism floor
@@ -261,9 +288,29 @@ The maximum drift over these step was around 0.002, smaller than my guess of
 It would also be interesting to investigate the extent of drift over the full
 course of training.
 
-<!-- ### Verifying predictions: initial loss
+### Verifying predictions: initial loss
 
-Predicted initial validation loss is 10.928. `attn_60M_s0` was somewhat far off at 11.01 at a difference of 0.08 nats, and generally it looks like the loss is biased higher than our predictions. -->
+The prediction above depends on the model width through the $s^2 d / 2$ term,
+so the two widths get different predictions:
+
+| $d$ | $\ln V$ | $s^2 d / 2$ | Predicted initial loss |
+|-----|---------|-------------|------------------------|
+| 512 | 10.826  | 0.102       | 10.928                 |
+| 768 | 10.826  | 0.154       | 10.979                 |
+
+Against the measured validation loss at step 0:
+
+| Run | $d$ | Predicted | Measured | Residual |
+|---|---|---|---|---|
+| attn_30M_s0  | 512 | 10.928 | 10.929 | $+0.001$ |
+| attn_30M_s1  | 512 | 10.928 | 10.932 | $+0.004$ |
+| attn_60M_s0  | 768 | 10.979 | 11.011 | $+0.032$ |
+| attn_60M_s1  | 768 | 10.979 | 10.957 | $-0.022$ |
+| attn_125M_s0 | 768 | 10.979 | 10.980 | $+0.001$ |
+| attn_125M_s1 | 768 | 10.979 | 10.964 | $-0.015$ |
+
+The predictions are pretty close to what we observed, and the residuals have no
+consistent sign, so there is no bias.
 
 ### Verifying predictions: peak memory
 
@@ -271,14 +318,13 @@ We previously predicted $10.8GB$ peak memory usage at 30M. Looking at our logs, 
 
 ### Verifying predictions: training time
 
-| Size | $t_{\text{pred}}$ | $t_{\text{actual},1}$ | $t_{\text{actual},2}$ |
-|------|-------------------|-----------------------|-----------------------|
-| 30M  | 1.2 h             | 0.5h$^*$                      | 1.5h                       |
-| 60M  | 3.1 h             |  3.3h                     |               3.3h        |
-| 125M | 11.0 h            |  2.26h$^*$                     | 11.3h                      |
+| Size | $t_{\text{pred}}$ | $t_{\text{actual}}$, seed 0 | $t_{\text{actual}}$, seed 1 |
+|------|-------------------|-----------------------------|-----------------------------|
+| 30M  | 1.2 h             | 0.53 h$^*$                  | 1.29 h                      |
+| 60M  | 3.1 h             | 3.26 h                      | 3.28 h                      |
+| 125M | 11.0 h            | 2.26 h$^*$                  | 11.31 h                     |
 
-$*$: this seems to be due to a bug in my metrics that didn't account for
-restarted runs, since the runs died halfway from thermal overheating and resumed from a checkpoint.
+$*$: wall-clock of the final segment only. These runs died from thermal shutdown partway through and were resumed from a checkpoint, and the hours field does not add up the time across segments.
 
 ### Verifying predictions: final loss
 
@@ -336,6 +382,6 @@ Another confounder is that the models are intentionally undertrained due to comp
 
 ## Next steps
 
-We have estimated seed variance at 3e-3 nats and have established our transformer baselines. We will subsequently proceed to training GDNs.
+We have estimated seed stddev at 3e-3 nats and have established our transformer baselines. We will subsequently proceed to training GDNs.
 
 If I found more compute, performing scaling laws analysis to ensure I could actually replicate the theory would also be interesting.
