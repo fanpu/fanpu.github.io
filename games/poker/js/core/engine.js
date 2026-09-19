@@ -295,3 +295,9 @@ export function replay(snap, actions, upto = actions.length) {
   for (const a of actions.slice(0, upto)) events.push(...apply(state, a));
   return { state, events };
 }
+
+// Chips as big blinds: "7.5 bb".
+export function fmt(chips) {
+  const bb = chips / BB;
+  return (Number.isInteger(bb) ? bb : bb.toFixed(1)) + " bb";
+}
