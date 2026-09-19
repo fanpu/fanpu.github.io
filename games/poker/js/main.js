@@ -17,19 +17,14 @@ import { createSettings } from "./ui/settings.js";
 import { createHome } from "./ui/home.js";
 import { createLessons } from "./lessons/lessons.js";
 import { idleScene } from "./lessons/staging.js";
+import { createAudio } from "./audio.js";
 
 const params = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
 
 async function boot() {
   const store = createStore();
-  if (!Stage.supported()) {
-    document.body.insertAdjacentHTML(
-      "beforeend",
-      `<div class="notice">This table is drawn with WebGL, which this browser is not offering.<br />The lessons will still work once they are built.</div>`
-    );
-    return;
-  }
+  if (!Stage.supported() || params.has("nowebgl")) return bootWithoutTable(store);
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const stage = new Stage($("stage"), { reducedMotion: reduced || !store.settings.animations, fourColour: store.settings.fourColour });
   const parts = {
@@ -57,6 +52,10 @@ async function boot() {
   }
 
   const seed = params.has("seed") ? +params.get("seed") : (Date.now() ^ (Math.random() * 2 ** 31)) >>> 0;
+  const audio = createAudio({ muted: store.settings.muted });
+  director.on("sound", (name) => audio.play(name));
+  const live = $("live"); // screen readers hear the action as it happens
+  director.on("say", (text) => (live.textContent = text));
   const coach = createCoach();
   const session = createSession({ store, director, coach, rng: core.makeRng(seed) });
 
@@ -87,6 +86,7 @@ async function boot() {
     store,
     onChange(key, value) {
       if (key === "fourColour") stage.textures.setFourColour(value);
+      if (key === "muted") audio.setMuted(value), value || audio.play("chip");
       if (key === "animations") stage.anim.reduced = reduced || !value;
       if (key === "speed" || key === "animations") director.setSpeed(store.settings.speed);
     },
@@ -97,7 +97,7 @@ async function boot() {
     onLevel: (level) => go("table", level),
     onSettings: () => settings.toggle(),
   });
-  const lessons = createLessons($("lesson"), { store, director, rig: parts.rig, onExit: () => go("home") });
+  const lessons = createLessons($("lesson"), { store, director, rig: parts.rig, onExit: () => go("home"), onSound: (name) => audio.play(name) });
   const home = createHome($("home"), { store, onTable: (level) => go("table", level), onLesson: () => go("learn") });
   addEventListener("keydown", (e) => e.key === "Escape" && body.classList.remove("info-open"));
   $("scrim").addEventListener("click", () => body.classList.remove("info-open"));
@@ -167,6 +167,31 @@ async function boot() {
           : "home",
     wanted === "prove" ? "silent" : wanted === "train" ? "guided" : undefined
   );
+  body.dataset.ready = "1";
+}
+
+// No WebGL: the lessons still work, with their cards drawn in the pane; the table modes explain themselves.
+function bootWithoutTable(store) {
+  const body = document.body;
+  const nothing = { applyScene() {}, on() {} },
+    still = { to: async () => {}, refit() {} };
+  const go = (mode) => {
+    store.setProgress({ mode });
+    body.dataset.mode = mode;
+    if (mode === "learn") lessons.open(null);
+    home.render();
+    lessons.render();
+  };
+  const lessons = createLessons($("lesson"), { store, director: nothing, rig: still, onExit: () => go("home") });
+  const home = createHome($("home"), {
+    store,
+    onLesson: () => go("learn"),
+    onTable: () => alert("The table is drawn with WebGL, which this browser is not offering. The lessons work without it."),
+  });
+  body.classList.add("no-table");
+  body.dataset.phase = "idle";
+  store.subscribe(() => home.render());
+  go(params.get("mode") === "learn" || store.progress.mode === "learn" ? "learn" : "home");
   body.dataset.ready = "1";
 }
 

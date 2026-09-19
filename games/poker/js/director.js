@@ -41,7 +41,7 @@ export function createDirector({ stage, table, cards, chips, labels, fx, rig }) 
   let seats = [];
   let speed = 1;
   const L = () => table.layout; // board, pot and deck positions for the table's current orientation
-  const hooks = { sound: () => {} };
+  const hooks = { sound: () => {}, say: () => {} }; // say(text): a plain-language account of what just happened, for screen readers
 
   function seatLabel(s, bubble) {
     if (!s.name) return labels.remove("seat" + s.seat); // an empty chair in a lesson
@@ -54,6 +54,7 @@ export function createDirector({ stage, table, cards, chips, labels, fx, rig }) 
         s.allIn ? `<em>all-in</em>` : ""
       }</span>` +
       (bubble ? `<span class="bubble">${bubble}</span>` : "");
+    if (bubble) hooks.say(`${s.name}: ${bubble}`);
     labels.set("seat" + s.seat, { x: lay.label.x, y: 0.9, z: lay.label.z }, html, cls);
   }
   function betLabel(seat, amount) {
@@ -248,6 +249,9 @@ export function createDirector({ stage, table, cards, chips, labels, fx, rig }) 
       await Promise.all(e.cards.map((c, i) => cards.deal("b" + (first + i), c, slots[first + i], { delay: i * 0.09 })));
       await Promise.all(e.cards.map((c, i) => cards.flip("b" + (first + i), true)));
       current.board.push(...e.cards);
+      hooks.say(
+        `${STREET_NAMES[e.street]}: ${e.cards.map((c) => "23456789TJQKA"[c.r - 2] + ["\u2660", "\u2665", "\u2666", "\u2663"][c.s]).join(" ")}`
+      );
       labels.set("street", { x: 0, y: 0.2, z: L().board[0].z + 1.75 }, STREET_NAMES[e.street], "street");
       await stage.anim.wait(0.25);
       if (e.street === 1) rig.to("table", 0.9);
@@ -300,6 +304,9 @@ export function createDirector({ stage, table, cards, chips, labels, fx, rig }) 
       await stage.anim.wait(0.5);
     },
   };
+
+  // A lost WebGL context comes back empty: put everything back where the running picture says it was.
+  stage.onContextRestored = () => current && applyScene(current);
 
   // When the screen turns, the table turns with it: rebuild from the director's running picture.
   stage.onResized(() => {

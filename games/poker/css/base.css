@@ -52,6 +52,31 @@ body {
   backdrop-filter: blur(10px) saturate(1.2);
   -webkit-backdrop-filter: blur(10px) saturate(1.2);
 }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+/* Without WebGL there is no table: the lesson pane takes the page and shows its own cards at full size. */
+.no-table #lesson {
+  inset: 0;
+  width: auto;
+  height: auto;
+  max-width: 760px;
+  margin: 0 auto;
+  border: 0;
+  border-radius: 0;
+}
+/* ...and since no table is showing the cards, the pane's own copy stays large. */
+.no-table .staged .drill .visual .lcard .pcard {
+  height: 72px;
+}
+.no-table #stage {
+  display: none;
+}
 .notice {
   position: fixed;
   inset: 0;

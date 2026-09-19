@@ -5,7 +5,7 @@ import { mountCards } from "../ui/html.js";
 // Learn: the lesson text sits in a pane beside (on a phone, beneath) the table, and the table is the illustration.
 // Every page and every drill question lays its cards, chips and seats out on the felt; answering a drill makes the
 // table show why (the five cards that play are lifted, the outs fan out, the seat that acts is lit).
-export function createLessons(root, { store, director, rig, onExit }) {
+export function createLessons(root, { store, director, rig, onExit, onSound = () => {} }) {
   const at = { lesson: null, page: 0, drill: null }; // drill: { q, rows, chosen, correct }
 
   function stage(scene, shot = "lesson") {
@@ -123,6 +123,7 @@ export function createLessons(root, { store, director, rig, onExit }) {
     if (!d || d.chosen !== null || i >= d.q.options.length) return;
     d.chosen = i;
     if (i === d.q.answer) d.correct++;
+    onSound(i === d.q.answer ? "right" : "wrong");
     render();
   }
   function another() {

@@ -1,7 +1,13 @@
 # Poker trainer: 3D rebuild — design
 
 Date: 2026-09-19
-Status: awaiting review (rev 2: parity requirement dropped)
+Status: built. All six milestones are implemented on branch `poker-trainer-3d` (2026-09-19).
+
+Differences from this document as built: drill answers sit in the lesson pane rather than the dock (the pane is
+beside the table on a desktop and beneath it on a phone, which reads better than splitting a question from its
+answers); opponent stats are shown in the coach panel's table-reads list rather than on hover over a seat; the
+rail has no contrast stitching (removed at Fan Pu's request). `?ui=mock` no longer exists: the real panels
+replaced it.
 
 ## Vision
 
