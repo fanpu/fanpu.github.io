@@ -1,0 +1,384 @@
+/* Learn: the lesson pane. Beside the table on a desktop, beneath it on a phone. */
+#lesson {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(520px, 42vw);
+  z-index: 2;
+  padding: 16px 22px 40px;
+  border-width: 0 0 0 1px;
+  border-radius: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--glass-strong);
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+#lesson[hidden] {
+  display: none;
+}
+#lesson h1 {
+  margin: 10px 0 12px;
+  font: 600 24px/1.2 var(--serif);
+  color: var(--ink);
+}
+#lesson b {
+  color: var(--ink);
+}
+#lesson .lead {
+  color: var(--ink-2);
+}
+.crumb {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.crumb button {
+  border: 0;
+  background: none;
+  padding: 6px 0;
+  color: var(--brass);
+  font-weight: 600;
+  font-size: 13px;
+}
+.lessons {
+  list-style: none;
+  counter-reset: l;
+  margin: 18px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.lessons button {
+  width: 100%;
+  text-align: left;
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 1px 12px;
+  padding: 11px 14px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.035);
+}
+.lessons button::before {
+  counter-increment: l;
+  content: counter(l);
+  grid-row: 1 / 3;
+  align-self: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font: 600 14px var(--serif);
+  color: var(--brass);
+  border: 1px solid rgba(216, 179, 106, 0.4);
+}
+.lessons button.done::before {
+  content: "\2713";
+  background: var(--brass);
+  color: var(--brass-ink);
+}
+.lessons button:hover {
+  border-color: var(--brass);
+}
+.lessons span {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  line-height: 1.4;
+}
+.primary.wide {
+  width: 100%;
+  margin-top: 6px;
+  white-space: normal;
+  height: auto;
+  min-height: 52px;
+  padding: 10px 18px;
+}
+#lesson .nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+#lesson .nav .primary {
+  height: 46px;
+  white-space: normal;
+}
+
+/* the vocabulary of the ported lesson markup */
+.term {
+  color: var(--brass);
+  font-weight: 600;
+}
+.key {
+  margin: 14px 0;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(216, 179, 106, 0.3);
+  background: rgba(216, 179, 106, 0.09);
+  color: var(--ink);
+}
+.eqn {
+  margin: 10px 0;
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 15px;
+  text-align: center;
+}
+.fr {
+  display: inline-grid;
+  vertical-align: middle;
+  text-align: center;
+  margin: 0 3px;
+  font-size: 0.9em;
+  line-height: 1.25;
+}
+.fr span:first-child {
+  border-bottom: 1px solid currentColor;
+  padding: 0 4px;
+}
+.ttable {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 13px;
+}
+.ttable th {
+  text-align: left;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding: 5px 8px 5px 0;
+}
+.ttable td {
+  padding: 7px 8px 7px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  vertical-align: middle;
+}
+.tcards {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 6px 14px 6px 0;
+  vertical-align: middle;
+}
+.tcards .lbl {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-right: 4px;
+}
+.lcard {
+  display: inline-block;
+}
+.lcard .pcard {
+  height: 50px;
+}
+.ttable .lcard .pcard {
+  height: 34px;
+}
+.lcard.plays .pcard {
+  outline: 2px solid var(--brass);
+  outline-offset: 1px;
+}
+.lcard.dim .pcard {
+  opacity: 0.35;
+}
+/* When the table is showing the question's cards, the panel's copy shrinks to a caption. */
+.staged .drill .visual .lcard .pcard {
+  height: 30px;
+}
+.nc {
+  display: grid;
+  grid-template-columns: 16px repeat(13, 1fr);
+  gap: 2px;
+  margin: 10px 0;
+  font-size: 11px;
+  text-align: center;
+}
+.nc > div {
+  line-height: 22px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.05);
+}
+.nc .hd {
+  background: none;
+  color: var(--ink-3);
+}
+.nc .hd.red {
+  color: var(--bad);
+}
+.nc .gone {
+  background: none;
+  color: var(--ink-3);
+}
+.eqbar {
+  display: flex;
+  height: 26px;
+  border-radius: 7px;
+  overflow: hidden;
+  margin: 10px 0;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 26px;
+  color: #10120f;
+}
+.eqbar .a {
+  background: var(--brass);
+  padding-left: 8px;
+  white-space: nowrap;
+}
+.eqbar .b {
+  background: #6fa3bd;
+  text-align: right;
+  padding-right: 8px;
+  white-space: nowrap;
+}
+.lab {
+  margin: 12px 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+}
+.lab .chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+.lab .chips button {
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: none;
+  font-size: 12px;
+  color: var(--ink-2);
+}
+.lab .chips button.on {
+  background: rgba(216, 179, 106, 0.18);
+  border-color: var(--brass);
+  color: var(--brass);
+}
+.gridnote {
+  font-size: 12px;
+  color: var(--ink-3);
+}
+#lesson .rgrid {
+  max-width: 330px;
+  margin-top: 12px;
+}
+
+/* drills */
+.pips {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 4px 0 12px;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.pips i {
+  width: 22px;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.12);
+}
+.pips i.on {
+  background: var(--brass);
+}
+.pips span {
+  margin-left: 6px;
+}
+.drill .q {
+  font-size: 16px;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+.opts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  margin: 12px 0;
+}
+.opts button {
+  position: relative;
+  min-height: 52px;
+  padding: 8px 14px 8px 30px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.opts button:not(:disabled):hover {
+  border-color: var(--brass);
+}
+.opts kbd {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+}
+.opts .right {
+  background: rgba(63, 185, 132, 0.2);
+  border-color: var(--good);
+}
+.opts .wrong {
+  background: rgba(226, 96, 79, 0.18);
+  border-color: var(--bad);
+}
+.fb {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.045);
+  font-size: 13.5px;
+}
+.verd {
+  margin: 0 0 6px;
+  font-weight: 700;
+}
+.verd.right {
+  color: var(--good);
+}
+.verd.wrong {
+  color: var(--bad);
+}
+
+@media (max-width: 720px) {
+  #lesson {
+    inset: auto 0 0 0;
+    width: auto;
+    height: 58vh;
+    border-width: 1px 0 0;
+    border-radius: 16px 16px 0 0;
+    padding: 10px 14px calc(28px + env(safe-area-inset-bottom));
+    font-size: 14px;
+  }
+  #lesson h1 {
+    font-size: 20px;
+    margin: 6px 0 10px;
+  }
+  .opts {
+    grid-template-columns: 1fr 1fr;
+  }
+  .opts kbd {
+    display: none;
+  }
+  .opts button {
+    padding-left: 12px;
+  }
+}

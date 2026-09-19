@@ -15,6 +15,8 @@ import { createDock } from "./ui/dock.js";
 import { createInfo } from "./ui/info.js";
 import { createSettings } from "./ui/settings.js";
 import { createHome } from "./ui/home.js";
+import { createLessons } from "./lessons/lessons.js";
+import { idleScene } from "./lessons/staging.js";
 
 const params = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
@@ -95,32 +97,37 @@ async function boot() {
     onLevel: (level) => go("table", level),
     onSettings: () => settings.toggle(),
   });
-  const home = createHome($("home"), { store, onTable: (level) => go("table", level) });
+  const lessons = createLessons($("lesson"), { store, director, rig: parts.rig, onExit: () => go("home") });
+  const home = createHome($("home"), { store, onTable: (level) => go("table", level), onLesson: () => go("learn") });
   addEventListener("keydown", (e) => e.key === "Escape" && body.classList.remove("info-open"));
   $("scrim").addEventListener("click", () => body.classList.remove("info-open"));
 
   // ----- routing: home or the table -----
   async function go(mode, level = store.progress.level) {
-    if (mode === "home") await session.stop();
+    if (mode !== "table") await session.stop();
     store.setProgress({ mode, level });
     body.dataset.mode = mode;
     body.classList.remove("info-open");
     claimSpace();
     if (mode === "table") session.start(level), session.setLevel(level);
-    else parts.rig.to("idle", 1.4);
+    else if (mode === "learn") lessons.open(null);
+    else director.applyScene(idleScene()), parts.rig.to("idle", 1.4);
+    home.render();
   }
 
   // Panels claim their share of the screen; the stage takes the rest and the camera refits.
   function claimSpace() {
     const table = body.dataset.mode === "table",
       phone = matchMedia("(max-width: 720px)").matches;
+    const learn = body.dataset.mode === "learn";
     const px = (el) => (table ? Math.round(el.getBoundingClientRect()[el === $("info") ? "width" : "height"]) : 0) + "px";
+    const pane = $("lesson").getBoundingClientRect();
     body.style.setProperty("--stage-top", px($("hud")));
-    body.style.setProperty("--stage-bottom", px($("dock")));
-    body.style.setProperty("--stage-right", phone ? "0px" : px($("info")));
+    body.style.setProperty("--stage-bottom", learn && phone ? Math.round(pane.height) + "px" : px($("dock")));
+    body.style.setProperty("--stage-right", learn && !phone ? Math.round(pane.width) + "px" : phone ? "0px" : px($("info")));
   }
   const watch = new ResizeObserver(claimSpace);
-  [$("hud"), $("dock"), $("info")].forEach((el) => watch.observe(el));
+  [$("hud"), $("dock"), $("info"), $("lesson")].forEach((el) => watch.observe(el));
   addEventListener("resize", claimSpace);
 
   store.subscribe(() => {
@@ -147,11 +154,17 @@ async function boot() {
     });
   }
 
-  window.__poker = { core, store, session, director, coach, timings: session.timings, ...parts };
+  window.__poker = { core, store, session, director, coach, lessons, timings: session.timings, ...parts };
   home.render();
   const wanted = params.get("mode");
   go(
-    wanted === "train" ? "table" : wanted === "prove" ? "table" : store.progress.mode === "table" ? "table" : "home",
+    wanted === "learn"
+      ? "learn"
+      : wanted === "train" || wanted === "prove"
+        ? "table"
+        : ["table", "learn"].includes(store.progress.mode)
+          ? store.progress.mode
+          : "home",
     wanted === "prove" ? "silent" : wanted === "train" ? "guided" : undefined
   );
   body.dataset.ready = "1";

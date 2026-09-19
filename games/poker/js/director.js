@@ -44,11 +44,15 @@ export function createDirector({ stage, table, cards, chips, labels, fx, rig }) 
   const hooks = { sound: () => {} };
 
   function seatLabel(s, bubble) {
+    if (!s.name) return labels.remove("seat" + s.seat); // an empty chair in a lesson
     const lay = seats[s.seat];
     const cls = "seat" + (s.folded ? " folded" : "") + (s.acting ? " acting" : "") + (s.seat === 0 ? " hero" : "");
     const html =
       `<span class="name">${s.name}</span>` +
-      `<span class="meta"><b>${fmt(s.stack)}</b>${s.pos ? `<i>${s.pos}</i>` : ""}${s.allIn ? `<em>all-in</em>` : ""}</span>` +
+      // In a lesson a seat is just a name and a position: no stack (stack == null), so no money shown.
+      `<span class="meta">${s.stack == null ? "" : `<b>${fmt(s.stack)}</b>`}${s.pos ? `<i>${s.pos}</i>` : ""}${
+        s.allIn ? `<em>all-in</em>` : ""
+      }</span>` +
       (bubble ? `<span class="bubble">${bubble}</span>` : "");
     labels.set("seat" + s.seat, { x: lay.label.x, y: 0.9, z: lay.label.z }, html, cls);
   }
@@ -80,7 +84,7 @@ export function createDirector({ stage, table, cards, chips, labels, fx, rig }) 
       allIds = [];
     for (const s of scene.seats) {
       const lay = seats[s.seat];
-      chips.setStack("stack" + s.seat, s.stack, lay.stack);
+      chips.setStack("stack" + s.seat, s.stack || 0, lay.stack);
       chips.setStack("bet" + s.seat, s.bet, lay.bet);
       betLabel(s.seat, s.bet);
       seatLabel(s);
@@ -99,6 +103,21 @@ export function createDirector({ stage, table, cards, chips, labels, fx, rig }) 
     });
     chips.setStack("pot", scene.pot, L().pot);
     potLabel(scene.pot);
+    // A fan of loose cards above the board: a lesson's way of showing "these are your outs".
+    const fan = scene.fan || [];
+    const perRow = L().portrait ? 8 : 16,
+      gap = 0.98;
+    fan.forEach((c, i) => {
+      const row = Math.floor(i / perRow),
+        inRow = Math.min(perRow, fan.length - row * perRow),
+        col = i % perRow;
+      cards.place(
+        "f" + i,
+        c,
+        { x: (col - (inRow - 1) / 2) * gap, z: L().board[0].z - 2.35 - row * 1.35, rot: 0, scale: 0.74, y: 0.02 + i * 0.0015 },
+        { faceUp: true }
+      );
+    });
     if (lit.size) {
       cards.lift(litIds, true);
       cards.dim(

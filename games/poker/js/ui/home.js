@@ -20,9 +20,9 @@ export function createHome(root, { store, onTable, onLesson }) {
       <h1>Poker Trainer</h1>
       <p class="lead">No-limit hold’em, from what beats what to sound decisions. Three steps, one table.</p>
       <ol class="steps">
-        <li><button data-go="learn" disabled><b>Learn</b><span>Thirteen short lessons, each drilled at the table until it sticks.</span><small>${
-          done ? done + " of 13 lessons done · " : ""
-        }arrives with the lessons milestone</small></button></li>
+        <li><button data-go="learn"><b>Learn</b><span>Thirteen short lessons, each drilled at the table until it sticks.</span><small>${
+          done ? done + " of 13 lessons done" : "Start here if the rules are new to you"
+        }</small></button></li>
         <li><button data-go="guided"><b>Train</b><span>Play real hands. The coach shows its working: ranges, equity, the value of each action, and why.</span><small>${score(
           "guided"
         )}</small></button></li>
