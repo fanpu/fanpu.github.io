@@ -28,7 +28,8 @@ test("labels firm up with sample size", () => {
     while (!state.handOver) {
       const l = legalActions(state);
       // seat 1 raises every time it can, seat 2 never puts a chip in voluntarily, the hero just calls
-      const type = l.seat === 1 && l.canRaise && state.street === 0 ? "raise" : l.seat === 2 ? (l.canCheck ? "check" : "fold") : l.canCheck ? "check" : "call";
+      const type =
+        l.seat === 1 && l.canRaise && state.street === 0 ? "raise" : l.seat === 2 ? (l.canCheck ? "check" : "fold") : l.canCheck ? "check" : "call";
       observeAll(reads, apply(state, { seat: l.seat, type, ...(type === "raise" ? { to: l.minTo } : {}) }));
     }
   };

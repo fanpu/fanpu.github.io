@@ -2,7 +2,17 @@ import { RANK_NAMES } from "./cards.js";
 
 // Hand evaluation for 5 to 7 cards. A score is an int: category in the top bits (score >> 20, 0..8),
 // then up to five 4-bit tiebreak ranks. A higher score wins; equal scores split.
-export const CAT_NAMES = ["High card", "One pair", "Two pair", "Three of a kind", "Straight", "Flush", "Full house", "Four of a kind", "Straight flush"];
+export const CAT_NAMES = [
+  "High card",
+  "One pair",
+  "Two pair",
+  "Three of a kind",
+  "Straight",
+  "Flush",
+  "Full house",
+  "Four of a kind",
+  "Straight flush",
+];
 
 // mask has bit r set for each rank present. Returns the top card of the best straight, or 0.
 export function straightHigh(mask) {

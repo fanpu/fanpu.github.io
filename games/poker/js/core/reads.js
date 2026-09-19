@@ -21,7 +21,8 @@ export function readOf(reads, seat) {
   const vpip = (100 * (o.vpip + (READ_PRIOR.vpip / 100) * w)) / (n + w);
   const pfr = Math.min(vpip, (100 * (o.pfr + (READ_PRIOR.pfr / 100) * w)) / (n + w));
   let label = "";
-  if (n >= 15) label = vpip < 15.5 ? "Nit" : vpip >= 45 && pfr >= 29 ? "Maniac" : vpip >= 36 && pfr < 16 ? "Station" : vpip >= 21 && pfr >= 15 ? "LAG" : "TAG";
+  if (n >= 15)
+    label = vpip < 15.5 ? "Nit" : vpip >= 45 && pfr >= 29 ? "Maniac" : vpip >= 36 && pfr < 16 ? "Station" : vpip >= 21 && pfr >= 15 ? "LAG" : "TAG";
   return { n, vpip, pfr, rawV: n ? (100 * o.vpip) / n : 0, rawR: n ? (100 * o.pfr) / n : 0, label, sure: n >= 40 };
 }
 export function readLabel(reads, seat) {

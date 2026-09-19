@@ -15,7 +15,19 @@ export function createGame({ n, names = DEFAULT_NAMES }) {
   if (!(n >= 2 && n <= 9)) throw new Error("createGame: n must be 2..9");
   const players = [];
   for (let id = 0; id < n; id++)
-    players.push({ id, name: names[id], stack: BUYIN, startStack: BUYIN, cards: [], bet: 0, invested: 0, folded: false, allIn: false, needAct: false, raiseLocked: false });
+    players.push({
+      id,
+      name: names[id],
+      stack: BUYIN,
+      startStack: BUYIN,
+      cards: [],
+      bet: 0,
+      invested: 0,
+      folded: false,
+      allIn: false,
+      needAct: false,
+      raiseLocked: false,
+    });
   return {
     config: { n, sb: SB, bb: BB, buyin: BUYIN },
     handNo: 0,
@@ -64,7 +76,16 @@ export function startHand(state, rng) {
       state.rebuys++;
       rebuys.push(p.id);
     }
-    Object.assign(p, { startStack: p.stack, cards: [state.deck.pop(), state.deck.pop()], bet: 0, invested: 0, folded: false, allIn: false, needAct: true, raiseLocked: false });
+    Object.assign(p, {
+      startStack: p.stack,
+      cards: [state.deck.pop(), state.deck.pop()],
+      bet: 0,
+      invested: 0,
+      folded: false,
+      allIn: false,
+      needAct: true,
+      raiseLocked: false,
+    });
   }
   const sbSeat = n === 2 ? state.dealer : (state.dealer + 1) % n,
     bbSeat = (sbSeat + 1) % n;

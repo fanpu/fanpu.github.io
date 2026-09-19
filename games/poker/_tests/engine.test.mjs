@@ -205,7 +205,20 @@ test("replay reproduces the hand at every step", () => {
   const state = createGame({ n: 4 });
   startHand(state, makeRng(11));
   const snap = snapshot(state);
-  const script = [["raise", 6], ["call"], ["fold"], ["call"], ["check"], ["raise", 10], ["call"], ["fold"], ["check"], ["check"], ["raise", 30], ["call"]];
+  const script = [
+    ["raise", 6],
+    ["call"],
+    ["fold"],
+    ["call"],
+    ["check"],
+    ["raise", 10],
+    ["call"],
+    ["fold"],
+    ["check"],
+    ["check"],
+    ["raise", 30],
+    ["call"],
+  ];
   const live = [];
   const steps = [JSON.stringify(state)];
   for (const [type, to] of script) {

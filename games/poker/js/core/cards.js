@@ -3,7 +3,21 @@ import { randInt } from "./rng.js";
 // A card is { r, s }: r is 2..14 (14 = ace), s indexes SUITS.
 export const RANKS = "23456789TJQKA";
 export const SUITS = ["♠", "♥", "♦", "♣"];
-export const RANK_NAMES = { 2: "2", 3: "3", 4: "4", 5: "5", 6: "6", 7: "7", 8: "8", 9: "9", 10: "Ten", 11: "Jack", 12: "Queen", 13: "King", 14: "Ace" };
+export const RANK_NAMES = {
+  2: "2",
+  3: "3",
+  4: "4",
+  5: "5",
+  6: "6",
+  7: "7",
+  8: "8",
+  9: "9",
+  10: "Ten",
+  11: "Jack",
+  12: "Queen",
+  13: "King",
+  14: "Ace",
+};
 
 export function newDeck() {
   const d = [];

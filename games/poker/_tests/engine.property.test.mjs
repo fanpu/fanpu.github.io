@@ -42,7 +42,7 @@ for (let n = 2; n <= 9; n++) {
       const total = state.players.reduce((s, p) => s + p.stack, 0) + pot(state);
       assert.equal(total, (n + state.rebuys) * BUYIN, "chips are conserved");
       for (const p of state.players) {
-        assert.ok(p.stack >= 0 && p.bet >= 0 && p.invested >= 0 && p.bet <= p.invested || state.handOver, "no negative or inconsistent amounts");
+        assert.ok((p.stack >= 0 && p.bet >= 0 && p.invested >= 0 && p.bet <= p.invested) || state.handOver, "no negative or inconsistent amounts");
         assert.ok(Number.isInteger(p.stack));
         assert.equal(p.allIn && !state.handOver ? p.stack : 0, 0, "all-in means no chips behind");
       }
@@ -57,13 +57,21 @@ for (let n = 2; n <= 9; n++) {
       if (phase === "end") {
         const end = events.at(-1);
         assert.equal(end.type, "handEnd");
-        assert.equal(Object.values(end.net).reduce((a, b) => a + b, 0), 0, "net sums to zero");
+        assert.equal(
+          Object.values(end.net).reduce((a, b) => a + b, 0),
+          0,
+          "net sums to zero"
+        );
         for (const p of state.players) assert.equal(end.net[p.id], p.stack - p.startStack);
         // Every chip that went in comes out as an award or a refund.
         const put = events.filter((e) => e.type === "post" || e.type === "action").reduce((s, e) => s + (e.amount ?? e.added), 0);
         const out = events.filter((e) => e.type === "award" || e.type === "refund").reduce((s, e) => s + e.amount, 0);
         assert.equal(out, put);
-        for (const a of events.filter((e) => e.type === "award")) assert.equal(Object.values(a.shares).reduce((x, y) => x + y, 0), a.amount);
+        for (const a of events.filter((e) => e.type === "award"))
+          assert.equal(
+            Object.values(a.shares).reduce((x, y) => x + y, 0),
+            a.amount
+          );
         assert.equal(state.board.length <= 5, true);
         const sd = events.find((e) => e.type === "showdown");
         if (sd) assert.equal(state.board.length, 5, "a showdown always has a full board");

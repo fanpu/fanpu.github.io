@@ -27,7 +27,10 @@ test("PCT is a cumulative combo-weighted percentile over all 169 hands", () => {
 });
 
 test("expandRange", () => {
-  assert.deepEqual([...expandRange("TT+,A9s+,KQo,65s")].sort(), ["TT", "JJ", "QQ", "KK", "AA", "A9s", "ATs", "AJs", "AQs", "AKs", "KQo", "65s"].sort());
+  assert.deepEqual(
+    [...expandRange("TT+,A9s+,KQo,65s")].sort(),
+    ["TT", "JJ", "QQ", "KK", "AA", "A9s", "ATs", "AJs", "AQs", "AKs", "KQo", "65s"].sort()
+  );
 });
 
 test("tiers nest: a hand first listed in tier k sits at or below TIER_END[k]", () => {
