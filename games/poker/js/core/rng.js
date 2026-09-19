@@ -1,0 +1,1 @@
+export function makeRng(t){let n=t>>>0;return()=>{n=n+1831565813>>>0;let t=n;return t=Math.imul(t^t>>>15,1|t),t^=t+Math.imul(t^t>>>7,61|t),((t^t>>>14)>>>0)/4294967296}}export const randInt=(t,n)=>Math.floor(t()*n);
