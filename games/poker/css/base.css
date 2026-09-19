@@ -36,9 +36,14 @@ body {
   font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
 }
+/* The table is a region, not the whole screen: panels claim space by setting these variables, and the camera
+   reframes the table to fit whatever is left. */
 #stage {
   position: fixed;
-  inset: 0;
+  top: var(--stage-top, 0px);
+  right: var(--stage-right, 0px);
+  bottom: var(--stage-bottom, 0px);
+  left: var(--stage-left, 0px);
 }
 .glass {
   background: var(--glass);

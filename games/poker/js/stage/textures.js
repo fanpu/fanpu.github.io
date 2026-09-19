@@ -98,45 +98,189 @@ export function paintCardFace(g, w, h, card, { fourColour = false } = {}) {
   paintPip(g, card.s, w * 0.63, h * 0.71, w * 0.52);
 }
 
+// The back: an original design in the tradition of red casino decks. White border, deep red field over a fine
+// lattice, a guilloche rosette medallion, shell fans in the corners and scrollwork between, all mirrored in
+// four so the card reads the same either way up.
 export function paintCardBack(g, w, h) {
+  const CREAM = "#fbf3e4",
+    cx = w / 2,
+    cy = h / 2;
   g.clearRect(0, 0, w, h);
   g.fillStyle = STOCK;
   roundRect(g, 0, 0, w, h, w * 0.085);
   g.fill();
-  const m = w * 0.06;
-  roundRect(g, m, m, w - 2 * m, h - 2 * m, w * 0.05);
-  const fill = g.createLinearGradient(0, 0, w, h);
-  fill.addColorStop(0, "#16324a");
-  fill.addColorStop(1, "#0c1d2e");
-  g.fillStyle = fill;
+
+  const m = w * 0.062; // white border
+  const field = g.createRadialGradient(cx, cy, w * 0.1, cx, cy, h * 0.62);
+  field.addColorStop(0, "#b81e28");
+  field.addColorStop(1, "#7c0f18");
+  roundRect(g, m, m, w - 2 * m, h - 2 * m, w * 0.045);
+  g.fillStyle = field;
   g.fill();
+
   g.save();
+  roundRect(g, m, m, w - 2 * m, h - 2 * m, w * 0.045);
   g.clip();
-  g.strokeStyle = "rgba(216,179,106,0.42)";
-  g.lineWidth = w * 0.008;
-  const step = w * 0.085;
+  // Fine diamond lattice, barely lighter than the field: texture up close, solid red from across the table.
+  g.strokeStyle = "rgba(255,214,200,0.2)";
+  g.lineWidth = w * 0.0035;
+  const step = w * 0.042;
   for (let k = -h; k < w + h; k += step) {
     g.beginPath();
     g.moveTo(k, 0);
-    g.lineTo(k + h, h);
-    g.stroke();
-    g.beginPath();
-    g.moveTo(k + h, 0);
+    g.lineTo(k + h * 0.62, h);
+    g.moveTo(k + h * 0.62, 0);
     g.lineTo(k, h);
     g.stroke();
   }
   g.restore();
-  g.strokeStyle = BRASS;
-  g.lineWidth = w * 0.012;
-  roundRect(g, m * 1.6, m * 1.6, w - 3.2 * m, h - 3.2 * m, w * 0.035);
+
+  g.strokeStyle = CREAM;
+  g.fillStyle = CREAM;
+  g.lineCap = "round";
+  // Frames: a bold line, a hairline, and a row of beads between them.
+  const f1 = m * 1.5,
+    f2 = m * 2.15;
+  g.lineWidth = w * 0.011;
+  roundRect(g, f1, f1, w - 2 * f1, h - 2 * f1, w * 0.035);
   g.stroke();
-  g.fillStyle = "#0c1d2e";
+  g.lineWidth = w * 0.0045;
+  roundRect(g, f2, f2, w - 2 * f2, h - 2 * f2, w * 0.024);
+  g.stroke();
+  const bead = (f1 + f2) / 2,
+    gap = w * 0.03;
+  for (let x = bead + gap; x < w - bead - gap / 2; x += gap)
+    for (const y of [bead, h - bead]) {
+      g.beginPath();
+      g.arc(x, y, w * 0.0052, 0, Math.PI * 2);
+      g.fill();
+    }
+  for (let y = bead + gap; y < h - bead - gap / 2; y += gap)
+    for (const x of [bead, w - bead]) {
+      g.beginPath();
+      g.arc(x, y, w * 0.0052, 0, Math.PI * 2);
+      g.fill();
+    }
+
+  // A rosette of overlapping ellipses: the engraver's guilloche.
+  const rosette = (x, y, R, n, ratio, width) => {
+    g.lineWidth = width;
+    for (let i = 0; i < n; i++) {
+      g.beginPath();
+      g.ellipse(x, y, R, R * ratio, (i * Math.PI) / n, 0, Math.PI * 2);
+      g.stroke();
+    }
+  };
+  // A scroll: a curve that winds in on itself.
+  const scroll = (x, y, r0, a0, turns, dir, width) => {
+    g.lineWidth = width;
+    g.beginPath();
+    for (let i = 0; i <= 60; i++) {
+      const t = i / 60,
+        r = r0 * (1 - 0.86 * t),
+        a = a0 + dir * t * turns * Math.PI * 2;
+      const px = x + r * Math.cos(a),
+        py = y + r * Math.sin(a);
+      i ? g.lineTo(px, py) : g.moveTo(px, py);
+    }
+    g.stroke();
+    g.beginPath();
+    g.arc(
+      x + r0 * 0.14 * Math.cos(a0 + dir * turns * Math.PI * 2),
+      y + r0 * 0.14 * Math.sin(a0 + dir * turns * Math.PI * 2),
+      width * 1.5,
+      0,
+      Math.PI * 2
+    );
+    g.fill();
+  };
+
+  // One quadrant, drawn with +x right and +y down from the card's centre; mirrored into the other three.
+  const hw = cx - f2,
+    hh = cy - f2;
+  const quadrant = () => {
+    // Shell fan in the corner.
+    const fx = hw,
+      fy = hh;
+    g.lineWidth = w * 0.0045;
+    for (let k = 1; k <= 5; k++) {
+      g.beginPath();
+      g.arc(fx, fy, w * 0.036 * k, Math.PI, 1.5 * Math.PI);
+      g.stroke();
+    }
+    for (let k = 0; k <= 6; k++) {
+      const a = Math.PI + (k / 6) * (Math.PI / 2);
+      g.beginPath();
+      g.moveTo(fx + w * 0.036 * Math.cos(a), fy + w * 0.036 * Math.sin(a));
+      g.lineTo(fx + w * 0.18 * Math.cos(a), fy + w * 0.18 * Math.sin(a));
+      g.stroke();
+    }
+    // The main stem sweeps from beside the medallion out toward the corner and ends in a scroll...
+    g.lineWidth = w * 0.009;
+    g.beginPath();
+    g.moveTo(w * 0.07, h * 0.2);
+    g.bezierCurveTo(w * 0.27, h * 0.21, w * 0.3, h * 0.3, w * 0.2, h * 0.345);
+    g.stroke();
+    scroll(w * 0.235, h * 0.262, w * 0.082, Math.PI * 0.6, 1.35, -1, w * 0.008);
+    // ...with a smaller curl thrown off toward the side, and one toward the end.
+    scroll(w * 0.29, h * 0.125, w * 0.06, Math.PI * 1.1, 1.25, 1, w * 0.0065);
+    scroll(w * 0.095, h * 0.335, w * 0.055, Math.PI * 1.9, 1.25, 1, w * 0.0065);
+    g.lineWidth = w * 0.0065;
+    g.beginPath();
+    g.moveTo(w * 0.16, h * 0.035);
+    g.bezierCurveTo(w * 0.24, h * 0.04, w * 0.33, h * 0.07, w * 0.33, h * 0.125);
+    g.stroke();
+    // Leaves along the stem.
+    for (const [lx, ly, rot] of [
+      [0.13, 0.215, 0.5],
+      [0.2, 0.232, 0.95],
+      [0.31, 0.2, -0.4],
+      [0.05, 0.29, 1.3],
+    ]) {
+      g.save();
+      g.translate(w * lx, h * ly);
+      g.rotate(rot);
+      g.beginPath();
+      g.ellipse(0, 0, w * 0.03, w * 0.0095, 0, 0, Math.PI * 2);
+      g.fill();
+      g.restore();
+    }
+    // A small rosette halfway to the end of the card.
+    rosette(0, h * 0.325, w * 0.062, 6, 0.42, w * 0.0038);
+  };
+  for (const [sx, sy] of [
+    [1, 1],
+    [-1, 1],
+    [1, -1],
+    [-1, -1],
+  ]) {
+    g.save();
+    g.translate(cx, cy);
+    g.scale(sx, sy);
+    quadrant();
+    g.restore();
+  }
+
+  // The medallion: a solid red disc, ringed, filled with a rosette, carrying a spade.
+  g.fillStyle = "#8a111b";
   g.beginPath();
-  g.arc(w / 2, h / 2, w * 0.16, 0, Math.PI * 2);
+  g.arc(cx, cy, w * 0.215, 0, Math.PI * 2);
   g.fill();
+  g.lineWidth = w * 0.011;
   g.stroke();
-  g.fillStyle = BRASS;
-  paintPip(g, 0, w / 2, h / 2 - w * 0.01, w * 0.18);
+  g.lineWidth = w * 0.004;
+  g.beginPath();
+  g.arc(cx, cy, w * 0.19, 0, Math.PI * 2);
+  g.stroke();
+  rosette(cx, cy, w * 0.183, 14, 0.5, w * 0.0034);
+  g.fillStyle = "#8a111b";
+  g.beginPath();
+  g.arc(cx, cy, w * 0.092, 0, Math.PI * 2);
+  g.fill();
+  g.lineWidth = w * 0.0045;
+  g.stroke();
+  g.fillStyle = CREAM;
+  paintPip(g, 0, cx, cy - w * 0.004, w * 0.115);
 }
 
 // Small fixed-seed generator so the felt grain (and so every screenshot) is identical from run to run.
@@ -219,6 +363,62 @@ export function paintFelt(g, w, h, portrait = false) {
   } else {
     spaced("NO LIMIT HOLD\u2019EM", -2.55, 0.5, 0.3);
     spaced("TRAINER", 1.75, 0.34, 0.24);
+  }
+}
+
+// Walnut veneer for the racetrack: a warm ground, then hundreds of long wavering grain lines, a few
+// darker figure bands, and pores. Tiles along x.
+export function paintWood(g, w, h) {
+  const rnd = grain(19);
+  const ground = g.createLinearGradient(0, 0, 0, h);
+  ground.addColorStop(0, "#5a3218");
+  ground.addColorStop(0.5, "#6b3d1e");
+  ground.addColorStop(1, "#4f2b14");
+  g.fillStyle = ground;
+  g.fillRect(0, 0, w, h);
+  for (let i = 0; i < 520; i++) {
+    const y0 = rnd() * h,
+      amp = 2 + rnd() * 9,
+      k = 1 + Math.floor(rnd() * 3), // whole waves across the width, so the texture tiles
+      phase = rnd() * Math.PI * 2;
+    const dark = rnd() < 0.62;
+    g.strokeStyle = dark ? `rgba(28,12,4,${0.05 + rnd() * 0.2})` : `rgba(214,150,84,${0.04 + rnd() * 0.13})`;
+    g.lineWidth = 0.6 + rnd() * 2.4;
+    g.beginPath();
+    for (let x = 0; x <= w; x += 16) {
+      const y = y0 + Math.sin((x / w) * Math.PI * 2 * k + phase) * amp;
+      x ? g.lineTo(x, y) : g.moveTo(x, y);
+    }
+    g.stroke();
+  }
+  for (let i = 0; i < 7; i++) {
+    const y = rnd() * h,
+      band = g.createLinearGradient(0, y - 26, 0, y + 26);
+    band.addColorStop(0, "rgba(20,8,2,0)");
+    band.addColorStop(0.5, `rgba(20,8,2,${0.16 + rnd() * 0.16})`);
+    band.addColorStop(1, "rgba(20,8,2,0)");
+    g.fillStyle = band;
+    g.fillRect(0, y - 26, w, 52);
+  }
+  g.fillStyle = "rgba(15,6,2,0.35)";
+  for (let i = 0; i < 2600; i++) g.fillRect(rnd() * w, rnd() * h, 3 + rnd() * 7, 1);
+}
+
+// Leather grain as a height map: a pebbled surface of small soft cells.
+export function paintLeatherBump(g, size) {
+  const rnd = grain(31);
+  g.fillStyle = "#808080";
+  g.fillRect(0, 0, size, size);
+  for (let i = 0; i < size * 14; i++) {
+    const x = rnd() * size,
+      y = rnd() * size,
+      r = 1.5 + rnd() * 4.5,
+      up = rnd() < 0.55;
+    const cell = g.createRadialGradient(x, y, 0, x, y, r);
+    cell.addColorStop(0, up ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.4)");
+    cell.addColorStop(1, up ? "rgba(255,255,255,0)" : "rgba(0,0,0,0)");
+    g.fillStyle = cell;
+    g.fillRect(x - r, y - r, 2 * r, 2 * r);
   }
 }
 
@@ -337,6 +537,21 @@ export function makeTextures(renderer, { fourColour = false } = {}) {
     chipTop: (i) => chips[i].top,
     chipEdge: (i) => chips[i].edge,
     button: tex(256, 256, (g, w) => paintButton(g, w)),
+    get wood() {
+      if (!api._wood) {
+        api._wood = tex(1024, 512, paintWood);
+        api._wood.wrapS = api._wood.wrapT = THREE.RepeatWrapping;
+      }
+      return api._wood;
+    },
+    get leatherBump() {
+      if (!api._leather) {
+        api._leather = tex(512, 512, (g, w) => paintLeatherBump(g, w));
+        api._leather.colorSpace = THREE.NoColorSpace; // a height map, not a colour
+        api._leather.wrapS = api._leather.wrapT = THREE.RepeatWrapping;
+      }
+      return api._leather;
+    },
     dispose: () => made.forEach((t) => t.dispose()),
   };
   return api;

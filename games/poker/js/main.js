@@ -7,6 +7,7 @@ import { createChips } from "./stage/chips3d.js";
 import { createLabels } from "./stage/labels.js";
 import { createFx } from "./stage/fx.js";
 import { createDirector, sceneFromState } from "./director.js";
+import { cardCanvas } from "./stage/textures.js";
 
 // Milestone 2 shell: the stage on its own. With ?pose=<name> it shows one fixed scene (for screenshots);
 // otherwise bots play real hands through the director, with the hero's seat following the coach's advice.
@@ -16,6 +17,7 @@ const { parseCards: P } = core;
 
 function boot() {
   const mount = document.getElementById("stage");
+  if (params.get("ui") === "mock") mockPanels();
   if (!Stage.supported()) {
     document.body.insertAdjacentHTML(
       "beforeend",
@@ -27,20 +29,70 @@ function boot() {
   const parts = {
     stage,
     table: buildTable(stage),
-    rig: createCameraRig(stage),
+    rig: null,
     cards: createCards(stage),
     chips: createChips(stage),
-    labels: createLabels(stage, document.getElementById("hud")),
+    labels: createLabels(stage, mount),
     fx: createFx(stage),
   };
+  parts.table.setSeats(6);
+  parts.rig = createCameraRig(stage, parts.table);
   const director = createDirector(parts);
   parts.rig.enableOrbit(stage.renderer.domElement);
   window.__poker = { core, stage, director, ...parts };
 
   const pose = params.get("pose");
+  if (pose === "back") return showArtwork(stage);
   if (pose) showPose(pose, parts, director);
   else autoplay(parts, director);
   stage.start();
+  document.body.dataset.ready = "1";
+}
+
+// ---------- placeholder panels (?ui=mock): the screen-space budget the real panels of milestone 3 will fill ----------
+// The panels claim their space through the --stage-* variables; the camera reframes the table into what is left.
+function mockPanels() {
+  const link = Object.assign(document.createElement("link"), { rel: "stylesheet", href: "css/mock.css" });
+  document.head.appendChild(link);
+  document.body.classList.add("mock");
+  document.getElementById("hud").innerHTML = `
+    <header class="glass m-head"><b>Poker Trainer</b><span>Train &middot; guided</span><i>hand 12 &nbsp; +14.5 bb</i></header>
+    <aside class="glass m-drawer">
+      <nav><b>Ranges</b><span>EV</span><span>Next card</span><span>Hand</span><span>Why</span></nav>
+      <div class="m-grid"></div><p>13 &times; 13 range grid, composition bars, EV table</p>
+    </aside>
+    <footer class="glass m-dock">
+      <div class="m-strip"><span class="m-cards" id="mHand"></span><em>top pair, nut flush draw</em><span class="m-cards" id="mBoard"></span></div>
+      <div class="m-actions"><button>Fold</button><button>Call 6 bb</button><button class="pick">Raise to 18 bb</button></div>
+      <div class="m-sizes"><span>&frac12; pot</span><span>&frac23; pot</span><span>pot</span><span>all-in</span><input type="range" aria-label="raise size" /></div>
+      <nav class="m-tabs"><b>Ranges</b><span>EV</span><span>Next card</span><span>Hand</span><span>Why</span></nav>
+    </footer>`;
+  const grid = document.querySelector(".m-grid");
+  for (let i = 0; i < 169; i++)
+    grid.appendChild(
+      Object.assign(document.createElement("i"), {
+        style: `opacity:${(0.15 + 0.85 * Math.max(0, 1 - ((i % 13) + Math.floor(i / 13)) / 14)).toFixed(2)}`,
+      })
+    );
+  for (const [id, txt] of [
+    ["mHand", "Ah Qh"],
+    ["mBoard", "Kh 9h 2c"],
+  ])
+    for (const c of P(txt)) document.getElementById(id).appendChild(cardCanvas(c, {}, 120));
+}
+
+// ---------- the painted artwork at full size, to check it without the table in the way ----------
+function showArtwork(stage) {
+  stage.stop();
+  const wall = document.createElement("div");
+  wall.style.cssText =
+    "position:fixed;inset:0;z-index:5;display:flex;gap:28px;align-items:center;justify-content:center;background:#123a2c;flex-wrap:wrap;overflow:auto";
+  for (const card of [null, { r: 14, s: 0 }, { r: 12, s: 1 }, { r: 10, s: 2 }, { r: 7, s: 3 }]) {
+    const c = cardCanvas(card, { fourColour: params.has("four") }, 512);
+    c.style.cssText = "height:min(78vh,560px);width:auto;border-radius:4.5%;box-shadow:0 12px 40px rgba(0,0,0,.5)";
+    wall.appendChild(c);
+  }
+  document.body.appendChild(wall);
   document.body.dataset.ready = "1";
 }
 

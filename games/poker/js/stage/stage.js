@@ -28,6 +28,7 @@ export class Stage {
     r.shadowMap.type = THREE.PCFSoftShadowMap;
     r.setClearColor(0x050607);
     r.domElement.style.cssText = "display:block;width:100%;height:100%;touch-action:none";
+    r.domElement.setAttribute("aria-hidden", "true"); // what the canvas shows is also said by the DOM labels and panels
     container.appendChild(r.domElement);
 
     const scene = (this.scene = new THREE.Scene());
@@ -47,10 +48,31 @@ export class Stage {
     lamp.shadow.camera.near = 8;
     lamp.shadow.camera.far = 40;
     scene.add(lamp, lamp.target);
-    scene.add((this.fill = new THREE.HemisphereLight(0x8a93a6, 0x0b0805, 0.38)));
+    scene.add((this.fill = new THREE.HemisphereLight(0x8a93a6, 0x0b0805, 0.3)));
     const rim = (this.rim = new THREE.DirectionalLight(0xa9c2ff, 0.32));
     rim.position.set(0, 10, -30);
     scene.add(rim);
+
+    // Something for polished wood, brass and chip edges to reflect: a dark room with a warm panel where the lamp
+    // is and a cool glow behind. Without an environment, metal renders nearly black and gloss has nothing to catch.
+    const pmrem = new THREE.PMREMGenerator(r);
+    const room = new THREE.Scene();
+    room.background = new THREE.Color(0x020303);
+    const glow = (hex, strength, w, h, pos) => {
+      const m = new THREE.Mesh(
+        new THREE.PlaneGeometry(w, h),
+        new THREE.MeshBasicMaterial({ color: new THREE.Color(hex).multiplyScalar(strength), side: THREE.DoubleSide })
+      );
+      m.position.set(...pos);
+      m.lookAt(0, 0, 0);
+      room.add(m);
+    };
+    glow(0xffd9a8, 14, 16, 10, [0, 26, 3]);
+    glow(0x8fb4ff, 1.6, 60, 14, [0, 9, -40]);
+    glow(0xffc890, 0.7, 50, 12, [0, 6, 42]);
+    scene.environment = pmrem.fromScene(room, 0.03).texture;
+    scene.environmentIntensity = 0.55;
+    pmrem.dispose();
 
     this.quality = -1;
     this.setQuality(0);
@@ -110,7 +132,7 @@ export class Stage {
     this.renderer.setSize(w, h, false);
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();
-    this.portrait = w / h < 0.8;
+    this.portrait = w / h < 1; // a region taller than it is wide gets the quarter-turned table
     for (const fn of this.resizeFns) fn(w, h);
   }
 

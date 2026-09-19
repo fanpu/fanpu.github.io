@@ -1,7 +1,10 @@
 // Table geometry, as pure functions of the number of seats. No three.js here, so it is tested in node.
 // Units: 1 = 10 cm. x runs along the table, the hero sits at +z (nearest the camera), y is up.
 // Cards and chips are larger than life against the table, on purpose: they have to be read from across the room.
-export const TABLE = { a: 13, b: 7.5, rail: 1.5 }; // felt half-length, felt half-width, rail width
+// Felt half-length and half-width; then, going outward, a polished wood racetrack and the padded leather rail.
+// A portrait table is narrow on a narrow screen, so its surround is slimmer.
+export const TABLE = { a: 13, b: 7.5, track: 1.0, rail: 1.45, tall: { track: 0.7, rail: 1.2 } };
+export const surround = (portrait) => (portrait ? TABLE.tall : TABLE);
 export const CARD = { w: 1.26, h: 1.76, t: 0.02 };
 export const CHIP = { r: 0.39, t: 0.066 };
 export const HERO_SCALE = 1.5;
@@ -40,7 +43,8 @@ function edge(t) {
 // On a portrait screen the whole table turns a quarter: its long axis runs away from the viewer and the hero
 // sits at the near end. The same racetrack, entered at the middle of its right-hand end and rotated so that
 // end faces +z. Order round the table, and everything measured from the rail, are unchanged.
-const T_END = 1 - (L + (Math.PI * TABLE.b) / 2) / (4 * L + 2 * Math.PI * TABLE.b);
+const PERIMETER = 4 * L + 2 * Math.PI * TABLE.b;
+const T_END = 1 - (L + (Math.PI * TABLE.b) / 2) / PERIMETER;
 function edgeFor(t, portrait) {
   if (!portrait) return edge(t);
   const e = edge(t + T_END);
@@ -56,6 +60,9 @@ export function seatLayout(n, portrait = false) {
     const at = (inward, along = 0) => ({ x: e.x - e.nx * inward + e.tx * along, z: e.z - e.nz * inward + e.tz * along });
     const rot = Math.atan2(e.nx, e.nz); // turn about y so that a card's foot points at its player
     const hero = seat === 0;
+    const { track, rail } = surround(portrait);
+    // A cup holder set into the wood, a little way round to the player's left (measured along the rail, so it stays on the wood round the ends).
+    const c = edgeFor(t + (hero ? 4.6 : 3.0) / PERIMETER, portrait);
     // A portrait table is narrow, so there cards sit nearer the rail and bets stay closer to their owners,
     // which leaves the middle free for the board.
     const inset = hero ? { cards: 2.25, bet: 4.3 } : portrait ? { cards: 1.55, bet: 3.3 } : { cards: 2.1, bet: 3.9 };
@@ -65,9 +72,10 @@ export function seatLayout(n, portrait = false) {
       seat,
       t,
       rot,
-      pos: at(-TABLE.rail / 2),
+      pos: at(-track - rail / 2),
+      cup: { x: c.x + (c.nx * track) / 2, z: c.z + (c.nz * track) / 2 },
       // On a phone the side labels are pulled in from the screen's edge, so they are slid along the rail to stay clear of the cards.
-      label: at(-TABLE.rail - 0.4, portrait && !hero ? 2.7 : 0),
+      label: at(-track - rail - 0.4, portrait && !hero ? 2.7 : 0),
       // The hero's own two cards are the most important thing on the table, so they are drawn half as big again.
       cards: [
         { ...at(inset.cards, half), rot, ...(hero ? { scale: HERO_SCALE } : {}) },
@@ -99,6 +107,15 @@ export function layoutFor(portrait = false) {
     portrait,
     halfX: portrait ? TABLE.b : TABLE.a,
     halfZ: portrait ? TABLE.a : TABLE.b,
+    ...surround(portrait), // track and rail widths
+    // Points round the outside of the rail: what the camera must keep in frame.
+    outline(samples = 40) {
+      const out = surround(portrait).track + surround(portrait).rail;
+      return Array.from({ length: samples }, (_, i) => {
+        const e = edgeFor(i / samples, portrait);
+        return { x: e.x + e.nx * out, z: e.z + e.nz * out };
+      });
+    },
     seats: (n) => seatLayout(n, portrait),
     board: boardSlots(portrait),
     pot: portrait ? { x: 0, z: -2.3 } : POT,

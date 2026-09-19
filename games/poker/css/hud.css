@@ -1,6 +1,6 @@
 /* Labels that live on the table: seats, bets, the pot. Positioned from 3D points by stage/labels.js. */
 .labels {
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
   overflow: hidden;

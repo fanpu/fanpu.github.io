@@ -284,6 +284,29 @@ and showdown, plus lesson shots (top-down for position, close on the board for
 texture). Pointer drag orbits, wheel zooms, double-click resets. Under 720px
 wide the default shot pulls back and up so every seat fits in portrait.
 
+### The table is a region, not the screen
+
+Panels claim screen space by setting CSS variables (`--stage-top`, `--stage-right`, `--stage-bottom`,
+`--stage-left`) and the stage fills what is left. Camera distance is never fixed: each shot is a direction, a
+field of view and a zoom, and the rig solves for the closest, centred position at which the whole rail and
+every seat label fit the stage's rectangle. A region taller than it is wide gets the quarter-turned table.
+
+- Desktop: header, a right-hand drawer (about 380px) and a bottom dock; the table fills the rest.
+- Phone: header, then the table in roughly the top 60%, then a dock holding a DOM strip of the hero's hand and
+  the board (crisp at any size, since 3D board cards are only about 22px wide on a phone), the action buttons,
+  size presets, and a tab bar (Ranges / EV / Next card / Hand / Why). A tab slides a sheet up over the table
+  rather than squeezing it.
+
+`?ui=mock` shows placeholder panels that exercise this; milestone 3 replaces them.
+
+### Table furniture
+
+A lacquered walnut racetrack with brass inlay lines sits between felt and rail, with a brass cup holder by each
+seat. The rail is a cushion of dark leather (pebbled bump map, soft sheen) with contrast stitching along both
+shoulders. A small procedural environment map gives the lacquer, brass and chip edges something to reflect.
+Card backs are an original red design: lattice field, guilloche rosette medallion, corner fans, mirrored
+scrollwork.
+
 ### Labels and panels
 
 Names, stacks, bet amounts and action bubbles are DOM elements projected from

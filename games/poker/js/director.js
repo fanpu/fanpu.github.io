@@ -69,6 +69,7 @@ export function createDirector({ stage, table, cards, chips, labels, fx, rig }) 
       seats = table.setSeats(scene.n);
       cards.setLayout(L());
       labels.clear();
+      rig.refit();
     }
     current = structuredClone(scene);
     if (scene.dealer >= 0) table.moveButton(scene.dealer, false);
@@ -284,6 +285,7 @@ export function createDirector({ stage, table, cards, chips, labels, fx, rig }) 
   // When the screen turns, the table turns with it: rebuild from the director's running picture.
   stage.onResized(() => {
     if (current && table.layout.portrait !== stage.portrait) applyScene(current);
+    else rig.refit();
   });
 
   return {

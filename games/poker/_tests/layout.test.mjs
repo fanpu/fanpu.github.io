@@ -36,6 +36,22 @@ for (let n = 2; n <= 9; n++) {
   });
 }
 
+test("the surround: cup holders sit on the wood, the outline wraps the rail", () => {
+  for (const portrait of [false, true]) {
+    const lay = layoutFor(portrait);
+    for (let n = 2; n <= 9; n++)
+      for (const s of lay.seats(n)) {
+        assert.ok(!lay.inside(s.cup, 0.05), "not on the felt");
+        assert.ok(lay.inside(s.cup, -lay.track + 0.05), "not on the leather");
+        assert.ok(dist(s.cup, s.stack) > 1.2 && dist(s.cup, s.button) > 1.0);
+      }
+    const pts = lay.outline(32);
+    assert.equal(pts.length, 32);
+    for (const p of pts)
+      assert.ok(!lay.inside(p, -(lay.track + lay.rail) + 0.01) && lay.inside(p, -(lay.track + lay.rail) - 0.01), "exactly on the rail's outer edge");
+  }
+});
+
 test("the middle of the table", () => {
   const b = boardSlots();
   assert.equal(b.length, 5);
