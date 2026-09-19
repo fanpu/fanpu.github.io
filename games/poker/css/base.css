@@ -1,0 +1,58 @@
+/* Design tokens and primitives shared by every panel. Sibling of flyjack: near-black room, glass panels,
+   system type, tabular numerals. Poker's own accent is brass. */
+:root {
+  color-scheme: dark;
+  --room: #050607;
+  --surface: #14161a;
+  --glass: rgba(18, 20, 24, 0.66);
+  --glass-strong: rgba(14, 16, 19, 0.84);
+  --line: rgba(255, 255, 255, 0.09);
+  --ink: #f3f2ee;
+  --ink-2: #c3c2b7;
+  --ink-3: #8c8b82;
+  --brass: #d8b36a;
+  --brass-ink: #1a1408;
+  --felt: #0f3d2e;
+  --good: #3fb984;
+  --warn: #e0a23c;
+  --bad: #e2604f;
+  --radius: 12px;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --serif: Georgia, "Times New Roman", serif;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+body {
+  overflow: hidden;
+  background: var(--room);
+  color: var(--ink);
+  font: 14px/1.45 var(--font);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+#stage {
+  position: fixed;
+  inset: 0;
+}
+.glass {
+  background: var(--glass);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  backdrop-filter: blur(10px) saturate(1.2);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2);
+}
+.notice {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  text-align: center;
+  color: var(--ink-2);
+}

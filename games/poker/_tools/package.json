@@ -1,0 +1,1 @@
+{ "private": true, "type": "module", "description": "Dev-only screenshot tooling. Not published (Jekyll skips _ directories).", "dependencies": { "puppeteer-core": "23.11.1" } }

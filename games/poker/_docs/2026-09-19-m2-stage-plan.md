@@ -41,9 +41,9 @@
   - `boardSlots() -> [{x,z}] x5`, `POT = {x,z}`, `MUCK = {x,z}`, `DECK = {x,z}`
   - `DENOMS = [{ value, color, edge }]` for 500, 100, 25, 5, 1; `chipBreakdown(amount, maxChips = 24) -> [{ value, count }]` whose values sum to `amount` exactly, greedy from the top, merging upward when over `maxChips`
 
-- [ ] **Step 1:** `cd /tmp && npm pack three@0.186.0`, extract `build/three.module.min.js`, `build/three.core.min.js` and `LICENSE` into `vendor/`. Verify `three.module.min.js` imports `./three.core.min.js` by relative path.
-- [ ] **Step 2: Failing tests.** Tween: a 1 s tween stepped by 250 ms calls `update` with increasing `k` ending at exactly 1 and then resolves; `speed = 2` halves the steps needed; `skip()` jumps every active tween to `k = 1` and resolves; `reduced` resolves on the first step; `wait` resolves; easings map 0 to 0 and 1 to 1 and `inOut` is monotonic. Layout: for every n in 2..9, n seats, seat 0 has the largest z and x near 0, angles strictly ordered, minimum distance between any two seats' card centres > `2.2 * CARD.w`, every `bet` spot is closer to the centre than its `pos`, every position lies inside the felt, no bet spot overlaps a board slot or the pot (distance > 1.5); `chipBreakdown` sums exactly for amounts 1..2000 and never exceeds `maxChips` chips for amounts up to 5000.
-- [ ] **Step 3:** Run, watch fail. **Step 4:** Implement. **Step 5:** Pass. Commit.
+- [x] **Step 1:** `cd /tmp && npm pack three@0.186.0`, extract `build/three.module.min.js`, `build/three.core.min.js` and `LICENSE` into `vendor/`. Verify `three.module.min.js` imports `./three.core.min.js` by relative path.
+- [x] **Step 2: Failing tests.** Tween: a 1 s tween stepped by 250 ms calls `update` with increasing `k` ending at exactly 1 and then resolves; `speed = 2` halves the steps needed; `skip()` jumps every active tween to `k = 1` and resolves; `reduced` resolves on the first step; `wait` resolves; easings map 0 to 0 and 1 to 1 and `inOut` is monotonic. Layout: for every n in 2..9, n seats, seat 0 has the largest z and x near 0, angles strictly ordered, minimum distance between any two seats' card centres > `2.2 * CARD.w`, every `bet` spot is closer to the centre than its `pos`, every position lies inside the felt, no bet spot overlaps a board slot or the pot (distance > 1.5); `chipBreakdown` sums exactly for amounts 1..2000 and never exceeds `maxChips` chips for amounts up to 5000.
+- [x] **Step 3:** Run, watch fail. **Step 4:** Implement. **Step 5:** Pass. Commit.
 
 ### Task 2: Textures
 
@@ -55,7 +55,7 @@
 - Card face: large corner index (rank 38% of card width, suit beneath), one big centre pip or court letter, 512x716 px. Suit colours: two-colour `#161616` / `#b3261e`; four-colour adds `#1d5fbf` diamonds and `#1d7a3a` clubs.
 - Felt: radial gradient from `#14503c` at the lamp's pool to `#0a2a20`, fine grain noise from a fixed-seed generator (so screenshots are stable), brass betting line as a racetrack inset 62% of the way out, faint arc lettering "NO LIMIT HOLD'EM" top and "TRAINER" bottom.
 
-- [ ] **Step 1:** Implement. **Step 2:** Verified visually in Task 6 (`?pose=cards` shows all 52 faces plus a back). Commit.
+- [x] **Step 1:** Implement. **Step 2:** Verified visually in Task 6 (`?pose=cards` shows all 52 faces plus a back). Commit.
 
 ### Task 3: Stage, table, camera
 
@@ -67,7 +67,7 @@
 - `buildTable(stage) -> { group, setSeats(n), moveButton(seat, animate) -> Promise }`: racetrack felt (ExtrudeGeometry from a rounded-rect Shape, felt texture mapped by world xz), padded rail (tube-like extrusion, dark leather `#1a1210` with a specular sheen), apron beneath, a floor disc that catches the lamp's falloff.
 - `shots.js`: `SHOTS = { table, deal, board, showdown, top, lesson }` as `{ pos, target, fov }`; `createCameraRig(stage) -> { to(name, seconds) -> Promise, snap(name), enableOrbit(dom), setPortrait(bool) }`. Portrait variants pull back and up so nine seats fit 390x844.
 
-- [ ] **Step 1:** Implement. **Step 2:** `index.html` minimal shell + `js/main.js` that mounts the stage and table. **Step 3:** Screenshot via Task 6 tooling; iterate on lighting until the felt pool, rail sheen and shadows read well. Commit.
+- [x] **Step 1:** Implement. **Step 2:** `index.html` minimal shell + `js/main.js` that mounts the stage and table. **Step 3:** Screenshot via Task 6 tooling; iterate on lighting until the felt pool, rail sheen and shadows read well. Commit.
 
 ### Task 4: Cards and chips
 
@@ -77,7 +77,7 @@
 - `createCards(stage) -> { place(id, card, slot, { faceUp }) , deal(id, card, from, slot, { faceUp, delay }) -> Promise, flip(id, faceUp) -> Promise, moveTo(id, slot) -> Promise, muck(id) -> Promise, lift(ids, on) -> Promise, dim(ids, on), fan(idPrefix, cards, centre) -> Promise, remove(id), clear() }`. `id` is a string (`"h0a"`, `"h0b"`, `"b2"`, `"out7"`); `slot` is `{ x, z, rot, y? }`. Meshes are pooled. A card is a thin `BoxGeometry` with face/back materials and an ivory edge; lift raises and adds an emissive brass rim via a second slightly larger mesh.
 - `createChips(stage) -> { setStack(key, amount, at) , slide(key, toKey, at) -> Promise, merge(fromKeys, toKey, at) -> Promise, split(fromKey, shares:[{ key, amount, at }]) -> Promise, clear() }`. One `InstancedMesh` per denomination; a stack is drawn as columns of at most 12 chips; instance matrices are rewritten on change.
 
-- [ ] **Step 1:** Implement. **Step 2:** Screenshot `?pose=flop` and `?pose=showdown`. Commit.
+- [x] **Step 1:** Implement. **Step 2:** Screenshot `?pose=flop` and `?pose=showdown`. Commit.
 
 ### Task 5: Labels, fx, director
 
@@ -92,11 +92,11 @@
   - `play` handles `handStart, post, deal, action, refund, street, showdown, award, handEnd` per the spec's choreography table; after the last event it re-applies `sceneFromState` without animation so the stage can never drift from the engine.
 - Seat labels show name, stack in bb, position tag, and the last action as a bubble that fades.
 
-- [ ] **Step 1:** Implement. **Step 2:** `main.js` autoplay: bots in every seat (hero seat plays the coach's light advice), `?seed=`, `?n=`, `?speed=`. **Step 3:** Watch several hands via screenshots at intervals; fix drift, overlap and timing. Commit.
+- [x] **Step 1:** Implement. **Step 2:** `main.js` autoplay: bots in every seat (hero seat plays the coach's light advice), `?seed=`, `?n=`, `?speed=`. **Step 3:** Watch several hands via screenshots at intervals; fix drift, overlap and timing. Commit.
 
 ### Task 6: Screenshot tooling and the look check
 
 **Files:** Create `_tools/package.json`, `_tools/shoot.mjs`, `_tools/.gitignore` (`node_modules`, `out`)
 
 - `shoot.mjs` serves `games/poker/` on a local port, launches `/usr/bin/google-chrome` headless through puppeteer-core with WebGL enabled, and for each of the poses `table, cards, deal, flop, bets, showdown, nine, heads-up` captures 1440x900 and 390x844 into `_tools/out/`. Poses are reached with `?pose=<name>&seed=1`, which builds a fixed scene and calls `applyScene` with no animation, then sets `document.body.dataset.ready = "1"`; the script waits for that attribute.
-- [ ] **Step 1:** Implement and run. **Step 2:** Review every image by eye; fix what looks wrong; repeat. **Step 3:** Send the desktop and phone captures of `flop`, `showdown` and `nine` to Fan Pu. **STOP for the look check before starting M3.**
+- [x] **Step 1:** Implement and run. **Step 2:** Review every image by eye; fix what looks wrong; repeat. **Step 3:** Send the desktop and phone captures of `flop`, `showdown` and `nine` to Fan Pu. **STOP for the look check before starting M3.**
