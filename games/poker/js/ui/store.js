@@ -70,8 +70,11 @@ export function createStore(storage) {
   const stats = { guided: emptyStats(), silent: emptyStats() };
   for (const level of ["guided", "silent"]) {
     const src = isObject(s[level]) ? s[level] : {};
-    for (const k of ["hands", "net", "decisions", "correct", "acceptable", "mistakes", "streak"]) if (Number.isFinite(src[k])) stats[level][k] = src[k];
-    if (isObject(src.byCat)) for (const [cat, b] of Object.entries(src.byCat)) if (isObject(b) && Number.isFinite(b.n)) stats[level].byCat[cat] = { n: b.n, score: +b.score || 0, mistakes: +b.mistakes || 0 };
+    for (const k of ["hands", "net", "decisions", "correct", "acceptable", "mistakes", "streak"])
+      if (Number.isFinite(src[k])) stats[level][k] = src[k];
+    if (isObject(src.byCat))
+      for (const [cat, b] of Object.entries(src.byCat))
+        if (isObject(b) && Number.isFinite(b.n)) stats[level].byCat[cat] = { n: b.n, score: +b.score || 0, mistakes: +b.mistakes || 0 };
     if (Array.isArray(src.recent)) stats[level].recent = src.recent.filter(isObject).slice(0, 40);
   }
 

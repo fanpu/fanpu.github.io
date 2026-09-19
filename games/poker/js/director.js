@@ -299,11 +299,15 @@ export function createDirector({ stage, table, cards, chips, labels, fx, rig }) 
       return speed;
     },
     skip: () => stage.anim.skip(),
-    // Act out a batch of engine events. `state` is the engine state after them.
-    async play(events, state, { reveal = [] } = {}) {
+    // Act out a batch of engine events. `state` is the engine state after all of them. With `partial`, more events
+    // from the same engine step are still to come, so the stage must not be snapped to a state it has not reached yet.
+    async play(events, state, { reveal = [], partial = false } = {}) {
       if (seats.length !== state.config.n) applyScene(sceneFromState(state, { acting: false }));
       for (let i = 0; i < events.length; i++) await acts[events[i].type]?.(events[i], state, events.slice(i + 1));
-      if (!state.handOver) applyScene(sceneFromState(state, { reveal }));
+      if (!state.handOver && !partial) applyScene(sceneFromState(state, { reveal }));
     },
+    // Put the table straight to a given engine state: coming back to a parked hand, or rewinding in review.
+    show: (state, opts) => applyScene(sceneFromState(state, opts)),
+    wait: (seconds) => stage.anim.wait(seconds),
   };
 }

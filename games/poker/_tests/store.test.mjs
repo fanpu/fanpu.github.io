@@ -25,7 +25,11 @@ test("junk in storage never throws and falls back to defaults", () => {
     assert.equal(s.stats.guided.decisions, 0);
   }
   const partial = createStore(fakeStorage({ "pokerTrainer.prefs": '{"players":99,"speed":"fast","fourColour":true}' }));
-  assert.deepEqual([partial.settings.players, partial.settings.speed, partial.settings.fourColour], [6, 1, true], "bad values dropped, good ones kept");
+  assert.deepEqual(
+    [partial.settings.players, partial.settings.speed, partial.settings.fourColour],
+    [6, 1, true],
+    "bad values dropped, good ones kept"
+  );
 });
 
 test("settings round-trip", () => {
@@ -86,7 +90,15 @@ test("weakest category needs enough evidence", () => {
 });
 
 test("storage that throws is survivable", () => {
-  const broken = { getItem: () => { throw new Error("denied"); }, setItem: () => { throw new Error("quota"); }, removeItem() {} };
+  const broken = {
+    getItem: () => {
+      throw new Error("denied");
+    },
+    setItem: () => {
+      throw new Error("quota");
+    },
+    removeItem() {},
+  };
   const s = createStore(broken);
   s.setSetting("players", 3);
   s.recordDecision("guided", decision("Open or fold", "correct"));
