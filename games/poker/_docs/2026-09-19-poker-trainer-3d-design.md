@@ -138,11 +138,14 @@ games/poker/
       cards.js        card encoding, deck, shuffle
       eval.js         7-card evaluator, hand description, best-five extraction
       preflop.js      range tiers, hand percentiles
+      positions.js    position names, opening and defending percentages
       equity.js       Monte Carlo equity vs ranges
       analysis.js     outs, hand class, board texture, combos, range
                       composition, next-card map, EV sampling
       engine.js       event-sourced hold'em engine (below)
-      bots.js         five styles, observation model, decisions
+      reads.js        what an observer infers from engine events: VPIP/PFR,
+                      assumed ranges, the story of the hand
+      bots.js         five styles, decisions
       coach.js        analyze, recommend, grade, category -> lesson
     worker/
       coachWorker.js  runs equity/analysis/coach off-thread
@@ -196,13 +199,14 @@ to the code without being published. No `_config.yml` change is needed.
 
 The engine is rewritten rather than ported. `engine.js` exposes:
 
-- `createGame(config, rng)` -> state
+- `createGame(config)` -> state; `startHand(state, rng)` -> events
 - `legalActions(state)` -> what the player to act may do, with min/max raise
-- `apply(state, action)` -> `{ state, events }`
-- `replay(config, seed, actions, uptoIndex)` -> state at any point in a hand
+- `apply(state, action)` -> events (state is updated in place)
+- `snapshot(state)` at hand start, and `replay(snapshot, actions, upto)` ->
+  `{ state, events }` at any point in that hand
 
-Events: `handStart`, `post`, `deal`, `action`, `street`, `showdown`, `award`,
-`handEnd`. Every state change is described by an event, so the director can
+Events: `handStart`, `post`, `deal`, `action`, `refund`, `street`, `showdown`,
+`award`, `handEnd`. Every state change is described by an event, so the director can
 animate it, the review can rewind to it, and tests can assert on it. The
 engine never waits on animation; `session.js` awaits the director before asking
 the next bot or enabling hero controls.
