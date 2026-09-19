@@ -251,7 +251,7 @@ export function gridCounts(list) {
   return m;
 }
 
-export function composition(list, hero, board, rng) {
+export function composition(list, hero, board, rng, samples = 260) {
   const out = BUCKETS.map((name, k) => ({ name, k, n: 0, eq: null }));
   const by = BUCKETS.map(() => []);
   for (const h of list) by[h.bk].push(h);
@@ -271,7 +271,7 @@ export function composition(list, hero, board, rng) {
       }
       out[k].eq = w / arr.length;
     } else {
-      const N = 260;
+      const N = samples;
       for (let it = 0; it < N; it++) {
         const h = arr[(rng() * arr.length) | 0];
         const full = board.concat(pickRunout(deck, need, [h.ka, h.kb], rng));

@@ -25,7 +25,7 @@ export class Stage {
     r.toneMapping = THREE.ACESFilmicToneMapping;
     r.toneMappingExposure = 1.12;
     r.shadowMap.enabled = true;
-    r.shadowMap.type = THREE.PCFSoftShadowMap;
+    r.shadowMap.type = THREE.PCFShadowMap; // soft-filtered in this three.js release; the old PCFSoft name is gone
     r.setClearColor(0x050607);
     r.domElement.style.cssText = "display:block;width:100%;height:100%;touch-action:none";
     r.domElement.setAttribute("aria-hidden", "true"); // what the canvas shows is also said by the DOM labels and panels

@@ -1,0 +1,371 @@
+/* The dock: your hand, your actions, the grade, the result. Fixed height per breakpoint so the table never jumps. */
+#dock {
+  position: fixed;
+  left: 0;
+  right: min(392px, 34vw);
+  bottom: 0;
+  height: 136px;
+  z-index: 2;
+  padding: 12px 16px;
+  border-width: 1px 0 0;
+  border-radius: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 18px;
+  align-items: center;
+}
+.strip {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  gap: 6px 12px;
+  align-items: center;
+  min-width: 170px;
+}
+.strip .cards {
+  display: inline-flex;
+  gap: 4px;
+  min-height: 58px;
+}
+.strip .desc {
+  grid-column: 1 / 3;
+  grid-row: 2;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  max-width: 260px;
+  line-height: 1.3;
+}
+.strip .desc small {
+  color: var(--brass);
+  letter-spacing: 0.06em;
+  font-size: 10.5px;
+}
+.pcard {
+  height: 58px;
+  width: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  display: block;
+}
+.strip .cards:not(.mine) .pcard {
+  height: 46px;
+  align-self: end;
+}
+#dock .main {
+  display: grid;
+  grid-template-columns: auto minmax(180px, 1fr);
+  gap: 16px;
+  align-items: center;
+  min-width: 0;
+}
+.actions {
+  display: flex;
+  gap: 8px;
+}
+.actions button {
+  position: relative;
+  min-width: 112px;
+  height: 60px;
+  padding: 4px 14px 0;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.07);
+  font-size: 15px;
+  font-weight: 650;
+  color: var(--ink);
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 1px;
+  transition:
+    background 0.15s,
+    transform 0.08s;
+}
+.actions button:not(:disabled):hover {
+  background: rgba(255, 255, 255, 0.13);
+}
+.actions button:not(:disabled):active {
+  transform: translateY(1px);
+}
+.actions button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.actions button.pick {
+  border-color: var(--brass);
+  box-shadow: inset 0 0 0 1px var(--brass);
+}
+.actions button.pick::after {
+  content: "coach";
+  position: absolute;
+  top: -8px;
+  right: 8px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--brass);
+  color: var(--brass-ink);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.actions kbd {
+  position: absolute;
+  top: 5px;
+  left: 6px;
+  margin: 0;
+  border: 0;
+  opacity: 0.7;
+}
+.actions small {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-3);
+}
+.actions em,
+#raiseLabel em {
+  font-style: normal;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--bad);
+}
+#raiseLabel {
+  display: grid;
+  justify-items: center;
+  gap: 1px;
+}
+.sizing {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.presets {
+  display: flex;
+  gap: 5px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.presets button {
+  white-space: nowrap;
+  flex: none;
+}
+.presets button {
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: none;
+  font-size: 12px;
+  color: var(--ink-2);
+}
+.presets button.on {
+  background: rgba(216, 179, 106, 0.18);
+  border-color: rgba(216, 179, 106, 0.5);
+  color: var(--brass);
+}
+.presets button.coach {
+  border-color: rgba(216, 179, 106, 0.5);
+  color: var(--brass);
+}
+.slide {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.slide input {
+  flex: 1;
+  min-width: 140px;
+  accent-color: var(--brass);
+  height: 24px;
+}
+.slide output {
+  font-size: 11.5px;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.waiting {
+  grid-column: 1 / 3;
+  color: var(--ink-3);
+  font-size: 13px;
+}
+.feedback {
+  grid-column: 1 / 3;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: center;
+}
+.feedback p {
+  margin: 4px 0 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--ink-2);
+  max-width: 760px;
+}
+.feedback b {
+  color: var(--ink);
+}
+.grade {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--good);
+  color: #06140d;
+}
+.acceptable .grade {
+  background: var(--warn);
+  color: #1a1204;
+}
+.mistake .grade {
+  background: var(--bad);
+  color: #1d0805;
+}
+.grade.plain {
+  background: none;
+  color: var(--ink);
+  padding: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+.ctx {
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-left: 6px;
+}
+.pips {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.go {
+  display: flex;
+  gap: 8px;
+}
+.primary {
+  height: 52px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 11px;
+  background: var(--brass);
+  color: var(--brass-ink);
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.primary kbd {
+  color: rgba(26, 20, 8, 0.7);
+  border-color: rgba(26, 20, 8, 0.3);
+}
+.sheet-tabs {
+  display: none;
+}
+
+/* ---------- phone ---------- */
+@media (max-width: 720px) {
+  #dock {
+    right: 0;
+    height: 252px;
+    padding: 10px 10px calc(6px + env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+  .strip {
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: auto;
+    min-width: 0;
+  }
+  .strip .desc {
+    grid-column: 2;
+    grid-row: 1;
+    text-align: center;
+    font-size: 11.5px;
+    max-width: none;
+  }
+  .strip .cards {
+    min-height: 50px;
+  }
+  .pcard {
+    height: 50px;
+  }
+  .strip .cards:not(.mine) .pcard {
+    height: 42px;
+  }
+  #dock .main {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+    flex: 1;
+    min-height: 0;
+  }
+  .actions {
+    gap: 6px;
+  }
+  .actions button {
+    flex: 1;
+    min-width: 0;
+    height: 54px;
+    padding: 0 4px;
+    font-size: 14px;
+  }
+  .actions kbd,
+  .primary kbd {
+    display: none;
+  }
+  .presets {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .presets button {
+    padding: 7px 10px;
+    white-space: nowrap;
+  }
+  .slide output {
+    min-width: 0;
+    font-size: 10.5px;
+    white-space: normal;
+    max-width: 120px;
+    text-align: right;
+  }
+  .feedback {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    overflow-y: auto;
+  }
+  .feedback p {
+    font-size: 12px;
+  }
+  .go {
+    justify-content: flex-end;
+  }
+  .primary {
+    height: 46px;
+    flex: 1;
+  }
+  .sheet-tabs {
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 6px;
+    border-top: 1px solid var(--line);
+  }
+  .sheet-tabs button {
+    border: 0;
+    background: none;
+    padding: 9px 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-2);
+    min-height: 40px;
+  }
+  [data-level="silent"]:not([data-phase="handOver"]) .sheet-tabs button:not(:first-child) {
+    visibility: hidden;
+  }
+}

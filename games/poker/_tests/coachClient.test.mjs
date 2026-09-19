@@ -89,6 +89,24 @@ test("falls back to the main thread when the worker cannot start, errors, or nev
   }
 });
 
+test("a worker that is only slow to start is used once it answers", async () => {
+  const { state, reads } = heroSpot();
+  // A worker that is still loading answers nothing; once up, it works through its queue in order.
+  let up = false;
+  const queue = [];
+  const answer = (m, reply) => (m.type === "ping" ? reply({ type: "pong" }) : reply({ type: "result", id: m.id, analysis: "from the worker" }));
+  const release = () => ((up = true), queue.splice(0).forEach(([m, reply]) => answer(m, reply)));
+  const coach = createCoach({ pingMs: 15, workerFactory: () => fakeWorker((m, reply) => (up ? answer(m, reply) : queue.push([m, reply]))) });
+  const early = await coach.analyze(state, reads, { seed: 3, light: true, iters: 300 });
+  assert.equal(coach.mode, "main");
+  assert.ok(early.rec, "answered on the main thread while the worker was still loading");
+  release();
+  await new Promise((r) => setTimeout(r, 5));
+  assert.deepEqual([coach.mode, coach.fallbackReason], ["worker", ""]);
+  assert.equal(await coach.analyze(state, reads, { seed: 4 }), "from the worker");
+  coach.dispose();
+});
+
 test("errors from the coach reach the caller", async () => {
   const { state, reads } = heroSpot();
   A(state, "raise", 6); // seat 0 opened; move on so that the hero is no longer to act

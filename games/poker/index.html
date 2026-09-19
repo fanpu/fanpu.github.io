@@ -8,11 +8,18 @@
     <meta name="theme-color" content="#050607" />
     <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/hud.css" />
+    <link rel="stylesheet" href="css/panels.css" />
+    <link rel="stylesheet" href="css/dock.css" />
     <script defer src="/assets/js/game-analytics.js"></script>
   </head>
   <body>
     <div id="stage"></div>
-    <div id="hud"></div>
+    <header id="hud" class="glass"></header>
+    <div id="scrim"></div>
+    <aside id="info" class="glass" aria-label="Coach"></aside>
+    <footer id="dock" class="glass" aria-label="Your hand and actions"></footer>
+    <div id="settings" class="glass" role="dialog" aria-label="Settings" hidden></div>
+    <main id="home" hidden></main>
     <noscript><div class="notice">The poker trainer needs JavaScript.</div></noscript>
     <script type="module" src="js/main.js"></script>
   </body>

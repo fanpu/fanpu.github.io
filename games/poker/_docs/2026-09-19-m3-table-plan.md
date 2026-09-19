@@ -34,8 +34,8 @@
   - `weakest(level, minN = 8) -> { category, accuracy, n, lessonId } | null`.
   - `view` is the session's published state; `set` shallow-merges and notifies subscribers once per microtask.
 
-- [ ] **Step 1: Failing tests:** defaults with empty storage; junk JSON in every key falls back to defaults without throwing; settings round-trip; old prefs `{speed:'600',anim:true,pauseMode:'mistake',showPick:true,nPlayers:'6'}` migrate; each v2 mode migrates; `recordDecision` updates totals, byCat, streak (reset on mistake, unchanged on acceptable) and caps `recent` at 40; guided and silent are kept apart; `weakest` ignores categories under `minN` and returns the lowest accuracy with its lesson id; storage that throws on `setItem` does not throw out of the store; subscribers are called once for several `set` calls in a tick; unsubscribe works.
-- [ ] **Step 2:** Fail. **Step 3:** Implement. **Step 4:** Pass. Commit.
+- [x] **Step 1: Failing tests:** defaults with empty storage; junk JSON in every key falls back to defaults without throwing; settings round-trip; old prefs `{speed:'600',anim:true,pauseMode:'mistake',showPick:true,nPlayers:'6'}` migrate; each v2 mode migrates; `recordDecision` updates totals, byCat, streak (reset on mistake, unchanged on acceptable) and caps `recent` at 40; guided and silent are kept apart; `weakest` ignores categories under `minN` and returns the lowest accuracy with its lesson id; storage that throws on `setItem` does not throw out of the store; subscribers are called once for several `set` calls in a tick; unsubscribe works.
+- [x] **Step 2:** Fail. **Step 3:** Implement. **Step 4:** Pass. Commit.
 
 ### Task 2: Coach worker
 
@@ -43,8 +43,8 @@
 
 **Interfaces — Produces:** `createCoach({ workerFactory? }) -> { analyze(state, reads, { seed, light, iters }) -> Promise<analysis>, cancelAll(), dispose(), mode: 'worker' | 'main' }`. Requests carry an id; `cancelAll` rejects pending promises with `{ cancelled: true }` and ignores late replies. If the worker cannot be constructed, errors, or does not answer a ping within 1.5 s, the client switches to main-thread `analyze` (with `iters` capped at 3000) and replays outstanding requests. `workerFactory` is injectable for tests.
 
-- [ ] **Step 1: Failing tests** with a fake worker: resolves with the worker's reply; ids keep concurrent requests apart; `cancelAll` rejects and late replies are dropped; a worker that throws on construction, or posts `error`, falls back to main and still resolves; the main-thread result for a seed equals `core.analyze` with `makeRng(seed)`.
-- [ ] **Step 2:** Fail. **Step 3:** Implement. **Step 4:** Pass. Commit.
+- [x] **Step 1: Failing tests** with a fake worker: resolves with the worker's reply; ids keep concurrent requests apart; `cancelAll` rejects and late replies are dropped; a worker that throws on construction, or posts `error`, falls back to main and still resolves; the main-thread result for a seed equals `core.analyze` with `makeRng(seed)`.
+- [x] **Step 2:** Fail. **Step 3:** Implement. **Step 4:** Pass. Commit.
 
 ### Task 3: Session (the hand loop)
 
@@ -60,8 +60,8 @@ view = { phase: 'idle'|'dealing'|'bots'|'hero'|'feedback'|'handOver', level, han
 
 Rules: analysis is requested the moment the hero is to act; in Guided the dock enables at once and the panels fill in when it lands; acting before it lands waits for it (grading needs it). Guided pauses per `settings.pause`; Silent never pauses and never publishes `analysis` or `lastGrade` until `handOver`. `stop()` parks the loop at the next await (leaving the table mid-hand pauses it; `start` resumes the same hand). Grading follows OLD `heroAct` (check/call equivalence, EV of the chosen action from `evOfRaise`).
 
-- [ ] **Step 1: Failing tests:** a scripted hero plays 30 hands to completion at both levels with chips conserved; phases occur in a legal order; Silent never exposes analysis mid-hand; pause-on-mistake enters `feedback` and `resume()` continues; `stop()` then `start()` resumes the same hand number; stats are recorded per level; identical seeds give identical decision logs.
-- [ ] **Step 2:** Fail. **Step 3:** Implement. **Step 4:** Pass. Commit.
+- [x] **Step 1: Failing tests:** a scripted hero plays 30 hands to completion at both levels with chips conserved; phases occur in a legal order; Silent never exposes analysis mid-hand; pause-on-mistake enters `feedback` and `resume()` continues; `stop()` then `start()` resumes the same hand number; stats are recorded per level; identical seeds give identical decision logs.
+- [x] **Step 2:** Fail. **Step 3:** Implement. **Step 4:** Pass. Commit.
 
 ### Task 4: Panels
 
@@ -74,11 +74,11 @@ Rules: analysis is requested the moment the hero is to act; in Guided the dock e
 - `home.js`: the three steps (Learn / Train / Prove it) with progress and the weakest-category prompt. Learn is present but marked "arrives with the lessons" until M5.
 - Panels set `--stage-top/right/bottom` from their measured sizes (ResizeObserver), so the camera always fits what is really there.
 
-- [ ] **Step 1:** Implement. **Step 2:** `shoot.mjs` gains `until=<phase>` (waits for `document.body.dataset.phase`) and click/keys scripting; capture hero-to-act (each tab), feedback, hand over, settings, home, at both sizes. **Step 3:** Review by eye, fix, repeat. Commit.
+- [x] **Step 1:** Implement. **Step 2:** `shoot.mjs` gains `until=<phase>` (waits for `document.body.dataset.phase`) and click/keys scripting; capture hero-to-act (each tab), feedback, hand over, settings, home, at both sizes. **Step 3:** Review by eye, fix, repeat. Commit.
 
 ### Task 5: Play-test and tune
 
-- [ ] Drive 40 hands per level in headless Chrome with a scripted hero (`?auto=coach`), asserting no console errors and that `phase` never stalls more than 20 s.
-- [ ] Measure how often the hero faces a 3-bet after opening (M1 open item). If above roughly 25% six-handed, temper the LAG/Maniac 3-bet bluff frequency and re-run the bot style tests.
-- [ ] Check worker timing in the browser; raise `iters` while the median analysis stays under 400 ms.
-- [ ] Full test suite, format, commit.
+- [x] Drive 40 hands per level in headless Chrome with a scripted hero (`?auto=coach`), asserting no console errors and that `phase` never stalls more than 20 s.
+- [x] Measure how often the hero faces a 3-bet after opening (M1 open item). If above roughly 25% six-handed, temper the LAG/Maniac 3-bet bluff frequency and re-run the bot style tests.
+- [x] Check worker timing in the browser; raise `iters` while the median analysis stays under 400 ms.
+- [x] Full test suite, format, commit.

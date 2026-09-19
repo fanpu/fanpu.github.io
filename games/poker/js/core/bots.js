@@ -50,7 +50,9 @@ function choose(state, reads, seat, st, o, rng, iters) {
       return ["fold"];
     }
     if (state.raises === 1) {
-      if (pct <= st.pfr * 0.4 || (rnd < st.bluff * 0.5 && pct <= st.vpip)) return ["raise", state.currentBet * 3.2];
+      // 3-bet the top third of the raising range for value, and now and then as a bluff. (Tuned down from 0.4 and
+      // 0.5: at those values a six-handed table 3-bet a third of the hero's opens, half of them from the maniac alone.)
+      if (pct <= st.pfr * 0.33 || (rnd < st.bluff * 0.3 && pct <= st.vpip)) return ["raise", state.currentBet * 3.2];
       if (pct <= st.vpip * 0.75) return ["call"];
       return ["fold"];
     }

@@ -17,6 +17,7 @@ export function createSession({ store, director, coach, rng }) {
     hand = null, // { snap, decisions: [], events: [] }
     raiseTouched = false;
   const sessionNet = { guided: 0, silent: 0 };
+  const timings = []; // how long the coach took to answer, in ms (for tuning sample counts)
 
   const settings = () => store.settings;
   const fromPlayer = () =>
@@ -49,16 +50,14 @@ export function createSession({ store, director, coach, rng }) {
       board: state.board.slice(),
       pot: core.pot(state),
       hero: { cards: hero.cards.slice(), pos: state.dealer >= 0 ? core.seatPos(state, 0) : "", stack: hero.stack, folded: hero.folded },
-      opponents: state.players
-        .slice(1)
-        .map((p) => ({
-          seat: p.id,
-          name: p.name,
-          pos: core.seatPos(state, p.id),
-          folded: p.folded,
-          read: core.readOf(reads, p.id),
-          label: core.readLabel(reads, p.id),
-        })),
+      opponents: state.players.slice(1).map((p) => ({
+        seat: p.id,
+        name: p.name,
+        pos: core.seatPos(state, p.id),
+        folded: p.folded,
+        read: core.readOf(reads, p.id),
+        label: core.readLabel(reads, p.id),
+      })),
       decisions: level === "silent" && !state.handOver ? [] : hand ? hand.decisions : [],
       ...patch,
     });
@@ -72,7 +71,9 @@ export function createSession({ store, director, coach, rng }) {
     raiseTouched = false;
     publish({ phase: "hero", legal, analysis: null, analysing: guided, raiseTo: legal.canRaise ? sizeTo(legal, 0.66) : 0, lastGrade: null });
     const seed = Math.floor(rng() * 2 ** 31);
-    const analysed = coach.analyze(state, reads, { seed, iters: 6000 }).then((a) => {
+    const asked = performance.now();
+    const analysed = coach.analyze(state, reads, { seed, iters: 12000, quality: 2 }).then((a) => {
+      timings.push(Math.round(performance.now() - asked));
       if (guided && store.view.phase === "hero") {
         const pick = settings().showPick && a.rec.action === "raise" && a.rec.size && legal.canRaise && !raiseTouched;
         publish({ analysis: a, analysing: false, ...(pick ? { raiseTo: core.clampRaise(legal, a.rec.size) } : {}) });
@@ -189,6 +190,7 @@ export function createSession({ store, director, coach, rng }) {
     get hand() {
       return hand;
     },
+    timings,
     // Sit down (or come back). Starting while already running only changes the coach level.
     start(toLevel = level) {
       level = toLevel;
@@ -226,6 +228,7 @@ export function createSession({ store, director, coach, rng }) {
       answer({ type, to: type === "raise" ? core.clampRaise(legal, to ?? store.view.raiseTo) : 0 });
       return true;
     },
+    skip: () => director.skip(), // jump the current animation to its end
     resume() {
       if (store.view.phase === "feedback") answer();
     },

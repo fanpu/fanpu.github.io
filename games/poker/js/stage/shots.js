@@ -17,7 +17,7 @@ export const SHOTS = {
 };
 
 // Room to leave round the table, in CSS pixels: seat labels hang outside the rail, and action bubbles above them.
-const PAD = { wide: { x: 64, top: 50, bottom: 30 }, tall: { x: 10, top: 44, bottom: 30 } };
+const PAD = { wide: { x: 64, top: 62, bottom: 30 }, tall: { x: 10, top: 66, bottom: 30 } };
 
 export function createCameraRig(stage, table) {
   const cam = stage.camera;

@@ -64,7 +64,9 @@ export function decisionCategory(g, o) {
   return "Facing a bet";
 }
 
-export function analyze(state, reads, rng, { iters = 3000, light = false } = {}) {
+// `quality` scales the inner sample counts (range composition, next-card map, EV samples): 1 on the main thread,
+// more in the worker, where there is time to spare and steadier numbers are worth having.
+export function analyze(state, reads, rng, { iters = 3000, light = false, quality = 1 } = {}) {
   const o = legalActions(state);
   if (!o || o.seat !== 0) throw new Error("analyze: the hero is not to act");
   const g = view(state, reads);
@@ -106,14 +108,14 @@ export function analyze(state, reads, rng, { iters = 3000, light = false } = {})
   // Decision-time panels: live ranges, composition, next cards, EV by action
   const lists = rangeLists(hero.cards, g.board, ranges);
   const post = g.street > 0 && !light;
-  const comps = post ? lists.map((l) => composition(l, hero.cards, g.board, rng)) : null;
-  const nextCards = post ? nextCardMap(hero.cards, g.board, lists, g.street === 1 ? 160 : 220, rng) : null;
+  const comps = post ? lists.map((l) => composition(l, hero.cards, g.board, rng, Math.round(260 * quality))) : null;
+  const nextCards = post ? nextCardMap(hero.cards, g.board, lists, Math.round((g.street === 1 ? 160 : 220) * quality), rng) : null;
   let ev = null,
     ctx = null,
     samples = null;
   if (post) {
     ctx = evContext(g, o);
-    samples = o.canRaise ? evSamples(hero.cards, g.board, lists, 1400, { pct: hero.pct, filters: hero.filters }, rng) : null;
+    samples = o.canRaise ? evSamples(hero.cards, g.board, lists, Math.round(1400 * quality), { pct: hero.pct, filters: hero.filters }, rng) : null;
     const passive = toCall > 0 ? evCallVal : eq * potNow;
     const potTotal = potNow + toCall;
     const sizeTo = (f) => Math.max(o.minTo, Math.min(o.maxTo, hero.bet + toCall + Math.round(f * potTotal)));
