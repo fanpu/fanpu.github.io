@@ -131,7 +131,8 @@ games/poker/
     panels.css        info drawer, review, stats, settings, home
     lessons.css       lesson panel, drills, DOM cards, range grid
   vendor/
-    three.module.min.js   three 0.186.0, vendored from npm, no CDN
+    three.module.min.js   three 0.186.0 bundled into one minified ES module
+                          (see vendor/README.md), no CDN
   js/
     core/             PURE: no DOM, no three.js; runs in node and in a worker
       rng.js          seeded mulberry32; the only entropy source
@@ -154,6 +155,8 @@ games/poker/
       stage.js        renderer, scene, lights, fog, RAF loop, resize,
                       adaptive quality, context-loss recovery
       tween.js        promise-based Animator, easings, skip(), speed scale
+      layout.js       pure table geometry: seats, card slots, bet spots,
+                      chip breakdown (node-tested)
       textures.js     procedural painters: felt, card faces and back, chips
       table.js        table and rail meshes, seat layout for 2-9 players,
                       dealer button
