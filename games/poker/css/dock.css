@@ -269,7 +269,10 @@
   #dock {
     right: 0;
     height: 252px;
-    padding: 10px 10px calc(6px + env(safe-area-inset-bottom));
+    /* Not calc(Npx + env(...)): the site's CSS minifier strips the spaces round that +, which makes the calc invalid
+     and silently drops the whole declaration. max() says the same thing and survives. */
+    padding: 10px 10px 6px;
+    padding-bottom: max(6px, env(safe-area-inset-bottom));
     display: flex;
     flex-direction: column;
     gap: 8px;

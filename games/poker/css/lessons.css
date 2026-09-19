@@ -365,7 +365,10 @@
     height: 58vh;
     border-width: 1px 0 0;
     border-radius: 16px 16px 0 0;
-    padding: 10px 14px calc(28px + env(safe-area-inset-bottom));
+    /* Not calc(Npx + env(...)): the site's CSS minifier strips the spaces round that +, which makes the calc invalid
+     and silently drops the whole declaration. max() says the same thing and survives. */
+    padding: 10px 14px 28px;
+    padding-bottom: max(28px, env(safe-area-inset-bottom));
     font-size: 14px;
   }
   #lesson h1 {

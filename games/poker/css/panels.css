@@ -798,7 +798,10 @@ body:not([data-mode="table"]) :is(#hud, #info, #dock, #scrim) {
     z-index: 8;
     border-width: 1px 0 0;
     border-radius: 16px 16px 0 0;
-    padding: 16px 14px calc(20px + env(safe-area-inset-bottom));
+    /* Not calc(Npx + env(...)): the site's CSS minifier strips the spaces round that +, which makes the calc invalid
+     and silently drops the whole declaration. max() says the same thing and survives. */
+    padding: 16px 14px 20px;
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
     background: var(--glass-strong);
     transform: translateY(105%);
     transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);

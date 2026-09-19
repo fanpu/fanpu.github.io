@@ -134,6 +134,9 @@ export class Stage {
     this.camera.updateProjectionMatrix();
     this.portrait = w / h < 1; // a region taller than it is wide gets the quarter-turned table
     for (const fn of this.resizeFns) fn(w, h);
+    // Resizing clears the canvas. Draw again at once, or the table is black until the next frame: a flash on a fast
+    // device, and a long one on a slow device (exactly where the quality steps that cause resizes happen).
+    this.renderer.render(this.scene, this.camera);
   }
 
   start() {
