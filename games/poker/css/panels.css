@@ -844,3 +844,23 @@ body:not([data-mode="table"]) :is(#hud, #info, #dock, #scrim) {
     animation-duration: 2.4s;
   }
 }
+
+/* ---------- in between: a blog post's column, a small tablet ---------- */
+@media (min-width: 721px) and (max-width: 1100px) {
+  #info {
+    width: 300px;
+    padding-inline: 12px;
+  }
+  .stats {
+    margin-inline: -12px;
+  }
+  .stats > div {
+    padding: 8px 12px;
+  }
+  .stats b {
+    font-size: 17px;
+  }
+  #hud .meta span:last-child {
+    display: none;
+  }
+}

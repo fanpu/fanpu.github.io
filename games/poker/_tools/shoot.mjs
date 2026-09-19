@@ -13,6 +13,7 @@ const TYPES = { ".html": "text/html", ".js": "text/javascript", ".mjs": "text/ja
 const SIZES = {
   desktop: { width: 1440, height: 900, deviceScaleFactor: 1 },
   phone: { width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true },
+  tablet: { width: 900, height: 700, deviceScaleFactor: 1 }, // a small tablet, or a narrow desktop window
 };
 const ALL = ["table", "cards", "preflop", "flop", "showdown", "nine", "headsup"];
 
@@ -38,7 +39,7 @@ const browser = await puppeteer.launch({
 fs.mkdirSync(out, { recursive: true });
 let failed = false;
 for (const pose of poses.length ? poses : ALL)
-  for (const size of sizes.length ? sizes : Object.keys(SIZES)) {
+  for (const size of sizes.length ? sizes : ["desktop", "phone"]) {
     const context = await browser.createBrowserContext(); // a clean profile per capture: no saved mode or scores
     const page = await context.newPage();
     await page.setViewport(SIZES[size]);
