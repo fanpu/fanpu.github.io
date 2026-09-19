@@ -1,4 +1,4 @@
-import * as THREE from "../../vendor/three.module.min.js";
+import * as THREE from "../../lib/three.module.min.js";
 import { CARD, DECK, MUCK } from "./layout.js";
 import { ease } from "./tween.js";
 

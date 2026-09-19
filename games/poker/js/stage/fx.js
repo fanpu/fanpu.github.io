@@ -1,4 +1,4 @@
-import * as THREE from "../../vendor/three.module.min.js";
+import * as THREE from "../../lib/three.module.min.js";
 
 // Light touches: a burst of brass sparks when a pot is won, and a soft pool of light on whoever is to act.
 export function createFx(stage) {

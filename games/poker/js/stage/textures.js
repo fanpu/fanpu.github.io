@@ -1,4 +1,4 @@
-import * as THREE from "../../vendor/three.module.min.js";
+import * as THREE from "../../lib/three.module.min.js";
 import { TABLE, DENOMS } from "./layout.js";
 
 // Everything on the table is painted here, into 2D canvases: no image files. The painters take a plain

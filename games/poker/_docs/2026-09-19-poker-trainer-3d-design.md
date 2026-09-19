@@ -136,9 +136,9 @@ games/poker/
     hud.css           header, seat labels, decision dock
     panels.css        info drawer, review, stats, settings, home
     lessons.css       lesson panel, drills, DOM cards, range grid
-  vendor/
+  lib/                (not vendor/: the site git-ignores and Jekyll-excludes that name)
     three.module.min.js   three 0.186.0 bundled into one minified ES module
-                          (see vendor/README.md), no CDN
+                          (see lib/README.md), no CDN
   js/
     core/             PURE: no DOM, no three.js; runs in node and in a worker
       rng.js          seeded mulberry32; the only entropy source

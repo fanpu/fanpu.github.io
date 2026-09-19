@@ -1,4 +1,4 @@
-import * as THREE from "../../vendor/three.module.min.js";
+import * as THREE from "../../lib/three.module.min.js";
 import { Animator } from "./tween.js";
 import { makeTextures } from "./textures.js";
 

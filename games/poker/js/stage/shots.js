@@ -1,4 +1,4 @@
-import * as THREE from "../../vendor/three.module.min.js";
+import * as THREE from "../../lib/three.module.min.js";
 import { ease } from "./tween.js";
 
 // Camera shots, and the rig that moves between them. A shot is a direction to look from, a field of view and
