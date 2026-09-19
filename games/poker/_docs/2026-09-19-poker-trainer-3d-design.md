@@ -302,8 +302,8 @@ every seat label fit the stage's rectangle. A region taller than it is wide gets
 ### Table furniture
 
 A lacquered walnut racetrack with brass inlay lines sits between felt and rail, with a brass cup holder by each
-seat. The rail is a cushion of dark leather (pebbled bump map, soft sheen) with contrast stitching along both
-shoulders. A small procedural environment map gives the lacquer, brass and chip edges something to reflect.
+seat. The rail is a plain cushion of dark leather (pebbled bump map, soft sheen); no contrast stitching, which
+read as a distracting dashed line round the table. A small procedural environment map gives the lacquer, brass and chip edges something to reflect.
 Card backs are an original red design: lattice field, guilloche rosette medallion, corner fans, mirrored
 scrollwork.
 

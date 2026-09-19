@@ -2,7 +2,7 @@ import * as THREE from "../../vendor/three.module.min.js";
 import { TABLE, layoutFor } from "./layout.js";
 import { ease } from "./tween.js";
 
-// The furniture: felt, a lacquered walnut racetrack with brass inlay and cup holders, a stitched leather rail,
+// The furniture: felt, a lacquered walnut racetrack with brass inlay and cup holders, a cushioned leather rail,
 // the table's body, the floor the lamp falls on, and the dealer button.
 // hx, hz are half-extents along x and z. Shapes are drawn in xy and then laid flat, which maps shape y to -z;
 // the racetrack is symmetric, so that flip does not matter.
@@ -32,14 +32,6 @@ function ring(outerLen, outerWid, innerLen, innerWid) {
 }
 const flat = (geometry) => geometry.rotateX(-Math.PI / 2); // shapes are drawn in xy; the table lies in xz
 
-// Evenly spaced points along a racetrack outline, with the direction of travel at each: for stitching.
-function along(hx, hz, spacing) {
-  const pts = racetrack(hx, hz).getSpacedPoints(Math.round(racetrack(hx, hz).getLength() / spacing));
-  return pts.slice(0, -1).map((p, i) => {
-    const q = pts[i + 1];
-    return { x: p.x, z: -p.y, angle: Math.atan2(q.y - p.y, q.x - p.x) };
-  });
-}
 // Planar UVs from world position, so a veneer's grain runs straight across the whole table as if cut from one sheet.
 function planarUV(geometry, scaleX, scaleZ) {
   const pos = geometry.attributes.position,
@@ -69,7 +61,6 @@ export function buildTable(stage) {
   leather.bumpMap.repeat.set(1, 1);
   const walnut = new THREE.MeshPhysicalMaterial({ map: stage.textures.wood, roughness: 0.3, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.07 }); // piano lacquer
   const brass = new THREE.MeshStandardMaterial({ color: 0xd8b36a, roughness: 0.2, metalness: 1 });
-  const thread = new THREE.MeshStandardMaterial({ color: 0xcaa874, roughness: 0.8 });
 
   // Felt, racetrack, rail and body depend on which way the table lies; they are rebuilt when the screen turns.
   function setOrientation(portrait) {
@@ -153,21 +144,6 @@ export function buildTable(stage) {
     );
     cushion.position.y = 0.3;
     cushion.castShadow = cushion.receiveShadow = true;
-    const top = cushion.position.y + 0.06 + 0.44; // height of the cushion's crown
-
-    // Contrast stitching along both shoulders of the cushion.
-    const stitchGeo = new THREE.BoxGeometry(0.17, 0.03, 0.04);
-    const lines = [along(a + r0 + pad * 0.62, b + r0 + pad * 0.62, 0.3), along(a + r1 - pad * 0.62, b + r1 - pad * 0.62, 0.3)];
-    const stitches = new THREE.InstancedMesh(stitchGeo, thread, lines[0].length + lines[1].length);
-    const d = new THREE.Object3D();
-    let k = 0;
-    for (const line of lines)
-      for (const p of line) {
-        d.position.set(p.x, top - 0.035, p.z);
-        d.rotation.set(0, p.angle, 0);
-        d.updateMatrix();
-        stitches.setMatrixAt(k++, d.matrix);
-      }
 
     const body = new THREE.Mesh(
       flat(new THREE.ExtrudeGeometry(racetrack(a + r1 + 0.12, b + r1 + 0.12), { depth: 1.7, bevelEnabled: false, curveSegments: 48 })),
@@ -176,7 +152,7 @@ export function buildTable(stage) {
     body.position.y = -1.72;
     body.castShadow = body.receiveShadow = true; // without this the lamp shines straight through onto the floor
 
-    furniture.add(felt, wood, inlay(0.0), inlay(track - 0.075), cushion, stitches, body);
+    furniture.add(felt, wood, inlay(0.0), inlay(track - 0.075), cushion, body);
     group.add(furniture);
     if (seats.length) setSeats(seats.length);
     return true;
