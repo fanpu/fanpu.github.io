@@ -1,4 +1,5 @@
 import { esc, fmt } from "./html.js";
+import { scorecardHTML } from "./scorecard.js";
 
 // The way in: three steps that share one table.
 export function createHome(root, { store, onTable, onLesson }) {
@@ -29,6 +30,7 @@ export function createHome(root, { store, onTable, onLesson }) {
           "silent"
         )}</small></button></li>
       </ol>
+      ${scorecardHTML(store.stats.silent, "Prove it: your scorecard")}${scorecardHTML(store.stats.guided, "Train: your scorecard")}
       ${
         weak
           ? `<p class="leak">You are leaking most on <b>${esc(weak.category.toLowerCase())}</b>: ${Math.round(weak.accuracy * 100)}% over ${

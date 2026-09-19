@@ -63,8 +63,23 @@ async function boot() {
   const openInfo = (tab) => {
     if (tab) info.setTab(tab);
     body.classList.add("info-open");
+    // Opening the review of a finished hand goes straight to the first decision the coach disagreed with.
+    const v = store.view;
+    if (v.phase === "handOver" && v.at == null && v.decisions?.length)
+      session.rewind((v.decisions.find((d) => d.grade !== "correct") || v.decisions[0]).index);
   };
-  const info = createInfo($("info"), { store, onClose: () => body.classList.remove("info-open") });
+  const info = createInfo($("info"), { store, onClose: () => body.classList.remove("info-open"), onRewind: (k) => session.rewind(k) });
+  // Left and right step through the replay; Escape returns to the result.
+  addEventListener("keydown", (e) => {
+    const v = store.view;
+    if (v.phase !== "handOver" || !v.timeline?.length || e.metaKey || e.ctrlKey || e.altKey) return;
+    const last = v.timeline.length - 1;
+    if (e.key === "ArrowRight") session.rewind(v.at == null ? 0 : v.at >= last ? null : v.at + 1);
+    else if (e.key === "ArrowLeft") session.rewind(v.at == null ? last : Math.max(0, v.at - 1));
+    else if (e.key === "Escape") session.rewind(null);
+    else return;
+    e.preventDefault();
+  });
   const dock = createDock($("dock"), { store, session, openInfo });
   const settings = createSettings($("settings"), {
     store,
@@ -123,7 +138,7 @@ async function boot() {
     store.subscribe(() => {
       const v = store.view;
       if (v.phase === "feedback") session.resume();
-      else if (v.phase === "handOver") setTimeout(() => session.next(), 50);
+      else if (v.phase === "handOver" && !params.has("hold")) setTimeout(() => session.next(), 50);
       else if (v.phase === "hero" && v.legal && !v.analysing && v.street < (params.has("stopAt") ? +params.get("stopAt") : 9)) {
         const rec = v.analysis?.rec;
         if (policy === "coach" && rec) session.act(rec.action === "raise" ? "raise" : rec.action, rec.size);

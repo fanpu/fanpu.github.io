@@ -14,7 +14,7 @@ export function createSession({ store, director, coach, rng }) {
     running = false,
     looping = null,
     waiter = null, // { resolve, reject } of whatever the loop is waiting on the player for
-    hand = null, // { snap, decisions: [], events: [] }
+    hand = null, // { snap, decisions: [], events: [], trail: [], trailJobs: [] }
     raiseTouched = false;
   const sessionNet = { guided: 0, silent: 0 };
   const timings = []; // how long the coach took to answer, in ms (for tuning sample counts)
@@ -61,6 +61,49 @@ export function createSession({ store, director, coach, rng }) {
       decisions: level === "silent" && !state.handOver ? [] : hand ? hand.decisions : [],
       ...patch,
     });
+  }
+
+  // The hero's equity against the ranges still in, asked of the worker at the deal and at every new street.
+  // It is only ever shown once the hand is over, as the trail in the review.
+  function trackEquity(events) {
+    const hero = state.players[0];
+    if (hero.folded && !events.some((e) => e.type === "street")) return;
+    const streets = events.some((e) => e.type === "deal") ? [0] : events.filter((e) => e.type === "street").map((e) => e.street);
+    for (const street of streets) {
+      const foldedBefore = hand.events.findIndex((e) => e.type === "action" && e.seat === 0 && e.kind === "fold");
+      const streetAt = hand.events.findIndex((e) => e.type === "street" && e.street === street);
+      if (foldedBefore >= 0 && (street === 0 || foldedBefore < streetAt)) continue; // the hero was already out
+      const ranges = state.players.filter((p) => p.id !== 0 && !p.folded).map((p) => core.rangeOf(reads, p.id));
+      if (!ranges.length) continue;
+      const job = coach
+        .equity(hero.cards, state.board.slice(0, street === 0 ? 0 : street + 2), ranges, { seed: Math.floor(rng() * 2 ** 31) })
+        .then((eq) => hand.trail.push({ street, eq }))
+        .catch(() => {});
+      hand.trailJobs.push(job);
+    }
+  }
+
+  // Every action of the hand in order. k is how many actions had been applied before it: replay(snap, actions, k) is that moment.
+  function timeline() {
+    let k = 0;
+    return hand.events
+      .filter((e) => e.type === "action")
+      .map((e) => {
+        const d = e.seat === 0 ? hand.decisions.find((x) => x.index === k) : null;
+        return {
+          k: k++,
+          seat: e.seat,
+          name: state.players[e.seat].name,
+          pos: e.pos,
+          street: e.street,
+          kind: e.kind,
+          to: e.to,
+          added: e.added,
+          allIn: e.allIn,
+          hero: e.seat === 0,
+          grade: d?.grade || null,
+        };
+      });
   }
 
   const sizeTo = (legal, frac) => core.clampRaise(legal, state.players[0].bet + legal.toCall + frac * (legal.pot + legal.toCall));
@@ -122,6 +165,7 @@ export function createSession({ store, director, coach, rng }) {
 
     const events = core.observeAll(reads, core.apply(state, { seat: 0, type: choice.type, ...(choice.type === "raise" ? { to: choice.to } : {}) }));
     hand.events.push(...events);
+    trackEquity(events);
     // The hero's own action is acted out at once; whatever follows it (the next street, a showdown) waits for any pause.
     await director.play(events.slice(0, 1), state, { partial: events.length > 1 });
     const pauses = guided && !state.handOver && (settings().pause === "always" || (settings().pause === "mistake" && grade !== "correct"));
@@ -140,6 +184,7 @@ export function createSession({ store, director, coach, rng }) {
     const seat = state.toAct;
     const events = core.observeAll(reads, core.apply(state, core.botDecide(state, reads, seat, core.STYLES[styles[seat]], rng)));
     hand.events.push(...events);
+    trackEquity(events);
     await director.play(events, state);
   }
 
@@ -149,8 +194,9 @@ export function createSession({ store, director, coach, rng }) {
         if (!state || (state.handOver && state.config.n !== settings().players)) newGame();
         if (state.handOver) {
           const events = core.observeAll(reads, core.startHand(state, rng));
-          hand = { snap: core.snapshot(state), decisions: [], events: events.slice() };
-          publish({ phase: "dealing", result: null, analysis: null, lastGrade: null, legal: null });
+          hand = { snap: core.snapshot(state), decisions: [], events: events.slice(), trail: [], trailJobs: [] };
+          publish({ phase: "dealing", result: null, analysis: null, lastGrade: null, legal: null, timeline: null, equityTrail: null, at: null });
+          trackEquity(events);
           await director.play(events, state);
         } else director.show(state); // coming back to a hand that was left half-played
         while (!state.handOver) {
@@ -162,8 +208,13 @@ export function createSession({ store, director, coach, rng }) {
         sessionNet[level] += net;
         store.recordHand(level, net);
         const end = hand.events.find((e) => e.type === "showdown");
+        await Promise.allSettled(hand.trailJobs);
+        hand.shown = end ? end.hands.map((h) => h.seat) : [];
         publish({
           phase: "handOver",
+          timeline: timeline(),
+          equityTrail: hand.trail.slice().sort((a, b) => a.street - b.street),
+          at: null,
           analysis: null,
           legal: null,
           result: {
@@ -229,6 +280,19 @@ export function createSession({ store, director, coach, rng }) {
       return true;
     },
     skip: () => director.skip(), // jump the current animation to its end
+    // Review: show the table as it stood before action k of the finished hand, or (null) as the hand ended.
+    rewind(k) {
+      if (store.view.phase !== "handOver" || !hand) return false;
+      if (k == null) {
+        director.show(state, { reveal: hand.shown, acting: false });
+        store.set({ at: null });
+        return true;
+      }
+      const then = core.replay(hand.snap, state.actions, Math.max(0, Math.min(state.actions.length, k))).state;
+      director.show(then, { reveal: [] });
+      store.set({ at: k });
+      return true;
+    },
     resume() {
       if (store.view.phase === "feedback") answer();
     },

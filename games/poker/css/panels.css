@@ -431,6 +431,102 @@ body:not([data-mode="table"]) :is(#hud, #info, #dock, #scrim) {
   display: none;
 }
 
+/* ---------- the replay ---------- */
+.trail {
+  display: flex;
+  gap: 6px;
+  align-items: flex-end;
+  height: 84px;
+  margin: 2px 0 4px;
+}
+.trail > div {
+  flex: 1;
+  display: grid;
+  justify-items: center;
+  align-content: end;
+  gap: 3px;
+  font-size: 10.5px;
+  color: var(--ink-3);
+}
+.trail b {
+  font-size: 12px;
+}
+.trail i {
+  width: 100%;
+  max-width: 54px;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(var(--brass), rgba(216, 179, 106, 0.35));
+}
+.timeline {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.timeline .st {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+.timeline h3 {
+  margin: 0 4px 0 0;
+  width: 52px;
+  font: 600 10px/1 var(--font);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.timeline button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid var(--line);
+  background: none;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.timeline button b {
+  color: var(--ink-2);
+  font-weight: 600;
+}
+.timeline button.hero {
+  border-color: rgba(255, 255, 255, 0.22);
+  color: var(--ink-2);
+}
+.timeline button.hero b {
+  color: var(--ink);
+}
+.timeline button i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--good);
+}
+.timeline .acceptable i {
+  background: var(--warn);
+}
+.timeline .mistake i {
+  background: var(--bad);
+}
+.timeline button.on {
+  background: rgba(216, 179, 106, 0.16);
+  border-color: var(--brass);
+  color: var(--brass);
+}
+.timeline button.on b {
+  color: var(--brass);
+}
+.timeline .end {
+  margin-left: 56px;
+}
+.graded .grade {
+  margin-right: 6px;
+}
+
 /* ---------- settings ---------- */
 #settings {
   position: fixed;
@@ -501,7 +597,7 @@ body:not([data-mode="table"]) :is(#hud, #info, #dock, #scrim) {
   inset: 0;
   z-index: 4;
   display: grid;
-  place-items: center;
+  place-items: safe center; /* a tall card scrolls from its top instead of being cut off */
   padding: 20px;
   overflow-y: auto;
   background: radial-gradient(ellipse at center, rgba(5, 6, 7, 0.35), rgba(5, 6, 7, 0.82));
@@ -578,6 +674,89 @@ body:not([data-mode="table"]) :is(#hud, #info, #dock, #scrim) {
 .steps small {
   color: var(--ink-3);
   font-size: 12px;
+}
+.card {
+  margin-top: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0 14px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+.card summary {
+  cursor: pointer;
+  padding: 12px 0;
+  display: grid;
+  gap: 2px;
+  list-style: none;
+}
+.card summary::-webkit-details-marker {
+  display: none;
+}
+.card summary b {
+  color: var(--ink);
+}
+.card summary b::after {
+  content: " \25BE";
+  color: var(--ink-3);
+}
+.card[open] summary b::after {
+  content: " \25B4";
+}
+.card summary span {
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.card h3 {
+  margin: 14px 0 6px;
+  font: 600 10.5px/1 var(--font);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.cats .row {
+  grid-template-columns: 1fr 50px 130px;
+}
+.cats .acc {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.cats .meter {
+  display: block;
+  width: 72px;
+}
+.recent {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+  display: grid;
+  gap: 5px;
+  font-size: 12px;
+}
+.recent li {
+  display: grid;
+  grid-template-columns: 10px 1fr;
+  gap: 0 8px;
+  align-items: center;
+}
+.recent li i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--good);
+  grid-row: 1 / 3;
+}
+.recent li.acceptable i {
+  background: var(--warn);
+}
+.recent li.mistake i {
+  background: var(--bad);
+}
+.recent li span:first-of-type {
+  color: var(--ink-3);
+  font-size: 11px;
 }
 .leak {
   margin: 16px 0 0;

@@ -10,15 +10,22 @@ const fakeStorage = () => {
 };
 const stubDirector = () => ({
   plays: 0,
+  shown: [],
   async play() {
     this.plays++;
   },
-  show() {},
+  show(state, opts) {
+    this.shown.push({ state, opts });
+  },
   async wait() {},
   skip() {},
   setSpeed() {},
 });
-const inlineCoach = () => ({ analyze: async (s, r, o) => core.analyze(s, r, core.makeRng(o.seed), { light: true, iters: 250 }), cancelAll() {} });
+const inlineCoach = () => ({
+  analyze: async (s, r, o) => core.analyze(s, r, core.makeRng(o.seed), { light: true, iters: 250 }),
+  equity: async (h, b, ranges, o) => core.simulate(h, b, ranges, 200, core.makeRng(o.seed)),
+  cancelAll() {},
+});
 
 // Play `hands` hands with a hero who follows `policy(view)`. Returns what happened.
 async function play({ level, hands, seed = 5, pause = "never", policy, players = 4 }) {
@@ -125,5 +132,63 @@ test("leaving mid-hand parks the hand; coming back resumes it", async () => {
   await until("handOver");
   assert.equal(store.view.handNo, handNo);
   assert.equal(store.stats.silent.hands, 1, "the hand is scored at the level it finished at");
+  await session.stop();
+});
+
+test("review: a timeline of every action, an equity trail, and rewinding to any moment", async () => {
+  const store = createStore(fakeStorage());
+  store.setSetting("players", 4);
+  const director = stubDirector();
+  const session = createSession({ store, director, coach: inlineCoach(), rng: core.makeRng(12) });
+  const until = (phase) =>
+    new Promise((r) => {
+      const off = store.subscribe(() => store.view.phase === phase && (off(), r()));
+    });
+  let sawTrailEarly = false;
+  store.subscribe(() => {
+    const v = store.view;
+    if (v.phase !== "handOver" && (v.equityTrail || v.timeline)) sawTrailEarly = true;
+    if (v.phase === "hero" && v.legal) session.act(v.legal.canCheck ? "check" : "call");
+    else if (v.phase === "feedback") session.resume();
+  });
+  session.start("silent");
+  await until("handOver");
+  const v = store.view,
+    actions = session.state.actions;
+  assert.equal(sawTrailEarly, false);
+  assert.equal(v.timeline.length, actions.length);
+  v.timeline.forEach((t, k) => {
+    assert.deepEqual([t.k, t.seat], [k, actions[k].seat]);
+    assert.equal(t.hero, t.seat === 0);
+    if (t.hero) assert.ok(["correct", "acceptable", "mistake"].includes(t.grade));
+  });
+  const streetsSeen = [...new Set(v.timeline.filter((t) => t.hero).map((t) => t.street))];
+  assert.ok(v.equityTrail.length >= streetsSeen.length && v.equityTrail[0].street === 0);
+  const order = v.equityTrail.map((t) => t.street);
+  assert.deepEqual(
+    order,
+    order.slice().sort((a, b) => a - b)
+  );
+  assert.ok(v.equityTrail.every((t) => t.eq >= 0 && t.eq <= 1));
+
+  const before = JSON.stringify(session.state);
+  const k = v.timeline.find((t) => t.hero).k;
+  assert.equal(session.rewind(k), true);
+  const shown = director.shown.at(-1);
+  assert.equal(shown.state.actions.length, k);
+  assert.equal(shown.state.toAct, 0, "rewound to the hero's decision");
+  assert.deepEqual(shown.opts.reveal, [], "nobody's cards are exposed in a rewound view");
+  assert.equal(store.view.at, k);
+  assert.equal(JSON.stringify(session.state), before, "the finished hand is untouched");
+  session.rewind(null);
+  assert.equal(director.shown.at(-1).state, session.state);
+  assert.equal(store.view.at, null);
+
+  const handNo = v.handNo;
+  session.rewind(0);
+  session.next();
+  await until("dealing");
+  assert.equal(store.view.handNo, handNo + 1);
+  assert.equal(session.rewind(0), false, "no rewinding mid-hand");
   await session.stop();
 });

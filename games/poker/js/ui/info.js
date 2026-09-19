@@ -14,7 +14,7 @@ function statRow(a, n) {
   if (a.street === 0) {
     const pre = a.rec.pre;
     const raiser = a.opps.find((o) => o.tag === "4bet") || a.opps.find((o) => o.tag === "3bet") || a.opps.find((o) => o.tag === "raise");
-    h += cell("top " + Math.round(a.pct) + "%", "your hand, " + a.key);
+    h += cell("top " + Math.max(1, Math.round(a.pct)) + "%", "your hand, " + a.key); // aces are the top 0.45%: never show "top 0%"
     if (pre) {
       const need = Math.max(pre.call, pre.raise);
       h += cell("top " + Math.round(raiser ? raiser.pct : 20) + "%", (raiser ? esc(raiser.name) + "’s" : "their") + " raising range");
@@ -250,6 +250,50 @@ function readsList(v) {
   );
 }
 
+// The hand, replayed: your equity street by street, then every action in order. Choosing one rewinds the table to it.
+function replayer(v) {
+  const trail = v.equityTrail || [];
+  let h = "";
+  if (trail.length > 1) {
+    const eqs = trail.map((t) => t.eq),
+      swing = Math.max(...eqs) - Math.min(...eqs);
+    h += `<div class="trail" role="img" aria-label="Your equity by street">${trail
+      .map(
+        (t) =>
+          `<div><b>${Math.round(t.eq * 100)}%</b><i style="height:${Math.max(3, Math.round(t.eq * 46))}px"></i><span>${
+            STREETS[t.street]
+          }</span></div>`
+      )
+      .join("")}</div>`;
+    h += `<p class="note">Your equity against the ranges still in, street by street.${
+      swing > 0.35 ? ` A swing of ${Math.round(swing * 100)} points. Big swings are normal; what you control is the price you paid at each step.` : ""
+    }</p>`;
+  }
+  const word = (t) => {
+    const s = t.hero ? "" : "s"; // "You call", "Ava calls"
+    const w =
+      t.kind === "fold"
+        ? "fold" + s
+        : t.kind === "check"
+          ? "check" + s
+          : t.kind === "call"
+            ? `call${s} ${fmt(t.added)}`
+            : t.kind === "bet"
+              ? `bet${s} ${fmt(t.to)}`
+              : `raise${s} to ${fmt(t.to)}`;
+    return w + (t.allIn ? " all-in" : "");
+  };
+  let street = -1;
+  h += '<div class="timeline">';
+  for (const t of v.timeline || []) {
+    if (t.street !== street) h += `${street >= 0 ? "</div>" : ""}<div class="st"><h3>${STREETS[(street = t.street)]}</h3>`;
+    h += `<button data-k="${t.k}" class="${t.hero ? "hero " + (t.grade || "") : ""}${v.at === t.k ? " on" : ""}">${t.hero ? "<i></i>" : ""}<b>${esc(
+      t.name
+    )}</b> ${word(t)}</button>`;
+  }
+  return h + `${street >= 0 ? "</div>" : ""}<div class="st"><button data-k="end" class="end${v.at == null ? " on" : ""}">Result</button></div></div>`;
+}
+
 const TABS = [
   ["ranges", "Ranges"],
   ["ev", "EV"],
@@ -259,16 +303,14 @@ const TABS = [
 ];
 export const INFO_TABS = TABS;
 
-export function createInfo(root, { store, onClose }) {
-  const ui = { tab: "ranges", opp: null, forAnalysis: null, pickedDecision: null };
+export function createInfo(root, { store, onClose, onRewind }) {
+  const ui = { tab: "ranges", opp: null, forAnalysis: null };
   const draw = renderer(root, (el) => {
     const v = store.view,
       st = store.settings;
-    // What is there to explain? The spot in front of the hero, or, once a hand is over, a decision chosen from it.
+    // What is there to explain? The spot in front of the hero, or, once a hand is over, whichever moment of it is chosen.
     const over = v.phase === "handOver";
-    if (!over) ui.pickedDecision = null;
-    const decided = over ? v.decisions || [] : [];
-    const picked = over ? decided[ui.pickedDecision ?? decided.findIndex((d) => d.grade !== "correct")] || decided[0] : null;
+    const picked = over && v.at != null ? (v.decisions || []).find((d) => d.index === v.at) : null;
     const a = over ? picked?.analysis : v.level === "guided" ? v.analysis : null;
     const tabs = TABS.filter(([id]) => id !== "why" || st.showPick || over);
     if (!tabs.some(([id]) => id === ui.tab)) ui.tab = "ranges";
@@ -288,35 +330,32 @@ export function createInfo(root, { store, onClose }) {
           v.level === "silent" && !over
             ? "The coach is silent. Play your own game; every decision is graded and shown when the hand is over."
             : over
-              ? "No decisions of yours to review in this hand."
+              ? v.at == null
+                ? "Choose any action above to put the table back to that moment. Your own decisions carry the coach’s full working."
+                : "This was not your decision, so there is nothing to grade. The table shows the spot as it stood."
               : "The coach speaks when it is your turn. Meanwhile, watch the table:"
         }</p>` + readsList(v);
 
-    const review =
-      over && decided.length
-        ? `<div class="decisions">${decided
-            .map(
-              (d, i) =>
-                `<button data-decision="${i}" class="${d === picked ? "on " : ""}${d.grade}"><i></i>${STREETS[d.street]}: ${actionWord(
-                  d.action,
-                  d.analysis.toCall === 0 && d.street > 0
-                )}${
-                  d.grade === "correct" ? "" : ` <small>coach: ${actionWord(d.analysis.rec.action, d.analysis.toCall === 0 && d.street > 0)}</small>`
-                }</button>`
-            )
-            .join("")}</div>`
-        : "";
+    const review = over && v.timeline?.length ? replayer(v) : "";
+    const betting = picked && picked.analysis.toCall === 0 && picked.street > 0;
+    const verdict = picked
+      ? `<p class="graded ${picked.grade}"><span class="grade">${
+          { correct: "Correct", acceptable: "Acceptable", mistake: "Mistake" }[picked.grade]
+        }</span> You chose to <b>${actionWord(picked.action, betting)}${picked.raiseTo ? " " + fmt(picked.raiseTo) : ""}</b>${
+          picked.grade === "correct" ? "." : `; the coach preferred to <b>${actionWord(picked.analysis.rec.action, betting)}</b>.`
+        }</p>`
+      : "";
     el.innerHTML = `<button class="close" data-close aria-label="Close">×</button><h2>${
-      over ? "This hand" : v.level === "silent" ? "Table reads" : "Coach"
-    }</h2>${review}${body}`;
+      over ? "Replay" : v.level === "silent" ? "Table reads" : "Coach"
+    }</h2>${review}${verdict}${body}`;
   });
 
   root.addEventListener("click", (e) => {
-    const t = e.target.closest("[data-tab],[data-opp],[data-decision],[data-close]");
+    const t = e.target.closest("[data-tab],[data-opp],[data-k],[data-close]");
     if (!t) return;
+    if (t.dataset.k) return onRewind?.(t.dataset.k === "end" ? null : +t.dataset.k);
     if (t.dataset.tab) ui.tab = t.dataset.tab;
     else if (t.dataset.opp) ui.opp = t.dataset.opp === "open" ? "open" : +t.dataset.opp;
-    else if (t.dataset.decision) ui.pickedDecision = +t.dataset.decision;
     else return onClose?.();
     api.render(true);
   });
@@ -344,6 +383,8 @@ export function createInfo(root, { store, onClose }) {
           v.analysis?.category,
           v.street,
           v.decisions?.length,
+          v.at,
+          v.timeline?.length,
           v.opponents?.map((o) => o.read.n + o.label + o.folded).join(),
           store.settings.showPick,
         ].join("|")
