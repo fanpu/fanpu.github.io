@@ -5,6 +5,15 @@ import { INFO_TABS } from "./info.js";
 // The dock: what you hold, what you can do, and what just happened. It keeps the same height through every
 // phase of a hand, so the table above it never jumps.
 const GRADE_WORD = { correct: "Correct", acceptable: "Acceptable", mistake: "Mistake" };
+// After the flop, sizes are fractions of the pot. Before it, they are multiples of the bet to match (the big blind,
+// or the raise you are re-raising), which is how preflop sizes are actually talked about.
+const PREFLOP = [
+  ["min", "Min"],
+  ["x2.5", "2.5\u00d7"],
+  ["x3", "3\u00d7"],
+  ["x4", "4\u00d7"],
+  ["max", "All-in"],
+];
 const PRESETS = [
   ["min", "Min"],
   ["0.5", "½ pot"],
@@ -18,6 +27,7 @@ export function createDock(root, { store, session, openInfo }) {
     const v = store.view,
       l = v.legal;
     if (key === "coach") return Math.max(l.minTo, Math.min(l.maxTo, v.analysis?.rec.size || l.minTo));
+    if (key[0] === "x") return session.timesFor(parseFloat(key.slice(1)));
     return key === "min" ? l.minTo : key === "max" ? l.maxTo : session.sizeFor(parseFloat(key));
   };
 
@@ -53,9 +63,12 @@ export function createDock(root, { store, session, openInfo }) {
       </div>
       ${
         l.canRaise
-          ? `<div class="sizing"><div class="presets">${coachSize ? '<button data-size="coach" class="coach">Coach</button>' : ""}${PRESETS.map(
-              ([k, label]) => `<button data-size="${k}">${label}</button>`
-            ).join("")}</div>
+          ? `<div class="sizing"><div class="presets">${coachSize ? '<button data-size="coach" class="coach">Coach</button>' : ""}${(v.street === 0
+              ? PREFLOP
+              : PRESETS
+            )
+              .map(([k, label]) => `<button data-size="${k}">${label}</button>`)
+              .join("")}</div>
              <div class="slide"><input type="range" id="raiseSlider" min="${l.minTo}" max="${l.maxTo}" step="1" aria-label="${
                betting ? "Bet" : "Raise"
              } size" /><output id="raiseInfo"></output></div></div>`
@@ -208,7 +221,7 @@ export function createDock(root, { store, session, openInfo }) {
       if (k === "f") session.act("fold");
       else if (k === "c") session.act("call");
       else if (k === "r") session.act("raise");
-      else if (/^[1-5]$/.test(k) && v.legal?.canRaise) session.setRaise(presetValue(PRESETS[+k - 1][0]));
+      else if (/^[1-5]$/.test(k) && v.legal?.canRaise) session.setRaise(presetValue((v.street === 0 ? PREFLOP : PRESETS)[+k - 1][0]));
     }
   });
 

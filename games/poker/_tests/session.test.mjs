@@ -192,3 +192,20 @@ test("review: a timeline of every action, an equity trail, and rewinding to any 
   assert.equal(session.rewind(0), false, "no rewinding mid-hand");
   await session.stop();
 });
+
+test("sizing: multiples of the bet before the flop, fractions of the pot after", async () => {
+  const store = createStore(fakeStorage());
+  store.setSetting("players", 3);
+  const session = createSession({ store, director: stubDirector(), coach: inlineCoach(), rng: core.makeRng(21) });
+  const until = (ok) =>
+    new Promise((r) => {
+      const off = store.subscribe(() => ok(store.view) && (off(), r()));
+    });
+  session.start("silent");
+  await until((v) => v.phase === "hero" && v.street === 0);
+  const bet = session.state.currentBet;
+  assert.equal(session.timesFor(3), Math.min(store.view.legal.maxTo, Math.max(store.view.legal.minTo, Math.round(3 * bet))));
+  assert.equal(store.view.raiseTo, session.timesFor(session.state.raises ? 3 : 2.5), "the default preflop size is 2.5x to open, 3x to re-raise");
+  assert.ok(session.timesFor(999) === store.view.legal.maxTo && session.timesFor(0.1) === store.view.legal.minTo, "always a legal size");
+  await session.stop();
+});

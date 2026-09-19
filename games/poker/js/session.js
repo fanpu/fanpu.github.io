@@ -106,13 +106,22 @@ export function createSession({ store, director, coach, rng }) {
       });
   }
 
+  // Before the flop, bets are sized as multiples of what there is to match: 2.5x the big blind to open, 3x a raise to 3-bet.
+  const timesTo = (legal, mult) => core.clampRaise(legal, mult * state.currentBet);
   const sizeTo = (legal, frac) => core.clampRaise(legal, state.players[0].bet + legal.toCall + frac * (legal.pot + legal.toCall));
 
   async function heroTurn() {
     const legal = core.legalActions(state);
     const guided = level === "guided";
     raiseTouched = false;
-    publish({ phase: "hero", legal, analysis: null, analysing: guided, raiseTo: legal.canRaise ? sizeTo(legal, 0.66) : 0, lastGrade: null });
+    publish({
+      phase: "hero",
+      legal,
+      analysis: null,
+      analysing: guided,
+      raiseTo: !legal.canRaise ? 0 : state.street === 0 ? timesTo(legal, state.raises ? 3 : 2.5) : sizeTo(legal, 0.66),
+      lastGrade: null,
+    });
     const seed = Math.floor(rng() * 2 ** 31);
     const asked = performance.now();
     const analysed = coach.analyze(state, reads, { seed, iters: 12000, quality: 2 }).then((a) => {
@@ -270,6 +279,7 @@ export function createSession({ store, director, coach, rng }) {
       store.set({ raiseTo: core.clampRaise(store.view.legal, to) });
     },
     sizeFor: (frac) => (store.view.legal ? sizeTo(store.view.legal, frac) : 0),
+    timesFor: (mult) => (store.view.legal ? timesTo(store.view.legal, mult) : 0),
     act(type, to) {
       const legal = store.view.legal;
       if (store.view.phase !== "hero" || !legal || !waiter) return false;
