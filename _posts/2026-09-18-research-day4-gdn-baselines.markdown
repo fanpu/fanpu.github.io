@@ -88,3 +88,14 @@ A fun widget to play around with:
     new MutationObserver(sendTheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   })();
 </script>
+
+
+## Configurations
+
+| Mixer | $d$ | Heads | Per-head $d_k = d_v$ | Position embedding | State at $T = 512$, 2 layers |
+|---|---|---|---|---|---|
+| attention | $64$ | $2$ | $32$ | learned, $512 \times 64$ | $2 \cdot 2 \cdot 512 \cdot 64 = 131072$ |
+| additive, delta | $64$ | $2$ | $32$ | none | $2 \cdot 2 \cdot 32^2 = 4096$ |
+| additive, delta | $128$ | $2$ | $64$ | none | $2 \cdot 2 \cdot 64^2 = 16384$ |
+| additive, delta | $256$ | $2$ | $128$ | none | $2 \cdot 2 \cdot 128^2 = 65536$ |
+| additive, delta | $512$ | $2$ | $256$ | none | $2 \cdot 2 \cdot 256^2 = 262144$ |
