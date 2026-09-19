@@ -271,10 +271,12 @@ body:not([data-mode="table"]) :is(#hud, #info, #dock, #scrim) {
 .rgrid i {
   aspect-ratio: 1;
   border-radius: 2.5px;
-  background: color-mix(in srgb, var(--brass) calc(var(--a, 0) * 100%), rgba(255, 255, 255, 0.045));
+  /* Shades of green, as range charts are everywhere: deeper means more combos of that hand. Brass is kept for
+     accents (the selected tab, the coach's pick, your own hand's outline), so the grid does not compete with them. */
+  background: color-mix(in srgb, var(--range) calc(var(--a, 0) * 100%), rgba(255, 255, 255, 0.045));
 }
 .rgrid i.me {
-  outline: 2px solid var(--ink);
+  outline: 2px solid var(--brass);
   outline-offset: -1px;
   z-index: 1;
 }

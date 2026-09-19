@@ -142,7 +142,7 @@
 }
 .presets {
   display: flex;
-  gap: 5px;
+  gap: 4px;
   flex-wrap: nowrap;
   overflow-x: auto;
   scrollbar-width: none;
@@ -152,7 +152,7 @@
   flex: none;
 }
 .presets button {
-  padding: 5px 11px;
+  padding: 5px 9px;
   border-radius: 999px;
   border: 1px solid var(--line);
   background: none;
