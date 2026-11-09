@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lorenz, Lyapunov and Chaos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+  svg: { fontCache: 'global' },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js" defer></script>
+<style>
+:root {
+  /* Layout: one reading column (~66ch) with full-width simulation panels breaking out of it.
+     Two trajectory colors (blue reference, orange perturbed) match the lecture figure and carry meaning everywhere. */
+  --bg: #f4f6f9;
+  --panel: #ffffff;
+  --ink: #1b2230;
+  --ink-soft: #55607a;
+  --rule: #d6dce6;
+  --accent: #0f766e;
+  --traj-a: #2b64d9;
+  --traj-b: #e0701f;
+  --fixed: #1b2230;
+  --grid: #e3e8f0;
+  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f141c; --panel: #171e29; --ink: #e6eaf2; --ink-soft: #9aa5bb; --rule: #2b3444;
+    --accent: #2dd4bf; --traj-a: #6d9cff; --traj-b: #ff9a4d; --fixed: #e6eaf2; --grid: #232c3a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f141c; --panel: #171e29; --ink: #e6eaf2; --ink-soft: #9aa5bb; --rule: #2b3444;
+  --accent: #2dd4bf; --traj-a: #6d9cff; --traj-b: #ff9a4d; --fixed: #e6eaf2; --grid: #232c3a;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 17px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+main { max-width: 1040px; margin: 0 auto; padding: 32px 20px 96px; }
+.col { max-width: 68ch; margin-left: auto; margin-right: auto; }
+header.col { padding: 24px 0 8px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(34px, 5vw, 48px); line-height: 1.1; margin: 10px 0 14px; text-wrap: balance; }
+.lede { font-size: 19px; color: var(--ink-soft); margin: 0 0 20px; }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: 30px; line-height: 1.2; margin: 64px 0 12px; text-wrap: balance; }
+h2 .num { font-family: var(--font-mono); font-size: 14px; color: var(--accent); display: block; margin-bottom: 6px; letter-spacing: .04em; }
+h3 { font-family: var(--font-body); font-weight: 600; font-size: 18px; margin: 28px 0 8px; }
+p { margin: 0 0 16px; }
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+code, .mono { font-family: var(--font-mono); font-size: .92em; }
+.term { font-weight: 600; }
+.panel { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 18px; margin: 22px 0 28px; }
+.panel h4 { margin: 0 0 4px; font-size: 15px; font-weight: 600; }
+.panel .hint { margin: 0 0 12px; font-size: 14px; color: var(--ink-soft); }
+.controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin: 12px 0 10px; font-size: 14px; }
+.controls label { display: flex; align-items: center; gap: 8px; }
+.controls input[type=range] { width: 160px; accent-color: var(--accent); }
+.controls .val { font-family: var(--font-mono); font-variant-numeric: tabular-nums; min-width: 5ch; }
+button { font: inherit; font-size: 14px; padding: 6px 12px; border-radius: 7px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink); cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+canvas { display: block; width: 100%; height: auto; border-radius: 6px; background: var(--bg); }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 720px) { .row2 { grid-template-columns: 1fr; } }
+.readout { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 10px; font-size: 14px; color: var(--ink-soft); }
+.readout b { font-family: var(--font-mono); font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
+.legend { display: inline-flex; align-items: center; gap: 6px; margin-right: 14px; font-size: 13.5px; color: var(--ink-soft); }
+.legend i { display: inline-block; width: 18px; height: 3px; border-radius: 2px; }
+.callout { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; margin: 18px 0 22px; color: var(--ink); }
+.callout .label { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 4px; }
+table { border-collapse: collapse; width: 100%; font-size: 15px; margin: 8px 0 18px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-weight: 600; font-size: 13.5px; color: var(--ink-soft); }
+td.n { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.wide { overflow-x: auto; }
+dl.gloss dt { font-weight: 600; margin-top: 12px; }
+dl.gloss dd { margin: 2px 0 0; color: var(--ink); }
+.toc { font-size: 15px; columns: 2; column-gap: 28px; margin: 0 0 8px; padding-left: 20px; }
+.toc li { margin-bottom: 4px; break-inside: avoid; }
+@media (max-width: 600px) { .toc { columns: 1; } }
+mjx-container[display="true"] { margin: 10px 0 16px !important; overflow-x: auto; overflow-y: hidden; }
+.src { font-size: 14.5px; color: var(--ink-soft); }
+.src li { margin-bottom: 6px; }
+@media (prefers-reduced-motion: reduce) { .motion-note { display: block; } }
+.motion-note { display: none; font-size: 13px; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+<main>
+
+<header class="col">
+  <div class="eyebrow">Lorenz system · Lyapunov exponents · chaos in training, explained from scratch</div>
+  <h1>Lorenz, Lyapunov and why a weather model shows up in deep learning</h1>
+  <p class="lede">Lecture 2 of <a href="https://deep-learning-alchemy.github.io/">Deep Learning Alchemy</a> (Stanford CS 312, Tatsunori Hashimoto; the slides are public) has a slide titled "Chaotic systems". It sits in a list of mental models for the randomness in training: SGD is like GD plus noise, SGD is like Brownian motion, or SGD is like a chaotic system where "infinitesimal perturbations can lead to macroscopic divergence". The figure on that slide is the $x(t)$ coordinate of the Lorenz system with a copy perturbed at $t = 20$, next to a double pendulum. This page builds up every idea in that caption, with live simulations, and ends with what it has to do with training neural nets.</p>
+  <ol class="toc" start="0">
+    <li><a href="#s0">The only calculus you need</a></li>
+    <li><a href="#s1">Dynamical systems and stability</a></li>
+    <li><a href="#s2">The Lorenz equations and where they came from</a></li>
+    <li><a href="#s3">The attractor, one knob at a time</a></li>
+    <li><a href="#s4">The butterfly experiment</a></li>
+    <li><a href="#s5">Lyapunov exponents, properly</a></li>
+    <li><a href="#s6">The double pendulum</a></li>
+    <li><a href="#s7">Chaos in discrete time</a></li>
+    <li><a href="#s8">Why this matters for deep learning</a></li>
+    <li><a href="#s9">Blind spots and glossary</a></li>
+  </ol>
+  <p class="motion-note">Your system asks for reduced motion, so simulations start paused. Press Run on each panel.</p>
+</header>
+
+<!-- ============================ 0 ============================ -->
+<section class="col" id="s0">
+  <h2><span class="num">00</span>The only calculus you need</h2>
+  <p>You can read this whole page knowing one idea. A <span class="term">differential equation</span> is a rule that says how fast something is changing, given where it is right now. Write the thing as $y$ and its rate of change as $\dot{y}$ (the dot means "derivative with respect to time", the same $\frac{dy}{dt}$ from first-year calculus). The simplest possible rule is</p>
+  $$\dot{y} = \lambda\, y,$$
+  <p>which says "the speed at which $y$ grows is proportional to $y$ itself". Money in a savings account obeys this with $\lambda$ the interest rate. A cup of coffee cooling toward room temperature obeys it with $\lambda < 0$. The <span class="term">solution</span> is the function $y(t)$ that satisfies the rule at every instant, and for this rule it is $y(t) = y_0 e^{\lambda t}$. You can check it: differentiate $y_0 e^{\lambda t}$ and you get $\lambda y_0 e^{\lambda t}$, which is $\lambda y$. Positive $\lambda$ means exponential growth, negative $\lambda$ means exponential decay. This is the entire reason $e^{\lambda t}$ appears throughout the slide's caption. Whenever the rate of change of an error is proportional to the error, the error grows or shrinks exponentially, and $\lambda$ is the rate.</p>
+
+  <h3>How a computer solves one</h3>
+  <p>Almost no differential equation has a closed-form solution like the one above. Instead you simulate. If you know $y$ right now and you know the rule for $\dot{y}$, then a tiny time $\Delta t$ later $y$ will be approximately</p>
+  $$y(t + \Delta t) \approx y(t) + \Delta t \cdot \dot{y}(t).$$
+  <p>Take the step, recompute $\dot{y}$ at the new position, step again. This is the <span class="term">Euler method</span>, and if the update rule looks familiar it should. Gradient descent is exactly Euler's method applied to the rule $\dot{\theta} = -\nabla L(\theta)$ with step size $\eta$ playing the role of $\Delta t$. The simulations on this page use <span class="term">RK4</span> (fourth-order Runge–Kutta), which is the Euler method with a smarter estimate of the slope over the step. It is more accurate for the same $\Delta t$ but the idea is identical. Every "trajectory" you see below was produced by stepping a rule forward thousands of times.</p>
+
+  <div class="panel">
+    <h4>Sim 0 · $\dot{y} = \lambda y$ stepped forward by a computer</h4>
+    <p class="hint">Two starting values, $y_0 = 1$ (blue) and $y_0 = 1.05$ (orange). Each dot is one Euler step. Slide $\lambda$ through zero and watch the gap between the curves shrink or grow.</p>
+    <div class="controls">
+      <label>$\lambda$ <input type="range" id="s0lam" min="-1" max="1" step="0.05" value="0.5"><span class="val" id="s0lamv">0.50</span></label>
+    </div>
+    <canvas id="s0canvas" width="900" height="300"></canvas>
+    <div class="readout">
+      <span>Gap at $t = 4$ relative to the gap at $t = 0$: <b id="s0gap">…</b> (exact answer $e^{4\lambda}$ = <b id="s0exact">…</b>)</span>
+    </div>
+  </div>
+
+  <h3>More than one variable</h3>
+  <p>Real systems have several quantities changing at once, each with its own rule, and the rules refer to each other. Stack the quantities into a vector $\mathbf{s} = (s_1, \dots, s_n)$ and the rules into a vector-valued function $f$. Then $\dot{\mathbf{s}} = f(\mathbf{s})$ is a system of $n$ coupled equations and the solution is a path through $n$-dimensional space. That is an <span class="term">ordinary differential equation</span> (ODE). "Ordinary" just means the unknowns depend on a single variable, time. A <span class="term">partial differential equation</span> (PDE) is the case where the unknown is a whole field that varies over space as well as time, like the temperature at every point in a room. You will only meet PDEs once on this page, as the thing Lorenz started from and then simplified away.</p>
+  <p>One last piece of linear algebra you already have. If the rule is linear, $\dot{\mathbf{s}} = J\mathbf{s}$ for a matrix $J$, then along each eigenvector $\mathbf{v}$ of $J$ with eigenvalue $\mu$ the system behaves like the one-variable case, $\dot{(\cdot)} = \mu\,(\cdot)$, so the component along $\mathbf{v}$ grows like $e^{\mu t}$. A real negative $\mu$ decays, a real positive $\mu$ grows, and a complex $\mu = a + bi$ gives $e^{at}$ growth or decay multiplied by a rotation at frequency $b$, which is a spiral. That is all the eigenvalue talk in the next section means.</p>
+</section>
+
+<!-- ============================ 1 ============================ -->
+<section class="col" id="s1">
+  <h2><span class="num">01</span>Dynamical systems and stability</h2>
+  <p>A <span class="term">dynamical system</span> is any rule of the form above, $\dot{\mathbf{s}} = f(\mathbf{s})$ with $\mathbf{s} \in \mathbb{R}^n$. Some vocabulary. $\mathbf{s}$ is the <span class="term">state</span>, everything you need to know about the system right now. $f$ is the <span class="term">vector field</span>, an arrow attached to every point in state space saying which way the state moves next. The space of all possible states is <span class="term">phase space</span>. A solution $\mathbf{s}(t)$ is a <span class="term">trajectory</span>, a curve in phase space that follows the arrows. Sim 1 below draws the arrows so you can see all of this at once.</p>
+  <p>A <span class="term">fixed point</span> is a state $\mathbf{s}^*$ where $f(\mathbf{s}^*) = 0$, so nothing moves. The important question is what happens <em>near</em> it. Zoom in close enough and any smooth function looks linear, so replace $f$ by its tangent plane at $\mathbf{s}^*$ (this is called <span class="term">linearizing</span>). Writing $\boldsymbol{\delta} = \mathbf{s} - \mathbf{s}^*$ for the small displacement,</p>
+  $$\dot{\boldsymbol{\delta}} \approx J\,\boldsymbol{\delta}, \qquad J = \frac{\partial f}{\partial \mathbf{s}}\bigg|_{\mathbf{s}^*},$$
+  <p>where $J$ is the <span class="term">Jacobian</span>, the matrix of partial derivatives of $f$, the same object you backpropagate through. Now we are in the linear case from section 0. Along each eigenvector of $J$ with eigenvalue $\mu$, the displacement grows like $e^{\mathrm{Re}(\mu)\,t}$. So a fixed point is <span class="term">stable</span> if every eigenvalue has negative real part (all displacements die out) and <span class="term">unstable</span> if any eigenvalue has positive real part (some displacement grows). Complex eigenvalues add rotation, which is what makes spirals.</p>
+
+  <div class="panel">
+    <h4>Sim 1 · Drop pairs of points into a 2D flow</h4>
+    <p class="hint">Click anywhere on the canvas to release two points that start a tiny distance apart (blue and orange). Watch whether their separation shrinks or grows. The damping knob flips the sign of the real part of the eigenvalues.</p>
+    <div class="controls">
+      <label>Damping $c$ <input type="range" id="s1c" min="-0.6" max="0.6" step="0.05" value="0.3"><span class="val" id="s1cv">0.30</span></label>
+      <button id="s1run" class="on">Pause</button>
+      <button id="s1clear">Clear points</button>
+    </div>
+    <canvas id="s1canvas" width="900" height="420"></canvas>
+    <div class="readout">
+      <span>System: $\dot x = y,\ \dot y = -x - c\,y$</span>
+      <span>Eigenvalues: <b id="s1eig">…</b></span>
+      <span>Mean separation ratio $\delta(t)/\delta_0$ over all pairs: <b id="s1sep">…</b></span>
+    </div>
+  </div>
+
+  <p>With $c > 0$ this is a damped spring. Both points spiral into the origin and their separation shrinks exponentially, so a small error in where you started does not matter for long. This is the world the first two mental models on the slide ("GD plus noise", "Brownian motion") live in. <em>Small perturbations keep you close.</em></p>
+  <p>With $c < 0$ the origin is unstable and the separation grows exponentially. But notice this is boring too. Both points fly off to infinity along nearly the same path. Exponential growth of errors alone is not chaos. Chaos needs one more ingredient, which the next sections supply.</p>
+</section>
+
+<!-- ============================ 2 ============================ -->
+<section class="col" id="s2">
+  <h2><span class="num">02</span>The Lorenz equations and where they came from</h2>
+  <p>In 1963 the meteorologist Edward Lorenz published "Deterministic Nonperiodic Flow". He was studying <span class="term">Rayleigh–Bénard convection</span>, which is what happens when you heat a layer of fluid from below. Warm fluid rises, cools at the top, sinks, and the layer organizes into rolling cells. The full description is a PDE, because temperature and velocity are fields defined at every point in the fluid. Lorenz did something that should feel familiar from ML. He wrote the fields as a sum of spatial patterns (Fourier modes, which are just sine waves of different wavelengths), kept the three most important patterns, and threw the rest away. The coefficients of the three surviving patterns became three ordinary numbers that change in time, and their rules of motion are the Lorenz equations:</p>
+  $$\dot{x} = \sigma(y - x), \qquad \dot{y} = x(\rho - z) - y, \qquad \dot{z} = xy - \beta z.$$
+  <p>Loosely, $x$ is the speed of the convection roll, $y$ is the horizontal temperature difference between the rising and sinking fluid, and $z$ is how much the vertical temperature profile departs from a straight line. The parameters are $\sigma$ (the Prandtl number, a ratio of how fast momentum diffuses to how fast heat diffuses), $\rho$ (the Rayleigh number, how hard you are heating relative to the threshold where convection starts), and $\beta$ (a geometric aspect ratio of the cells). The standard values $\sigma = 10$, $\rho = 28$, $\beta = 8/3$ are the ones Lorenz used and the ones the slide uses.</p>
+  <p>You do not need the fluid story to use the equations. For the rest of this page, treat them as a three-dimensional vector field that is simple to write down and does something astonishing.</p>
+
+  <h3>The fixed points</h3>
+  <p>Setting all three derivatives to zero gives the origin, and, when $\rho > 1$, a symmetric pair</p>
+  $$C_{\pm} = \left(\pm\sqrt{\beta(\rho - 1)},\ \pm\sqrt{\beta(\rho - 1)},\ \rho - 1\right).$$
+  <p>At the standard parameters, $\sqrt{\beta(\rho-1)} = \sqrt{72} \approx 8.49$ and $z = 27$. Those are the two horizontal lines on the slide. Physically $C_\pm$ are steady convection rolls turning clockwise or anticlockwise. Linearize at $C_\pm$ as in section 1. The Jacobian has one negative real eigenvalue (a direction that is pulled in) and a complex pair (a spiral). For $\rho$ below about $24.74$ the complex pair has negative real part, so the spiral winds inward and the rolls are stable. Above it the real part turns positive, the steady rolls are unstable, and yet nothing else is stable either. The trajectory has nowhere to settle.</p>
+</section>
+
+<!-- ============================ 3 ============================ -->
+<section class="col" id="s3">
+  <h2><span class="num">03</span>The attractor, one knob at a time</h2>
+  <p>An <span class="term">attractor</span> is the set that trajectories end up on after transients die away. A stable fixed point is an attractor. A stable periodic orbit (a closed loop) is an attractor. The Lorenz system at $\rho = 28$ has a <span class="term">strange attractor</span>: trajectories are pulled onto a bounded, butterfly-shaped set, never leave it, never repeat, and never settle. Turn $\rho$ up from zero and watch the three regimes appear.</p>
+
+  <div class="panel">
+    <h4>Sim 2 · The Lorenz system live</h4>
+    <p class="hint">Left is the trajectory in 3D phase space (drag to rotate). Right is the $x(t)$ trace like the slide, with the fixed points $C_\pm$ as horizontal lines. Change $\rho$ and the system keeps running from its current state.</p>
+    <div class="controls">
+      <label>$\rho$ <input type="range" id="s3rho" min="0" max="40" step="0.5" value="28"><span class="val" id="s3rhov">28.0</span></label>
+      <button data-rho="0.5">$\rho = 0.5$ origin stable</button>
+      <button data-rho="15">$\rho = 15$ rolls stable</button>
+      <button data-rho="28" class="on">$\rho = 28$ chaos</button>
+      <button id="s3run" class="on">Pause</button>
+      <button id="s3reset">Reset state</button>
+    </div>
+    <div class="row2">
+      <canvas id="s3canvas3d" width="520" height="420"></canvas>
+      <canvas id="s3canvasx" width="520" height="420"></canvas>
+    </div>
+    <div class="readout">
+      <span>$\sigma = 10$, $\beta = 8/3$, RK4 with $\Delta t = 0.01$</span>
+      <span>$t$ = <b id="s3t">0.0</b></span>
+      <span>$C_\pm$ at $x$ = <b id="s3fp">±8.49</b></span>
+    </div>
+  </div>
+
+  <p>Three regimes to notice. For $\rho < 1$ the heating is too weak for convection and everything decays to the origin. For $1 < \rho < 24.74$ the trajectory spirals in to one of the two rolls $C_\pm$, with oscillations that shrink. The slide's first 17 time units are this same spiral, but with $\rho = 28$ the spiral is unstable so the oscillations grow instead of shrinking until the trajectory is thrown across to the other lobe. From then on it circulates around one lobe for a while, hops, circulates, hops, with no pattern to the counts.</p>
+  <p>Two things make this an attractor rather than an explosion. The <span class="term">divergence</span> of the vector field, $\nabla\cdot f = \partial\dot x/\partial x + \partial\dot y/\partial y + \partial\dot z/\partial z$, measures whether the flow spreads a small blob of states out (positive) or compresses it (negative). For Lorenz it is the constant $-(\sigma + 1 + \beta) \approx -13.67$, so any blob of initial conditions shrinks in volume exponentially fast, which is why trajectories are pulled onto a thin set. And nonlinear terms $xz$ and $xy$ fold the stretched-out directions back on themselves so nothing escapes to infinity. Stretch in one direction, squeeze in the others, fold. That combination is the recipe for chaos. The result has zero volume but is not a surface either. Its fractal dimension is about $2.06$.</p>
+</section>
+
+<!-- ============================ 4 ============================ -->
+<section class="col" id="s4">
+  <h2><span class="num">04</span>The butterfly experiment</h2>
+  <p>Now reproduce the slide. Run the system to $t = 20$, make a copy, nudge the copy's $x$ by $\delta_0$, and let both run. The two trajectories are both solutions of the exact same deterministic equations, with no noise anywhere. The only difference is $\delta_0$.</p>
+
+  <div class="panel">
+    <h4>Sim 3 · Perturb a copy at $t = 20$</h4>
+    <p class="hint">Top: $x(t)$ for the original (blue) and the perturbed copy (orange). Bottom: the separation $\|\mathbf{s}_{\text{copy}}(t) - \mathbf{s}(t)\|$ on a log scale, with a dashed guide line of slope $\lambda = 0.906$. Drag the slider to make the nudge a million times smaller and watch how little time that buys.</p>
+    <div class="controls">
+      <label>$\delta_0 = 10^{\,k}$, $k$ = <input type="range" id="s4k" min="-12" max="-1" step="1" value="-5"><span class="val" id="s4kv">-5</span></label>
+    </div>
+    <canvas id="s4canvasx" width="900" height="300"></canvas>
+    <canvas id="s4canvaslog" width="900" height="260" style="margin-top:10px"></canvas>
+    <div class="readout">
+      <span class="legend"><i style="background:var(--traj-a)"></i>original</span>
+      <span class="legend"><i style="background:var(--traj-b)"></i>perturbed copy</span>
+      <span>First time the separation exceeds 1: <b id="s4cross">…</b></span>
+      <span>Time after the nudge: <b id="s4after">…</b></span>
+    </div>
+  </div>
+
+  <p>Read the lower plot. The separation climbs along a roughly straight line on the log axis, which means exponential growth, $\delta(t) \approx \delta_0 e^{\lambda t}$. It wobbles because the local stretching rate depends on where on the attractor you are (near the center of the butterfly the stretching is strongest). Then it saturates at about the size of the attractor, around 20 to 40 units, because two points on a bounded set cannot get further apart than that. After saturation the orange and blue curves are as unrelated as two trajectories started from random points.</p>
+  <p>The table below is the real punchline. On average, each factor of ten in precision buys only about $\ln 10 / \lambda \approx 2.5$ time units of agreement. The spacing is uneven from row to row because the stretching rate varies along the attractor, but the trend is unmistakable. That is the sense in which "infinitesimal at the input becomes macroscopic at the output". Linear improvements in forecast horizon cost exponential improvements in measurement.</p>
+  <div class="wide">
+  <table id="s4table">
+    <thead><tr><th>$\delta_0$</th><th>Time after nudge until separation $> 1$</th><th>Until separation $> 10$</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  </div>
+  <p>Weather is the original application. Atmospheric models have a largest Lyapunov exponent that corresponds to errors roughly doubling every couple of days, and the initial state is only known to finite precision from sparse measurements. That is why the useful forecast horizon is around two weeks regardless of compute, and why forecasters run ensembles of slightly perturbed initial conditions instead of a single run. The ensemble spread is the orange-blue divergence, measured.</p>
+</section>
+
+<!-- ============================ 5 ============================ -->
+<section class="col" id="s5">
+  <h2><span class="num">05</span>Lyapunov exponents, properly</h2>
+  <p>The <span class="term">largest Lyapunov exponent</span> $\lambda_1$ is the average exponential growth rate of an infinitesimal perturbation, averaged along a trajectory for a long time:</p>
+  $$\lambda_1 = \lim_{t\to\infty}\ \lim_{\delta_0 \to 0}\ \frac{1}{t}\ln\frac{\|\boldsymbol{\delta}(t)\|}{\|\boldsymbol{\delta}(0)\|}.$$
+  <p>The order of limits matters. You shrink the perturbation first so it never saturates, then take the time average. Numerically you do the equivalent trick of renormalizing the perturbation back to tiny size every few steps and summing the logs of the growth factors (the Benettin algorithm). For Lorenz at the standard parameters, $\lambda_1 \approx 0.906$ per unit time. The <span class="term">Lyapunov time</span> $1/\lambda_1 \approx 1.1$ is the characteristic time for errors to grow by a factor of $e$. Errors double every $\ln 2 / \lambda_1 \approx 0.77$ time units.</p>
+
+  <h3>Relation to the eigenvalues from section 1</h3>
+  <p>At a fixed point, the Lyapunov exponents are exactly the real parts of the Jacobian eigenvalues. Everywhere else they generalize that idea. Instead of one Jacobian you have a product of many Jacobians along the trajectory, $M(t) = \prod_k e^{J(\mathbf{s}(t_k))\Delta t}$, and the Lyapunov exponents are the long-run growth rates of the singular values of $M(t)$, divided by $t$. The <span class="term">Oseledets theorem</span> guarantees these limits exist for almost every starting point and do not depend on it. So $\lambda_1$ is a property of the attractor, not of where you began.</p>
+
+  <h3>The full spectrum</h3>
+  <p>An $n$-dimensional system has $n$ exponents, one per independent direction. For Lorenz they are approximately</p>
+  $$(\lambda_1, \lambda_2, \lambda_3) \approx (0.906,\ 0,\ -14.57).$$
+  <p>Each sign tells a story. The positive one is the stretching that causes sensitivity to initial conditions. The zero one is always present for a continuous-time system on an attractor that is not a fixed point, because a perturbation <em>along</em> the direction of motion just shifts you forward or back in time and neither grows nor shrinks. The large negative one is the squeezing that pulls trajectories onto the thin attractor. Their sum, $-13.67$, equals the divergence $-(\sigma + 1 + \beta)$ from section 3, which is a nice consistency check: total volume contraction rate equals the sum of the per-direction rates.</p>
+
+  <div class="callout">
+    <span class="label">The working definition of chaos</span>
+    A deterministic system is chaotic if its trajectories stay bounded (they do not run off to infinity) and it has at least one positive Lyapunov exponent (nearby trajectories separate exponentially). The unstable spring in Sim 1 has the second property but not the first. The stable spring has neither. Lorenz at $\rho = 28$ has both.
+  </div>
+
+  <h3>Predictability horizon</h3>
+  <p>If your initial error is $\delta_0$ and you can tolerate error $\Delta$, the time until you exceed it is</p>
+  $$T_{\text{pred}} \approx \frac{1}{\lambda_1}\ln\frac{\Delta}{\delta_0}.$$
+  <p>This is the formula behind the table in section 4. The logarithm is why heroic measurement effort gives disappointing returns.</p>
+</section>
+
+<!-- ============================ 6 ============================ -->
+<section class="col" id="s6">
+  <h2><span class="num">06</span>The double pendulum</h2>
+  <p>The right half of the slide is a mechanical system with the same property. A pendulum with a second pendulum hanging from its tip has a four-dimensional state (two angles, two angular velocities). The equations come from Newton's laws written in terms of the two angles (the standard machinery for that is called Lagrangian mechanics, and you do not need it here). They are not pretty, but they are fully deterministic and energy-conserving. Released from a small angle it swings predictably. Released from a large angle it is chaotic, and two copies that differ by less than you could ever measure disagree completely within seconds.</p>
+
+  <div class="panel">
+    <h4>Sim 4 · Two pendulums, one tiny difference</h4>
+    <p class="hint">Both pendulums start from the same release angles except the orange one has its upper angle offset by $\Delta\theta$. The lower bob leaves a trail. Try $\Delta\theta = 10^{-6}$ degrees. That is smaller than the width of an atom at the bob.</p>
+    <div class="controls">
+      <label>Release angle <input type="range" id="s6ang" min="20" max="180" step="5" value="120"><span class="val" id="s6angv">120°</span></label>
+      <label>$\Delta\theta = 10^{\,k}$ deg, $k$ = <input type="range" id="s6k" min="-6" max="0" step="1" value="-3"><span class="val" id="s6kv">-3</span></label>
+      <button id="s6run" class="on">Pause</button>
+      <button id="s6reset">Release again</button>
+    </div>
+    <canvas id="s6canvas" width="900" height="440"></canvas>
+    <div class="readout">
+      <span>$m_1 = m_2 = 1$, $L_1 = L_2 = 1$, $g = 9.81$, RK4 with $\Delta t = 0.001$ s</span>
+      <span>$t$ = <b id="s6t">0.00</b> s</span>
+      <span>Angle difference (lower arm): <b id="s6diff">…</b></span>
+    </div>
+  </div>
+
+  <p>At a 20° release the two copies stay together indefinitely. The motion is nearly a sum of two sine waves and the Lyapunov exponents are essentially zero (energy conservation forbids them from being negative, and small-angle motion is not chaotic). At 120° or more the upper bob has enough energy to flip over, the dynamics become chaotic, and the trails separate within a few seconds. Same equations, same physics, different region of phase space. Chaos is a property of a <em>regime</em>, not of a system as a whole.</p>
+</section>
+
+<!-- ============================ 7 ============================ -->
+<section class="col" id="s7">
+  <h2><span class="num">07</span>Chaos in discrete time</h2>
+  <p>Everything above is continuous time. Training a network is an <span class="term">iterated map</span>, $\mathbf{s}_{k+1} = F(\mathbf{s}_k)$, so it helps to see the same ideas with a step counter instead of a clock. For maps, the linearization is $\boldsymbol{\delta}_{k+1} = J_k\,\boldsymbol{\delta}_k$ with $J_k = \partial F / \partial \mathbf{s}$ at $\mathbf{s}_k$, and the largest Lyapunov exponent is</p>
+  $$\lambda_1 = \lim_{N\to\infty}\frac{1}{N}\sum_{k=0}^{N-1}\ln\|J_k\,\mathbf{u}_k\|,$$
+  <p>where $\mathbf{u}_k$ is the unit perturbation direction, renormalized each step. In one dimension $J_k$ is just the derivative $F'(s_k)$, so $\lambda_1$ is the average of $\ln|F'|$ along the orbit. If the map stretches on average ($|F'| > 1$ typically) you get chaos, if it squeezes you get convergence.</p>
+  <p>A continuous ODE needs at least three dimensions to be chaotic (in two dimensions trajectories cannot cross, which prevents the folding). A map can be chaotic in one dimension because a map can jump. The classic example is the <span class="term">logistic map</span> $x_{k+1} = r\,x_k(1 - x_k)$, a toy population model.</p>
+
+  <div class="panel">
+    <h4>Sim 5 · The logistic map and its Lyapunov exponent</h4>
+    <p class="hint">Two orbits start $10^{-8}$ apart. The Lyapunov exponent is computed directly as the average of $\ln|r(1 - 2x_k)|$ over 2000 steps after a transient. Slide $r$ from 2.8 to 4 and watch the exponent cross zero.</p>
+    <div class="controls">
+      <label>$r$ <input type="range" id="s7r" min="2.8" max="4" step="0.005" value="3.2"><span class="val" id="s7rv">3.200</span></label>
+      <button data-r="2.9">fixed point</button>
+      <button data-r="3.2" class="on">period 2</button>
+      <button data-r="3.5">period 4</button>
+      <button data-r="3.9">chaos</button>
+    </div>
+    <canvas id="s7canvas" width="900" height="300"></canvas>
+    <div class="readout">
+      <span>$\lambda_1$ ≈ <b id="s7lam">…</b> per step</span>
+      <span>Regime: <b id="s7reg">…</b></span>
+    </div>
+  </div>
+
+  <p>Below $r = 3$ the orbit settles to a fixed point and $\lambda_1 < 0$. Between 3 and about 3.57 it settles into cycles of period 2, 4, 8 and so on (the period-doubling cascade) and $\lambda_1$ stays negative except exactly at the doubling points where it touches zero. Past about 3.57 the exponent becomes positive and the two orbits that started $10^{-8}$ apart stop agreeing after about 20 steps, for the same logarithmic reason as the table in section 4.</p>
+
+  <h3>Gradient descent is an iterated map too</h3>
+  <p>Take gradient descent on a one-dimensional quadratic $L(w) = \tfrac{h}{2}w^2$ with learning rate $\eta$. The update is $w_{k+1} = (1 - \eta h)\,w_k$. This is a linear map with derivative $1 - \eta h$, so its Lyapunov exponent is simply</p>
+  $$\lambda = \ln|1 - \eta h|.$$
+  <p>For $0 < \eta h < 2$ this is negative and GD converges (monotonically for $\eta h < 1$, with oscillating sign for $1 < \eta h < 2$). At $\eta h = 2$ it is exactly zero. Beyond 2 it is positive and GD diverges. In many dimensions the same thing holds eigenvalue by eigenvalue with $h$ replaced by each eigenvalue of the Hessian, which is where the familiar stability condition $\eta < 2/h_{\max}$ comes from. The "edge of stability" phenomenon (<a href="https://arxiv.org/abs/2103.00065">Cohen et al., ICLR 2021</a>, which the course covers in Lecture 6), where sharpness $h_{\max}$ climbs until it sits right at $2/\eta$, is training arranging itself so that the top direction has Lyapunov exponent about zero. Notice that a quadratic can be unstable but never chaotic, because the diverging iterates are unbounded. It takes the nonlinearity of a real loss to fold them back.</p>
+</section>
+
+<!-- ============================ 8 ============================ -->
+<section class="col" id="s8">
+  <h2><span class="num">08</span>Why this matters for deep learning</h2>
+  <p>The slide puts "SGD is like a chaotic system" next to "SGD is like GD plus noise" and "SGD is like Brownian motion" and then asks, "But also, training deep nets?" The question matters because the three models make different predictions about what a small perturbation does. Under the first two, if you change the seed a little the final weights change a little. Under the chaotic model, any perturbation at all, no matter how small, gets amplified to the full run-to-run spread. Here is the evidence that the chaotic model is the right one for the weights.</p>
+
+  <h3>One bit is enough</h3>
+  <p>Summers and Dinneen (ICML 2021) isolated every source of nondeterminism in training a ResNet on CIFAR-10 one at a time: initialization seed, data order, data augmentation seed, and the nondeterministic floating-point reductions inside cuDNN. Each source alone produced about as much variability between trained models as all sources together. To explain that they ran the butterfly experiment on training: change a single weight at initialization by one unit in the last place of a float (about $6\times10^{-11}$) and keep everything else bit-identical. The resulting models were nearly as different from each other as models trained from entirely different random initializations. This is exactly the slide's orange-blue curve, with the network's weights as the state. And it explains a CIFAR slide earlier in the same lecture, which says the sources of randomness are not additive and "any single source leads to similar variance". Once the dynamics have a positive Lyapunov exponent, every perturbation saturates to the attractor's size, so the sources cannot add. The smallest one already gets you the full spread.</p>
+
+  <h3>But the loss is not chaotic in the same way</h3>
+  <p>This is the subtlety that makes the chaotic model useful rather than depressing. The weights diverge, yet the final test accuracy of the diverged runs is nearly the same (within a fraction of a percent on CIFAR). The attractor is enormous in weight space but the loss is nearly constant across it. The lecture's conclusion that "randomness is often not your biggest problem" is a statement about the loss, not the weights. Related evidence from Frankle, Dziugaite, Roy and Carbin (ICML 2020) found that after a short early phase of training, two copies of a network trained with different data orders end up in the same linearly connected basin, with no loss barrier on the straight line between them. Sensitivity to initial conditions in the weights is compatible with insensitivity in the quantities you care about. Keep both facts in your head at once.</p>
+
+  <h3>Backprop through time is a product of Jacobians</h3>
+  <p>A recurrent network unrolled for $T$ steps is an iterated map $\mathbf{h}_{t+1} = F(\mathbf{h}_t, x_t)$. The gradient of the loss at step $T$ with respect to $\mathbf{h}_0$ is</p>
+  $$\frac{\partial L}{\partial \mathbf{h}_0} = \frac{\partial L}{\partial \mathbf{h}_T}\prod_{t=0}^{T-1} J_t,$$
+  <p>the same product of Jacobians whose growth rate defines the Lyapunov exponent. So exploding gradients (Pascanu, Mikolov and Bengio 2013) and a positive Lyapunov exponent of the forward dynamics are the same fact seen from two sides. Vanishing gradients are the negative-exponent case. Metz, Freeman, Schoenholz and Kachman ("Gradients are Not All You Need", 2021) push this further: when you differentiate through a chaotic system (a physics simulator, an unrolled optimizer in meta-learning, a long RNN), the gradient is formally correct but its variance explodes exponentially in the horizon, and a black-box estimator can beat the exact gradient. Their diagnostic is the spectrum of the Jacobians, which is this page's $\lambda_1$.</p>
+
+  <h3>Signal propagation at initialization</h3>
+  <p>A deep feed-forward net at initialization is also an iterated map, layer index playing the role of time. Poole, Lahiri, Raghu, Sohl-Dickstein and Ganguli (NeurIPS 2016) computed how two inputs' correlation evolves through random layers and found an ordered phase (inputs collapse together, negative exponent) and a chaotic phase (nearby inputs are pulled apart, positive exponent) depending on the weight variance. Schoenholz et al. (ICLR 2017) then showed that trainability of very deep nets requires initializing near the boundary, the <span class="term">edge of chaos</span>, where the exponent is near zero and signals neither die nor explode across depth. Residual connections and normalization are ways of keeping a deep net near that boundary without tuning.</p>
+
+  <div class="callout">
+    <span class="label">What to take from the slide</span>
+    The chaotic mental model says: expect any two training runs to have unrelated weights, expect a single flipped bit to be as disruptive as a new seed, do not try to make training reproducible by removing one source of randomness, and measure run-to-run variance of the metric you care about rather than trusting a single run. Then notice that the loss landscape is kind enough that the metric's variance is usually small anyway.
+  </div>
+</section>
+
+<!-- ============================ 9 ============================ -->
+<section class="col" id="s9">
+  <h2><span class="num">09</span>Blind spots and glossary</h2>
+  <p>Ideas that sit right next to the slide and are easy to miss when you first meet it.</p>
+  <dl class="gloss">
+    <dt>Chaos, stochasticity and instability are three different things</dt>
+    <dd>Stochastic means randomness is injected. Unstable means a linearized perturbation grows (an eigenvalue beyond the unit circle). Chaotic means deterministic, bounded, and exponentially sensitive. Full-batch GD showing spikes (the slide right after "Chaotic systems" in the same lecture, titled "stochastic behavior in deterministic training") is instability at the edge of stability, not chaos. The slide is careful to say chaotic systems <em>look</em> random.</dd>
+    <dt>Lyapunov exponent is not an eigenvalue</dt>
+    <dd>Eigenvalues of a single Jacobian describe one point. The Lyapunov exponent is a long-time average over a whole trajectory. The two coincide only at a fixed point. A system can have every local Jacobian contracting in some direction yet still be chaotic because the directions rotate.</dd>
+    <dt>Finite-time Lyapunov exponents</dt>
+    <dd>Over a finite window the growth rate fluctuates, which is why the log-separation curve in Sim 3 wobbles. People report finite-time exponents to describe where on the attractor sensitivity is worst. The asymptotic exponent is a single number for the whole attractor.</dd>
+    <dt>Numerical trajectories are wrong but statistically right</dt>
+    <dd>Any computer trajectory of a chaotic system departs from the true one after a few Lyapunov times because of rounding. The shadowing lemma says that for a wide class of systems there is nonetheless a true trajectory that stays close to the computed one. So you cannot trust the specific path, but you can trust averages over the attractor. The same reasoning is why we trust loss curves from a single nondeterministic GPU run as statistically representative.</dd>
+    <dt>Ergodicity</dt>
+    <dd>Time averages along one trajectory equal space averages over the attractor. This is what lets you estimate $\lambda_1$ from a single long run and what justifies the Oseledets result that $\lambda_1$ does not depend on where you start.</dd>
+    <dt>Dissipative vs conservative</dt>
+    <dd>Lorenz is dissipative (volume shrinks, attractor exists). The double pendulum is conservative (Hamiltonian, volume preserved by Liouville's theorem, no attractor). Conservative systems can still be chaotic, with Lyapunov exponents summing to zero and coming in $\pm$ pairs. Training with SGD and weight decay is dissipative. Pure Hamiltonian dynamics (as in HMC samplers) are conservative.</dd>
+    <dt>Strange attractor and fractal dimension</dt>
+    <dd>The Lorenz attractor has Kaplan–Yorke dimension $\approx 2.06$, computed from the exponents as $2 + \lambda_1/|\lambda_3|$. It is more than a surface and less than a volume. The analogous question for training, what is the geometry of the set of weights that SGD visits, is open.</dd>
+    <dt>Chaos was proved, not just simulated</dt>
+    <dd>Lorenz observed chaos numerically in 1963. A rigorous computer-assisted proof that the attractor exists and is strange came only in 2002, from Warwick Tucker. It is a reminder that "the plot looks chaotic" and "the system is chaotic" are different claims.</dd>
+  </dl>
+
+  <h3>Sources</h3>
+  <ul class="src">
+    <li>E. N. Lorenz, "Deterministic Nonperiodic Flow", <em>J. Atmos. Sci.</em> 20, 1963.</li>
+    <li>S. Strogatz, <em>Nonlinear Dynamics and Chaos</em>, ch. 9 (the Lorenz chapter) for every formula in sections 2 to 5.</li>
+    <li>C. Summers and M. J. Dinneen, "Nondeterminism and Instability in Neural Network Optimization", ICML 2021. <a href="https://arxiv.org/abs/2103.04514">arXiv:2103.04514</a></li>
+    <li>L. Metz, C. D. Freeman, S. S. Schoenholz, T. Kachman, "Gradients are Not All You Need", 2021. <a href="https://arxiv.org/abs/2111.05803">arXiv:2111.05803</a></li>
+    <li>J. Frankle, G. K. Dziugaite, D. M. Roy, M. Carbin, "Linear Mode Connectivity and the Lottery Ticket Hypothesis", ICML 2020. <a href="https://arxiv.org/abs/1912.05671">arXiv:1912.05671</a></li>
+    <li>R. Pascanu, T. Mikolov, Y. Bengio, "On the difficulty of training recurrent neural networks", ICML 2013. <a href="https://arxiv.org/abs/1211.5063">arXiv:1211.5063</a></li>
+    <li>B. Poole et al., "Exponential expressivity in deep neural networks through transient chaos", NeurIPS 2016 (<a href="https://arxiv.org/abs/1606.05340">arXiv:1606.05340</a>). S. Schoenholz et al., "Deep Information Propagation", ICLR 2017 (<a href="https://arxiv.org/abs/1611.01232">arXiv:1611.01232</a>).</li>
+    <li>J. Cohen, S. Kaur, Y. Li, J. Z. Kolter, A. Talwalkar, "Gradient Descent on Neural Networks Typically Occurs at the Edge of Stability", ICLR 2021. <a href="https://arxiv.org/abs/2103.00065">arXiv:2103.00065</a></li>
+    <li>T. Hashimoto, Stanford CS 312 (Deep Learning Alchemy), Lecture 2 slides, "Mental models of deep learning randomness" and "Chaotic systems". <a href="https://deep-learning-alchemy.github.io/assets/slides/lecture_02.pdf">lecture_02.pdf</a></li>
+  </ul>
+</section>
+
+</main>
+
+<script>
+(function () {
+  'use strict';
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const C = () => ({ a: css('--traj-a'), b: css('--traj-b'), ink: css('--ink'), soft: css('--ink-soft'), grid: css('--grid'), rule: css('--rule'), fixed: css('--fixed'), accent: css('--accent'), bg: css('--bg') });
+
+  function rk4(s, dt, f) {
+    const k1 = f(s);
+    const k2 = f(s.map((v, i) => v + 0.5 * dt * k1[i]));
+    const k3 = f(s.map((v, i) => v + 0.5 * dt * k2[i]));
+    const k4 = f(s.map((v, i) => v + dt * k3[i]));
+    return s.map((v, i) => v + dt / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]));
+  }
+  function setupCanvas(id) {
+    const c = document.getElementById(id);
+    const ctx = c.getContext('2d');
+    return { c, ctx, W: c.width, H: c.height };
+  }
+  function axes(ctx, x0, y0, x1, y1, col) {
+    ctx.strokeStyle = col; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0, y1); ctx.lineTo(x1, y1); ctx.stroke();
+  }
+  function label(ctx, txt, x, y, col, align) {
+    ctx.fillStyle = col; ctx.font = '12px "IBM Plex Mono", monospace'; ctx.textAlign = align || 'left'; ctx.fillText(txt, x, y);
+  }
+  function toggleRun(btn, state, onLabel, offLabel) {
+    btn.addEventListener('click', () => {
+      state.run = !state.run;
+      btn.textContent = state.run ? onLabel : offLabel;
+      btn.classList.toggle('on', state.run);
+    });
+    if (reduce) { state.run = false; btn.textContent = offLabel; btn.classList.remove('on'); }
+  }
+
+  /* ================= Sim 0: dy/dt = lambda y with Euler steps ================= */
+  (function sim0() {
+    const { ctx, W, H } = setupCanvas('s0canvas');
+    const slider = document.getElementById('s0lam'), val = document.getElementById('s0lamv');
+    const gapEl = document.getElementById('s0gap'), exEl = document.getElementById('s0exact');
+    function draw(lam) {
+      const col = C(); ctx.fillStyle = col.bg; ctx.fillRect(0, 0, W, H);
+      const L = 40, R = W - 12, T = 12, B = H - 26, Tmax = 4, dt = 0.1, N = Math.round(Tmax / dt);
+      const ymax = Math.max(1.2, 1.05 * Math.exp(Math.max(0, lam) * Tmax) * 1.05);
+      const tToPx = (t) => L + t / Tmax * (R - L), yToPx = (y) => B - y / ymax * (B - T);
+      ctx.strokeStyle = col.grid;
+      const stepY = ymax > 20 ? 10 : (ymax > 6 ? 2 : (ymax > 2.5 ? 1 : 0.25));
+      for (let y = 0; y <= ymax; y += stepY) { ctx.beginPath(); ctx.moveTo(L, yToPx(y)); ctx.lineTo(R, yToPx(y)); ctx.stroke(); label(ctx, y.toFixed(stepY < 1 ? 2 : 0), L - 6, yToPx(y) + 4, col.soft, 'right'); }
+      axes(ctx, L, T, R, B, col.rule);
+      for (let t = 0; t <= Tmax; t += 1) label(ctx, 't = ' + t, tToPx(t), B + 16, col.soft, 'center');
+      let a = 1, b = 1.05;
+      const pa = [[0, a]], pb = [[0, b]];
+      for (let i = 1; i <= N; i++) { a = a + dt * lam * a; b = b + dt * lam * b; pa.push([i * dt, a]); pb.push([i * dt, b]); }
+      for (const [pts, color] of [[pb, col.b], [pa, col.a]]) {
+        ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.beginPath();
+        pts.forEach((p, i) => { i ? ctx.lineTo(tToPx(p[0]), yToPx(p[1])) : ctx.moveTo(tToPx(p[0]), yToPx(p[1])); }); ctx.stroke();
+        ctx.fillStyle = color; pts.forEach((p) => { ctx.beginPath(); ctx.arc(tToPx(p[0]), yToPx(p[1]), 2.5, 0, 6.283); ctx.fill(); });
+      }
+      label(ctx, 'y(t), Euler steps of Δt = 0.1', L + 6, T + 12, col.soft);
+      gapEl.textContent = ((b - a) / 0.05).toFixed(2);
+      exEl.textContent = Math.exp(4 * lam).toFixed(2);
+    }
+    function update() { const lam = parseFloat(slider.value); val.textContent = lam.toFixed(2); draw(lam); }
+    slider.addEventListener('input', update); update();
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', update);
+  })();
+
+  /* ================= Sim 1: 2D damped/undamped spring ================= */
+  (function sim1() {
+    const { c, ctx, W, H } = setupCanvas('s1canvas');
+    const st = { c: 0.3, run: true, pairs: [] };
+    const slider = document.getElementById('s1c'), val = document.getElementById('s1cv');
+    const eigEl = document.getElementById('s1eig'), sepEl = document.getElementById('s1sep');
+    const scale = 70; // px per unit
+    const cx = W / 2, cy = H / 2;
+    const f = (s) => [s[1], -s[0] - st.c * s[1]];
+    function eig() {
+      const disc = st.c * st.c - 4;
+      if (disc < 0) { const re = -st.c / 2, im = Math.sqrt(-disc) / 2; return `${re.toFixed(2)} ± ${im.toFixed(2)}i`; }
+      const r1 = (-st.c + Math.sqrt(disc)) / 2, r2 = (-st.c - Math.sqrt(disc)) / 2; return `${r1.toFixed(2)}, ${r2.toFixed(2)}`;
+    }
+    function spawn(x, y) {
+      const d0 = 0.15;
+      st.pairs.push({ a: [x, y], b: [x + d0, y], d0, trailA: [], trailB: [], t: 0 });
+      if (st.pairs.length > 6) st.pairs.shift();
+    }
+    c.addEventListener('click', (e) => {
+      const r = c.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width * W - cx) / scale;
+      const y = -((e.clientY - r.top) / r.height * H - cy) / scale;
+      spawn(x, y);
+    });
+    document.getElementById('s1clear').addEventListener('click', () => { st.pairs = []; });
+    slider.addEventListener('input', () => { st.c = parseFloat(slider.value); val.textContent = st.c.toFixed(2); });
+    toggleRun(document.getElementById('s1run'), st, 'Pause', 'Run');
+    spawn(1.8, 1.2); spawn(-2.2, 0.4);
+    function draw() {
+      const col = C();
+      ctx.fillStyle = col.bg; ctx.fillRect(0, 0, W, H);
+      // vector field
+      ctx.strokeStyle = col.rule; ctx.lineWidth = 1;
+      for (let gx = -6; gx <= 6; gx++) for (let gy = -2.5; gy <= 2.5; gy += 0.5) {
+        const x = gx * 0.5 * 1.98, y = gy;
+        const v = f([x, y]); const n = Math.hypot(v[0], v[1]) || 1; const L = 9;
+        const px = cx + x * scale, py = cy - y * scale;
+        ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px + v[0] / n * L, py - v[1] / n * L); ctx.stroke();
+      }
+      label(ctx, 'x', W - 16, cy - 6, col.soft); label(ctx, 'y', cx + 6, 14, col.soft);
+      ctx.strokeStyle = col.grid; ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(W, cy); ctx.moveTo(cx, 0); ctx.lineTo(cx, H); ctx.stroke();
+      // trails and points
+      let ratioSum = 0, n = 0;
+      for (const p of st.pairs) {
+        for (const [trail, color] of [[p.trailA, col.a], [p.trailB, col.b]]) {
+          ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.beginPath();
+          trail.forEach((q, i) => { const px = cx + q[0] * scale, py = cy - q[1] * scale; i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); });
+          ctx.stroke();
+        }
+        for (const [pt, color] of [[p.a, col.a], [p.b, col.b]]) {
+          ctx.fillStyle = color; ctx.beginPath(); ctx.arc(cx + pt[0] * scale, cy - pt[1] * scale, 4, 0, 6.283); ctx.fill();
+        }
+        const d = Math.hypot(p.a[0] - p.b[0], p.a[1] - p.b[1]);
+        if (Math.abs(p.a[0]) < 1e4) { ratioSum += d / p.d0; n++; }
+      }
+      eigEl.textContent = eig();
+      sepEl.textContent = n ? (ratioSum / n).toExponential(2) : '—';
+    }
+    function step() {
+      if (st.run) {
+        const dt = 0.02;
+        for (const p of st.pairs) {
+          for (let i = 0; i < 2; i++) { p.a = rk4(p.a, dt, f); p.b = rk4(p.b, dt, f); p.t += dt; }
+          p.trailA.push(p.a.slice()); p.trailB.push(p.b.slice());
+          if (p.trailA.length > 600) { p.trailA.shift(); p.trailB.shift(); }
+        }
+      }
+      draw(); requestAnimationFrame(step);
+    }
+    step();
+  })();
+
+  /* ================= Lorenz helpers ================= */
+  const SIG = 10, BETA = 8 / 3;
+  const lorenz = (rho) => (s) => [SIG * (s[1] - s[0]), s[0] * (rho - s[2]) - s[1], s[0] * s[1] - BETA * s[2]];
+
+  /* ================= Sim 2: Lorenz live ================= */
+  (function sim2() {
+    const A = setupCanvas('s3canvas3d'), B = setupCanvas('s3canvasx');
+    const st = { rho: 28, run: true, s: [1, 1, 1], t: 0, trail: [], xs: [], ang: 0.6, tilt: 0.35, drag: null };
+    const slider = document.getElementById('s3rho'), val = document.getElementById('s3rhov');
+    const tEl = document.getElementById('s3t'), fpEl = document.getElementById('s3fp');
+    const presets = Array.from(document.querySelectorAll('#s3 [data-rho]'));
+    function setRho(r) {
+      st.rho = r; slider.value = r; val.textContent = r.toFixed(1);
+      presets.forEach(b => b.classList.toggle('on', Math.abs(parseFloat(b.dataset.rho) - r) < 1e-9));
+      const fp = r > 1 ? Math.sqrt(BETA * (r - 1)) : null;
+      fpEl.textContent = fp ? `±${fp.toFixed(2)}` : 'none (only origin)';
+    }
+    slider.addEventListener('input', () => setRho(parseFloat(slider.value)));
+    presets.forEach(b => b.addEventListener('click', () => setRho(parseFloat(b.dataset.rho))));
+    document.getElementById('s3reset').addEventListener('click', () => { st.s = [1, 1, 1]; st.t = 0; st.trail = []; st.xs = []; });
+    toggleRun(document.getElementById('s3run'), st, 'Pause', 'Run');
+    A.c.addEventListener('pointerdown', (e) => { st.drag = { x: e.clientX, y: e.clientY, ang: st.ang, tilt: st.tilt }; A.c.setPointerCapture(e.pointerId); });
+    A.c.addEventListener('pointermove', (e) => { if (!st.drag) return; st.ang = st.drag.ang + (e.clientX - st.drag.x) * 0.01; st.tilt = Math.max(-1.4, Math.min(1.4, st.drag.tilt + (e.clientY - st.drag.y) * 0.01)); });
+    A.c.addEventListener('pointerup', () => { st.drag = null; });
+    A.c.style.cursor = 'grab'; A.c.style.touchAction = 'none';
+    setRho(28);
+    function project(p) {
+      const ca = Math.cos(st.ang), sa = Math.sin(st.ang), ct = Math.cos(st.tilt), stl = Math.sin(st.tilt);
+      const x = p[0] * ca - p[1] * sa, y = p[0] * sa + p[1] * ca, z = p[2] - 25;
+      const X = x, Y = z * ct - y * stl;
+      return [A.W / 2 + X * 7.5, A.H / 2 - Y * 6.5];
+    }
+    function draw() {
+      const col = C();
+      // 3D view
+      A.ctx.fillStyle = col.bg; A.ctx.fillRect(0, 0, A.W, A.H);
+      const axesPts = [[[0, 0, 0], [15, 0, 0], 'x'], [[0, 0, 0], [0, 15, 0], 'y'], [[0, 0, 0], [0, 0, 15], 'z']];
+      A.ctx.strokeStyle = col.rule; A.ctx.lineWidth = 1;
+      for (const [p0, p1, name] of axesPts) {
+        const a = project(p0), b = project(p1);
+        A.ctx.beginPath(); A.ctx.moveTo(a[0], a[1]); A.ctx.lineTo(b[0], b[1]); A.ctx.stroke();
+        label(A.ctx, name, b[0] + 4, b[1] - 4, col.soft);
+      }
+      // fixed points
+      A.ctx.fillStyle = col.fixed;
+      const fps = [[0, 0, 0]];
+      if (st.rho > 1) { const q = Math.sqrt(BETA * (st.rho - 1)); fps.push([q, q, st.rho - 1], [-q, -q, st.rho - 1]); }
+      for (const p of fps) { const q = project(p); A.ctx.beginPath(); A.ctx.arc(q[0], q[1], 3.5, 0, 6.283); A.ctx.fill(); }
+      // trail with fading
+      const n = st.trail.length;
+      for (let i = 1; i < n; i++) {
+        const a = project(st.trail[i - 1]), b = project(st.trail[i]);
+        A.ctx.strokeStyle = col.a; A.ctx.globalAlpha = 0.15 + 0.85 * (i / n); A.ctx.lineWidth = 1.4;
+        A.ctx.beginPath(); A.ctx.moveTo(a[0], a[1]); A.ctx.lineTo(b[0], b[1]); A.ctx.stroke();
+      }
+      A.ctx.globalAlpha = 1;
+      const h = project(st.s); A.ctx.fillStyle = col.a; A.ctx.beginPath(); A.ctx.arc(h[0], h[1], 4, 0, 6.283); A.ctx.fill();
+      label(A.ctx, 'phase space (x, y, z)  drag to rotate', 10, A.H - 10, col.soft);
+      // x(t) view
+      const { ctx, W, H } = B;
+      ctx.fillStyle = col.bg; ctx.fillRect(0, 0, W, H);
+      const L = 40, R = W - 10, T = 16, Bm = H - 28;
+      const ymin = -25, ymax = 25; const yToPx = (y) => Bm - (y - ymin) / (ymax - ymin) * (Bm - T);
+      ctx.strokeStyle = col.grid; ctx.lineWidth = 1;
+      for (let y = -20; y <= 20; y += 10) { ctx.beginPath(); ctx.moveTo(L, yToPx(y)); ctx.lineTo(R, yToPx(y)); ctx.stroke(); label(ctx, String(y), L - 6, yToPx(y) + 4, col.soft, 'right'); }
+      axes(ctx, L, T, R, Bm, col.rule);
+      if (st.rho > 1) {
+        const q = Math.sqrt(BETA * (st.rho - 1)); ctx.strokeStyle = col.fixed; ctx.setLineDash([4, 4]);
+        for (const yy of [q, -q]) { ctx.beginPath(); ctx.moveTo(L, yToPx(yy)); ctx.lineTo(R, yToPx(yy)); ctx.stroke(); }
+        ctx.setLineDash([]);
+      }
+      const N = 1200; const xs = st.xs.slice(-N);
+      ctx.strokeStyle = col.a; ctx.lineWidth = 1.5; ctx.beginPath();
+      xs.forEach((x, i) => { const px = L + i / N * (R - L), py = yToPx(Math.max(ymin, Math.min(ymax, x))); i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); });
+      ctx.stroke();
+      label(ctx, 'x(t), last 24 time units', L + 6, Bm + 18, col.soft);
+      tEl.textContent = st.t.toFixed(1);
+    }
+    function step() {
+      if (st.run) {
+        const f = lorenz(st.rho);
+        for (let i = 0; i < 2; i++) { st.s = rk4(st.s, 0.01, f); st.t += 0.01; st.xs.push(st.s[0]); }
+        st.trail.push(st.s.slice()); if (st.trail.length > 2500) st.trail.shift();
+        if (st.xs.length > 1300) st.xs.splice(0, st.xs.length - 1300);
+        if (!st.drag) st.ang += 0.0015;
+      }
+      draw(); requestAnimationFrame(step);
+    }
+    step();
+  })();
+
+  /* ================= Sim 3: Butterfly experiment ================= */
+  (function sim3() {
+    const X = setupCanvas('s4canvasx'), G = setupCanvas('s4canvaslog');
+    const slider = document.getElementById('s4k'), val = document.getElementById('s4kv');
+    const crossEl = document.getElementById('s4cross'), afterEl = document.getElementById('s4after');
+    const LAMBDA = 0.906, T0 = 20, T1 = 60, dt = 0.002, every = 5;
+    const f = lorenz(28);
+    // shared transient to t=20
+    let base = [1, 1, 1];
+    const pre = [];
+    for (let i = 0, t = 0; t < T0 - 1e-9; i++, t += dt) { if (i % every === 0) pre.push([t, base[0]]); base = rk4(base, dt, f); }
+    function run(k) {
+      const d0 = Math.pow(10, k);
+      let a = base.slice(), b = [base[0] + d0, base[1], base[2]];
+      const xa = pre.slice(), xb = [], sep = [];
+      let cross1 = null, cross10 = null;
+      for (let i = 0, t = T0; t < T1; i++, t += dt) {
+        if (i % every === 0) {
+          xa.push([t, a[0]]); xb.push([t, b[0]]);
+          const d = Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]); sep.push([t, d]);
+          if (cross1 === null && d > 1) cross1 = t; if (cross10 === null && d > 10) cross10 = t;
+        }
+        a = rk4(a, dt, f); b = rk4(b, dt, f);
+      }
+      return { xa, xb, sep, cross1, cross10, d0 };
+    }
+    function draw(res) {
+      const col = C();
+      // x(t)
+      {
+        const { ctx, W, H } = X; ctx.fillStyle = col.bg; ctx.fillRect(0, 0, W, H);
+        const L = 40, R = W - 12, T = 12, B = H - 26; const tToPx = (t) => L + t / T1 * (R - L);
+        const yToPx = (y) => B - (y + 25) / 50 * (B - T);
+        ctx.strokeStyle = col.grid; for (let y = -20; y <= 20; y += 10) { ctx.beginPath(); ctx.moveTo(L, yToPx(y)); ctx.lineTo(R, yToPx(y)); ctx.stroke(); label(ctx, String(y), L - 6, yToPx(y) + 4, col.soft, 'right'); }
+        axes(ctx, L, T, R, B, col.rule);
+        for (let t = 0; t <= T1; t += 5) label(ctx, String(t), tToPx(t), B + 16, col.soft, 'center');
+        ctx.strokeStyle = col.fixed; ctx.setLineDash([4, 4]); for (const q of [8.485, -8.485]) { ctx.beginPath(); ctx.moveTo(L, yToPx(q)); ctx.lineTo(R, yToPx(q)); ctx.stroke(); } ctx.setLineDash([]);
+        ctx.strokeStyle = '#d33'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(tToPx(T0), T); ctx.lineTo(tToPx(T0), B); ctx.stroke();
+        label(ctx, 'copy perturbed here', tToPx(T0) + 5, T + 12, '#d33');
+        for (const [pts, color] of [[res.xb, col.b], [res.xa, col.a]]) {
+          ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.beginPath();
+          pts.forEach((p, i) => { const px = tToPx(p[0]), py = yToPx(p[1]); i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); }); ctx.stroke();
+        }
+        label(ctx, 'x(t)', L + 6, T + 12, col.soft);
+      }
+      // log separation
+      {
+        const { ctx, W, H } = G; ctx.fillStyle = col.bg; ctx.fillRect(0, 0, W, H);
+        const L = 40, R = W - 12, T = 12, B = H - 26; const tToPx = (t) => L + t / T1 * (R - L);
+        const ymin = -13, ymax = 2; const yToPx = (y) => B - (y - ymin) / (ymax - ymin) * (B - T);
+        ctx.strokeStyle = col.grid; for (let y = -12; y <= 2; y += 2) { ctx.beginPath(); ctx.moveTo(L, yToPx(y)); ctx.lineTo(R, yToPx(y)); ctx.stroke(); label(ctx, '1e' + y, L - 6, yToPx(y) + 4, col.soft, 'right'); }
+        axes(ctx, L, T, R, B, col.rule);
+        for (let t = 0; t <= T1; t += 5) label(ctx, String(t), tToPx(t), B + 16, col.soft, 'center');
+        // guide line: log10 d = log10 d0 + lambda t / ln10
+        ctx.strokeStyle = col.soft; ctx.setLineDash([5, 5]); ctx.lineWidth = 1.2; ctx.beginPath();
+        const k0 = Math.log10(res.d0); ctx.moveTo(tToPx(T0), yToPx(k0));
+        const tEnd = Math.min(T1, T0 + (1.6 - k0) * Math.LN10 / LAMBDA); ctx.lineTo(tToPx(tEnd), yToPx(k0 + LAMBDA * (tEnd - T0) / Math.LN10)); ctx.stroke(); ctx.setLineDash([]);
+        label(ctx, 'slope λ = 0.906', tToPx(tEnd) + 4, yToPx(k0 + LAMBDA * (tEnd - T0) / Math.LN10) + 4, col.soft);
+        ctx.strokeStyle = col.b; ctx.lineWidth = 1.8; ctx.beginPath();
+        res.sep.forEach((p, i) => { const v = Math.max(ymin, Math.log10(Math.max(p[1], 1e-300))); const px = tToPx(p[0]), py = yToPx(v); i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); }); ctx.stroke();
+        label(ctx, 'separation between copy and original (log scale)', L + 6, T + 12, col.soft);
+      }
+      crossEl.textContent = res.cross1 === null ? 'never within window' : `t = ${res.cross1.toFixed(1)}`;
+      afterEl.textContent = res.cross1 === null ? '—' : `${(res.cross1 - T0).toFixed(1)} time units`;
+    }
+    function update() { const k = parseInt(slider.value, 10); val.textContent = String(k); draw(run(k)); }
+    slider.addEventListener('input', update); update();
+    // table
+    const tb = document.querySelector('#s4table tbody');
+    for (let k = -2; k >= -12; k -= 2) {
+      const r = run(k); const tr = document.createElement('tr');
+      const c1 = r.cross1 === null ? '—' : (r.cross1 - T0).toFixed(1), c10 = r.cross10 === null ? '—' : (r.cross10 - T0).toFixed(1);
+      tr.innerHTML = `<td class="n">1e${k}</td><td class="n">${c1}</td><td class="n">${c10}</td>`; tb.appendChild(tr);
+    }
+  })();
+
+  /* ================= Sim 4: Double pendulum ================= */
+  (function sim4() {
+    const { c, ctx, W, H } = setupCanvas('s6canvas');
+    const g = 9.81, m1 = 1, m2 = 1, L1 = 1, L2 = 1;
+    const st = { run: true, ang: 120, k: -3, t: 0, A: null, B: null, trailA: [], trailB: [] };
+    const angS = document.getElementById('s6ang'), angV = document.getElementById('s6angv');
+    const kS = document.getElementById('s6k'), kV = document.getElementById('s6kv');
+    const tEl = document.getElementById('s6t'), dEl = document.getElementById('s6diff');
+    function deriv(s) {
+      const [t1, t2, w1, w2] = s; const d = t1 - t2;
+      const den = 2 * m1 + m2 - m2 * Math.cos(2 * t1 - 2 * t2);
+      const a1 = (-g * (2 * m1 + m2) * Math.sin(t1) - m2 * g * Math.sin(t1 - 2 * t2) - 2 * Math.sin(d) * m2 * (w2 * w2 * L2 + w1 * w1 * L1 * Math.cos(d))) / (L1 * den);
+      const a2 = (2 * Math.sin(d) * (w1 * w1 * L1 * (m1 + m2) + g * (m1 + m2) * Math.cos(t1) + w2 * w2 * L2 * m2 * Math.cos(d))) / (L2 * den);
+      return [w1, w2, a1, a2];
+    }
+    function reset() {
+      const th = st.ang * Math.PI / 180, dth = Math.pow(10, st.k) * Math.PI / 180;
+      st.A = [th, th, 0, 0]; st.B = [th + dth, th, 0, 0]; st.t = 0; st.trailA = []; st.trailB = [];
+    }
+    angS.addEventListener('input', () => { st.ang = parseInt(angS.value, 10); angV.textContent = st.ang + '°'; reset(); });
+    kS.addEventListener('input', () => { st.k = parseInt(kS.value, 10); kV.textContent = String(st.k); reset(); });
+    document.getElementById('s6reset').addEventListener('click', reset);
+    toggleRun(document.getElementById('s6run'), st, 'Pause', 'Run');
+    reset();
+    const ox = W / 2, oy = H / 2 - 40, S = 95;
+    function pos(s) { const x1 = ox + S * L1 * Math.sin(s[0]), y1 = oy + S * L1 * Math.cos(s[0]); return [x1, y1, x1 + S * L2 * Math.sin(s[1]), y1 + S * L2 * Math.cos(s[1])]; }
+    function draw() {
+      const col = C(); ctx.fillStyle = col.bg; ctx.fillRect(0, 0, W, H);
+      for (const [trail, color] of [[st.trailA, col.a], [st.trailB, col.b]]) {
+        ctx.strokeStyle = color; ctx.lineWidth = 1.2; ctx.globalAlpha = 0.6; ctx.beginPath();
+        trail.forEach((p, i) => { i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }); ctx.stroke(); ctx.globalAlpha = 1;
+      }
+      for (const [s, color] of [[st.A, col.a], [st.B, col.b]]) {
+        const [x1, y1, x2, y2] = pos(s);
+        ctx.strokeStyle = color; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+        ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x1, y1, 7, 0, 6.283); ctx.fill(); ctx.beginPath(); ctx.arc(x2, y2, 9, 0, 6.283); ctx.fill();
+      }
+      ctx.fillStyle = col.fixed; ctx.beginPath(); ctx.arc(ox, oy, 4, 0, 6.283); ctx.fill();
+      tEl.textContent = st.t.toFixed(2);
+      let dd = Math.abs(st.A[1] - st.B[1]) % (2 * Math.PI); if (dd > Math.PI) dd = 2 * Math.PI - dd;
+      dEl.textContent = (dd * 180 / Math.PI).toExponential(2) + '°';
+    }
+    function step() {
+      if (st.run) {
+        const dt = 0.001, sub = 16; // 16 ms of simulated time per frame
+        for (let i = 0; i < sub; i++) { st.A = rk4(st.A, dt, deriv); st.B = rk4(st.B, dt, deriv); st.t += dt; }
+        const pa = pos(st.A), pb = pos(st.B);
+        st.trailA.push([pa[2], pa[3]]); st.trailB.push([pb[2], pb[3]]);
+        if (st.trailA.length > 700) { st.trailA.shift(); st.trailB.shift(); }
+      }
+      draw(); requestAnimationFrame(step);
+    }
+    step();
+  })();
+
+  /* ================= Sim 5: Logistic map ================= */
+  (function sim5() {
+    const { ctx, W, H } = setupCanvas('s7canvas');
+    const slider = document.getElementById('s7r'), val = document.getElementById('s7rv');
+    const lamEl = document.getElementById('s7lam'), regEl = document.getElementById('s7reg');
+    const presets = Array.from(document.querySelectorAll('#s7 [data-r]'));
+    function compute(r) {
+      let x = 0.4, y = 0.4 + 1e-8; const xs = [], ys = [];
+      for (let i = 0; i < 1000; i++) x = r * x * (1 - x);
+      let lam = 0; let xl = x;
+      for (let i = 0; i < 2000; i++) { lam += Math.log(Math.abs(r * (1 - 2 * xl)) + 1e-300); xl = r * xl * (1 - xl); }
+      lam /= 2000;
+      x = 0.4; y = 0.4 + 1e-8;
+      for (let i = 0; i < 60; i++) { xs.push(x); ys.push(y); x = r * x * (1 - x); y = r * y * (1 - y); }
+      return { xs, ys, lam };
+    }
+    function draw(r) {
+      const col = C(); const res = compute(r);
+      ctx.fillStyle = col.bg; ctx.fillRect(0, 0, W, H);
+      const L = 40, R = W - 12, T = 12, B = H - 26; const n = res.xs.length;
+      const tToPx = (i) => L + i / (n - 1) * (R - L), yToPx = (y) => B - y * (B - T);
+      ctx.strokeStyle = col.grid; for (let y = 0; y <= 1; y += 0.25) { ctx.beginPath(); ctx.moveTo(L, yToPx(y)); ctx.lineTo(R, yToPx(y)); ctx.stroke(); label(ctx, y.toFixed(2), L - 6, yToPx(y) + 4, col.soft, 'right'); }
+      axes(ctx, L, T, R, B, col.rule);
+      for (let i = 0; i < n; i += 10) label(ctx, String(i), tToPx(i), B + 16, col.soft, 'center');
+      for (const [arr, color] of [[res.ys, col.b], [res.xs, col.a]]) {
+        ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.beginPath();
+        arr.forEach((v, i) => { i ? ctx.lineTo(tToPx(i), yToPx(v)) : ctx.moveTo(tToPx(i), yToPx(v)); }); ctx.stroke();
+        ctx.fillStyle = color; arr.forEach((v, i) => { ctx.beginPath(); ctx.arc(tToPx(i), yToPx(v), 2.2, 0, 6.283); ctx.fill(); });
+      }
+      label(ctx, 'x_k for two orbits 1e-8 apart, step k on the horizontal axis', L + 6, T + 12, col.soft);
+      lamEl.textContent = (res.lam >= 0 ? '+' : '') + res.lam.toFixed(3);
+      lamEl.style.color = res.lam > 0.005 ? col.b : col.ink;
+      regEl.textContent = res.lam > 0.005 ? 'chaotic (λ > 0)' : (res.lam < -0.005 ? 'converging to a cycle or point (λ < 0)' : 'marginal (λ ≈ 0, a bifurcation point)');
+      presets.forEach(b => b.classList.toggle('on', Math.abs(parseFloat(b.dataset.r) - r) < 1e-9));
+    }
+    function update() { const r = parseFloat(slider.value); val.textContent = r.toFixed(3); draw(r); }
+    slider.addEventListener('input', update);
+    presets.forEach(b => b.addEventListener('click', () => { slider.value = b.dataset.r; update(); }));
+    update();
+  })();
+
+  // Re-draw static sims when theme changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { document.getElementById('s4k').dispatchEvent(new Event('input')); document.getElementById('s7r').dispatchEvent(new Event('input')); });
+})();
+</script>
+</body>
+</html>
