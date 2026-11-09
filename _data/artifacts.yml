@@ -16,3 +16,9 @@
   date: 2026-11-09
   blurb: Rotating the keys doesn't change the loss at all, but it does change what Adam does. Hit "Run paired experiment" and watch the GD pair stay stuck at 1e-15 while the Adam pair drifts apart.
   selected: true
+
+- title: InfiniBand field guide
+  url: /artifacts/infiniband-field-guide/
+  date: 2026-11-09
+  blurb: Made this to understand Imbue's post on building their H100 cluster. Follow one packet from GPU to GPU, then keep hitting Send in the credits demo until the buffer fills, and flip to Ethernet to see what happens instead.
+  selected: true
