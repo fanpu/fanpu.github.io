@@ -3,48 +3,58 @@
   date: 2025-09-19
   url: /assets/presentations/Average%20Gradient%20Outer%20Product.pdf
   thumb: /assets/img/talks/agop.webp
+  blurb: "How the average gradient outer product lines up with the features a neural net learns, and what that explains about spurious features, lottery tickets and grokking. Also covers recursive feature machines, which bring that kind of feature learning to kernel methods."
 
 - title: Learning Dynamics of LLM Finetuning
   date: 2025-05-13
   url: /assets/presentations/Learning%20Dynamics%20of%20LLM%20Finetuning.pdf
   thumb: /assets/img/talks/learning-dynamics.webp
+  blurb: "How each gradient step in SFT or DPO changes the model's predictions on other examples. This explains some odd behaviors, like hallucinations after SFT and the squeezing effect, where off-policy DPO piles probability onto the single most likely response."
 
 - title: "DistiLLM-2: A Contrastive Approach Boosts the Distillation of LLMs"
   date: 2025-05-08
   url: /assets/presentations/DistiLLM-2.pdf
   thumb: /assets/img/talks/distillm-2.webp
+  blurb: "Distilling LLMs with a contrastive loss that raises the likelihood of the teacher's responses and lowers the student's own. Starts with why forward and reverse KL each go wrong for distillation."
 
 - title: "Convergence and Generalization of Neural Networks: Neural Tangent Kernels and Beyond"
   date: 2025-02-21
   url: /assets/presentations/Neural%20Tangent%20Kernels%20and%20Beyond.pdf
   thumb: /assets/img/talks/ntk.webp
+  blurb: "Why overparameterized networks train and generalize at all. Goes from infinite-width nets as Gaussian processes, to the neural tangent kernel and its limits, to Tensor Programs and zero-shot hyperparameter transfer with muP."
 
 - title: A Statistical Approach to Language Model Evaluations
   date: 2024-11-18
   url: /assets/presentations/Statistics%20for%20Evals.pdf
   thumb: /assets/img/talks/stats-evals.webp
+  blurb: "The statistics you need to report LLM eval results properly: standard errors (including clustered ones), variance reduction, paired comparisons between models, and power analysis for how many questions you need."
 
 - title: Advanced Retrieval Augmented Generation Techniques
   date: 2024-10-08
   url: /assets/presentations/Advanced%20Retrieval%20Augmented%20Generation.pdf
   thumb: /assets/img/talks/advanced-rag.webp
+  blurb: "Techniques for retrieval augmented generation beyond the basic pipeline: chunking, query rewriting and HyDE, hybrid search, long contexts and lost in the middle, re-ranking, multi-step retrieval, and how to evaluate the whole thing."
 
 - title: Superalignment, or how to train models smarter than us
   date: 2024-07-24
   url: /assets/presentations/Superalignment.pdf
   thumb: /assets/img/talks/superalignment.webp
+  blurb: "OpenAI's weak-to-strong generalization paper. Can a strong model trained on a weak model's labels end up better than its teacher, and which training tricks close more of the gap?"
 
 - title: Rotary Positional Embeddings (RoPE)
   date: 2024-05-03
   url: /assets/presentations/Rotary%20Positional%20Embeddings.pdf
   thumb: /assets/img/talks/rope.webp
+  blurb: "Starts from attention and sinusoidal positional encodings, then derives rotary positional embeddings step by step and shows why the attention score ends up depending only on relative position."
 
 - title: Parameter-Efficient Fine-Tuning
   date: 2024-04-30
   url: /assets/presentations/Parameter%20Efficient%20Fine-Tuning.pdf
   thumb: /assets/img/talks/peft.webp
+  blurb: "Ways to fine-tune big models cheaply: adapters, LoRA, quantization (outlier features, QLoRA), prefix tuning and prompt tuning. Also scaling laws for transfer, which say why fine-tuning works so well in the first place."
 
 - title: Understanding Transformers
   date: 2024-03-01
   url: /assets/presentations/Understanding%20Transformers.pdf
   thumb: /assets/img/talks/transformers.webp
+  blurb: "An intro to transformers from scratch. Neural nets, language modeling and sampling, RNNs and the history leading up to attention, then each part of the transformer block one at a time."
