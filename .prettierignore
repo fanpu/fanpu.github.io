@@ -25,3 +25,6 @@ _data/tag_colors.yml
 # kramdown IAL / liquid formatting would be broken by prettier
 _pages/courses.md
 _pages/reading_list.md
+# LLM-generated standalone pages, served as-is
+artifacts/**
+assets/html/research_sprint/**
