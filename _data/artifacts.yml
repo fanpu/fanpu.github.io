@@ -17,30 +17,30 @@
   blurb: Gradient descent doesn't care which basis your parameters are written in, but Adam does. Why that happens, and how it ties into the outlier features you see in transformers trained with Adam.
   selected: true
 
-- title: InfiniBand field guide
-  url: /artifacts/infiniband-field-guide/
-  date: 2026-11-09
-  blurb: An intro to InfiniBand, the network that connects GPUs in big training clusters, for people with no networking background. How data gets from one GPU to another, why the network never drops packets, and how that differs from Ethernet.
-  selected: true
-
 - title: Chaos, and why retraining is never the same
   url: /artifacts/lorenz-lyapunov-chaos/
-  date: 2026-11-09
+  date: 2026-11-08
   blurb: An intro to chaos theory (the Lorenz system, Lyapunov exponents, the butterfly effect) starting from basic calculus, and why training a neural net behaves like a chaotic system.
   selected: true
 
-- title: Pre-LN vs post-LN gradients
-  url: /artifacts/pre-ln-vs-post-ln-gradients/
-  date: 2026-11-09
-  blurb: How where you put LayerNorm in a transformer changes the gradients at each layer, and why that means post-LN needs learning rate warmup while pre-LN mostly doesn't.
+- title: InfiniBand field guide
+  url: /artifacts/infiniband-field-guide/
+  date: 2026-10-25
+  blurb: An intro to InfiniBand, the network that connects GPUs in big training clusters, for people with no networking background. How data gets from one GPU to another, why the network never drops packets, and how that differs from Ethernet.
   selected: true
 
 - title: Why H100 has four NVSwitches
   url: /artifacts/nvlink-port-budget/
-  date: 2026-11-09
+  date: 2026-10-25
   blurb: How the 8 GPUs in an H100 server are wired together over NVLink, and why it takes four NVSwitches when B200 gets by with two.
+
+- title: Pre-LN vs post-LN gradients
+  url: /artifacts/pre-ln-vs-post-ln-gradients/
+  date: 2026-10-03
+  blurb: How where you put LayerNorm in a transformer changes the gradients at each layer, and why that means post-LN needs learning rate warmup while pre-LN mostly doesn't.
+  selected: true
 
 - title: Why do ReLU nets need a bias?
   url: /artifacts/why-bias-matters/
-  date: 2026-11-09
+  date: 2026-10-01
   blurb: Why ReLU networks need bias terms. Without them every decision boundary has to pass through the origin, which limits what even a very wide net can learn.
