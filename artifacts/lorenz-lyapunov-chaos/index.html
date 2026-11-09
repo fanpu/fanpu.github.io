@@ -71,7 +71,7 @@ code, .mono { font-family: var(--font-mono); font-size: .92em; }
 .panel .hint { margin: 0 0 12px; font-size: 14px; color: var(--ink-soft); }
 .controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin: 12px 0 10px; font-size: 14px; }
 .controls label { display: flex; align-items: center; gap: 8px; }
-.controls input[type=range] { width: 160px; accent-color: var(--accent); }
+.controls input[type=range] { width: 160px; max-width: 34vw; accent-color: var(--accent); }
 .controls .val { font-family: var(--font-mono); font-variant-numeric: tabular-nums; min-width: 5ch; }
 button { font: inherit; font-size: 14px; padding: 6px 12px; border-radius: 7px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink); cursor: pointer; }
 button:hover { border-color: var(--accent); }
@@ -96,7 +96,7 @@ dl.gloss dd { margin: 2px 0 0; color: var(--ink); }
 .toc { font-size: 15px; columns: 2; column-gap: 28px; margin: 0 0 8px; padding-left: 20px; }
 .toc li { margin-bottom: 4px; break-inside: avoid; }
 @media (max-width: 600px) { .toc { columns: 1; } }
-mjx-container[display="true"] { margin: 10px 0 16px !important; overflow-x: auto; overflow-y: hidden; }
+mjx-container[display="true"] { margin: 10px 0 16px !important; overflow-x: auto; overflow-y: hidden; max-width: 100%; min-width: 0 !important; }
 .src { font-size: 14.5px; color: var(--ink-soft); }
 .src li { margin-bottom: 6px; }
 @media (prefers-reduced-motion: reduce) { .motion-note { display: block; } }
