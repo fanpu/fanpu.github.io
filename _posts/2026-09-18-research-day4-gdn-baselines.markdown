@@ -1,5 +1,6 @@
 ---
 title: "Research Sprint Day 4 - ???"
+published: false
 layout: distill
 tags: [machine-learning, linear-attention]
 cover: kearsarge_pass.webp
