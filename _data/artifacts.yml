@@ -20,5 +20,5 @@
 - title: InfiniBand field guide
   url: /artifacts/infiniband-field-guide/
   date: 2026-11-09
-  blurb: Made this to understand Imbue's post on building their H100 cluster. Follow one packet from GPU to GPU, then keep hitting Send in the credits demo until the buffer fills, and flip to Ethernet to see what happens instead.
+  blurb: How the network in big GPU clusters actually moves data, no networking background needed. Step one packet from GPU to GPU, then keep hitting Send in the credits demo until the buffer fills, and flip to Ethernet to see what happens instead.
   selected: true
