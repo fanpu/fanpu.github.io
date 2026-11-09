@@ -59,30 +59,38 @@ I have a Technician amateur radio license, with callsign
 This blog was originally started on 24 June 2018, although it has taken many
 forms since then. All banner pictures on the blog are taken by yours truly!
 
-### Talks
-
-Slides I developed for talks on various LLM-related topics.
-You are free to share, adapt, and reuse these
-materials, provided that you give appropriate credit.
-
+<section class="home-section" id="talks">
+<div class="home-section-side">
+{% include home_section_head.liquid title="Talks" note="Slides I developed for talks on various LLM-related topics. You are free to share, adapt, and reuse these materials, provided that you give appropriate credit." %}
+</div>
+<div class="home-section-body">
 {% include thumb_list.liquid items=site.data.talks %}
+</div>
+</section>
 
-### Starred Blog Posts
-
-Some of my more popular posts:
-
+<section class="home-section" id="starred">
+<div class="home-section-side">
+{% include home_section_head.liquid title="Starred posts" note="Some of my more popular posts." more_url="/blog/" more_label="All posts" %}
+</div>
+<div class="home-section-body">
 {% include starred_posts.liquid %}
+</div>
+</section>
 
-### Artifacts
-
-Interactive explainers I made with Claude while trying to understand something. A few favorites are below, and the rest are on the [artifacts page](/artifacts/).
-
-<div class="artifacts-home">
+<section class="home-section" id="artifacts">
+<div class="home-section-side">
+{% include home_section_head.liquid title="Artifacts" note="Interactive explainers I made with Claude while trying to understand something." more_url="/artifacts/" more_label="All artifacts" %}
+</div>
+<div class="home-section-body">
 {% include artifacts.liquid selected=true %}
 </div>
+</section>
 
-### Games
-
-Some games that I wish existed but didn't, so I made them with Claude Code
-
+<section class="home-section" id="games">
+<div class="home-section-side">
+{% include home_section_head.liquid title="Games" note="Some games that I wish existed but didn't, so I made them with Claude Code." %}
+</div>
+<div class="home-section-body">
 {% include thumb_list.liquid items=site.data.games %}
+</div>
+</section>

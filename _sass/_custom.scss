@@ -209,3 +209,34 @@
     height: 72px;
   }
 }
+
+// Home page sections
+.home-section {
+  margin-top: 3.5rem;
+}
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.post article h2.section-title,
+.section-title {
+  font-size: 1.35rem;
+  font-weight: 500;
+  margin: 0;
+  white-space: nowrap;
+}
+.section-rule {
+  flex: 1;
+  height: 1px;
+  background: var(--global-divider-color);
+}
+.section-more {
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+.section-note {
+  font-size: 0.95rem;
+  color: var(--global-text-color-light);
+  margin: 0.4rem 0 0.5rem;
+}

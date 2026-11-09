@@ -42,18 +42,22 @@ layout: default
 
     <!-- News -->
     {% if page.news and site.announcements.enabled %}
-      <h2>
-        <a href="{{ '/news/' | relative_url }}" style="color: inherit">news</a>
-      </h2>
-      {% include news.liquid limit=true %}
+      <section class="home-section" id="news">
+        <div class="home-section-side">
+          {% include home_section_head.liquid title="News" more_url="/news/" more_label="All news" %}
+        </div>
+        <div class="home-section-body">{% include news.liquid limit=true %}</div>
+      </section>
     {% endif %}
 
     <!-- Latest posts -->
     {% if site.latest_posts.enabled %}
-      <h2>
-        <a href="{{ '/blog/' | relative_url }}" style="color: inherit">latest posts</a>
-      </h2>
-      {% include latest_posts.liquid %}
+      <section class="home-section" id="latest-posts">
+        <div class="home-section-side">
+          {% include home_section_head.liquid title="Latest posts" more_url="/blog/" more_label="Blog" %}
+        </div>
+        <div class="home-section-body">{% include latest_posts.liquid %}</div>
+      </section>
     {% endif %}
 
     <!-- Selected papers -->

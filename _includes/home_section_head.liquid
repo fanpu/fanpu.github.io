@@ -1,0 +1,16 @@
+{% comment %}
+  Header for a home page section.
+  include.title, include.note (HTML ok), include.more_url, include.more_label
+{% endcomment %}
+<header class="section-head">
+  <h2 class="section-title">{{ include.title }}</h2>
+  <span class="section-rule" aria-hidden="true"></span>
+  {% if include.more_url %}
+    <a class="section-more" href="{{ include.more_url | relative_url }}">
+      {{- include.more_label | default: 'All' }} &rarr;</a
+    >
+  {% endif %}
+</header>
+{% if include.note %}
+  <p class="section-note">{{ include.note }}</p>
+{% endif %}
