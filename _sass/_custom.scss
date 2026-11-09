@@ -139,3 +139,34 @@
 .badge.graduate:after {
   content: "Graduate";
 }
+
+// Artifact list: small preview image left of each title/blurb
+.artifact-item {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+}
+.artifact-thumb {
+  flex: 0 0 auto;
+  img {
+    display: block;
+    width: 120px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid var(--global-divider-color);
+  }
+}
+.artifact-text {
+  min-width: 0;
+}
+@media (max-width: 576px) {
+  .artifact-item {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .artifact-thumb img {
+    width: 160px;
+    height: 120px;
+  }
+}

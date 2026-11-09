@@ -13,13 +13,20 @@
         <tr>
           <th scope="row" style="width: 20%">{{ item.date | date: '%b %d, %Y' }}</th>
           <td>
-            <a class="news-title" href="{{ item.url | relative_url }}">{{ item.title }}</a>
-            {% if item.blurb %}<br><span class="text-muted">{{ item.blurb }}</span>{% endif %}
-            {% if item.thumb and include.selected != true %}
-              <a href="{{ item.url | relative_url }}"
-                ><img src="{{ item.thumb | relative_url }}" alt="{{ item.title }}" loading="lazy" class="img-fluid rounded mt-2" style="max-width: 360px"
-              ></a>
-            {% endif %}
+            <div class="artifact-item">
+              {% if item.thumb %}
+                <a class="artifact-thumb" href="{{ item.url | relative_url }}" tabindex="-1" aria-hidden="true"
+                  ><img src="{{ item.thumb | relative_url }}" alt="" loading="lazy" width="240" height="180"
+                ></a>
+              {% endif %}
+              <div class="artifact-text">
+                <a class="news-title" href="{{ item.url | relative_url }}">{{ item.title }}</a>
+                {% if item.blurb -%}
+                  <br>
+                  <span class="text-muted">{{ item.blurb }}</span>
+                {%- endif %}
+              </div>
+            </div>
           </td>
         </tr>
       {% endfor %}
