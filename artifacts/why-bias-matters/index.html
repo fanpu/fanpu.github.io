@@ -1,0 +1,394 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Why Bias Matters</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column; each step is prose on the left, an interactive panel on the right, stacking on phones. */
+:root {
+  --bg: #f7f7f4; --surface: #ffffff; --fg: #1d1f1b; --muted: #5f635b; --rule: #d9dbd4;
+  --accent: #2a4f8a; --grid: #ececE7;
+  --c0: #2a78d6; --c1: #eb6834; --c2: #1baf7a; --ink: #1d1f1b;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #171816; --surface: #1f201d; --fg: #ecece6; --muted: #a3a69c; --rule: #363832;
+  --accent: #8fb3ea; --grid: #2a2c27; --c0: #3987e5; --c1: #d95926; --c2: #199e70; --ink: #ecece6; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #171816; --surface: #1f201d; --fg: #ecece6; --muted: #a3a69c; --rule: #363832;
+  --accent: #8fb3ea; --grid: #2a2c27; --c0: #3987e5; --c1: #d95926; --c2: #199e70; --ink: #ecece6; color-scheme: dark; }
+
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.5; padding-inline: 16px; padding-block: 32px 64px; }
+main { max-width: 1040px; margin: 0 auto; display: grid; gap: 56px; }
+h1 { font-size: 2rem; font-weight: 600; line-height: 1.15; margin: 0 0 8px; text-wrap: balance; }
+h2 { font-size: 1.25rem; font-weight: 600; margin: 0 0 8px; text-wrap: balance; }
+a { color: var(--accent); }
+.lede { color: var(--muted); max-width: 62ch; margin: 0; }
+.eyebrow { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+section.step { display: grid; grid-template-columns: minmax(0, 34ch) minmax(0, 1fr); gap: 28px; align-items: start; padding-top: 24px; border-top: 1px solid var(--rule); }
+section.step p { margin: 0 0 12px; }
+.math { font-family: var(--font-mono); font-size: 0.9rem; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 8px 10px; margin: 8px 0 12px; overflow-x: auto; white-space: nowrap; }
+.panel { min-width: 0; display: grid; gap: 10px; }
+.controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; font-size: 0.875rem; }
+.controls label { display: inline-flex; align-items: center; gap: 6px; }
+.controls input[type=range] { width: 120px; accent-color: var(--accent); }
+.controls input[type=checkbox] { accent-color: var(--accent); width: 16px; height: 16px; }
+.controls .val { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--muted); min-width: 4ch; }
+button { font: inherit; font-size: 0.875rem; padding: 4px 12px; border: 1px solid var(--rule); background: var(--surface); color: var(--fg); border-radius: 4px; cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button.primary { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+.canvas-wrap { position: relative; width: 100%; max-width: 100%; }
+canvas { display: block; width: 100%; height: auto; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; touch-action: none; }
+.row2 { display: grid; grid-template-columns: 3fr 2fr; gap: 10px; }
+.readout { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); font-variant-numeric: tabular-nums; min-height: 1.4em; }
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.stat { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 6px 10px; }
+.stat .k { font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.stat .v { font-family: var(--font-mono); font-size: 1.1rem; font-variant-numeric: tabular-nums; }
+.legend { display: flex; gap: 14px; font-size: 0.8rem; color: var(--muted); }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; background: var(--sw); }
+.takeaway { border-left: 3px solid var(--accent); padding: 4px 12px; color: var(--fg); background: var(--surface); border-radius: 0 4px 4px 0; }
+@media (max-width: 760px) { section.step { grid-template-columns: 1fr; } .row2 { grid-template-columns: 1fr; } .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<main>
+  <header>
+    <div class="eyebrow">MLP on the three-arm spiral</div>
+    <h1>Why Bias Matters</h1>
+    <p class="lede">A ReLU network with no bias terms stalls at about 50% on the three-class spiral no matter how wide you make it. Turn the biases on and the same network gets about 98%. Five steps, each one interactive, show why.</p>
+    <p class="legend" style="margin-top:12px"><span style="--sw:var(--c0)">class 0</span><span style="--sw:var(--c1)">class 1</span><span style="--sw:var(--c2)">class 2</span></p>
+  </header>
+
+  <section class="step" id="s1">
+    <div>
+      <div class="eyebrow">Step 1 of 5</div>
+      <h2>One hidden unit is a hinge over a line</h2>
+      <p>A hidden unit computes <span class="math" style="display:inline;padding:1px 6px;margin:0">relu(w·x + b)</span>. The points where <code>w·x + b = 0</code> form a straight line. On one side the unit outputs zero; on the other it ramps up with distance from the line.</p>
+      <p>Drag the angle to rotate the line. Drag the bias to slide it. Then lock the bias at zero and try to move the line anywhere that doesn't pass through the origin.</p>
+      <p class="takeaway">The bias is the only knob that moves the line off the origin.</p>
+    </div>
+    <div class="panel">
+      <div class="controls">
+        <label>angle <input type="range" id="s1-angle" min="0" max="360" value="35"><span class="val" id="s1-angle-v">35°</span></label>
+        <label>bias b <input type="range" id="s1-bias" min="-80" max="80" value="30"><span class="val" id="s1-bias-v">0.30</span></label>
+        <label><input type="checkbox" id="s1-lock"> lock bias at 0</label>
+      </div>
+      <div class="canvas-wrap"><canvas id="s1-canvas" width="640" height="480"></canvas></div>
+      <div class="readout" id="s1-readout"></div>
+    </div>
+  </section>
+
+  <section class="step" id="s2">
+    <div>
+      <div class="eyebrow">Step 2 of 5</div>
+      <h2>Without bias, every line goes through the origin</h2>
+      <p>A hidden layer is many such units. Each one draws its own line, and the network's decision regions are stitched together from the pieces those lines cut out.</p>
+      <p>Here are the lines for a randomly initialized layer. Toggle the bias. Without it, every line is pinned to the origin and the plane is cut into wedges. Adding more units adds more wedges, never a line somewhere else.</p>
+      <p class="takeaway">Width adds lines. Only bias lets a line leave the origin.</p>
+    </div>
+    <div class="panel">
+      <div class="controls">
+        <label><input type="checkbox" id="s2-bias"> bias on</label>
+        <label>units <input type="range" id="s2-n" min="2" max="48" value="12"><span class="val" id="s2-n-v">12</span></label>
+        <button id="s2-reshuffle">new random layer</button>
+      </div>
+      <div class="canvas-wrap"><canvas id="s2-canvas" width="640" height="480"></canvas></div>
+    </div>
+  </section>
+
+  <section class="step" id="s3">
+    <div>
+      <div class="eyebrow">Step 3 of 5</div>
+      <h2>No bias means the logits scale along a ray</h2>
+      <p>Scale the input by a positive <code>c</code>. The first matrix product scales by <code>c</code>; ReLU keeps the same entries positive, so its output scales by <code>c</code>; the second matrix product scales by <code>c</code> again.</p>
+      <div class="math">mlp(c·x) = c · mlp(x)  for all c &gt; 0</div>
+      <p>Move your pointer over the plane. The right plot shows the three logits as you walk out from the origin along that ray. Without bias they are straight lines through zero, so the largest one stays largest and the whole ray gets one class. With bias they bend and cross.</p>
+      <p class="takeaway">A bias-free network classifies directions, not points.</p>
+    </div>
+    <div class="panel">
+      <div class="controls">
+        <label><input type="checkbox" id="s3-bias"> bias on</label>
+        <button id="s3-reshuffle">new random network</button>
+      </div>
+      <div class="row2">
+        <div class="canvas-wrap"><canvas id="s3-canvas" width="480" height="480"></canvas></div>
+        <div class="canvas-wrap"><canvas id="s3-plot" width="320" height="480"></canvas></div>
+      </div>
+      <div class="readout" id="s3-readout">move the pointer over the left panel</div>
+    </div>
+  </section>
+
+  <section class="step" id="s4">
+    <div>
+      <div class="eyebrow">Step 4 of 5</div>
+      <h2>The spiral puts several classes on one ray</h2>
+      <p>The data is the toy spiral from the <a href="https://cs231n.github.io/neural-networks-case-study/">Stanford CS231n neural network case study</a>, a standard example of data a linear classifier can't separate. Each arm sweeps about 4 radians of angle while its radius grows from 0 to 1. Three arms wind almost twice around the origin.</p>
+      <p>Move the pointer. The points within a narrow angular band of that ray light up, and the strip below lays them out by radius. Nearly every direction crosses two or three classes at different radii.</p>
+      <p class="takeaway">The class depends on radius at a fixed angle. That is exactly the information a bias-free network throws away, and the best angle-only rule scores about 54%.</p>
+    </div>
+    <div class="panel">
+      <div class="canvas-wrap"><canvas id="s4-canvas" width="640" height="480"></canvas></div>
+      <div class="canvas-wrap"><canvas id="s4-strip" width="640" height="56"></canvas></div>
+      <div class="readout" id="s4-readout">move the pointer over the panel</div>
+    </div>
+  </section>
+
+  <section class="step" id="s5">
+    <div>
+      <div class="eyebrow">Step 5 of 5</div>
+      <h2>Train it and watch the regions</h2>
+      <p>The same two-layer ReLU MLP, trained live with minibatch SGD on the spiral and scored on a fresh spiral it never saw. Toggle the bias and reset.</p>
+      <p>Without bias the regions stay wedges meeting at the origin and held-out accuracy stalls around 0.5. With bias the boundaries wrap around the arms. Turn on the hidden unit lines to see them pinned or free.</p>
+      <p class="takeaway">Same data, same width, same optimizer. The only difference is whether a boundary may leave the origin.</p>
+    </div>
+    <div class="panel">
+      <div class="controls">
+        <label><input type="checkbox" id="s5-bias" checked> bias on</label>
+        <label>width <input type="range" id="s5-width" min="3" max="8" value="6"><span class="val" id="s5-width-v">64</span></label>
+        <label>lr <input type="range" id="s5-lr" min="-3" max="1" step="0.25" value="0"><span class="val" id="s5-lr-v">0.10</span></label>
+        <label><input type="checkbox" id="s5-lines"> hidden unit lines</label>
+        <button class="primary" id="s5-play">Pause</button>
+        <button id="s5-reset">Reset</button>
+      </div>
+      <div class="canvas-wrap"><canvas id="s5-canvas" width="640" height="480"></canvas></div>
+      <div class="stats">
+        <div class="stat"><div class="k">updates</div><div class="v" id="s5-step">0</div></div>
+        <div class="stat"><div class="k">train loss</div><div class="v" id="s5-loss">1.099</div></div>
+        <div class="stat"><div class="k">train acc</div><div class="v" id="s5-tacc">0.33</div></div>
+        <div class="stat"><div class="k">held-out acc</div><div class="v" id="s5-hacc">0.33</div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+(() => {
+'use strict';
+// ---------- shared helpers ----------
+const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const CLASS = () => [css('--c0'), css('--c1'), css('--c2')];
+const EXT = 1.2;                         // world is [-EXT, EXT]^2
+function mulberry32(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function gauss(rnd) { let u = 0, v = 0; while (u === 0) u = rnd(); while (v === 0) v = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+function makeSpiral(nPer, seed, noise = 0.2) {
+  const rnd = mulberry32(seed), X = [], y = [];
+  for (let k = 0; k < 3; k++) for (let i = 0; i < nPer; i++) {
+    const r = i / (nPer - 1), t = k * 4 + 4 * i / (nPer - 1) + gauss(rnd) * noise;
+    X.push([r * Math.sin(t), r * Math.cos(t)]); y.push(k);
+  }
+  return { X, y };
+}
+const TRAIN = makeSpiral(300, 1), HELD = makeSpiral(100, 2);
+
+function setupCanvas(c) {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = c.width, h = c.height;
+  if (c.dataset.scaled !== String(dpr)) { c.width = w * dpr; c.height = h * dpr; c.style.aspectRatio = `${w} / ${h}`; c.dataset.scaled = String(dpr); c.dataset.w = w; c.dataset.h = h; }
+  const ctx = c.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, w: +c.dataset.w, h: +c.dataset.h };
+}
+// world -> pixel, square mapping centred in the canvas
+function mapper(w, h) { const s = Math.min(w, h) / (2 * EXT); const cx = w / 2, cy = h / 2; return { px: (x) => cx + x * s, py: (y) => cy - y * s, wx: (px) => (px - cx) / s, wy: (py) => (cy - py) / s, s }; }
+function drawAxes(ctx, m, w, h) {
+  ctx.strokeStyle = css('--grid'); ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(m.px(-EXT), m.py(0)); ctx.lineTo(m.px(EXT), m.py(0)); ctx.moveTo(m.px(0), m.py(-EXT)); ctx.lineTo(m.px(0), m.py(EXT)); ctx.stroke();
+  ctx.strokeStyle = css('--rule'); ctx.beginPath(); ctx.arc(m.px(0), m.py(0), m.s, 0, Math.PI * 2); ctx.stroke(); // unit circle
+}
+function drawPoints(ctx, m, data, r = 2.2, alpha = 1) {
+  const cols = CLASS(); ctx.globalAlpha = alpha;
+  for (let i = 0; i < data.X.length; i++) { ctx.fillStyle = cols[data.y[i]]; ctx.beginPath(); ctx.arc(m.px(data.X[i][0]), m.py(data.X[i][1]), r, 0, Math.PI * 2); ctx.fill(); }
+  ctx.globalAlpha = 1;
+}
+// the line w·x + b = 0 clipped to the world square
+function drawLine(ctx, m, w0, w1, b, color, width = 1, alpha = 1) {
+  const pts = [];
+  const tryX = (x) => { if (Math.abs(w1) > 1e-9) { const y = -(w0 * x + b) / w1; if (Math.abs(y) <= EXT) pts.push([x, y]); } };
+  const tryY = (y) => { if (Math.abs(w0) > 1e-9) { const x = -(w1 * y + b) / w0; if (Math.abs(x) < EXT) pts.push([x, y]); } };
+  tryX(-EXT); tryX(EXT); tryY(-EXT); tryY(EXT);
+  if (pts.length < 2) return;
+  ctx.strokeStyle = color; ctx.lineWidth = width; ctx.globalAlpha = alpha;
+  ctx.beginPath(); ctx.moveTo(m.px(pts[0][0]), m.py(pts[0][1])); ctx.lineTo(m.px(pts[1][0]), m.py(pts[1][1])); ctx.stroke(); ctx.globalAlpha = 1;
+}
+function hexToRgb(hex) { const n = parseInt(hex.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }
+function pointerWorld(c, m, ev) { const r = c.getBoundingClientRect(); const sx = +c.dataset.w / r.width, sy = +c.dataset.h / r.height; return [m.wx((ev.clientX - r.left) * sx), m.wy((ev.clientY - r.top) * sy)]; }
+
+// ---------- tiny MLP: 2 -> H -> 3 ----------
+function makeMLP(H, useBias, seed) {
+  const rnd = mulberry32(seed);
+  const W1 = new Float64Array(2 * H), b1 = new Float64Array(H), W2 = new Float64Array(H * 3), b2 = new Float64Array(3);
+  for (let i = 0; i < 2 * H; i++) W1[i] = gauss(rnd) / Math.sqrt(2);
+  for (let i = 0; i < H * 3; i++) W2[i] = gauss(rnd) / Math.sqrt(H);
+  if (useBias) for (let j = 0; j < H; j++) b1[j] = (rnd() * 2 - 1) * 0.6;   // random init so the untrained net in steps 2-3 shows lines off the origin
+  return { H, useBias, W1, b1, W2, b2 };
+}
+function logits(net, x0, x1, out = [0, 0, 0], hbuf) {
+  const { H, W1, b1, W2, b2 } = net; const z = hbuf || new Float64Array(H);
+  for (let j = 0; j < H; j++) { const h = x0 * W1[j] + x1 * W1[H + j] + b1[j]; z[j] = h > 0 ? h : 0; }
+  for (let k = 0; k < 3; k++) { let s = b2[k]; for (let j = 0; j < H; j++) s += z[j] * W2[j * 3 + k]; out[k] = s; }
+  return out;
+}
+function argmax3(o) { return o[0] >= o[1] ? (o[0] >= o[2] ? 0 : 2) : (o[1] >= o[2] ? 1 : 2); }
+function accuracy(net, data) { let c = 0; const o = [0, 0, 0], hb = new Float64Array(net.H); for (let i = 0; i < data.X.length; i++) if (argmax3(logits(net, data.X[i][0], data.X[i][1], o, hb)) === data.y[i]) c++; return c / data.X.length; }
+// one SGD step on a random minibatch; returns mean CE loss
+function sgdStep(net, data, lr, B, rnd) {
+  const { H, W1, b1, W2, b2, useBias } = net;
+  const dW1 = new Float64Array(2 * H), db1 = new Float64Array(H), dW2 = new Float64Array(H * 3), db2 = new Float64Array(3);
+  const h = new Float64Array(H), z = new Float64Array(H), o = [0, 0, 0]; let loss = 0;
+  for (let n = 0; n < B; n++) {
+    const i = Math.floor(rnd() * data.X.length), x0 = data.X[i][0], x1 = data.X[i][1], y = data.y[i];
+    for (let j = 0; j < H; j++) { h[j] = x0 * W1[j] + x1 * W1[H + j] + b1[j]; z[j] = h[j] > 0 ? h[j] : 0; }
+    for (let k = 0; k < 3; k++) { let s = b2[k]; for (let j = 0; j < H; j++) s += z[j] * W2[j * 3 + k]; o[k] = s; }
+    const mx = Math.max(o[0], o[1], o[2]); let Z = 0; for (let k = 0; k < 3; k++) Z += Math.exp(o[k] - mx);
+    loss += Math.log(Z) - (o[y] - mx);
+    const d = [0, 0, 0]; for (let k = 0; k < 3; k++) d[k] = (Math.exp(o[k] - mx) / Z - (k === y ? 1 : 0)) / B;
+    for (let j = 0; j < H; j++) {
+      let dz = 0; for (let k = 0; k < 3; k++) { dW2[j * 3 + k] += z[j] * d[k]; dz += W2[j * 3 + k] * d[k]; }
+      if (h[j] > 0) { dW1[j] += x0 * dz; dW1[H + j] += x1 * dz; db1[j] += dz; }
+    }
+    for (let k = 0; k < 3; k++) db2[k] += d[k];
+  }
+  for (let i = 0; i < 2 * H; i++) W1[i] -= lr * dW1[i];
+  for (let i = 0; i < H * 3; i++) W2[i] -= lr * dW2[i];
+  if (useBias) { for (let j = 0; j < H; j++) b1[j] -= lr * db1[j]; for (let k = 0; k < 3; k++) b2[k] -= lr * db2[k]; }
+  return loss / B;
+}
+// decision regions as a translucent raster
+function drawRegions(ctx, m, net, w, h, G = 96) {
+  const cols = CLASS().map(hexToRgb), o = [0, 0, 0], hb = new Float64Array(net.H);
+  const side = 2 * EXT * m.s, x0 = m.px(-EXT), y0 = m.py(EXT), cell = side / G;
+  for (let gy = 0; gy < G; gy++) for (let gx = 0; gx < G; gx++) {
+    const wx = -EXT + (gx + 0.5) / G * 2 * EXT, wy = EXT - (gy + 0.5) / G * 2 * EXT;
+    const k = argmax3(logits(net, wx, wy, o, hb)); const c = cols[k];
+    ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},0.22)`; ctx.fillRect(x0 + gx * cell, y0 + gy * cell, cell + 0.5, cell + 0.5);
+  }
+}
+
+// ---------- Step 1: one hinge ----------
+{
+  const c = document.getElementById('s1-canvas'), angle = document.getElementById('s1-angle'), bias = document.getElementById('s1-bias'), lock = document.getElementById('s1-lock');
+  const draw = () => {
+    const { ctx, w, h } = setupCanvas(c), m = mapper(w, h);
+    const th = angle.value * Math.PI / 180, w0 = Math.cos(th), w1 = Math.sin(th), b = lock.checked ? 0 : bias.value / 100;
+    document.getElementById('s1-angle-v').textContent = `${angle.value}°`; document.getElementById('s1-bias-v').textContent = b.toFixed(2); bias.disabled = lock.checked;
+    ctx.clearRect(0, 0, w, h);
+    // activation raster, one hue light->dark
+    const G = 80, side = 2 * EXT * m.s, x0 = m.px(-EXT), y0 = m.py(EXT), cell = side / G, rgb = hexToRgb(css('--c0'));
+    for (let gy = 0; gy < G; gy++) for (let gx = 0; gx < G; gx++) {
+      const wx = -EXT + (gx + 0.5) / G * 2 * EXT, wy = EXT - (gy + 0.5) / G * 2 * EXT, a = Math.max(0, w0 * wx + w1 * wy + b);
+      if (a <= 0) continue; ctx.fillStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${Math.min(0.85, a / 1.6)})`; ctx.fillRect(x0 + gx * cell, y0 + gy * cell, cell + 0.5, cell + 0.5);
+    }
+    drawAxes(ctx, m, w, h);
+    drawLine(ctx, m, w0, w1, b, css('--fg'), 2);
+    // weight vector arrow from the line's closest point to the origin
+    const px0 = -b * w0, py0 = -b * w1; ctx.strokeStyle = css('--fg'); ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(m.px(px0), m.py(py0)); ctx.lineTo(m.px(px0 + 0.3 * w0), m.py(py0 + 0.3 * w1)); ctx.stroke();
+    ctx.fillStyle = css('--fg'); ctx.beginPath(); ctx.arc(m.px(0), m.py(0), 3.5, 0, Math.PI * 2); ctx.fill();
+    ctx.font = `12px ${css('--font-mono')}`; ctx.fillStyle = css('--muted'); ctx.fillText('origin', m.px(0) + 7, m.py(0) + 14);
+    document.getElementById('s1-readout').textContent = `relu(${w0.toFixed(2)}·x₁ + ${w1.toFixed(2)}·x₂ + ${b.toFixed(2)})   distance of line from origin: ${Math.abs(b).toFixed(2)}`;
+  };
+  [angle, bias, lock].forEach(el => el.addEventListener('input', draw)); draw(); window.addEventListener('resize', draw);
+  window.__s1 = draw;
+}
+
+// ---------- Step 2: many lines ----------
+{
+  const c = document.getElementById('s2-canvas'), biasEl = document.getElementById('s2-bias'), nEl = document.getElementById('s2-n'); let seed = 7;
+  const draw = () => {
+    const { ctx, w, h } = setupCanvas(c), m = mapper(w, h), H = +nEl.value; document.getElementById('s2-n-v').textContent = H;
+    const net = makeMLP(H, biasEl.checked, seed);
+    ctx.clearRect(0, 0, w, h); drawAxes(ctx, m, w, h); drawPoints(ctx, m, TRAIN, 1.8, 0.35);
+    for (let j = 0; j < H; j++) drawLine(ctx, m, net.W1[j], net.W1[H + j], net.b1[j], css('--fg'), 1, 0.7);
+    ctx.fillStyle = css('--fg'); ctx.beginPath(); ctx.arc(m.px(0), m.py(0), 3.5, 0, Math.PI * 2); ctx.fill();
+  };
+  [biasEl, nEl].forEach(el => el.addEventListener('input', draw)); document.getElementById('s2-reshuffle').addEventListener('click', () => { seed++; draw(); }); draw(); window.addEventListener('resize', draw);
+  window.__s2 = draw;
+}
+
+// ---------- Step 3: logits along a ray ----------
+{
+  const c = document.getElementById('s3-canvas'), p = document.getElementById('s3-plot'), biasEl = document.getElementById('s3-bias'); let seed = 11, net = makeMLP(24, false, seed), dir = [0.6, 0.8];
+  const rebuild = () => { net = makeMLP(24, biasEl.checked, seed); draw(); };
+  const draw = () => {
+    const { ctx, w, h } = setupCanvas(c), m = mapper(w, h);
+    ctx.clearRect(0, 0, w, h); drawRegions(ctx, m, net, w, h); drawAxes(ctx, m, w, h);
+    ctx.strokeStyle = css('--fg'); ctx.lineWidth = 2; ctx.setLineDash([6, 4]); ctx.beginPath(); ctx.moveTo(m.px(0), m.py(0)); ctx.lineTo(m.px(dir[0] * EXT), m.py(dir[1] * EXT)); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = css('--fg'); ctx.beginPath(); ctx.arc(m.px(0), m.py(0), 3.5, 0, Math.PI * 2); ctx.fill();
+    // right plot: logits vs radius
+    const P = setupCanvas(p), pw = P.w, ph = P.h, pc = P.ctx; pc.clearRect(0, 0, pw, ph);
+    const L = 40, R = 12, T = 24, Bm = 36, N = 80, cols = CLASS(), o = [0, 0, 0], hb = new Float64Array(net.H);
+    const series = [[], [], []]; let lo = Infinity, hi = -Infinity; const cls = [];
+    for (let i = 0; i <= N; i++) { const r = EXT * i / N; logits(net, r * dir[0], r * dir[1], o, hb); for (let k = 0; k < 3; k++) { series[k].push(o[k]); lo = Math.min(lo, o[k]); hi = Math.max(hi, o[k]); } cls.push(argmax3(o)); }
+    if (hi - lo < 1e-6) { hi = lo + 1; } const pad = (hi - lo) * 0.1; lo -= pad; hi += pad;
+    const X = (i) => L + (pw - L - R) * i / N, Y = (v) => T + (ph - T - Bm) * (1 - (v - lo) / (hi - lo));
+    // class band along the bottom
+    for (let i = 0; i < N; i++) { pc.fillStyle = cols[cls[i]]; pc.fillRect(X(i), ph - Bm + 10, X(i + 1) - X(i) + 0.5, 8); }
+    pc.strokeStyle = css('--grid'); pc.lineWidth = 1; pc.beginPath(); pc.moveTo(L, Y(0)); pc.lineTo(pw - R, Y(0)); pc.stroke();
+    for (let k = 0; k < 3; k++) { pc.strokeStyle = cols[k]; pc.lineWidth = 2; pc.beginPath(); series[k].forEach((v, i) => i ? pc.lineTo(X(i), Y(v)) : pc.moveTo(X(i), Y(v))); pc.stroke(); }
+    pc.fillStyle = css('--muted'); pc.font = `11px ${css('--font-mono')}`; pc.fillText('logits', L, 14); pc.fillText('0', L - 12, Y(0) + 4); pc.fillText('r = 0', L, ph - 4); pc.fillText('r = 1.2', pw - R - 40, ph - 4); pc.fillText('class along the ray', L + 48, ph - 4 - 10 - 6 + 0);
+    let changes = 0; for (let i = 1; i < cls.length; i++) if (cls[i] !== cls[i - 1]) changes++;
+    document.getElementById('s3-readout').textContent = changes === 0 ? 'class along this ray: constant (argmax never changes)' : `class along this ray changes ${changes} time${changes > 1 ? 's' : ''}`;
+  };
+  const onMove = (ev) => { const [x, y] = pointerWorld(c, mapper(+c.dataset.w, +c.dataset.h), ev); const n = Math.hypot(x, y); if (n > 1e-3) { dir = [x / n, y / n]; draw(); } };
+  c.addEventListener('pointermove', onMove); c.addEventListener('pointerdown', onMove);
+  biasEl.addEventListener('input', rebuild); document.getElementById('s3-reshuffle').addEventListener('click', () => { seed++; rebuild(); }); draw(); window.addEventListener('resize', draw);
+  window.__s3 = draw;
+}
+
+// ---------- Step 4: classes along a ray of the spiral ----------
+{
+  const c = document.getElementById('s4-canvas'), s = document.getElementById('s4-strip'); let dir = [0.6, 0.8]; const BAND = 0.12;
+  const draw = () => {
+    const { ctx, w, h } = setupCanvas(c), m = mapper(w, h); ctx.clearRect(0, 0, w, h); drawAxes(ctx, m, w, h); drawPoints(ctx, m, TRAIN, 2, 0.25);
+    const ang = Math.atan2(dir[1], dir[0]); const hits = [];
+    for (let i = 0; i < TRAIN.X.length; i++) { const [x, y] = TRAIN.X[i]; const r = Math.hypot(x, y); if (r < 0.05) continue; let d = Math.atan2(y, x) - ang; d = Math.atan2(Math.sin(d), Math.cos(d)); if (Math.abs(d) < BAND) hits.push([r, TRAIN.y[i], x, y]); }
+    const cols = CLASS();
+    for (const [, k, x, y] of hits) { ctx.fillStyle = cols[k]; ctx.beginPath(); ctx.arc(m.px(x), m.py(y), 3.5, 0, Math.PI * 2); ctx.fill(); }
+    ctx.strokeStyle = css('--fg'); ctx.lineWidth = 2; ctx.setLineDash([6, 4]); ctx.beginPath(); ctx.moveTo(m.px(0), m.py(0)); ctx.lineTo(m.px(dir[0] * EXT), m.py(dir[1] * EXT)); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = css('--fg'); ctx.beginPath(); ctx.arc(m.px(0), m.py(0), 3.5, 0, Math.PI * 2); ctx.fill();
+    // strip: radius -> class
+    const S = setupCanvas(s), sw = S.w, sh = S.h, sc = S.ctx; sc.clearRect(0, 0, sw, sh);
+    const L = 40, R = 12; sc.strokeStyle = css('--grid'); sc.beginPath(); sc.moveTo(L, sh / 2); sc.lineTo(sw - R, sh / 2); sc.stroke();
+    for (const [r, k] of hits) { sc.fillStyle = cols[k]; sc.beginPath(); sc.arc(L + (sw - L - R) * r / 1.0, sh / 2, 4, 0, Math.PI * 2); sc.fill(); }
+    sc.fillStyle = css('--muted'); sc.font = `11px ${css('--font-mono')}`; sc.fillText('r = 0', L, sh - 4); sc.fillText('r = 1', sw - R - 30, sh - 4); sc.fillText('radius', 2, sh / 2 + 4);
+    const seen = new Set(hits.map(h => h[1]));
+    let majority = 0; const cnt = [0, 0, 0]; hits.forEach(h => cnt[h[1]]++); majority = Math.max(...cnt);
+    document.getElementById('s4-readout').textContent = hits.length ? `${hits.length} points near this ray, ${seen.size} class${seen.size > 1 ? 'es' : ''}. An angle-only rule gets at most ${majority}/${hits.length} of them right.` : 'no points near this ray';
+  };
+  const onMove = (ev) => { const [x, y] = pointerWorld(c, mapper(+c.dataset.w, +c.dataset.h), ev); const n = Math.hypot(x, y); if (n > 1e-3) { dir = [x / n, y / n]; draw(); } };
+  c.addEventListener('pointermove', onMove); c.addEventListener('pointerdown', onMove); draw(); window.addEventListener('resize', draw);
+  window.__s4 = draw;
+}
+
+// ---------- Step 5: live training ----------
+{
+  const c = document.getElementById('s5-canvas'), biasEl = document.getElementById('s5-bias'), widthEl = document.getElementById('s5-width'), lrEl = document.getElementById('s5-lr'), linesEl = document.getElementById('s5-lines'), playBtn = document.getElementById('s5-play');
+  let net, rnd, steps, running = true, lossEma = Math.log(3), frame = 0;
+  const widthVal = () => 2 ** +widthEl.value, lrVal = () => 10 ** +lrEl.value;
+  const reset = () => { net = makeMLP(widthVal(), biasEl.checked, 3); net.b1.fill(0); steps = 0; lossEma = Math.log(3); rnd = mulberry32(99); draw(true); };
+  const draw = (withStats) => {
+    const { ctx, w, h } = setupCanvas(c), m = mapper(w, h); ctx.clearRect(0, 0, w, h); drawRegions(ctx, m, net, w, h); drawAxes(ctx, m, w, h); drawPoints(ctx, m, TRAIN, 2, 0.9);
+    if (linesEl.checked) { const H = net.H, show = Math.min(H, 32); for (let j = 0; j < show; j++) drawLine(ctx, m, net.W1[j], net.W1[H + j], net.b1[j], css('--fg'), 1, 0.35); }
+    ctx.fillStyle = css('--fg'); ctx.beginPath(); ctx.arc(m.px(0), m.py(0), 3, 0, Math.PI * 2); ctx.fill();
+    if (withStats) { document.getElementById('s5-step').textContent = steps; document.getElementById('s5-loss').textContent = lossEma.toFixed(3); document.getElementById('s5-tacc').textContent = accuracy(net, TRAIN).toFixed(2); document.getElementById('s5-hacc').textContent = accuracy(net, HELD).toFixed(2); }
+  };
+  const tick = () => {
+    if (running) { const lr = lrVal(); for (let i = 0; i < 6; i++) { const l = sgdStep(net, TRAIN, lr, 32, rnd); lossEma = isFinite(l) ? 0.98 * lossEma + 0.02 * l : lossEma; steps++; } frame++; draw(frame % 3 === 0); }
+    requestAnimationFrame(tick);
+  };
+  const syncLabels = () => { document.getElementById('s5-width-v').textContent = widthVal(); document.getElementById('s5-lr-v').textContent = lrVal().toFixed(lrVal() < 0.01 ? 3 : 2); };
+  biasEl.addEventListener('input', reset); widthEl.addEventListener('input', () => { syncLabels(); reset(); }); lrEl.addEventListener('input', syncLabels); linesEl.addEventListener('input', () => draw(false));
+  playBtn.addEventListener('click', () => { running = !running; playBtn.textContent = running ? 'Pause' : 'Run'; });
+  document.getElementById('s5-reset').addEventListener('click', reset);
+  syncLabels(); reset(); requestAnimationFrame(tick);
+  window.__s5 = () => draw(true);
+}
+
+// redraw static panels when the theme flips
+const mq = window.matchMedia('(prefers-color-scheme: dark)');
+const redrawAll = () => { ['__s1', '__s2', '__s3', '__s4', '__s5'].forEach(k => window[k] && window[k]()); };
+mq.addEventListener && mq.addEventListener('change', redrawAll);
+new MutationObserver(redrawAll).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+})();
+</script>
+
+</body></html>

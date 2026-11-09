@@ -1,0 +1,268 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>NVLink Port Budget</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single schematic sheet. Controls, then the baseboard diagram, then readouts and the plane-split strip. */
+:root {
+  --bg: #f3f5f6;
+  --sheet: #ffffff;
+  --ink: #1b2328;
+  --muted: #5d6b73;
+  --rule: #d5dde1;
+  --copper: #b5602b;
+  --copper-soft: #e8c4ab;
+  --ext: #2f6f8f;
+  --ext-soft: #bcd6e3;
+  --bad: #c0392b;
+  --good: #2e7d4f;
+  --warn: #a8700f;
+  --chip: #e9eef0;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12171a; --sheet: #1a2125; --ink: #e4eaed; --muted: #93a2aa; --rule: #2d373c;
+    --copper: #e08a52; --copper-soft: #5a3a26; --ext: #6fb3d4; --ext-soft: #23404e;
+    --bad: #ef6b5b; --good: #5cc28a; --warn: #e0a83c; --chip: #242d32; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12171a; --sheet: #1a2125; --ink: #e4eaed; --muted: #93a2aa; --rule: #2d373c;
+  --copper: #e08a52; --copper-soft: #5a3a26; --ext: #6fb3d4; --ext-soft: #23404e;
+  --bad: #ef6b5b; --good: #5cc28a; --warn: #e0a83c; --chip: #242d32; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 48px;
+}
+.wrap { max-width: 980px; margin: 0 auto; display: grid; gap: 20px; }
+header { display: grid; gap: 6px; }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--copper); }
+h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(26px, 4.4vw, 38px); line-height: 1.1; margin: 0; text-wrap: balance; }
+.lede { color: var(--muted); max-width: 64ch; margin: 0; }
+
+.controls { display: grid; gap: 12px; }
+.seg { display: flex; flex-wrap: wrap; gap: 8px; }
+.seg button {
+  font: 500 14px/1.2 var(--f-body); color: var(--ink); background: var(--sheet);
+  border: 1px solid var(--rule); border-radius: 6px; padding: 9px 12px; cursor: pointer; text-align: left;
+}
+.seg button small { display: block; font-family: var(--f-mono); font-size: 11px; color: var(--muted); margin-top: 2px; }
+.seg button[aria-pressed="true"] { border-color: var(--copper); box-shadow: inset 0 0 0 1px var(--copper); }
+.seg button:focus-visible, .toggle input:focus-visible, .gpu-hit:focus-visible { outline: 2px solid var(--copper); outline-offset: 2px; }
+.toggle { display: flex; align-items: center; gap: 8px; font-size: 15px; }
+.toggle input { width: 18px; height: 18px; accent-color: var(--ext); }
+.toggle.disabled { color: var(--muted); }
+
+.sheet { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 18px; display: grid; gap: 16px; }
+.diagram { overflow-x: auto; }
+.diagram svg { display: block; width: 100%; min-width: 560px; height: auto; }
+.hint { font-size: 13px; color: var(--muted); margin: 0; }
+
+.readouts { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.ro { border-top: 2px solid var(--rule); padding-top: 8px; min-width: 0; }
+.ro .k { font-family: var(--f-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.ro .v { font-family: var(--f-display); font-weight: 700; font-size: 26px; font-variant-numeric: tabular-nums; }
+.ro .s { font-size: 13px; color: var(--muted); }
+.verdict { display: inline-block; font-family: var(--f-mono); font-size: 13px; padding: 4px 10px; border-radius: 999px; border: 1px solid currentColor; }
+.verdict.good { color: var(--good); } .verdict.bad { color: var(--bad); } .verdict.warn { color: var(--warn); }
+.note { margin: 0; max-width: 70ch; }
+
+h2 { font-family: var(--f-display); font-weight: 700; font-size: 20px; margin: 0; }
+.planes { display: grid; gap: 10px; }
+.strip { display: flex; height: 40px; border-radius: 6px; overflow: hidden; border: 1px solid var(--rule); }
+.strip div { display: grid; place-items: center; font-family: var(--f-mono); font-size: 12px; color: var(--ink); border-right: 1px solid var(--sheet); min-width: 0; }
+.strip div:last-child { border-right: 0; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--muted); }
+.legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; background: var(--c); }
+footer { font-size: 13px; color: var(--muted); max-width: 70ch; }
+footer a { color: var(--ext); }
+@media (prefers-reduced-motion: no-preference) { .lk, .bar { transition: opacity .2s, stroke-width .2s; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">HGX baseboard · NVLink fabric</div>
+    <h1>Why 5 + 4 + 4 + 5 and not 4 × 4</h1>
+    <p class="lede">Each GPU has 18 NVLinks. Every switch chip has a fixed number of ports. Pick a layout and see which ones fit. Tap a GPU to trace its links, then tap another to pick its peer.</p>
+  </header>
+
+  <div class="controls">
+    <div class="seg" id="layouts" role="group" aria-label="Board layout"></div>
+    <label class="toggle" id="extWrap"><input type="checkbox" id="ext" checked> Reserve ports for the external NVLink network (DGX H100, 2:1 taper)</label>
+  </div>
+
+  <section class="sheet">
+    <div class="diagram"><svg id="svg" viewBox="0 0 820 430" role="img" aria-label="GPUs connected to NVSwitch chips"></svg></div>
+    <p class="hint">Line thickness is the number of links between that GPU and that switch. Each switch's bar is its port budget.</p>
+    <div class="legend">
+      <span style="--c: var(--copper)">GPU-facing ports</span>
+      <span style="--c: var(--ext)">External ports</span>
+      <span style="--c: var(--chip)">Free</span>
+      <span style="--c: var(--bad)">Over budget</span>
+    </div>
+    <div class="readouts" id="readouts"></div>
+    <p class="note" id="note"></p>
+  </section>
+
+  <section class="sheet planes">
+    <h2>How a transfer between two GPUs uses the planes</h2>
+    <p class="note" id="pairText"></p>
+    <div class="strip" id="strip"></div>
+    <p class="hint" id="stripHint"></p>
+  </section>
+
+  <footer>The board layouts come from NVIDIA's <a href="https://docs.nvidia.com/datacenter/tesla/fabric-manager-user-guide/index.html">Fabric Manager user guide</a>: on HGX H100 each GPU sends 5, 4, 4 and 5 links to four NVSwitches, and on HGX B200 it sends 9 to each of two. The H100-side port numbers come from Alexander Ishii and Ryan Wells's <a href="https://hc34.hotchips.org/assets/program/conference/day2/Network%20and%20Switches/NVSwitch%20HotChips%202022%20r5.pdf">Hot Chips 34 talk on NVIDIA's NVLink Network switch</a>, which gives 64 ports per switch and shows DGX H100 wiring 20, 16, 16 and 20 of them out to 18 OSFP cages. That's 72 external links against 144 GPU-facing ones, hence the 2:1 taper. B200's switch has 72 ports and uses all of them. NVIDIA hasn't said the external ports are the reason H100 needs four switches; that part is just reading the numbers. Per-link speed is 25 GB/s per direction on H100 and 50 GB/s on B200.</footer>
+</div>
+
+<script>
+const LAYOUTS = [
+  { id: "h100", name: "H100 actual", sub: "4 switches · 5/4/4/5 · 64 ports", sw: [5,4,4,5], cap: 64, gbps: 25, extOK: true,
+    note: "All 18 links are used. With external ports reserved, the busiest switch needs 40 + 20 = 60 of 64 ports. This is the smallest switch count that fits both jobs." },
+  { id: "even", name: "Even 4 × 4", sub: "4 switches · 16 links", sw: [4,4,4,4], cap: 64, gbps: 25, extOK: true,
+    note: "Perfectly symmetric, and it fits easily. But each GPU leaves 2 of its 18 links unconnected, giving up about 11% of NVLink bandwidth that the silicon already paid for." },
+  { id: "three", name: "3 × 6", sub: "3 switches · 18 links", sw: [6,6,6], cap: 64, gbps: 25, extOK: true,
+    note: "Even and uses every link. On the board alone it fits (48 of 64). Reserve half as many ports for the external network and each switch needs 48 + 24 = 72, which is over budget." },
+  { id: "two3", name: "2 × 9 on H100 switch", sub: "2 switches · 64 ports", sw: [9,9], cap: 64, gbps: 25, extOK: true,
+    note: "Each switch needs 8 × 9 = 72 GPU-facing ports. The third-generation NVSwitch only has 64, so this is impossible before any external ports are counted." },
+  { id: "b200", name: "B200 actual", sub: "2 switches · 9/9 · 72 ports", sw: [9,9], cap: 72, gbps: 50, extOK: false,
+    note: "The fourth-generation switch is bigger. With 72 ports per chip, NVIDIA used exactly the symmetric 2 × 9 layout that was impossible on H100. This board has no external NVLink ports." }
+];
+const PLANE_COLORS = ["var(--copper)", "var(--ext)", "var(--copper-soft)", "var(--ext-soft)", "var(--chip)", "var(--chip)"];
+
+let state = { layout: "h100", ext: true, gpu: 0, peer: 5 };
+try { const s = JSON.parse(localStorage.getItem("nvl-state")||"null"); if (s && LAYOUTS.some(l=>l.id===s.layout)) state = Object.assign(state, s); } catch(e) {}
+let pickPeerNext = false;
+const save = () => { try { localStorage.setItem("nvl-state", JSON.stringify(state)); } catch(e) {} };
+
+const $ = id => document.getElementById(id);
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs, text) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; return e; }
+
+function buildButtons() {
+  const seg = $("layouts");
+  LAYOUTS.forEach(L => {
+    const b = document.createElement("button");
+    b.type = "button"; b.id = "lay-" + L.id; b.dataset.id = L.id;
+    b.innerHTML = `${L.name}<small>${L.sub}</small>`;
+    b.addEventListener("click", () => { state.layout = L.id; save(); render(); });
+    seg.appendChild(b);
+  });
+  $("ext").addEventListener("change", e => { state.ext = e.target.checked; save(); render(); });
+}
+
+function render() {
+  const L = LAYOUTS.find(l => l.id === state.layout);
+  document.querySelectorAll("#layouts button").forEach(b => b.setAttribute("aria-pressed", b.dataset.id === L.id));
+  const extOn = state.ext && L.extOK;
+  $("ext").checked = state.ext; $("ext").disabled = !L.extOK;
+  $("extWrap").classList.toggle("disabled", !L.extOK);
+
+  const svg = $("svg"); svg.innerHTML = "";
+  const W = 820, gpuY = 70, swY = 300;
+  const gx = i => 60 + i * ((W - 120) / 7);
+  const n = L.sw.length;
+  const swW = Math.min(170, (W - 80) / n - 20);
+  const sx = j => (W / (n + 1)) * (j + 1);
+
+  // links
+  const links = el("g", {});
+  for (let i = 0; i < 8; i++) for (let j = 0; j < n; j++) {
+    const k = L.sw[j];
+    const active = i === state.gpu || i === state.peer;
+    const line = el("line", { class: "lk", x1: gx(i), y1: gpuY + 26, x2: sx(j), y2: swY - 30,
+      stroke: i === state.gpu ? "var(--copper)" : (i === state.peer ? "var(--ext)" : "var(--muted)"),
+      "stroke-width": k * (active ? 1.15 : 0.75), "stroke-linecap": "round", opacity: active ? 0.95 : 0.16 });
+    links.appendChild(line);
+    if (i === state.gpu) {
+      const t = 0.32, lx = gx(i) + (sx(j) - gx(i)) * t, ly = gpuY + 26 + (swY - 30 - gpuY - 26) * t;
+      links.appendChild(el("circle", { cx: lx, cy: ly, r: 11, fill: "var(--sheet)", stroke: "var(--copper)", "stroke-width": 1.5 }));
+      links.appendChild(el("text", { x: lx, y: ly + 4, "text-anchor": "middle", "font-family": "IBM Plex Mono, monospace", "font-size": 12, fill: "var(--ink)" }, k));
+    }
+  }
+  svg.appendChild(links);
+
+  // GPUs
+  for (let i = 0; i < 8; i++) {
+    const sel = i === state.gpu, peer = i === state.peer;
+    const g = el("g", { class: "gpu-hit", tabindex: 0, role: "button", "aria-label": `GPU ${i}`, style: "cursor:pointer" });
+    g.appendChild(el("rect", { x: gx(i) - 34, y: gpuY - 26, width: 68, height: 52, rx: 5,
+      fill: sel ? "var(--copper)" : (peer ? "var(--ext)" : "var(--sheet)"),
+      stroke: sel ? "var(--copper)" : (peer ? "var(--ext)" : "var(--rule)"), "stroke-width": 1.5 }));
+    g.appendChild(el("text", { x: gx(i), y: gpuY - 2, "text-anchor": "middle", "font-family": "Archivo, sans-serif", "font-weight": 700, "font-size": 14,
+      fill: (sel || peer) ? "var(--sheet)" : "var(--ink)" }, `GPU ${i}`));
+    g.appendChild(el("text", { x: gx(i), y: gpuY + 15, "text-anchor": "middle", "font-family": "IBM Plex Mono, monospace", "font-size": 11,
+      fill: (sel || peer) ? "var(--sheet)" : "var(--muted)" }, `${L.sw.reduce((a,b)=>a+b,0)} links`));
+    const pick = () => {
+      if (pickPeerNext && i !== state.gpu) { state.peer = i; pickPeerNext = false; }
+      else { state.gpu = i; if (state.peer === i) state.peer = (i + 5) % 8; pickPeerNext = true; }
+      save(); render();
+    };
+    g.addEventListener("click", pick);
+    g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(e); } });
+    svg.appendChild(g);
+  }
+  svg.appendChild(el("text", { x: 20, y: 22, "font-family": "IBM Plex Mono, monospace", "font-size": 11, fill: "var(--muted)" }, pickPeerNext ? "NOW TAP A SECOND GPU TO PICK THE PEER" : "TAP A GPU TO TRACE ITS 18 LINKS"));
+
+  // switches with port bars
+  let worst = 0, over = false;
+  for (let j = 0; j < n; j++) {
+    const gpuPorts = 8 * L.sw[j], extPorts = extOn ? gpuPorts / 2 : 0, used = gpuPorts + extPorts;
+    worst = Math.max(worst, used); if (used > L.cap) over = true;
+    const x = sx(j) - swW / 2, y = swY - 30;
+    svg.appendChild(el("rect", { x, y, width: swW, height: 60, rx: 6, fill: "var(--sheet)", stroke: used > L.cap ? "var(--bad)" : "var(--ink)", "stroke-width": 1.5 }));
+    svg.appendChild(el("text", { x: sx(j), y: y + 20, "text-anchor": "middle", "font-family": "Archivo, sans-serif", "font-weight": 700, "font-size": 14, fill: "var(--ink)" }, `NVSwitch ${j}`));
+    svg.appendChild(el("text", { x: sx(j), y: y + 40, "text-anchor": "middle", "font-family": "IBM Plex Mono, monospace", "font-size": 11, fill: "var(--muted)" }, `${L.sw[j]} links × 8 GPUs`));
+
+    // bar
+    const bx = x, by = y + 80, bw = swW, bh = 20, scale = Math.max(L.cap, used);
+    const px = v => bw * v / scale;
+    svg.appendChild(el("rect", { x: bx, y: by, width: px(L.cap), height: bh, rx: 3, fill: "var(--chip)" }));
+    const gpuIn = Math.min(gpuPorts, L.cap), extIn = Math.max(0, Math.min(extPorts, L.cap - gpuPorts));
+    svg.appendChild(el("rect", { class: "bar", x: bx, y: by, width: px(gpuIn), height: bh, fill: "var(--copper)" }));
+    if (extIn > 0) svg.appendChild(el("rect", { class: "bar", x: bx + px(gpuIn), y: by, width: px(extIn), height: bh, fill: "var(--ext)" }));
+    if (used > L.cap) svg.appendChild(el("rect", { class: "bar", x: bx + px(L.cap), y: by, width: px(used - L.cap), height: bh, fill: "var(--bad)" }));
+    svg.appendChild(el("line", { x1: bx + px(L.cap), y1: by - 4, x2: bx + px(L.cap), y2: by + bh + 4, stroke: "var(--ink)", "stroke-width": 1.5 }));
+    svg.appendChild(el("text", { x: bx, y: by + bh + 16, "font-family": "IBM Plex Mono, monospace", "font-size": 11, fill: used > L.cap ? "var(--bad)" : "var(--ink)" },
+      `${gpuPorts}${extOn ? " + " + extPorts : ""} = ${used} / ${L.cap}`));
+  }
+
+  // readouts
+  const total = L.sw.reduce((a,b)=>a+b,0), idle = 18 - total;
+  let vClass = "good", vText = "Fits, all 18 links used";
+  if (over) { vClass = "bad"; vText = "Over the port budget"; }
+  else if (idle > 0) { vClass = "warn"; vText = `Fits, ${idle} links idle per GPU`; }
+  $("readouts").innerHTML = `
+    <div class="ro"><div class="k">Links per GPU</div><div class="v">${total} / 18</div><div class="s">${idle > 0 ? idle + " left unconnected" : "every link wired"}</div></div>
+    <div class="ro"><div class="k">Bandwidth per direction</div><div class="v">${total * L.gbps} GB/s</div><div class="s">${total} × ${L.gbps} GB/s per link</div></div>
+    <div class="ro"><div class="k">Busiest switch</div><div class="v">${worst} / ${L.cap}</div><div class="s">ports used of ports available</div></div>
+    <div class="ro"><div class="k">Verdict</div><div class="v" style="font-size:16px;padding-top:8px"><span class="verdict ${vClass}">${vText}</span></div></div>`;
+  $("note").textContent = L.note;
+
+  // plane split
+  const strip = $("strip"); strip.innerHTML = "";
+  L.sw.forEach((k, j) => {
+    const d = document.createElement("div");
+    d.style.flex = k; d.style.background = PLANE_COLORS[j % PLANE_COLORS.length];
+    if (j < 2) d.style.color = "var(--sheet)";
+    d.textContent = `plane ${j} · ${k}/${total}`;
+    strip.appendChild(d);
+  });
+  $("pairText").textContent = `GPU ${state.gpu} sends to GPU ${state.peer}. Data entering switch k from GPU ${state.gpu} can only leave through GPU ${state.peer}'s links on that same switch, so each switch is an independent plane. Both GPUs have the identical split, so every plane has the same number of links in as out, and no plane bottlenecks.`;
+  const per = L.sw.map(k => `${k} × ${L.gbps} = ${k * L.gbps} GB/s`).join(", ");
+  $("stripHint").textContent = `Software splits each transfer in proportion to the links on each plane (${per}). Unequal planes are fine as long as every GPU sees the same split.`;
+}
+
+buildButtons();
+render();
+</script>
+
+</body></html>

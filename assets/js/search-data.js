@@ -44,18 +44,7 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/reading-list/";
           },
-        },{id: "post-research-sprint-day-4",
-      
-        title: "Research Sprint Day 4 - ???",
-      
-      description: "",
-      section: "Posts",
-      handler: () => {
-        
-          window.location.href = "/blog/2026/research-day4-gdn-baselines/";
-        
-      },
-    },{id: "post-research-sprint-day-3-seed-noise-and-transformer-baselines",
+        },{id: "post-research-sprint-day-3-seed-noise-and-transformer-baselines",
       
         title: "Research Sprint Day 3 - Seed Noise and Transformer Baselines",
       
@@ -745,6 +734,15 @@ ninja.data = [{
           description: "",
           section: "News",},{id: "news-i-thought-the-redunet-paper-was-particularly-novel-after-learning-about-it-at-iclr-and-wrote-a-post-about-it-neural-networks-from-maximizing-rate-reduction",
           title: 'I thought the ReduNet paper was particularly novel after learning about it at...',
+          description: "",
+          section: "News",},{id: "news-i-will-be-at-icml-in-vancouver-from-07-13-07-19-let-s-chat-if-you-re-also-there",
+          title: 'I will be at ICML in Vancouver from 07/13-07/19. Let’s chat if you’re...',
+          description: "",
+          section: "News",},{id: "news-i-will-be-at-colm-in-montreal-from-10-07-10-10-let-s-chat-if-you-re-also-there",
+          title: 'I will be at COLM in Montreal from 10/07-10/10. Let’s chat if you’re...',
+          description: "",
+          section: "News",},{id: "news-i-will-be-at-neurips-in-san-diego-from-12-02-12-07-let-s-chat-if-you-re-also-there",
+          title: 'I will be at NeurIPS in San Diego from 12/02-12/07. Let’s chat if...',
           description: "",
           section: "News",},{id: "projects-graphical-bayesian-networks-for-predicting-asset-covariances",
           title: 'Graphical Bayesian Networks for Predicting Asset Covariances',

@@ -1,0 +1,558 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>InfiniBand Field Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,750&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one calm reading column, each lesson anchored by a framed diagram on a "patch panel" surface */
+:root {
+  --bg: #F1F4F8;
+  --surface: #FFFFFF;
+  --ink: #17202B;
+  --muted: #586577;
+  --line: #D3DAE4;
+  --accent: #2C57DF;
+  --accent-soft: #E2E9FD;
+  --packet: #E59A10;
+  --packet-soft: #FCEFD2;
+  --on-packet: #2A1C00;
+  --ok: #1D8757;
+  --bad: #C43D35;
+  --bad-soft: #FBE4E2;
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E131A; --surface: #161D27; --ink: #E5EAF1; --muted: #93A0B2; --line: #2A3443;
+    --accent: #7FA1FF; --accent-soft: #1C2949; --packet: #F2B443; --packet-soft: #3A2B0E;
+    --on-packet: #2A1C00; --ok: #4CC58D; --bad: #F27B72; --bad-soft: #3D1A18; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E131A; --surface: #161D27; --ink: #E5EAF1; --muted: #93A0B2; --line: #2A3443;
+  --accent: #7FA1FF; --accent-soft: #1C2949; --packet: #F2B443; --packet-soft: #3A2B0E;
+  --on-packet: #2A1C00; --ok: #4CC58D; --bad: #F27B72; --bad-soft: #3D1A18; color-scheme: dark;
+}
+
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.62; }
+.wrap { max-width: 780px; margin: 0 auto; padding-block: 48px 96px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 64px; }
+section { display: flex; flex-direction: column; gap: 18px; }
+p { margin: 0; max-width: 66ch; }
+h1, h2, h3 { font-family: var(--f-display); margin: 0; text-wrap: balance; line-height: 1.12; }
+h1 { font-size: clamp(34px, 6vw, 52px); font-weight: 750; letter-spacing: -0.02em; }
+h2 { font-size: clamp(25px, 4vw, 32px); font-weight: 750; letter-spacing: -0.01em; }
+h3 { font-size: 19px; font-weight: 600; }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.lede { font-size: 19px; color: var(--muted); }
+.head { display: flex; flex-direction: column; gap: 8px; }
+code, .mono { font-family: var(--f-mono); font-size: 0.88em; }
+strong { font-weight: 700; }
+
+.summary { background: var(--accent-soft); border-radius: 14px; padding: 18px 20px; display: flex; flex-direction: column; gap: 4px; }
+.summary b { font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+
+figure { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+figcaption { font-size: 15px; color: var(--muted); max-width: 66ch; }
+.scroll { overflow-x: auto; }
+.scroll svg { display: block; width: 100%; min-width: 560px; height: auto; }
+
+/* SVG parts */
+.n { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; transition: fill .3s, stroke .3s; }
+.n.alt { fill: var(--bg); }
+.w { stroke: var(--line); stroke-width: 2; fill: none; transition: stroke .3s, stroke-width .3s; }
+.w.dash { stroke-dasharray: 5 5; stroke: var(--accent); opacity: .7; }
+.t { fill: var(--ink); font-family: var(--f-mono); font-size: 12px; font-weight: 500; }
+.t.s { font-size: 10px; }
+.t.m { fill: var(--muted); }
+.t.a { fill: var(--accent); font-weight: 700; }
+.chip { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1; }
+.hl.n { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2.5; }
+.hl.w { stroke: var(--accent); stroke-width: 3.5; }
+.pkt { transition: transform .6s cubic-bezier(.45,.05,.2,1); }
+.pkt rect { fill: var(--packet); }
+.pkt text { fill: var(--on-packet); font-family: var(--f-mono); font-size: 11px; font-weight: 700; }
+.slot { fill: var(--bg); stroke: var(--line); stroke-width: 1.5; transition: fill .25s; }
+.slot.full { fill: var(--packet); stroke: var(--packet); }
+.flash-bad { animation: fb .5s; }
+@keyframes fb { 0%,100% { fill: var(--surface); } 40% { fill: var(--bad-soft); } }
+
+/* Cards */
+.cast { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.card p { font-size: 15.5px; }
+.tag { font-family: var(--f-mono); font-size: 11px; color: var(--muted); letter-spacing: .06em; }
+
+/* Stepper */
+.stepper { display: flex; flex-direction: column; gap: 12px; }
+.caption-box { min-height: 5.2em; background: var(--packet-soft); border-radius: 10px; padding: 12px 14px; font-size: 16px; }
+.controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.dots { display: flex; gap: 6px; flex: 1; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); transition: background .3s; }
+.dot.on { background: var(--packet); }
+button { font-family: var(--f-body); font-size: 15px; font-weight: 700; border-radius: 999px; padding: 8px 16px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+button:disabled { opacity: .4; cursor: default; }
+button:focus-visible { outline: 3px solid var(--packet); outline-offset: 2px; }
+.seg { display: inline-flex; border: 1.5px solid var(--line); border-radius: 999px; padding: 3px; gap: 2px; }
+.seg button { border: 0; padding: 6px 14px; font-size: 14px; background: transparent; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.status { font-size: 15.5px; min-height: 3.2em; padding: 10px 14px; border-radius: 10px; background: var(--bg); }
+.status.bad { background: var(--bad-soft); color: var(--bad); }
+.status.ok { color: var(--ok); }
+
+/* Table */
+.tbl-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+td.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+tr.hit td { background: var(--packet-soft); font-weight: 700; }
+
+ol.steps { margin: 0; padding-left: 1.4em; display: flex; flex-direction: column; gap: 8px; max-width: 66ch; }
+ol.steps li::marker { font-family: var(--f-mono); color: var(--accent); font-weight: 700; }
+ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 8px; max-width: 66ch; }
+
+.reasons { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.note { border-left: 3px solid var(--packet); padding: 4px 0 4px 16px; color: var(--muted); max-width: 66ch; }
+
+.boot { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.boot > div { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.boot svg { width: 100%; height: auto; display: block; }
+.panel-label { font-family: var(--f-mono); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+.ufm { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.ufm ul { margin: 0; padding-left: 1.1em; font-size: 15.5px; display: flex; flex-direction: column; gap: 4px; }
+
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.stats div { background: var(--surface); padding: 14px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.stats b { font-family: var(--f-display); font-size: 24px; font-weight: 750; font-variant-numeric: tabular-nums; }
+.stats span { font-size: 13px; color: var(--muted); }
+
+dl.gloss { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 20px; }
+dl.gloss div { display: flex; flex-direction: column; min-width: 0; }
+dt { font-family: var(--f-mono); font-size: 13.5px; font-weight: 700; color: var(--accent); }
+dd { margin: 0; font-size: 15px; color: var(--muted); }
+
+footer { font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 20px; display: flex; flex-direction: column; gap: 4px; }
+a { color: var(--accent); }
+
+@media (max-width: 640px) {
+  .cast, .reasons, .boot, .ufm, dl.gloss { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  body { font-size: 16.5px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pkt, .n, .w, .slot, .dot { transition: none; }
+  .flash-bad { animation: none; }
+}
+</style>
+
+<div class="wrap">
+
+<header class="head">
+  <span class="eyebrow">A friendly guide for ML people</span>
+  <h1>How InfiniBand moves your gradients</h1>
+  <p class="lede">When thousands of GPUs train one model, they spend a lot of time swapping data. InfiniBand is the network most big clusters use for that. This page walks through how it works, one picture at a time. No networking background needed.</p>
+</header>
+
+<section>
+  <div class="head"><span class="eyebrow">Part 1</span><h2>The big idea</h2></div>
+  <p>Ethernet, the network your laptop uses, was built for the internet. Nobody owns the whole internet, so every switch has to figure things out on its own, and losing a packet now and then is treated as normal.</p>
+  <p>InfiniBand was built for a different world. One owner, one building, one job, which is moving memory from one machine to another as fast as possible. Once you can assume a single owner, you can make very different design choices. The rest of this page is about those choices.</p>
+  <div class="summary">
+    <b>The whole thing in one line</b>
+    <span>Smart network cards, dumb fast switches, one central brain that sets everything up, and links that never throw packets away.</span>
+  </div>
+</section>
+
+<section>
+  <div class="head"><span class="eyebrow">Part 2</span><h2>Meet the cast</h2></div>
+  <figure>
+    <div class="scroll">
+    <svg viewBox="0 0 720 310" role="img" aria-label="A small fat tree. Two spine switches on top, four leaf switches in the middle, eight servers at the bottom, and a Subnet Manager connected by a dashed line.">
+      <!-- leaf to spine wires -->
+      <g class="w-group">
+        <line class="w" x1="95" y1="130" x2="280" y2="66"/><line class="w" x1="95" y1="130" x2="440" y2="66"/>
+        <line class="w" x1="265" y1="130" x2="280" y2="66"/><line class="w" x1="265" y1="130" x2="440" y2="66"/>
+        <line class="w" x1="455" y1="130" x2="280" y2="66"/><line class="w" x1="455" y1="130" x2="440" y2="66"/>
+        <line class="w" x1="625" y1="130" x2="280" y2="66"/><line class="w" x1="625" y1="130" x2="440" y2="66"/>
+      </g>
+      <!-- leaf to server wires -->
+      <line class="w" x1="95" y1="166" x2="53" y2="220"/><line class="w" x1="95" y1="166" x2="137" y2="220"/>
+      <line class="w" x1="265" y1="166" x2="223" y2="220"/><line class="w" x1="265" y1="166" x2="307" y2="220"/>
+      <line class="w" x1="455" y1="166" x2="413" y2="220"/><line class="w" x1="455" y1="166" x2="497" y2="220"/>
+      <line class="w" x1="625" y1="166" x2="583" y2="220"/><line class="w" x1="625" y1="166" x2="667" y2="220"/>
+      <!-- SM -->
+      <line class="w dash" x1="490" y1="48" x2="580" y2="48"/>
+      <rect class="n hl" x="580" y="28" width="128" height="40" rx="8"/>
+      <text class="t a" x="644" y="52" text-anchor="middle">Subnet Manager</text>
+      <!-- spines -->
+      <rect class="n" x="230" y="30" width="100" height="36" rx="8"/><text class="t" x="280" y="53" text-anchor="middle">Spine</text>
+      <rect class="n" x="390" y="30" width="100" height="36" rx="8"/><text class="t" x="440" y="53" text-anchor="middle">Spine</text>
+      <!-- leaves -->
+      <rect class="n" x="45" y="130" width="100" height="36" rx="8"/><text class="t" x="95" y="153" text-anchor="middle">Leaf</text>
+      <rect class="n" x="215" y="130" width="100" height="36" rx="8"/><text class="t" x="265" y="153" text-anchor="middle">Leaf</text>
+      <rect class="n" x="405" y="130" width="100" height="36" rx="8"/><text class="t" x="455" y="153" text-anchor="middle">Leaf</text>
+      <rect class="n" x="575" y="130" width="100" height="36" rx="8"/><text class="t" x="625" y="153" text-anchor="middle">Leaf</text>
+      <!-- servers -->
+      <g id="servers"></g>
+      <text class="t m s" x="360" y="304" text-anchor="middle">8 servers. Each one has a GPU and its own HCA (network card).</text>
+    </svg>
+    </div>
+    <figcaption>A tiny InfiniBand network, which people call a fabric. Servers plug into leaf switches, and every leaf connects to every spine. This shape is called a fat tree. Real clusters add a third tier on top to reach thousands of servers.</figcaption>
+  </figure>
+  <div class="cast">
+    <div class="card"><span class="tag">THE NETWORK CARD</span><h3>HCA</h3><p>Short for Host Channel Adapter, InfiniBand's name for a network card. It is a small computer of its own. It reads memory, builds packets and handles retries in hardware, so the CPU can stay out of it. In GPU clusters each GPU usually gets its own HCA.</p></div>
+    <div class="card"><span class="tag">THE ROAD JUNCTION</span><h3>Switch</h3><p>Forwards packets. On the fast path it does exactly one thing. It looks up the destination in a table and sends the packet out the matching port.</p></div>
+    <div class="card"><span class="tag">THE ADDRESS</span><h3>LID</h3><p>Every port on the fabric gets a small number called a LID, short for Local Identifier. Each packet carries the LID it is headed to, a bit like an apartment number on an envelope.</p></div>
+    <div class="card"><span class="tag">THE BRAIN</span><h3>Subnet Manager</h3><p>A piece of software running somewhere on the fabric. It hands out every address and fills in every switch's table. More on why it exists in Part 6.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="head"><span class="eyebrow">Part 3</span><h2>Follow one packet</h2></div>
+  <p>Let's follow a chunk of gradients from a GPU on Server A to a GPU on Server B. Step through it with the buttons.</p>
+  <figure class="stepper" id="trip">
+    <div class="scroll">
+    <svg viewBox="0 0 720 300" role="img" aria-label="Path from GPU on Server A, through its HCA, up a leaf switch, across a spine, down another leaf, into Server B's HCA and GPU.">
+      <line id="t-wL1" class="w" x1="180" y1="120" x2="330" y2="72"/>
+      <line id="t-wL3" class="w" x1="540" y1="120" x2="390" y2="72"/>
+      <line id="t-wA" class="w" x1="235" y1="225" x2="180" y2="160"/>
+      <line id="t-wB" class="w" x1="485" y1="225" x2="540" y2="160"/>
+      <line class="w" x1="300" y1="72" x2="250" y2="98" opacity=".5"/>
+      <line class="w" x1="420" y1="72" x2="470" y2="98" opacity=".5"/>
+      <text class="t m s" x="360" y="104" text-anchor="middle">more switches and servers…</text>
+
+      <rect id="t-S" class="n" x="290" y="28" width="140" height="44" rx="9"/>
+      <text class="t" x="360" y="55" text-anchor="middle">Spine S</text>
+      <rect id="t-L1" class="n" x="120" y="120" width="120" height="40" rx="9"/>
+      <text class="t" x="180" y="145" text-anchor="middle">Leaf L1</text>
+      <rect id="t-L3" class="n" x="480" y="120" width="120" height="40" rx="9"/>
+      <text class="t" x="540" y="145" text-anchor="middle">Leaf L3</text>
+
+      <rect class="n alt" x="60" y="200" width="240" height="88" rx="12"/>
+      <text class="t m s" x="72" y="282">SERVER A</text>
+      <rect id="t-gpuA" class="n" x="80" y="225" width="90" height="44" rx="8"/>
+      <text class="t" x="125" y="252" text-anchor="middle">GPU</text>
+      <line id="t-pcieA" class="w" x1="170" y1="247" x2="190" y2="247"/>
+      <rect id="t-hcaA" class="n" x="190" y="225" width="90" height="44" rx="8"/>
+      <text class="t" x="235" y="252" text-anchor="middle">HCA</text>
+      <text class="t m s" x="180" y="282" text-anchor="middle">PCIe</text>
+
+      <rect class="n alt" x="420" y="200" width="240" height="88" rx="12"/>
+      <text class="t m s" x="432" y="282">SERVER B</text>
+      <rect id="t-hcaB" class="n" x="440" y="225" width="90" height="44" rx="8"/>
+      <text class="t" x="485" y="252" text-anchor="middle">HCA</text>
+      <line id="t-pcieB" class="w" x1="530" y1="247" x2="550" y2="247"/>
+      <rect id="t-gpuB" class="n" x="550" y="225" width="90" height="44" rx="8"/>
+      <text class="t" x="595" y="252" text-anchor="middle">GPU</text>
+      <text class="t m s" x="540" y="282" text-anchor="middle">PCIe</text>
+      <text class="t a s" x="595" y="218" text-anchor="middle">LID 42</text>
+
+      <g id="pkt" class="pkt" style="transform: translate(102px, 192px)">
+        <rect width="46" height="20" rx="6"/>
+        <text id="pktText" x="23" y="14" text-anchor="middle">data</text>
+      </g>
+    </svg>
+    </div>
+    <div class="caption-box" id="tripCap" aria-live="polite"></div>
+    <div class="controls">
+      <button id="tripBack" type="button">Back</button>
+      <button id="tripNext" type="button" class="primary">Next step</button>
+      <div class="dots" id="tripDots" aria-hidden="true"></div>
+      <span class="mono" id="tripCount" style="color: var(--muted)"></span>
+    </div>
+  </figure>
+  <p>Two things to notice. The switches never think, they only look things up. And neither CPU ever touches the data. Software leaves a note for the HCA and hardware does the rest. That second idea is called <strong>RDMA</strong>, short for Remote Direct Memory Access.</p>
+</section>
+
+<section>
+  <div class="head"><span class="eyebrow">Part 4</span><h2>Switches just look things up</h2></div>
+  <p>Each switch holds a forwarding table. It is basically an array where the index is a destination address and the value is which port to send the packet out of. Here is what Leaf L1's table might look like.</p>
+  <figure>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Destination LID</th><th>Send out port</th><th>Which leads to</th></tr></thead>
+      <tbody>
+        <tr><td class="num">7</td><td class="num">1</td><td>Server A</td></tr>
+        <tr><td class="num">9</td><td class="num">2</td><td>Server A2, the neighbour</td></tr>
+        <tr class="hit"><td class="num">42</td><td class="num">3</td><td>Up to Spine S</td></tr>
+        <tr><td class="num">55</td><td class="num">4</td><td>Up to the other spine</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <figcaption>A packet for LID 42 arrives, the switch reads row 42, and out it goes on port 3. That really is the whole job.</figcaption>
+  </figure>
+  <p>There is no learning and no route calculation inside the switch, which keeps it simple and very fast. But it raises an obvious question. Who fills in the table? Hold that thought for Part 6.</p>
+</section>
+
+<section>
+  <div class="head"><span class="eyebrow">Part 5</span><h2>Links never throw packets away</h2></div>
+  <p>On Ethernet, a switch with a full buffer simply drops new packets. TCP on the sending computer eventually notices and resends. That works, but the waiting and resending hurts a lot when thousands of GPUs are all waiting on each other.</p>
+  <p>InfiniBand uses <strong>credits</strong> instead. The receiver tells the sender how much buffer space it has free. Each packet costs one credit. No credits means no sending, so the sender pauses until the receiver frees up space and hands a credit back.</p>
+  <figure id="credits">
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Network type">
+        <button type="button" id="modeIB" aria-pressed="true">InfiniBand</button>
+        <button type="button" id="modeEth" aria-pressed="false">Ethernet</button>
+      </div>
+    </div>
+    <div class="scroll">
+    <svg viewBox="0 0 720 150" role="img" aria-label="A sender on the left with a credit counter, a link, and a receiver on the right with four buffer slots.">
+      <rect id="c-sender" class="n" x="20" y="30" width="200" height="90" rx="12"/>
+      <text class="t m s" x="36" y="52">SENDER</text>
+      <text id="c-cred" class="t a" x="36" y="84" style="font-size:18px">4 credits</text>
+      <text id="c-sub" class="t m s" x="36" y="104">one per free slot</text>
+      <line class="w" x1="220" y1="75" x2="500" y2="75"/>
+      <text class="t m s" x="360" y="66" text-anchor="middle">link</text>
+      <text id="c-back" class="t a s" x="360" y="96" text-anchor="middle">credits flow back ←</text>
+      <rect id="c-recv" class="n" x="500" y="20" width="200" height="110" rx="12"/>
+      <text class="t m s" x="516" y="42">RECEIVER BUFFER</text>
+      <rect class="slot" id="slot0" x="516" y="56" width="38" height="56" rx="6"/>
+      <rect class="slot" id="slot1" x="562" y="56" width="38" height="56" rx="6"/>
+      <rect class="slot" id="slot2" x="608" y="56" width="38" height="56" rx="6"/>
+      <rect class="slot" id="slot3" x="654" y="56" width="38" height="56" rx="6"/>
+    </svg>
+    </div>
+    <div class="controls">
+      <button type="button" id="cSend" class="primary">Send a packet</button>
+      <button type="button" id="cDrain">Receiver uses one up</button>
+      <span class="mono" id="cDrops" style="color: var(--bad)"></span>
+    </div>
+    <div class="status" id="cStatus" aria-live="polite">Press Send a few times until the buffer fills, then keep pressing. Then try Ethernet mode.</div>
+  </figure>
+  <p>This is called <strong>lossless</strong> flow control. Congestion makes senders wait, and nothing gets thrown away.</p>
+</section>
+
+<section>
+  <div class="head"><span class="eyebrow">Part 6</span><h2>Why the network needs a brain</h2></div>
+  <p>Go back to the packet's trip in Part 3. It only worked because every port already had an address and every switch already had a full table. When you first power on a cluster, none of that exists.</p>
+  <figure>
+    <div class="boot">
+      <div>
+        <span class="panel-label">Just powered on</span>
+        <svg viewBox="0 0 340 220" role="img" aria-label="A switch with an empty table and three servers with no addresses.">
+          <line class="w" x1="170" y1="92" x2="60" y2="150"/><line class="w" x1="170" y1="92" x2="170" y2="150"/><line class="w" x1="170" y1="92" x2="280" y2="150"/>
+          <rect class="n" x="90" y="12" width="160" height="80" rx="10"/>
+          <text class="t" x="170" y="36" text-anchor="middle">Switch</text>
+          <text class="t m s" x="170" y="60" text-anchor="middle">table is empty</text>
+          <text class="t m" x="170" y="78" text-anchor="middle">? ? ?</text>
+          <rect class="n" x="20" y="150" width="80" height="50" rx="8"/><text class="t s" x="60" y="172" text-anchor="middle">Server</text><text class="t m s" x="60" y="189" text-anchor="middle">LID ?</text>
+          <rect class="n" x="130" y="150" width="80" height="50" rx="8"/><text class="t s" x="170" y="172" text-anchor="middle">Server</text><text class="t m s" x="170" y="189" text-anchor="middle">LID ?</text>
+          <rect class="n" x="240" y="150" width="80" height="50" rx="8"/><text class="t s" x="280" y="172" text-anchor="middle">Server</text><text class="t m s" x="280" y="189" text-anchor="middle">LID ?</text>
+        </svg>
+      </div>
+      <div>
+        <span class="panel-label">After the Subnet Manager runs</span>
+        <svg viewBox="0 0 340 220" role="img" aria-label="The Subnet Manager has given each server an address and filled the switch table.">
+          <line class="w" x1="170" y1="92" x2="60" y2="150"/><line class="w" x1="170" y1="92" x2="170" y2="150"/><line class="w" x1="170" y1="92" x2="280" y2="150"/>
+          <line class="w dash" x1="56" y1="46" x2="96" y2="46"/>
+          <rect class="n hl" x="6" y="28" width="50" height="36" rx="8"/><text class="t a" x="31" y="50" text-anchor="middle">SM</text>
+          <rect class="n" x="96" y="12" width="148" height="80" rx="10"/>
+          <text class="t" x="170" y="31" text-anchor="middle">Switch</text>
+          <text class="t a s" x="170" y="50" text-anchor="middle">7 → port 1</text>
+          <text class="t a s" x="170" y="65" text-anchor="middle">12 → port 2</text>
+          <text class="t a s" x="170" y="80" text-anchor="middle">42 → port 3</text>
+          <rect class="n" x="20" y="150" width="80" height="50" rx="8"/><text class="t s" x="60" y="172" text-anchor="middle">Server</text><text class="t a s" x="60" y="189" text-anchor="middle">LID 7</text>
+          <rect class="n" x="130" y="150" width="80" height="50" rx="8"/><text class="t s" x="170" y="172" text-anchor="middle">Server</text><text class="t a s" x="170" y="189" text-anchor="middle">LID 12</text>
+          <rect class="n" x="240" y="150" width="80" height="50" rx="8"/><text class="t s" x="280" y="172" text-anchor="middle">Server</text><text class="t a s" x="280" y="189" text-anchor="middle">LID 42</text>
+        </svg>
+      </div>
+    </div>
+    <figcaption>Before, nobody can talk to anybody. After, every server has an address and every switch knows where to send things.</figcaption>
+  </figure>
+  <p>So the <strong>Subnet Manager</strong> (SM for short) does the setup, roughly in this order.</p>
+  <ol class="steps">
+    <li><strong>Explore.</strong> It sends special management packets out cable by cable to map every switch and HCA. These packets carry their own directions, like "out port 3, then port 17", so they work before any tables exist.</li>
+    <li><strong>Hand out addresses.</strong> Every port gets a LID.</li>
+    <li><strong>Plan routes.</strong> With the whole map in hand, it picks a path to every destination and spreads traffic evenly across the spines.</li>
+    <li><strong>Fill in every table,</strong> then switch the ports on.</li>
+    <li><strong>Keep watching.</strong> It re-checks the fabric regularly and reroutes around cables that die.</li>
+  </ol>
+  <h3>Why not let each switch figure things out alone, like Ethernet?</h3>
+  <div class="reasons">
+    <div class="card"><span class="tag">REASON 1</span><h3>Better routes</h3><p>Only someone who sees the whole map can spread traffic evenly over every spine. That even spread is what lets every GPU talk at full speed at the same time.</p></div>
+    <div class="card"><span class="tag">REASON 2</span><h3>No gridlock</h3><p>In a network that never drops packets, a bad set of routes can leave packets waiting on each other in a circle forever. Planning with the full map makes that easy to rule out.</p></div>
+    <div class="card"><span class="tag">REASON 3</span><h3>Simple switches</h3><p>All the thinking happens in one place, so the switches can stay dumb and fast.</p></div>
+  </div>
+  <p class="note"><strong>What if the brain crashes?</strong> Traffic keeps flowing, because the switches keep their tables. The fabric just can't adapt to changes until a backup SM takes over, which is why real clusters run a standby.</p>
+</section>
+
+<section>
+  <div class="head"><span class="eyebrow">Part 7</span><h2>So what is UFM?</h2></div>
+  <p><strong>UFM</strong> (Unified Fabric Manager) is NVIDIA's software for running a big InfiniBand fabric. Think of it as the Subnet Manager plus a control room.</p>
+  <div class="ufm">
+    <div class="card"><span class="tag">THE BRAIN</span><h3>Runs the Subnet Manager</h3><ul><li>Hands out addresses</li><li>Plans routes</li><li>Fills in every switch table</li></ul></div>
+    <div class="card"><span class="tag">THE CONTROL ROOM</span><h3>Watches everything</h3><ul><li>A live map of every switch and cable</li><li>Health numbers per port, like errors and temperature</li><li>An alert log when a link flickers or degrades</li><li>Tools to switch off bad ports</li></ul></div>
+  </div>
+  <p>On a big cluster that matters a lot. Instead of logging into hundreds of switches one by one, you deal with a single place.</p>
+</section>
+
+<section>
+  <div class="head"><span class="eyebrow">Part 8</span><h2>A real cluster</h2></div>
+  <p>In June 2024 the AI company Imbue published <a href="https://imbue.com/blog/70b-infrastructure" target="_blank" rel="noopener">From bare metal to a 70B model</a>, a detailed write-up of bringing up their own training cluster from scratch. Here is roughly what it looked like.</p>
+  <div class="stats">
+    <div><b>4,088</b><span>H100 GPUs</span></div>
+    <div><b>511</b><span>servers, 8 GPUs each</span></div>
+    <div><b>400 Gb/s</b><span>per GPU, each with its own HCA</span></div>
+    <div><b>320</b><span>switches in 3 tiers</span></div>
+  </div>
+  <p>They describe InfiniBand as having "one brain for the entire network", which is the Subnet Manager from Part 6. A few of the problems they ran into make sense with the pieces above.</p>
+  <ul class="plain">
+    <li><strong>Renaming switches by location.</strong> One of their first jobs was working out which switch connected to which machines and renaming every switch after where it physically sat. Alerts say things like "port 12 on switch X", which only helps if X tells a technician which rack to walk to.</li>
+    <li><strong>UFM couldn't see the switches.</strong> The SM discovers the fabric by walking cables. The top tier had been wired as eight disconnected networks instead of one, so there was no single fabric to discover.</li>
+    <li><strong>Restarting UFM after mass reboots.</strong> Rebooting lots of GPU servers at once sends hundreds of ports down and back up together, which floods the brain with changes. Firmware upgrades could also corrupt its state. Either way, UFM needed a restart.</li>
+    <li><strong>Parsing the UFM event log.</strong> All the flickering-link alerts land there, so Imbue scripted the loop of reading the log, disabling the ports involved, filing a repair ticket, and turning them back on once fixed.</li>
+  </ul>
+</section>
+
+<section>
+  <div class="head"><span class="eyebrow">Part 9</span><h2>Side by side</h2></div>
+  <figure>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th></th><th>Ethernet</th><th>InfiniBand</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Who decides routes</strong></td><td>Each switch, on its own</td><td>One central Subnet Manager</td></tr>
+        <tr><td><strong>When a buffer is full</strong></td><td>Drops the packet</td><td>Sender waits for a credit</td></tr>
+        <tr><td><strong>Who handles reliability</strong></td><td>Software (TCP) on the CPU</td><td>The HCA, in hardware</td></tr>
+        <tr><td><strong>Designed for</strong></td><td>The open internet</td><td>One cluster, one owner</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <figcaption>There is also a middle path called RoCE (RDMA over Converged Ethernet). It runs InfiniBand-style RDMA over Ethernet switches, with extra settings to avoid drops. Some very large clusters use it.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <div class="head"><span class="eyebrow">Keep handy</span><h2>Pocket glossary</h2></div>
+  <dl class="gloss">
+    <div><dt>Fabric</dt><dd>The whole InfiniBand network, all switches and cables together.</dd></div>
+    <div><dt>HCA</dt><dd>Host Channel Adapter. The smart network card.</dd></div>
+    <div><dt>LID</dt><dd>Local Identifier. A port's address on the fabric.</dd></div>
+    <div><dt>Forwarding table</dt><dd>A switch's lookup from destination LID to output port. Also called an LFT.</dd></div>
+    <div><dt>Credit</dt><dd>Permission to send one chunk, given by the receiver when it has buffer space.</dd></div>
+    <div><dt>Lossless</dt><dd>The network makes senders wait instead of dropping packets.</dd></div>
+    <div><dt>RDMA</dt><dd>Remote Direct Memory Access. One machine's card writes straight into another machine's memory without the CPUs.</dd></div>
+    <div><dt>GDR</dt><dd>GPUDirect RDMA. The same trick, but straight into GPU memory.</dd></div>
+    <div><dt>Fat tree</dt><dd>Leaves connect to every spine, so there are many equal paths between any two servers.</dd></div>
+    <div><dt>Subnet Manager</dt><dd>The brain. Assigns addresses and fills in every table.</dd></div>
+    <div><dt>UFM</dt><dd>NVIDIA's Subnet Manager plus monitoring, in one product.</dd></div>
+  </dl>
+</section>
+
+<footer>
+  <span>Sources</span>
+  <a href="https://imbue.com/blog/70b-infrastructure" target="_blank" rel="noopener">Imbue, From bare metal to a 70B model</a>
+  <a href="https://networking-docs.nvidia.com/ufmsdnappswum/4170/subnet-manager-tab" target="_blank" rel="noopener">NVIDIA UFM user manual, Subnet Manager</a>
+  <a href="https://www.rfc-editor.org/rfc/rfc4392" target="_blank" rel="noopener">RFC 4392, overview of InfiniBand architecture</a>
+</footer>
+
+</div>
+
+<script>
+(function () {
+  // Draw the 8 servers in the cast diagram
+  var NS = "http://www.w3.org/2000/svg";
+  var g = document.getElementById("servers");
+  [53, 137, 223, 307, 413, 497, 583, 667].forEach(function (c) {
+    function el(tag, attrs, text) {
+      var e = document.createElementNS(NS, tag);
+      for (var k in attrs) e.setAttribute(k, attrs[k]);
+      if (text) e.textContent = text;
+      g.appendChild(e); return e;
+    }
+    el("rect", { "class": "n alt", x: c - 36, y: 220, width: 72, height: 68, rx: 8 });
+    el("rect", { "class": "n", x: c - 28, y: 228, width: 56, height: 22, rx: 5 });
+    el("text", { "class": "t s", x: c, y: 243, "text-anchor": "middle" }, "GPU");
+    el("rect", { "class": "chip", x: c - 28, y: 256, width: 56, height: 22, rx: 5 });
+    el("text", { "class": "t a s", x: c, y: 271, "text-anchor": "middle" }, "HCA");
+  });
+
+  // Packet trip stepper
+  var steps = [
+    { at: [125, 202], label: "data", hl: ["gpuA"], cap: "NCCL on Server A wants to send a chunk of gradients to a GPU on Server B. It does not build any packets itself. It just leaves a note for the HCA saying what to send and where." },
+    { at: [235, 202], label: "→42", hl: ["gpuA", "pcieA", "hcaA"], cap: "The HCA reads the data straight out of GPU memory over PCIe, which is the GDR trick. It cuts the data into packets and stamps each one with the destination address, LID 42." },
+    { at: [180, 110], label: "→42", hl: ["hcaA", "wA", "L1"], cap: "Leaf L1 reads 42, checks its table, and sends the packet up toward the spine. One lookup, no thinking." },
+    { at: [360, 18], label: "→42", hl: ["L1", "wL1", "S"], cap: "The spine does the same single lookup and sends the packet down to leaf L3." },
+    { at: [540, 110], label: "→42", hl: ["S", "wL3", "L3"], cap: "L3 looks up 42 one more time. That port leads straight to Server B." },
+    { at: [485, 202], label: "→42", hl: ["L3", "wB", "hcaB"], cap: "Server B's HCA checks the packet arrived intact and sends a tiny acknowledgement back. If a packet ever got corrupted, the HCAs would resend it themselves, in hardware." },
+    { at: [595, 202], label: "done", hl: ["hcaB", "pcieB", "gpuB"], cap: "The HCA writes the data directly into GPU memory on Server B. Neither CPU touched a single byte. That is RDMA." }
+  ];
+  var i = 0;
+  var pkt = document.getElementById("pkt"), pktText = document.getElementById("pktText");
+  var cap = document.getElementById("tripCap"), count = document.getElementById("tripCount");
+  var back = document.getElementById("tripBack"), next = document.getElementById("tripNext");
+  var dots = document.getElementById("tripDots");
+  steps.forEach(function () { var d = document.createElement("span"); d.className = "dot"; dots.appendChild(d); });
+  function render() {
+    document.querySelectorAll("#trip .hl").forEach(function (e) { e.classList.remove("hl"); });
+    var s = steps[i];
+    s.hl.forEach(function (id) { document.getElementById("t-" + id).classList.add("hl"); });
+    pkt.style.transform = "translate(" + (s.at[0] - 23) + "px," + (s.at[1] - 10) + "px)";
+    pktText.textContent = s.label;
+    cap.textContent = s.cap;
+    count.textContent = "Step " + (i + 1) + " of " + steps.length;
+    back.disabled = i === 0;
+    next.textContent = i === steps.length - 1 ? "Start over" : "Next step";
+    Array.prototype.forEach.call(dots.children, function (d, k) { d.classList.toggle("on", k <= i); });
+  }
+  next.addEventListener("click", function () { i = i === steps.length - 1 ? 0 : i + 1; render(); });
+  back.addEventListener("click", function () { if (i > 0) { i--; render(); } });
+  render();
+
+  // Credits demo
+  var SLOTS = 4, st = { mode: "ib", credits: 4, buf: 0, drops: 0 };
+  var statusEl = document.getElementById("cStatus"), credEl = document.getElementById("c-cred"),
+      subEl = document.getElementById("c-sub"), backEl = document.getElementById("c-back"),
+      dropsEl = document.getElementById("cDrops"), sender = document.getElementById("c-sender"),
+      recv = document.getElementById("c-recv");
+  function say(msg, kind) { statusEl.textContent = msg; statusEl.className = "status" + (kind ? " " + kind : ""); }
+  function flash(node) { node.classList.remove("flash-bad"); void node.getBoundingClientRect(); node.classList.add("flash-bad"); }
+  function draw() {
+    for (var k = 0; k < SLOTS; k++) document.getElementById("slot" + k).classList.toggle("full", k < st.buf);
+    if (st.mode === "ib") {
+      credEl.textContent = st.credits + (st.credits === 1 ? " credit" : " credits");
+      subEl.textContent = "one per free slot";
+      backEl.style.opacity = 1;
+      dropsEl.textContent = "";
+    } else {
+      credEl.textContent = "no credits";
+      subEl.textContent = "just sends and hopes";
+      backEl.style.opacity = 0;
+      dropsEl.textContent = st.drops ? st.drops + " dropped" : "";
+    }
+  }
+  document.getElementById("cSend").addEventListener("click", function () {
+    if (st.mode === "ib") {
+      if (st.credits === 0) { flash(sender); say("No credits left, so the sender waits. Nothing is lost. It will send as soon as the receiver frees a slot.", "ok"); }
+      else { st.credits--; st.buf++; say("Sent. That cost one credit. The sender always knows exactly how much room is left on the other end."); }
+    } else {
+      if (st.buf === SLOTS) { st.drops++; flash(recv); say("Buffer full, so the packet is dropped. TCP will notice much later and resend it, and the whole training step waits for that.", "bad"); }
+      else { st.buf++; say("Sent. The sender has no idea how full the receiver is."); }
+    }
+    draw();
+  });
+  document.getElementById("cDrain").addEventListener("click", function () {
+    if (st.buf === 0) { say("The buffer is already empty. Send something first."); return; }
+    st.buf--;
+    if (st.mode === "ib") { st.credits++; say("The receiver used a packet and handed one credit back to the sender."); }
+    else { say("The receiver used a packet. One slot is free again."); }
+    draw();
+  });
+  function setMode(m) {
+    st = { mode: m, credits: SLOTS, buf: 0, drops: 0 };
+    document.getElementById("modeIB").setAttribute("aria-pressed", m === "ib");
+    document.getElementById("modeEth").setAttribute("aria-pressed", m === "eth");
+    say(m === "ib" ? "InfiniBand mode. Fill the buffer, then keep pressing Send." : "Ethernet mode. Fill the buffer, then keep pressing Send and watch what happens.");
+    draw();
+  }
+  document.getElementById("modeIB").addEventListener("click", function () { setMode("ib"); });
+  document.getElementById("modeEth").addEventListener("click", function () { setMode("eth"); });
+  draw();
+})();
+</script>
+
+</body></html>

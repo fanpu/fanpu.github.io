@@ -1,0 +1,286 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Pre-LN vs Post-LN Gradients</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one 760px lab-notebook column; a sticky depth control drives three stacked charts that sit directly on the page. */
+:root {
+  --bg: #f7f8fa; --raise: #ffffff; --ink: #14171c; --ink-2: #4d545e; --muted: #767e8a;
+  --grid: #e2e5ea; --axis: #c2c7cf; --rule: #d9dde3;
+  --post: #2a78d6; --pre: #eb6834;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14161a; --raise: #1c1f24; --ink: #eef0f3; --ink-2: #b4bac4; --muted: #868e9a;
+    --grid: #272b31; --axis: #3a3f47; --rule: #2c3037;
+    --post: #3987e5; --pre: #d95926; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14161a; --raise: #1c1f24; --ink: #eef0f3; --ink-2: #b4bac4; --muted: #868e9a;
+  --grid: #272b31; --axis: #3a3f47; --rule: #2c3037;
+  --post: #3987e5; --pre: #d95926; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); font: 16px/1.55 var(--sans); padding-inline: 20px; padding-block: 36px 64px; }
+main { max-width: 760px; margin-inline: auto; display: flex; flex-direction: column; gap: 28px; }
+h1 { font-size: 1.7rem; line-height: 1.2; font-weight: 600; margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+h2 { font-size: 1.08rem; line-height: 1.3; font-weight: 600; margin: 0; text-wrap: balance; }
+p { margin: 0; max-width: 66ch; }
+.lede { color: var(--ink-2); }
+header { display: flex; flex-direction: column; gap: 12px; }
+.eyebrow { font: 500 0.72rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.arch { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 8px 24px; font: 0.86rem/1.5 var(--mono); color: var(--ink-2); }
+.arch div { min-width: 0; }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 7px; vertical-align: baseline; }
+.sw.post { background: var(--post); } .sw.pre { background: var(--pre); }
+.name { color: var(--ink); font-weight: 500; }
+
+.control { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--rule); padding-block: 10px 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; }
+.control label { font-weight: 500; white-space: nowrap; }
+.control output { font: 500 1.05rem var(--mono); display: inline-block; min-width: 2.2ch; text-align: right; font-variant-numeric: tabular-nums; }
+.control input[type=range] { flex: 1 1 200px; min-width: 0; accent-color: var(--ink-2); height: 28px; }
+.legend { display: flex; gap: 16px; font-size: 0.86rem; color: var(--ink-2); white-space: nowrap; }
+
+.readout { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px 28px; }
+.readout > div { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.readout .k { font-size: 0.8rem; color: var(--muted); line-height: 1.35; }
+.readout .v { font: 500 1.02rem/1.5 var(--mono); font-variant-numeric: tabular-nums; }
+.readout .v span.lab { font: 400 0.8rem var(--sans); color: var(--ink-2); margin-right: 6px; }
+.readout .big { font: 600 1.6rem/1.15 var(--sans); }
+.readout .sub { font-size: 0.8rem; color: var(--ink-2); }
+
+section.fig { display: flex; flex-direction: column; gap: 8px; }
+.fig .unit { font-size: 0.8rem; color: var(--muted); }
+.fig .cap { font-size: 0.92rem; color: var(--ink-2); }
+.plot { position: relative; width: 100%; }
+.plot svg { display: block; width: 100%; height: auto; overflow: visible; touch-action: pan-y; }
+.plot text { font: 11px var(--mono); fill: var(--muted); font-variant-numeric: tabular-nums; }
+.plot text.end { font: 500 12px var(--sans); fill: var(--ink-2); }
+.plot text.xt { font: 11px var(--sans); fill: var(--muted); }
+.tip { position: absolute; top: 4px; pointer-events: none; background: var(--raise); border: 1px solid var(--rule); border-radius: 6px; padding: 7px 10px; font-size: 0.8rem; line-height: 1.5; white-space: nowrap; box-shadow: 0 2px 10px rgba(0,0,0,0.10); }
+.tip b { font-weight: 600; display: block; }
+.tip .row { display: flex; justify-content: space-between; gap: 14px; }
+.tip .row span:last-child { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.dash { display: inline-block; width: 18px; border-top: 2px dashed var(--ink-2); vertical-align: middle; margin-right: 4px; }
+
+.notes { border-top: 1px solid var(--rule); padding-top: 20px; display: flex; flex-direction: column; gap: 12px; }
+.notes ul { margin: 0; padding-left: 1.15em; max-width: 66ch; display: flex; flex-direction: column; gap: 8px; color: var(--ink-2); font-size: 0.94rem; }
+.notes li::marker { color: var(--muted); }
+details { border-top: 1px solid var(--rule); padding-top: 14px; }
+summary { cursor: pointer; font-weight: 500; }
+summary:focus-visible, input:focus-visible { outline: 2px solid var(--post); outline-offset: 3px; }
+details > * + * { margin-top: 10px; }
+details p { color: var(--ink-2); font-size: 0.94rem; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; font: 0.82rem var(--mono); font-variant-numeric: tabular-nums; min-width: 520px; width: 100%; }
+th, td { text-align: right; padding: 5px 10px; border-bottom: 1px solid var(--grid); }
+th { font: 500 0.76rem var(--sans); color: var(--muted); vertical-align: bottom; }
+tr.sel td { background: var(--raise); font-weight: 500; }
+.setup { font-size: 0.82rem; color: var(--muted); }
+code { font: 0.92em var(--mono); }
+a { color: var(--post); }
+</style>
+
+<main>
+  <header>
+    <div class="eyebrow">Measured at initialisation</div>
+    <h1>Pre-LN vs post-LN: how big is the gradient?</h1>
+    <p class="lede">Backprop through a LayerNorm multiplies the gradient by 1/σ, where σ is the rms of whatever that LayerNorm divides. Both stacks end in a LayerNorm. The difference is how big σ gets. Drag the depth and watch σ and the gradient move together.</p>
+    <p class="lede">The comparison comes from Xiong et al., <em><a href="https://arxiv.org/abs/2002.04745">On Layer Normalization in the Transformer Architecture</a></em> (2020). They argue that at initialisation the gradient on the top layers is large for post-LN and about √L smaller for pre-LN, and use that to explain why post-LN needs learning-rate warmup and pre-LN can mostly skip it. The numbers below are measured, not taken from the paper.</p>
+    <div class="arch">
+      <div><span class="sw post"></span><span class="name">post-LN</span> &nbsp;x ← LN(x + F(x))</div>
+      <div><span class="sw pre"></span><span class="name">pre-LN</span> &nbsp;x ← x + F(LN(x)), then one final LN</div>
+    </div>
+  </header>
+
+  <div class="control">
+    <label for="depth">Depth L = <output id="depthOut" for="depth">16</output></label>
+    <input id="depth" type="range" min="0" max="10" step="1" value="6" aria-label="Number of blocks L">
+    <div class="legend"><span><span class="sw post"></span>post-LN</span><span><span class="sw pre"></span>pre-LN</span></div>
+  </div>
+
+  <div class="readout" aria-live="polite">
+    <div>
+      <div class="k">σ: rms of what the last LayerNorm divides</div>
+      <div class="v"><span class="lab"><span class="sw post"></span>post</span><span id="rSPost"></span></div>
+      <div class="v"><span class="lab"><span class="sw pre"></span>pre</span><span id="rSPre"></span></div>
+    </div>
+    <div>
+      <div class="k">Gradient on the top block's FFN weights, ‖∂L/∂W<sub>2</sub>‖</div>
+      <div class="v"><span class="lab"><span class="sw post"></span>post</span><span id="rGPost"></span></div>
+      <div class="v"><span class="lab"><span class="sw pre"></span>pre</span><span id="rGPre"></span></div>
+    </div>
+    <div>
+      <div class="k">Pre-LN's top gradient is smaller by</div>
+      <div class="big" id="rRatio"></div>
+      <div class="sub" id="rRatioSub"></div>
+    </div>
+  </div>
+
+  <section class="fig">
+    <h2>Forward: what each LayerNorm has to divide</h2>
+    <div class="unit">rms per element of the un-normalised stream leaving each block (1.0 = normalised)</div>
+    <div class="plot" id="c1"></div>
+    <p class="cap">Post-LN normalises after every block, so its LayerNorm only ever sees one block's worth of growth. Pre-LN never normalises the stream itself. Each block adds a roughly independent branch output, the variances add, and the rms climbs like √L.</p>
+  </section>
+
+  <section class="fig">
+    <h2>Backward: gradient on each block's FFN weights</h2>
+    <div class="unit">‖∂L/∂W<sub>2</sub>‖<sub>F</sub> per block</div>
+    <div class="plot" id="c2"></div>
+    <p class="cap">Post-LN stays between <span id="postBand"></span> in every block at every depth. Pre-LN starts in that band at block 1 and falls as you go up. The dashed line is <span id="kval"></span> ÷ (pre-LN stream rms at that block, from the chart above): each block's gradient is set by the size of the stream it writes into.</p>
+  </section>
+
+  <section class="fig">
+    <h2>Top block's gradient as the stack gets deeper</h2>
+    <div class="unit">‖∂L/∂W<sub>2</sub>‖<sub>F</sub> of the last block, log-log. Click a depth to select it.</div>
+    <div class="plot" id="c3"></div>
+    <p class="cap">Post-LN stays near <span id="postLevel"></span> at every depth. Pre-LN falls with a log-log slope of <span id="slope"></span> for L ≥ 8. The dashed line is a 1/√L guide, the scaling in Xiong et al.'s bound, anchored at L = 64.</p>
+  </section>
+
+  <div class="notes">
+    <h2>Where the measurement and the paper part ways</h2>
+    <ul>
+      <li><strong>The √L shrink is not uniform across pre-LN blocks.</strong> Only the top block sits behind a stream of size √L. Block l is shrunk by its own stream size, about √l, and block 1 is not shrunk at all. Going down the stack, the residual branches add gradient back at the same rate the stream grew going up.</li>
+      <li><strong>Xiong et al.'s Theorem 1 is an upper bound on the last FFN layer.</strong> It states O(d√ln d) and O(d√(ln d / L)), not Θ. Its claim about the other layers is a preliminary analysis.</li>
+      <li><strong>√L is the asymptote.</strong> The stream starts at rms 1 and each block adds less than one unit of variance, so at L = 64 the measured shrink is <span id="r64"></span>, not √64 = 8×.</li>
+    </ul>
+  </div>
+
+  <details>
+    <summary>Check yourself: what does GPT-2's residual init do to the first chart?</summary>
+    <p>GPT-2 (<a href="https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf">Radford et al., 2019</a>) scales the init of the residual layers by 1/√N, where N is the number of residual layers. With an attention and an FFN branch per block, that's 1/√(2L) on every residual-branch output projection. Decide what that does to the pre-LN curve before opening the answer.</p>
+    <details>
+      <summary>Answer</summary>
+      <p>There are 2L branch writes, each with variance scaled by 1/(2L), so their total stays O(1) however deep the stack is. The stream stays O(1), the final LayerNorm's 1/σ stays O(1), and the top-block shrink goes away. This one is reasoning, not something measured on this page.</p>
+    </details>
+  </details>
+
+  <details>
+    <summary>Table of the numbers</summary>
+    <div class="tablewrap"><table id="tbl"></table></div>
+  </details>
+
+  <p class="setup">Setup: decoder-only Transformer, d = 256, 4 heads, FFN width 4d with ReLU, causal attention, Xavier-uniform weights, sequence length 32, batch 32, vocabulary 1000, random tokens and targets, mean cross-entropy. Each point is the mean over 10 seeds of one backward pass at init. After Xiong et al., <em><a href="https://arxiv.org/abs/2002.04745">On Layer Normalization in the Transformer Architecture</a></em> (2020).</p>
+</main>
+
+<script>
+const D = {"depths":[2,3,4,6,8,12,16,24,32,48,64],"post":{"2":{"s":[1.148,1.152],"g":[0.2636,0.2518]},"3":{"s":[1.148,1.145,1.143],"g":[0.2747,0.2658,0.2575]},"4":{"s":[1.147,1.141,1.14,1.151],"g":[0.2763,0.2655,0.2588,0.259]},"6":{"s":[1.148,1.152,1.153,1.146,1.148,1.135],"g":[0.2816,0.2797,0.2799,0.2817,0.2803,0.274]},"8":{"s":[1.146,1.152,1.147,1.146,1.138,1.147,1.132,1.137],"g":[0.2732,0.2737,0.272,0.276,0.2791,0.2793,0.2775,0.2726]},"12":{"s":[1.151,1.148,1.149,1.145,1.149,1.155,1.156,1.137,1.149,1.174,1.156,1.132],"g":[0.256,0.2607,0.2664,0.2671,0.2706,0.2691,0.2758,0.2832,0.2902,0.29,0.2914,0.2881]},"16":{"s":[1.151,1.152,1.15,1.145,1.15,1.162,1.157,1.136,1.148,1.148,1.143,1.138,1.155,1.15,1.153,1.152],"g":[0.2409,0.2498,0.2554,0.2541,0.2534,0.2578,0.2594,0.2666,0.2759,0.2766,0.2855,0.2831,0.2824,0.2885,0.2896,0.2914]},"24":{"s":[1.147,1.147,1.16,1.157,1.149,1.137,1.145,1.152,1.141,1.146,1.155,1.144,1.148,1.158,1.156,1.146,1.155,1.15,1.148,1.157,1.139,1.14,1.148,1.141],"g":[0.2355,0.2375,0.2437,0.2481,0.248,0.2417,0.2431,0.2463,0.2405,0.2434,0.2441,0.2379,0.2395,0.2532,0.2529,0.2529,0.2639,0.2616,0.2653,0.2823,0.2941,0.2883,0.2887,0.2833]},"32":{"s":[1.151,1.15,1.149,1.153,1.156,1.144,1.158,1.129,1.148,1.144,1.151,1.157,1.152,1.143,1.148,1.156,1.133,1.154,1.156,1.147,1.127,1.14,1.136,1.15,1.146,1.154,1.149,1.16,1.15,1.142,1.148,1.144],"g":[0.2511,0.2562,0.2542,0.2542,0.2635,0.2648,0.2648,0.2676,0.2653,0.2667,0.2625,0.2678,0.2708,0.2768,0.2782,0.2831,0.2791,0.2737,0.2775,0.2754,0.2753,0.2821,0.2799,0.2824,0.2921,0.2813,0.2875,0.2856,0.2897,0.2952,0.2935,0.2935]},"48":{"s":[1.148,1.149,1.146,1.147,1.148,1.139,1.138,1.151,1.16,1.14,1.149,1.161,1.158,1.149,1.126,1.16,1.143,1.153,1.161,1.154,1.133,1.139,1.152,1.126,1.149,1.145,1.15,1.142,1.158,1.152,1.147,1.136,1.139,1.137,1.165,1.149,1.14,1.152,1.15,1.146,1.134,1.151,1.158,1.147,1.164,1.172,1.154,1.153],"g":[0.2692,0.2653,0.2612,0.2681,0.2646,0.2733,0.2729,0.2752,0.2684,0.2664,0.2638,0.2619,0.2721,0.2692,0.2572,0.2656,0.2629,0.2631,0.2657,0.2698,0.2701,0.2709,0.2741,0.2758,0.2716,0.2706,0.2748,0.2738,0.2743,0.2712,0.2797,0.2794,0.2689,0.2687,0.2649,0.2682,0.2722,0.2719,0.2757,0.2856,0.2801,0.2816,0.2797,0.2795,0.2837,0.2888,0.2925,0.2924]},"64":{"s":[1.148,1.149,1.153,1.154,1.147,1.141,1.142,1.149,1.139,1.173,1.148,1.147,1.147,1.155,1.15,1.145,1.136,1.148,1.145,1.14,1.162,1.143,1.147,1.134,1.147,1.151,1.16,1.15,1.144,1.143,1.14,1.142,1.148,1.167,1.142,1.149,1.156,1.134,1.136,1.161,1.145,1.165,1.148,1.137,1.145,1.155,1.155,1.154,1.146,1.148,1.141,1.142,1.145,1.147,1.165,1.126,1.153,1.16,1.15,1.154,1.152,1.125,1.133,1.15],"g":[0.3351,0.3451,0.3462,0.3538,0.3575,0.3558,0.3486,0.3429,0.3355,0.3338,0.3376,0.3281,0.3301,0.3221,0.3137,0.3178,0.3149,0.3055,0.3106,0.2988,0.303,0.3035,0.3121,0.3094,0.3017,0.3025,0.2971,0.2953,0.2884,0.2834,0.2877,0.2832,0.2783,0.2806,0.2838,0.2966,0.2992,0.3123,0.3132,0.3128,0.3186,0.3212,0.3291,0.3257,0.3301,0.3299,0.3216,0.3206,0.3103,0.3335,0.3225,0.3255,0.3182,0.3059,0.3176,0.3065,0.3095,0.2996,0.2992,0.2846,0.2929,0.2973,0.2941,0.2925]}},"pre":{"2":{"s":[1.179,1.356],"g":[0.2545,0.2148]},"3":{"s":[1.18,1.354,1.519],"g":[0.2604,0.2215,0.1935]},"4":{"s":[1.179,1.346,1.506,1.667],"g":[0.26,0.2211,0.1938,0.1776]},"6":{"s":[1.181,1.358,1.531,1.688,1.84,1.975],"g":[0.267,0.2289,0.201,0.1815,0.1661,0.1519]},"8":{"s":[1.177,1.354,1.522,1.681,1.834,1.982,2.127,2.247],"g":[0.268,0.2285,0.1998,0.1815,0.1647,0.1546,0.1432,0.1323]},"12":{"s":[1.184,1.36,1.528,1.685,1.842,1.997,2.14,2.277,2.414,2.552,2.669,2.763],"g":[0.2676,0.2301,0.204,0.1808,0.169,0.1538,0.1426,0.134,0.1279,0.1219,0.1162,0.1109]},"16":{"s":[1.182,1.362,1.539,1.704,1.857,2.013,2.161,2.293,2.423,2.553,2.679,2.803,2.898,3.016,3.111,3.202],"g":[0.2721,0.2323,0.2063,0.1858,0.1688,0.1565,0.146,0.1386,0.1316,0.1252,0.1192,0.1144,0.1089,0.1046,0.1005,0.09706]},"24":{"s":[1.178,1.354,1.531,1.696,1.857,1.998,2.138,2.285,2.4,2.53,2.647,2.765,2.882,3.012,3.121,3.212,3.316,3.41,3.507,3.623,3.723,3.813,3.906,3.996],"g":[0.2545,0.2181,0.1938,0.1743,0.1609,0.149,0.1405,0.1312,0.1236,0.1173,0.1117,0.1066,0.1044,0.1005,0.0981,0.09351,0.09126,0.09008,0.0865,0.08411,0.08274,0.07909,0.07908,0.07845]},"32":{"s":[1.184,1.361,1.533,1.7,1.857,1.998,2.15,2.279,2.414,2.538,2.656,2.798,2.921,3.024,3.133,3.224,3.337,3.443,3.526,3.614,3.705,3.776,3.87,3.948,4.047,4.132,4.239,4.322,4.395,4.49,4.563,4.658],"g":[0.2501,0.2139,0.1892,0.1727,0.1611,0.1502,0.1397,0.1313,0.1284,0.1194,0.1141,0.1098,0.1059,0.1042,0.09974,0.09802,0.09272,0.08933,0.0877,0.0855,0.08274,0.0816,0.07938,0.07884,0.07632,0.07404,0.07294,0.07116,0.07109,0.06979,0.06718,0.06648]},"48":{"s":[1.18,1.355,1.52,1.686,1.845,1.991,2.128,2.265,2.405,2.541,2.664,2.793,2.921,3.02,3.116,3.248,3.352,3.459,3.553,3.651,3.752,3.849,3.937,4.014,4.113,4.2,4.292,4.389,4.478,4.558,4.644,4.707,4.805,4.897,4.961,5.0,5.061,5.13,5.208,5.271,5.331,5.406,5.467,5.537,5.596,5.651,5.709,5.763],"g":[0.2501,0.2118,0.1871,0.168,0.1546,0.1432,0.1331,0.1286,0.1191,0.1143,0.111,0.1069,0.1007,0.09878,0.09413,0.09192,0.08892,0.0864,0.08526,0.08381,0.08177,0.0794,0.0773,0.0765,0.07632,0.07453,0.07328,0.07168,0.07098,0.07045,0.06934,0.06765,0.06639,0.0662,0.06624,0.06408,0.06336,0.06308,0.0609,0.05985,0.06048,0.05904,0.05814,0.0571,0.05761,0.0567,0.05595,0.05525]},"64":{"s":[1.179,1.353,1.53,1.695,1.847,1.993,2.129,2.26,2.387,2.512,2.646,2.769,2.883,3.0,3.1,3.189,3.296,3.406,3.51,3.61,3.696,3.81,3.901,3.995,4.061,4.148,4.21,4.281,4.375,4.477,4.57,4.657,4.733,4.81,4.89,4.97,5.03,5.113,5.181,5.263,5.314,5.384,5.442,5.491,5.564,5.661,5.732,5.807,5.857,5.89,5.943,5.992,6.051,6.105,6.145,6.192,6.267,6.329,6.408,6.449,6.523,6.59,6.62,6.699],"g":[0.2563,0.2181,0.1933,0.1753,0.1604,0.1483,0.1406,0.1322,0.1247,0.1179,0.1117,0.1076,0.1045,0.1002,0.09858,0.09541,0.09375,0.09148,0.08824,0.08602,0.08516,0.08153,0.08049,0.07825,0.0792,0.07556,0.07496,0.07276,0.07218,0.07081,0.06987,0.06743,0.06659,0.06642,0.06482,0.06439,0.06405,0.06256,0.06188,0.06066,0.06013,0.05963,0.05846,0.05762,0.05686,0.05694,0.056,0.05545,0.05483,0.05496,0.0536,0.05429,0.05269,0.05195,0.05223,0.05145,0.05174,0.05038,0.05064,0.04957,0.0491,0.04833,0.04764,0.04771]}}};
+const $ = id => document.getElementById(id);
+const NS = "http://www.w3.org/2000/svg";
+const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+const SER = [{ key: "post", name: "post-LN", color: "var(--post)" }, { key: "pre", name: "pre-LN", color: "var(--pre)" }];
+const top_ = (a, L, f) => D[a][L][f][L - 1];
+
+// One constant for the dashed prediction: mean of (gradient x stream rms) over every pre-LN block at every depth.
+let ks = 0, kn = 0;
+for (const L of D.depths) D.pre[L].s.forEach((s, i) => { ks += s * D.pre[L].g[i]; kn++; });
+const K = ks / kn;
+const deep = D.depths.filter(L => L >= 8);
+const lx = deep.map(Math.log), ly = deep.map(L => Math.log(top_("pre", L, "g")));
+const mx = lx.reduce((a, b) => a + b) / lx.length, my = ly.reduce((a, b) => a + b) / ly.length;
+const SLOPE = lx.reduce((a, x, i) => a + (x - mx) * (ly[i] - my), 0) / lx.reduce((a, x) => a + (x - mx) ** 2, 0);
+const POST_LEVEL = D.depths.reduce((a, L) => a + top_("post", L, "g"), 0) / D.depths.length;
+
+function chart(host, c) {
+  host.textContent = "";
+  const W = Math.max(280, host.clientWidth), H = 250, m = { l: 38, r: 60, t: 12, b: 38 };
+  const fx = c.xLog ? Math.log : v => v, fy = c.yLog ? Math.log : v => v;
+  const sx = v => m.l + (fx(v) - fx(c.x[0])) / (fx(c.x[1]) - fx(c.x[0])) * (W - m.l - m.r);
+  const sy = v => H - m.b - (fy(v) - fy(c.y[0])) / (fy(c.y[1]) - fy(c.y[0])) * (H - m.t - m.b);
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": c.label }, host);
+  for (const t of c.yTicks) {
+    el("line", { x1: m.l, x2: W - m.r, y1: sy(t), y2: sy(t), stroke: t === c.y[0] ? "var(--axis)" : "var(--grid)", "stroke-width": 1 }, svg);
+    el("text", { x: m.l - 7, y: sy(t) + 4, "text-anchor": "end" }, svg).textContent = c.yFmt(t);
+  }
+  for (const t of c.xTicks) {
+    el("line", { x1: sx(t), x2: sx(t), y1: H - m.b, y2: H - m.b + 4, stroke: "var(--axis)", "stroke-width": 1 }, svg);
+    el("text", { x: sx(t), y: H - m.b + 17, "text-anchor": "middle" }, svg).textContent = t;
+  }
+  el("text", { x: (m.l + W - m.r) / 2, y: H - 3, "text-anchor": "middle", class: "xt" }, svg).textContent = c.xTitle;
+  if (c.markX != null) el("line", { x1: sx(c.markX), x2: sx(c.markX), y1: m.t, y2: H - m.b, stroke: "var(--axis)", "stroke-width": 1 }, svg);
+  const path = pts => pts.map((p, i) => (i ? "L" : "M") + sx(p[0]).toFixed(1) + " " + sy(p[1]).toFixed(1)).join("");
+  for (const s of c.series) {
+    el("path", { d: path(s.pts), fill: "none", stroke: s.color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }, svg);
+  }
+  for (const r of c.refs || []) {
+    el("path", { d: path(r.pts), fill: "none", stroke: "var(--ink-2)", "stroke-width": 1.5, "stroke-dasharray": "5 4" }, svg);
+  }
+  for (const s of c.series) {
+    if (s.pts.length <= 16) for (const p of s.pts) {
+      const sel = c.markX === p[0];
+      el("circle", { cx: sx(p[0]), cy: sy(p[1]), r: sel ? 5.5 : 3.5, fill: s.color, stroke: "var(--bg)", "stroke-width": 2 }, svg);
+    }
+  }
+  // Direct labels at the line ends, nudged apart so they never collide.
+  const ends = c.series.map(s => ({ s, y: sy(s.pts[s.pts.length - 1][1]) })).sort((a, b) => a.y - b.y);
+  for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 15) { const mid = (ends[i].y + ends[i - 1].y) / 2; ends[i - 1].y = mid - 7.5; ends[i].y = mid + 7.5; }
+  for (const e of ends) el("text", { x: sx(e.s.pts[e.s.pts.length - 1][0]) + 9, y: e.y + 4, class: "end" }, svg).textContent = e.s.name;
+
+  // Hover layer: crosshair snapped to the nearest x, one tooltip listing every series.
+  const xs = c.series[0].pts.map(p => p[0]);
+  const cross = el("line", { y1: m.t, y2: H - m.b, stroke: "var(--muted)", "stroke-width": 1, visibility: "hidden" }, svg);
+  const dots = c.series.map(s => el("circle", { r: 5, fill: s.color, stroke: "var(--bg)", "stroke-width": 2, visibility: "hidden" }, svg));
+  const tip = document.createElement("div"); tip.className = "tip"; tip.hidden = true; host.appendChild(tip);
+  const hit = el("rect", { x: m.l - 10, y: 0, width: W - m.l - m.r + 20, height: H - m.b + 20, fill: "transparent" }, svg);
+  const nearest = ev => { const b = svg.getBoundingClientRect(), px = (ev.clientX - b.left) * W / b.width; let bi = 0, bd = Infinity; xs.forEach((x, i) => { const d = Math.abs(sx(x) - px); if (d < bd) { bd = d; bi = i; } }); return bi; };
+  const hide = () => { cross.setAttribute("visibility", "hidden"); dots.forEach(d => d.setAttribute("visibility", "hidden")); tip.hidden = true; };
+  hit.addEventListener("pointermove", ev => {
+    const i = nearest(ev), X = sx(xs[i]);
+    cross.setAttribute("x1", X); cross.setAttribute("x2", X); cross.setAttribute("visibility", "visible");
+    c.series.forEach((s, j) => { dots[j].setAttribute("cx", X); dots[j].setAttribute("cy", sy(s.pts[i][1])); dots[j].setAttribute("visibility", "visible"); });
+    tip.textContent = "";
+    const head = document.createElement("b"); head.textContent = c.tipHead(xs[i]); tip.appendChild(head);
+    const row = (sw, name, val) => { const r = document.createElement("div"); r.className = "row"; const a = document.createElement("span"); if (sw) { const d = document.createElement("span"); d.className = "sw " + sw; a.appendChild(d); } a.appendChild(document.createTextNode(name)); const b = document.createElement("span"); b.textContent = val; r.append(a, b); tip.appendChild(r); };
+    c.series.forEach(s => row(s.key, s.name, c.tipFmt(s.pts[i][1])));
+    (c.refs || []).forEach(r => row("", r.name, c.tipFmt(r.pts[i][1])));
+    tip.hidden = false;
+    const scale = host.clientWidth / W, left = X * scale + 12;
+    tip.style.left = (left + tip.offsetWidth > host.clientWidth ? X * scale - 12 - tip.offsetWidth : left) + "px";
+  });
+  hit.addEventListener("pointerleave", hide);
+  if (c.onPick) { hit.style.cursor = "pointer"; hit.addEventListener("click", ev => c.onPick(xs[nearest(ev)])); }
+}
+
+function blockTicks(L) {
+  if (L <= 12) return Array.from({ length: L }, (_, i) => i + 1);
+  const step = L <= 16 ? 2 : L <= 32 ? 4 : 8, t = [];
+  for (let v = step; v <= L; v += step) t.push(v);
+  return t;
+}
+const f2 = v => v.toFixed(2), f3 = v => v.toFixed(3);
+
+function render() {
+  const L = D.depths[+$("depth").value];
+  $("depthOut").textContent = L;
+  const sPost = top_("post", L, "s"), sPre = top_("pre", L, "s"), gPost = top_("post", L, "g"), gPre = top_("pre", L, "g");
+  $("rSPost").textContent = f2(sPost); $("rSPre").textContent = f2(sPre);
+  $("rGPost").textContent = f3(gPost); $("rGPre").textContent = f3(gPre);
+  $("rRatio").textContent = (gPost / gPre).toFixed(1) + "×";
+  $("rRatioSub").textContent = `σ is ${(sPre / sPost).toFixed(1)}× larger. √L = ${Math.sqrt(L).toFixed(1)}.`;
+  const byBlock = f => SER.map(s => ({ ...s, pts: D[s.key][L][f].map((v, i) => [i + 1, v]) }));
+  chart($("c1"), { label: "Stream rms by block", x: [1, L], y: [0, 7], xTicks: blockTicks(L), yTicks: [0, 1, 2, 3, 4, 5, 6, 7], yFmt: v => v, xTitle: "block", series: byBlock("s"), tipHead: x => "block " + x, tipFmt: f2 });
+  chart($("c2"), { label: "FFN weight gradient norm by block", x: [1, L], y: [0, 0.4], xTicks: blockTicks(L), yTicks: [0, 0.1, 0.2, 0.3, 0.4], yFmt: v => v.toFixed(1), xTitle: "block", series: byBlock("g"),
+    refs: [{ name: K.toFixed(2) + " ÷ stream", pts: D.pre[L].s.map((s, i) => [i + 1, K / s]) }], tipHead: x => "block " + x, tipFmt: f3 });
+  const g64 = top_("pre", 64, "g");
+  chart($("c3"), { label: "Top block gradient norm by depth", xLog: true, yLog: true, x: [2, 64], y: [0.03, 0.5], xTicks: [2, 4, 8, 16, 32, 64], yTicks: [0.03, 0.05, 0.1, 0.2, 0.5], yFmt: v => v, xTitle: "depth L (blocks)", markX: L,
+    series: SER.map(s => ({ ...s, pts: D.depths.map(d => [d, top_(s.key, d, "g")]) })),
+    refs: [{ name: "1/√L guide", pts: D.depths.map(d => [d, g64 * Math.sqrt(64 / d)]) }], tipHead: x => "L = " + x, tipFmt: f3,
+    onPick: d => { $("depth").value = D.depths.indexOf(d); render(); } });
+  const rows = D.depths.map(d => { const gp = top_("post", d, "g"), gq = top_("pre", d, "g"); return `<tr${d === L ? ' class="sel"' : ""}><td>${d}</td><td>${f2(top_("post", d, "s"))}</td><td>${f2(top_("pre", d, "s"))}</td><td>${f3(gp)}</td><td>${f3(gq)}</td><td>${(gp / gq).toFixed(2)}×</td><td>${Math.sqrt(d).toFixed(2)}</td></tr>`; }).join("");
+  $("tbl").innerHTML = "<thead><tr><th>L</th><th>σ post</th><th>σ pre</th><th>top grad post</th><th>top grad pre</th><th>post ÷ pre</th><th>√L</th></tr></thead><tbody>" + rows + "</tbody>";
+}
+const allPost = D.depths.flatMap(L => D.post[L].g);
+$("postBand").textContent = Math.min(...allPost).toFixed(2) + " and " + Math.max(...allPost).toFixed(2);
+$("kval").textContent = K.toFixed(2);
+$("slope").textContent = SLOPE.toFixed(2).replace("-", "−");
+$("postLevel").textContent = POST_LEVEL.toFixed(2);
+$("r64").textContent = (top_("post", 64, "g") / top_("pre", 64, "g")).toFixed(1) + "×";
+$("depth").addEventListener("input", render);
+let lastW = 0;
+new ResizeObserver(() => { const w = $("c1").clientWidth; if (w !== lastW) { lastW = w; render(); } }).observe($("c1"));
+render();
+</script>
+
+</body></html>
