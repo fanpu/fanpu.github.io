@@ -387,23 +387,24 @@ a { color: var(--accent); }
     <div class="card"><span class="tag">THE BRAIN</span><h3>Runs the Subnet Manager</h3><ul><li>Hands out addresses</li><li>Plans routes</li><li>Fills in every switch table</li></ul></div>
     <div class="card"><span class="tag">THE CONTROL ROOM</span><h3>Watches everything</h3><ul><li>A live map of every switch and cable</li><li>Health numbers per port, like errors and temperature</li><li>An alert log when a link flickers or degrades</li><li>Tools to switch off bad ports</li></ul></div>
   </div>
-  <p>That is why the Imbue post calls it one brain for the whole network. Instead of logging into 320 switches one by one, you deal with a single place.</p>
+  <p>On a big cluster that matters a lot. Instead of logging into hundreds of switches one by one, you deal with a single place.</p>
 </section>
 
 <section>
-  <div class="head"><span class="eyebrow">Part 8</span><h2>Back to the Imbue blog</h2></div>
+  <div class="head"><span class="eyebrow">Part 8</span><h2>A real cluster</h2></div>
+  <p>In June 2024 the AI company Imbue published <a href="https://imbue.com/blog/70b-infrastructure" target="_blank" rel="noopener">From bare metal to a 70B model</a>, a detailed write-up of bringing up their own training cluster from scratch. Here is roughly what it looked like.</p>
   <div class="stats">
     <div><b>4,088</b><span>H100 GPUs</span></div>
     <div><b>511</b><span>servers, 8 GPUs each</span></div>
     <div><b>400 Gb/s</b><span>per GPU, each with its own HCA</span></div>
     <div><b>320</b><span>switches in 3 tiers</span></div>
   </div>
-  <p>A few lines in the post should make sense now.</p>
+  <p>They describe InfiniBand as having "one brain for the entire network", which is the Subnet Manager from Part 6. A few of the problems they ran into make sense with the pieces above.</p>
   <ul class="plain">
-    <li><strong>Renaming switches by location.</strong> UFM alerts say things like "port 12 on switch X". That is only useful if X tells a technician which rack to walk to.</li>
-    <li><strong>UFM couldn't see the switches.</strong> The SM discovers the fabric by walking cables. The top tier had been wired as eight separate islands, so there was no single fabric to discover.</li>
-    <li><strong>Restarting UFM after mass reboots.</strong> Hundreds of ports going down and coming back at once floods the brain with changes to process.</li>
-    <li><strong>Parsing the UFM event log.</strong> All the flickering-link alerts land there, so Imbue scripted the loop of reading an alert, disabling the port, and filing a repair ticket.</li>
+    <li><strong>Renaming switches by location.</strong> One of their first jobs was working out which switch connected to which machines and renaming every switch after where it physically sat. Alerts say things like "port 12 on switch X", which only helps if X tells a technician which rack to walk to.</li>
+    <li><strong>UFM couldn't see the switches.</strong> The SM discovers the fabric by walking cables. The top tier had been wired as eight disconnected networks instead of one, so there was no single fabric to discover.</li>
+    <li><strong>Restarting UFM after mass reboots.</strong> Rebooting lots of GPU servers at once sends hundreds of ports down and back up together, which floods the brain with changes. Firmware upgrades could also corrupt its state. Either way, UFM needed a restart.</li>
+    <li><strong>Parsing the UFM event log.</strong> All the flickering-link alerts land there, so Imbue scripted the loop of reading the log, disabling the ports involved, filing a repair ticket, and turning them back on once fixed.</li>
   </ul>
 </section>
 
