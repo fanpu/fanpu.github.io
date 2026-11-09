@@ -1,0 +1,50 @@
+# Talks listed on the home page, newest first. Slides live in assets/presentations/.
+- title: Average Gradient Outer Product as a Mechanism for Feature Learning
+  date: 2025-09-19
+  url: /assets/presentations/Average%20Gradient%20Outer%20Product.pdf
+  thumb: /assets/img/talks/agop.webp
+
+- title: Learning Dynamics of LLM Finetuning
+  date: 2025-05-13
+  url: /assets/presentations/Learning%20Dynamics%20of%20LLM%20Finetuning.pdf
+  thumb: /assets/img/talks/learning-dynamics.webp
+
+- title: "DistiLLM-2: A Contrastive Approach Boosts the Distillation of LLMs"
+  date: 2025-05-08
+  url: /assets/presentations/DistiLLM-2.pdf
+  thumb: /assets/img/talks/distillm-2.webp
+
+- title: "Convergence and Generalization of Neural Networks: Neural Tangent Kernels and Beyond"
+  date: 2025-02-21
+  url: /assets/presentations/Neural%20Tangent%20Kernels%20and%20Beyond.pdf
+  thumb: /assets/img/talks/ntk.webp
+
+- title: A Statistical Approach to Language Model Evaluations
+  date: 2024-11-18
+  url: /assets/presentations/Statistics%20for%20Evals.pdf
+  thumb: /assets/img/talks/stats-evals.webp
+
+- title: Advanced Retrieval Augmented Generation Techniques
+  date: 2024-10-08
+  url: /assets/presentations/Advanced%20Retrieval%20Augmented%20Generation.pdf
+  thumb: /assets/img/talks/advanced-rag.webp
+
+- title: Superalignment, or how to train models smarter than us
+  date: 2024-07-24
+  url: /assets/presentations/Superalignment.pdf
+  thumb: /assets/img/talks/superalignment.webp
+
+- title: Rotary Positional Embeddings (RoPE)
+  date: 2024-05-03
+  url: /assets/presentations/Rotary%20Positional%20Embeddings.pdf
+  thumb: /assets/img/talks/rope.webp
+
+- title: Parameter-Efficient Fine-Tuning
+  date: 2024-04-30
+  url: /assets/presentations/Parameter%20Efficient%20Fine-Tuning.pdf
+  thumb: /assets/img/talks/peft.webp
+
+- title: Understanding Transformers
+  date: 2024-03-01
+  url: /assets/presentations/Understanding%20Transformers.pdf
+  thumb: /assets/img/talks/transformers.webp

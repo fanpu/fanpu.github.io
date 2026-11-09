@@ -140,30 +140,61 @@
   content: "Graduate";
 }
 
-// Artifact list: date with a preview image under it, title/blurb on the right
-.artifacts th.artifact-side {
-  width: 26%;
+// Lists with a small preview image (artifacts, talks, games, latest posts)
+.thumb-list {
+  margin: 0.5rem 0 1rem;
 }
-.artifact-thumb img {
+.thumb-row {
+  display: flex;
+  gap: 1.1rem;
+  align-items: flex-start;
+  padding: 0.6rem 0;
+}
+.thumb-img {
+  flex: 0 0 auto;
   display: block;
-  width: 100%;
-  max-width: 220px;
-  height: auto;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  margin: 0.5rem 0 0.75rem;
+  width: 144px;
+  height: 108px;
   border-radius: 6px;
+  overflow: hidden;
   border: 1px solid var(--global-divider-color);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
-}
-@media (max-width: 576px) {
-  .artifacts tr,
-  .artifacts th.artifact-side,
-  .artifacts td {
+  background: var(--global-divider-color);
+  img {
     display: block;
     width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
-  .artifacts td {
-    padding-bottom: 1.25rem;
+}
+.thumb-body {
+  min-width: 0;
+  padding-top: 0.1rem;
+}
+.thumb-title {
+  font-weight: 500;
+  line-height: 1.35;
+}
+.thumb-meta {
+  font-size: 0.8rem;
+  color: var(--global-text-color-light);
+  margin-top: 0.15rem;
+}
+.thumb-blurb {
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--global-text-color-light);
+  margin: 0.3rem 0 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+@media (max-width: 576px) {
+  .thumb-row {
+    gap: 0.8rem;
+  }
+  .thumb-img {
+    width: 96px;
+    height: 72px;
   }
 }

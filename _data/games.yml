@@ -1,0 +1,25 @@
+# Games listed on the home page, in display order.
+- title: FlyJack
+  url: /games/flyjack/
+  thumb: /assets/img/games/flyjack.webp
+  blurb: A simulated fruit fly brain, wired from the real FlyWire connectome, playing blackjack. Only a small readout on top is trained, the wiring is the actual fly's.
+
+- title: Blackjack trainer
+  url: /games/blackjack/
+  thumb: /assets/img/games/blackjack.webp
+  blurb: Blackjack with the odds showing. Every option is scored against perfect play, so you learn basic strategy and see what each mistake costs you.
+
+- title: Beginner xiangqi trainer
+  url: /games/xiangqi/
+  thumb: /assets/img/games/xiangqi.webp
+  blurb: Learn xiangqi (Chinese chess) from zero, starting with the board and how each piece moves, then drills and puzzles.
+
+- title: The Floating Cup
+  url: /games/the-floating-cup/
+  thumb: /assets/img/games/the-floating-cup.webp
+  blurb: Based on the old literati drinking game where a cup floats down a stream and whoever it stops at has to answer with a line of poetry. A way to pick up classical Chinese phrases.
+
+- title: Model Parallelism
+  url: /games/parallelism/
+  thumb: /assets/img/games/parallelism.webp
+  blurb: How to split a big model across GPUs with tensor, pipeline, data and expert parallelism, and what each layout does to memory and communication.

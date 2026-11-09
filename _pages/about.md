@@ -65,26 +65,7 @@ Slides I developed for talks on various LLM-related topics.
 You are free to share, adapt, and reuse these
 materials, provided that you give appropriate credit.
 
-- (2025-09-19) [Average Gradient Outer Product as a Mechanism for Feature Learning]({% link
-  /assets/presentations/Average Gradient Outer Product.pdf %})
-- (2025-05-13) [Learning Dynamics of LLM Finetuning]({% link
-  /assets/presentations/Learning Dynamics of LLM Finetuning.pdf %})
-- (2025-05-08) [DistiLLM-2: A Contrastive Approach Boosts the Distillation of LLMs]({% link
-  /assets/presentations/DistiLLM-2.pdf %})
-- (2025-02-21) [Convergence and Generalization of Neural Networks: Neural Tangent Kernels and Beyond]({% link
-  /assets/presentations/Neural Tangent Kernels and Beyond.pdf %})
-- (2024-11-18) [A Statistical Approach to Language Model Evaluations]({% link
-  /assets/presentations/Statistics for Evals.pdf %})
-- (2024-10-08) [Advanced Retrieval Augmented Generation Techniques]({% link
-  /assets/presentations/Advanced Retrieval Augmented Generation.pdf %})
-- (2024-07-24) [Superalignment, or how to train models smarter than us]({% link
-  /assets/presentations/Superalignment.pdf %})
-- (2024-05-03) [Rotary Positional Embeddings (RoPE)]({% link
-  /assets/presentations/Rotary Positional Embeddings.pdf %})
-- (2024-04-30) [Parameter-Efficient Fine-Tuning]({% link
-  /assets/presentations/Parameter Efficient Fine-Tuning.pdf %})
-- (2024-03-01) [Understanding Transformers]({% link
-  /assets/presentations/Understanding Transformers.pdf %})
+{% include thumb_list.liquid items=site.data.talks %}
 
 ### Starred Blog Posts
 
@@ -128,9 +109,4 @@ Interactive explainers I made with Claude while trying to understand something. 
 
 Some games that I wish existed but didn't, so I made them with Claude Code
 
-- [FlyJack (a simulated fruit fly brain playing blackjack)](/games/flyjack/)
-- [Blackjack trainer](/games/blackjack/)
-- [Beginner xiangqi (Chinese chess) trainer](/games/xiangqi/)
-- [The Floating Cup (for learning classical Chinese phrases)](/games/the-floating-cup/)
-- [Model Parallelism](/games/parallelism/)
-- [Fermi Estimates](/games/fermi/)
+{% include thumb_list.liquid items=site.data.games %}

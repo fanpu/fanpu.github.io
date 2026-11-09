@@ -6,28 +6,4 @@
 {% if include.selected %}
   {% assign items = items | where: 'selected', true %}
 {% endif %}
-<div class="artifacts">
-  <div class="table-responsive">
-    <table class="table table-sm table-borderless">
-      {% for item in items %}
-        <tr>
-          <th scope="row" class="artifact-side">
-            {{ item.date | date: '%b %d, %Y' }}
-            {% if item.thumb %}
-              <a class="artifact-thumb" href="{{ item.url | relative_url }}" tabindex="-1" aria-hidden="true"
-                ><img src="{{ item.thumb | relative_url }}" alt="" loading="lazy" width="480" height="360"
-              ></a>
-            {% endif %}
-          </th>
-          <td>
-            <a class="news-title" href="{{ item.url | relative_url }}">{{ item.title }}</a>
-            {% if item.blurb -%}
-              <br>
-              <span class="text-muted">{{ item.blurb }}</span>
-            {%- endif %}
-          </td>
-        </tr>
-      {% endfor %}
-    </table>
-  </div>
-</div>
+{% include thumb_list.liquid items=items %}
