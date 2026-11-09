@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Does Adam Favor a Basis?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;600&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] }, svg: { fontCache: 'global' }, options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code','canvas'] } };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js" async></script>
+<style>
+:root {
+  /* Lab-notebook treatment: narrow prose column, wider demo cards, two optimizer colors carried through every figure. */
+  --bg: #f3f5f7;
+  --paper: #ffffff;
+  --ink: #1c2430;
+  --ink-soft: #566274;
+  --rule: #d4dae2;
+  --accent: #3b4fd8;
+  --gd: #2a7fb8;
+  --adam: #c9424f;
+  --good: #2c8a5e;
+  --warn: #b9770e;
+  --font-display: "Bitter", Georgia, serif;
+  --font-body: "Source Sans 3", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161a21; --paper: #1e242d; --ink: #e6eaf0; --ink-soft: #a3adbb; --rule: #343c48;
+    --accent: #8d9bff; --gd: #5fb0e6; --adam: #f07682; --good: #5cc48f; --warn: #e0a640; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161a21; --paper: #1e242d; --ink: #e6eaf0; --ink-soft: #a3adbb; --rule: #343c48;
+  --accent: #8d9bff; --gd: #5fb0e6; --adam: #f07682; --good: #5cc48f; --warn: #e0a640; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 17px; line-height: 1.55; padding: 0 16px 64px; }
+main { max-width: 960px; margin: 0 auto; }
+.prose { max-width: 680px; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; text-wrap: balance; line-height: 1.2; }
+h1 { font-size: 2.1rem; margin: 48px 0 8px; }
+h2 { font-size: 1.45rem; margin: 56px 0 12px; padding-top: 16px; border-top: 1px solid var(--rule); }
+h3 { font-size: 1.1rem; margin: 28px 0 8px; }
+p { margin: 0 0 14px; }
+.lede { color: var(--ink-soft); font-size: 1.1rem; margin-bottom: 20px; }
+a { color: var(--accent); }
+code, .mono { font-family: var(--font-mono); font-size: 0.9em; }
+.toc { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 8px 20px; margin: 0 0 8px; padding: 0; list-style: none; counter-reset: toc; }
+.toc li { counter-increment: toc; padding: 8px 12px; border: 1px solid var(--rule); border-radius: 6px; background: var(--paper); }
+.toc li::before { content: counter(toc) ". "; color: var(--ink-soft); font-family: var(--font-mono); font-size: 0.85em; }
+.toc a { text-decoration: none; color: var(--ink); }
+.toc a:hover { color: var(--accent); }
+.card { background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 20px; margin: 20px 0 28px; }
+.card h4 { margin: 0 0 4px; font-family: var(--font-display); font-weight: 500; font-size: 1rem; }
+.card .hint { color: var(--ink-soft); font-size: 0.95rem; margin-bottom: 14px; }
+.row { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
+.col { flex: 1 1 280px; min-width: 0; }
+canvas { max-width: 100%; display: block; border-radius: 6px; background: var(--bg); touch-action: none; }
+.controls { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; margin: 10px 0 14px; font-size: 0.95rem; }
+.controls label { display: flex; align-items: center; gap: 8px; }
+.controls input[type=range] { width: 160px; accent-color: var(--accent); }
+.controls input[type=number], .controls select { font: inherit; font-family: var(--font-mono); font-size: 0.9em; padding: 3px 6px; border: 1px solid var(--rule); border-radius: 4px; background: var(--paper); color: var(--ink); width: 80px; }
+.controls select { width: auto; }
+button { font: inherit; font-weight: 600; padding: 7px 16px; border-radius: 6px; border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; }
+button.secondary { background: transparent; color: var(--accent); }
+button:disabled { opacity: 0.5; cursor: default; }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+table.grid { border-collapse: collapse; font-family: var(--font-mono); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+table.grid td, table.grid th { padding: 4px 8px; text-align: right; border: 1px solid var(--rule); }
+table.grid th { color: var(--ink-soft); font-weight: 500; }
+table.results { border-collapse: collapse; width: 100%; font-size: 0.92rem; font-variant-numeric: tabular-nums; }
+table.results th, table.results td { padding: 6px 8px; border-bottom: 1px solid var(--rule); text-align: right; }
+table.results th:first-child, table.results td:first-child { text-align: left; }
+table.results th { color: var(--ink-soft); font-weight: 600; }
+.bars { display: grid; gap: 6px; font-size: 0.88rem; }
+.bar-row { display: grid; grid-template-columns: 34px 1fr 54px; align-items: center; gap: 8px; }
+.bar-track { position: relative; height: 14px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+.bar-fill { position: absolute; top: 0; bottom: 0; }
+.bar-zero { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--rule); left: 50%; }
+.tag { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; }
+.tag.gd { background: color-mix(in srgb, var(--gd) 18%, transparent); color: var(--gd); }
+.tag.adam { background: color-mix(in srgb, var(--adam) 18%, transparent); color: var(--adam); }
+.readout { font-family: var(--font-mono); font-size: 0.9rem; font-variant-numeric: tabular-nums; color: var(--ink); }
+.readout b { font-weight: 500; color: var(--ink-soft); }
+.note { border-left: 3px solid var(--accent); padding: 8px 14px; background: var(--paper); margin: 16px 0; font-size: 0.97rem; }
+.note.warn { border-left-color: var(--warn); }
+.aside { color: var(--ink-soft); font-size: 0.95rem; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.85rem; color: var(--ink-soft); margin: 6px 0; }
+.legend span::before { content: ""; display: inline-block; width: 12px; height: 3px; margin-right: 6px; vertical-align: middle; background: var(--c); }
+.heat { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-top: 12px; }
+.heat figure { margin: 0; font-size: 0.85rem; color: var(--ink-soft); }
+.heat canvas { width: 100%; height: auto; image-rendering: pixelated; }
+.progress { height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden; margin: 8px 0; }
+.progress div { height: 100%; width: 0; background: var(--accent); transition: width 0.1s; }
+ol.steps li, ul.plain li { margin-bottom: 8px; }
+.sources li { margin-bottom: 6px; font-size: 0.95rem; }
+mjx-container { overflow-x: auto; overflow-y: hidden; }
+@media (prefers-reduced-motion: reduce) { .progress div { transition: none; } }
+@media (max-width: 480px) { body { font-size: 16px; } h1 { font-size: 1.7rem; } .controls input[type=range] { width: 120px; } }
+</style>
+</head>
+<body>
+<main>
+
+<header class="prose">
+  <h1>Does Adam Favor a Basis?</h1>
+  <p class="lede">An interactive explainer built around one small model, a delta-rule associative memory. The question is whether the optimizer you train with leaves fingerprints in the learned representation that the model itself has no reason to produce.</p>
+  <p>Stating the hypothesis takes a paragraph if you already carry the model, the symmetry argument, and the optimizer update in your head. This page builds each of those up one screen at a time, and then runs the controlled experiment live so you can see what the metrics look like before you do it at real scale.</p>
+</header>
+
+<ol class="toc">
+  <li><a href="#model">The model in one screen</a></li>
+  <li><a href="#symmetry">The model has no favorite axes</a></li>
+  <li><a href="#steps">What a step looks like, GD vs Adam</a></li>
+  <li><a href="#why">Why coordinatewise steps can prefer axes</a></li>
+  <li><a href="#experiment">The controlled test, running live</a></li>
+  <li><a href="#reading">Reading results honestly</a></li>
+  <li><a href="#blindspots">Blind spots and the wider map</a></li>
+</ol>
+
+<!-- ============================================================ 1 -->
+<section id="model">
+<div class="prose">
+<h2>1. The model in one screen</h2>
+<p>The task is associative recall. An episode writes \(k\) key-value pairs and then asks for the value of each key again in a shuffled order. The model has exactly one trainable object, a matrix \(W_K \in \mathbb{R}^{d_k \times V}\) whose columns, after normalization to unit length, are the key vectors \(k_a\). Everything else is fixed. Values are one-hot vectors \(v_b = e_b\), and the memory is a matrix \(S \in \mathbb{R}^{V_b \times d_k}\) that starts at zero every episode.</p>
+<p>Two operations touch \(S\). A <b>read</b> at key \(a\) computes scores \(r = S k_a\) and predicts \(\mathrm{softmax}(g\, r)\) over value classes. A <b>write</b> when the value \(v_b\) arrives corrects the memory by the prediction error,</p>
+\[ \delta = v_b - S k_a, \qquad S \leftarrow S + \beta\, \delta\, k_a^{\top}. \]
+<p>This is the delta rule, and it is one gradient step on \(\tfrac12\|S k_a - v_b\|^2\) with respect to \(S\). Because \(\|k_a\| = 1\), the new read at that key is \((1-\beta)\,S_{\text{old}}k_a + \beta v_b\), so at \(\beta = 1\) the current pair is stored exactly. The catch is that every other key \(c\) also moves, by \(\beta\,\delta\,(k_a^{\top}k_c)\). Orthogonal keys ignore each other. Overlapping keys interfere.</p>
+<p>Training runs across many episodes and updates only \(W_K\), differentiating through all the writes. So the outer loop learns <i>where to put the keys</i>, and the inner loop (the delta rule) does the remembering. The quantity that summarizes the key layout is the Gram matrix \(G = K^{\top}K\), the table of all pairwise overlaps \(k_a^{\top}k_c\). A Gram matrix is just that table, with ones on the diagonal because the keys are unit length.</p>
+</div>
+
+<div class="card" id="demo1">
+  <h4>Demo 1. Drag the keys, watch the memory</h4>
+  <div class="hint">Keys live in \(d_k = 2\). Drag an arrow tip to move a key. All pairs are written in order K1, K2, K3 at the chosen \(\beta\), then every key is read from the final memory. Each key's correct value is the class with the same number.</div>
+  <div class="controls">
+    <label>Active keys <select id="d1-n"><option value="2">2</option><option value="3" selected>3</option></select></label>
+    <label>\(\beta\) <input type="range" id="d1-beta" min="0.1" max="1" step="0.05" value="1"> <span class="mono" id="d1-beta-val">1.00</span></label>
+  </div>
+  <div class="row">
+    <div class="col" style="flex:0 0 300px"><canvas id="d1-canvas" width="300" height="300"></canvas></div>
+    <div class="col">
+      <div style="margin-bottom:12px"><div class="aside" style="margin-bottom:4px">Gram matrix \(G\) (signed overlaps)</div><table class="grid" id="d1-gram"></table></div>
+      <div><div class="aside" style="margin-bottom:4px">Reads \(r = S k_a\) from the final memory. Thick outline marks the correct class.</div><div class="bars" id="d1-bars"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="prose">
+<p>Things to try. Put two keys close together and watch the later write damage the earlier one. Put two keys at a negative overlap (pointing roughly opposite) and notice the interference changes sign, suppressing the wrong class instead of boosting it. That sign asymmetry is why a condition number alone does not capture retrieval quality. With three keys in two dimensions, no arrangement stores all three exactly. The memory has only two input directions.</p>
+</div>
+</section>
+
+<!-- ============================================================ 2 -->
+<section id="symmetry">
+<div class="prose">
+<h2>2. The model has no favorite axes</h2>
+<p>Here is the fact the whole question rests on. Take any orthogonal matrix \(Q \in \mathbb{R}^{d_k \times d_k}\). An orthogonal matrix is a rotation, possibly combined with a reflection, so \(Q^{\top}Q = I\) and it preserves lengths and angles. Apply it to every key and compensate in the memory,</p>
+\[ W_K' = Q W_K, \qquad k_a' = Q k_a, \qquad S' = S Q^{\top}. \]
+<p>Then every read is unchanged, since \(S' k_a' = S Q^{\top} Q k_a = S k_a\), and every write stays consistent, since \(\delta' k_a'^{\top} = \delta\, k_a^{\top} Q^{\top}\) is exactly how \(S'\) should move. The Gram matrix is unchanged too, because \(K'^{\top}K' = K^{\top} Q^{\top} Q K = G\). Two key layouts that differ by a rotation produce identical predictions and identical loss on every episode.</p>
+<p>In plain terms, the model cannot tell which way its coordinate axes point. Only the pairwise geometry of the keys matters. So if a trained model's keys end up lined up with the axes of \(\mathbb{R}^{d_k}\), the model's loss cannot be what asked for that. Something else did. The hypothesis is that the something is Adam.</p>
+</div>
+
+<div class="card" id="demo2">
+  <h4>Demo 2. Rotate everything, nothing changes</h4>
+  <div class="hint">Uses the keys you set in Demo 1. The slider rotates all keys together by the same angle. Faded arrows are the originals.</div>
+  <div class="controls">
+    <label>Rotation \(\theta\) <input type="range" id="d2-theta" min="0" max="360" step="1" value="0"> <span class="mono" id="d2-theta-val">0°</span></label>
+  </div>
+  <div class="row">
+    <div class="col" style="flex:0 0 300px"><canvas id="d2-canvas" width="300" height="300"></canvas></div>
+    <div class="col">
+      <div style="margin-bottom:12px"><div class="aside" style="margin-bottom:4px">Gram matrix of the rotated keys</div><table class="grid" id="d2-gram"></table></div>
+      <div class="readout">largest change in any Gram entry <span id="d2-gdiff">0</span><br>largest change in any read score <span id="d2-rdiff">0</span><br>axis concentration \(A(K)\) of the rotated keys <span id="d2-axis">0</span></div>
+      <p class="aside" style="margin-top:10px">The last number changes while the first two do not. That is the whole setup in one line. Axis concentration is defined in Section 5.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ============================================================ 3 -->
+<section id="steps">
+<div class="prose">
+<h2>3. What a step looks like, GD vs Adam</h2>
+<p>Gradient descent moves the flattened parameter vector \(w\) by \(w \leftarrow w - \eta\, \nabla L\). Rotate the whole problem by \(Q\) and the gradient rotates with it, since \(\nabla_{w'} L(Qw) = Q\, \nabla_w L(w)\) when \(L\) itself is rotation invariant, as ours is. So the GD step rotates too. This property has a name, <b>rotational equivariance</b>. Rotate first then step, or step first then rotate, you land in the same place. Two GD runs started from \(W_0\) and \(QW_0\) on the same data stay exact rotated copies of each other forever.</p>
+<p>Adam keeps two running averages per coordinate. With \(g_t = \nabla L(w_t)\),</p>
+\[ m_t = \beta_1 m_{t-1} + (1-\beta_1) g_t, \qquad v_t = \beta_2 v_{t-1} + (1-\beta_2) g_t^{2}, \qquad w_{t+1} = w_t - \eta\, \frac{\hat m_t}{\sqrt{\hat v_t} + \epsilon}, \]
+<p>where \(g_t^2\), the square root, and the division all act <i>elementwise</i>, and the hats denote the standard bias corrections \(\hat m_t = m_t / (1-\beta_1^t)\), \(\hat v_t = v_t/(1-\beta_2^t)\). Squaring coordinate by coordinate does not commute with a rotation, so the Adam step does not rotate when the gradient rotates.</p>
+<p>The cleanest way to see it is the very first step. At \(t = 1\) the bias corrections give \(\hat m_1 = g_1\) and \(\hat v_1 = g_1^2\), so with \(\epsilon \approx 0\)</p>
+\[ w_2 = w_1 - \eta\, \frac{g_1}{|g_1|} = w_1 - \eta\, \mathrm{sign}(g_1). \]
+<p>Adam's first step is sign descent. Every coordinate moves by exactly \(\eta\), regardless of how big its gradient was. Later steps are a smoothed version of this, each coordinate rescaled by its own recent gradient magnitude.</p>
+</div>
+
+<div class="card" id="demo3">
+  <h4>Demo 3. Rotate the gradient, compare the steps</h4>
+  <div class="hint">A two-parameter toy. Left, the gradient \(g\) and the two step directions. Right, the same problem after rotating the world by \(\varphi\). If an optimizer is equivariant, the step in the rotated world equals the rotation of the original step.</div>
+  <div class="controls">
+    <label>Gradient angle <input type="range" id="d3-g" min="0" max="360" step="1" value="25"> <span class="mono" id="d3-g-val">25°</span></label>
+    <label>World rotation \(\varphi\) <input type="range" id="d3-phi" min="0" max="360" step="1" value="40"> <span class="mono" id="d3-phi-val">40°</span></label>
+  </div>
+  <div class="row">
+    <div class="col" style="flex:1 1 280px"><div class="aside" style="margin-bottom:4px">Original world</div><canvas id="d3-left" width="300" height="300"></canvas></div>
+    <div class="col" style="flex:1 1 280px"><div class="aside" style="margin-bottom:4px">Rotated world</div><canvas id="d3-right" width="300" height="300"></canvas></div>
+    <div class="col" style="flex:1 1 220px">
+      <div class="legend"><span style="--c:var(--ink-soft)">gradient \(g\)</span><span style="--c:var(--gd)">GD step \(-g\)</span><span style="--c:var(--adam)">Adam first step \(-\mathrm{sign}(g)\)</span></div>
+      <div class="readout" style="margin-top:10px">
+        <b>GD</b> angle between \(Q\cdot\)step and step in rotated world <span id="d3-gd-ang">0°</span><br>
+        <b>Adam</b> angle between \(Q\cdot\)step and step in rotated world <span id="d3-adam-ang">0°</span>
+      </div>
+      <p class="aside" style="margin-top:10px">Dashed arrows on the right are the original steps carried over by \(Q\). For GD the dashed and solid blue arrows always coincide. For Adam they usually do not.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ============================================================ 4 -->
+<section id="why">
+<div class="prose">
+<h2>4. Why coordinatewise steps can prefer axes</h2>
+<p>Look again at the left canvas in Demo 3. The GD step always ends on the circle, and the sign step always ends on a corner of the square. That is not decoration. Gradient descent is steepest descent when you measure step length with the ordinary Euclidean norm, whose unit ball is a sphere. Sign descent is steepest descent when you measure step length with the max norm \(\|x\|_\infty = \max_j |x_j|\), whose unit ball is a cube. A sphere looks the same from every direction. A cube does not. Its corners and faces are tied to the coordinate axes.</p>
+<p>The symmetries a cube does keep are permutations of the axes and sign flips of the axes. Adam has exactly those symmetries and no others. Relabel your parameters, or negate some of them, and Adam does the same thing in the relabeled coordinates. Rotate them by \(37^\circ\) and it does something different. So Adam cannot prefer a <i>particular</i> axis, but it can prefer <i>the axes</i> as a set, which is why the right measurement is a quantity that is invariant under permutations and sign flips but not under general rotations.</p>
+<p>That is a reason the optimizer <i>could</i> break the symmetry. It is not yet a mechanism for why learned features would end up <i>aligned</i> with axes rather than merely pushed around. The honest status in the literature is that the alignment is observed in transformers trained with Adam and absent with SGD, and the per-coordinate normalization is the accepted explanation, but the step-by-step story of how the alignment forms is not settled. A rough intuition that is at least consistent with the update rule is this. A feature that lives in a single coordinate has its whole gradient in one slot, and Adam gives that slot a full-sized step. A feature spread across many coordinates shares its gradient among them, and each slot still gets a step of roughly size \(\eta\), so the feature as a whole moves faster in the Euclidean sense. Both effects make the dynamics depend on how features sit relative to the axes, which GD never does. Which one wins, and whether either produces alignment in a given model, is an empirical question.</p>
+</div>
+<div class="note"><b>Term check.</b> <i>Privileged basis</i> is interpretability vocabulary. It means the coordinate directions of some activation space behave differently from arbitrary directions, so you can meaningfully talk about "neuron 7" or "channel 412". The transformer residual stream has no privileged basis by construction, since every operation that touches it is either a linear map or a LayerNorm that treats directions symmetrically. Yet trained models show outlier channels, a few coordinates with much larger activations than the rest. The excess kurtosis of the activation vector (a statistic that is zero for a Gaussian and large when a few entries dominate) is the standard way to measure that.</div>
+</section>
+
+<!-- ============================================================ 5 -->
+<section id="experiment">
+<div class="prose">
+<h2>5. The controlled test, running live</h2>
+<p>The clean way to test this is a paired-run design. Draw one initialization \(W_0\) and one random orthogonal \(Q\). Train from \(W_0\) and from \(QW_0\) on the <i>same</i> episode stream with zero initial optimizer moments. Do this once with GD and once with Adam. Then track three things.</p>
+<ol class="steps">
+<li><b>Orientation divergence</b> \(\|W_t' - QW_t\|_F\). Frobenius norm means square root of the sum of squared entries. For GD this must stay at floating-point noise. For Adam it grows. The GD pair is the control that proves the harness is correct.</li>
+<li><b>Gram divergence</b> \(\|G_t' - G_t\|_F\). This is the one that can matter for recall. If the two Adam runs disagree only in orientation, their Gram matrices stay equal and their loss stays equal. If their Gram matrices split, Adam's basis sensitivity changed something the model can feel.</li>
+<li><b>Axis concentration</b>
+\[ A(K) = \frac{1}{V}\sum_{a=1}^{V}\sum_{j=1}^{d_k} (k_a)_j^{4}. \]
+For one unit vector, \(\sum_j k_j^4\) is \(1\) when the vector sits on an axis and \(1/d_k\) when it is spread evenly across all axes. For a direction drawn uniformly at random it averages \(3/(d_k+2)\), so a freshly initialized Gaussian \(W_K\) starts near that value. A sharper baseline than this constant is available. Take the <i>learned</i> keys, rotate them by many random \(Q\), and compute \(A\) each time. That baseline has the same intrinsic geometry as the learned keys and differs only in orientation. If the learned \(A\) sits well outside the spread of that baseline, the orientation is special.</li>
+</ol>
+<p>The simulation below implements exactly the model from Section 1, with analytic gradients through every write, and runs all four trainings at once in your browser. It is tiny on purpose. The point is to make the metrics concrete, not to settle the question.</p>
+</div>
+
+<div class="card" id="demo4">
+  <h4>Demo 4. Paired runs under GD and Adam</h4>
+  <div class="hint">Four runs share every episode. GD from \(W_0\) and from \(QW_0\), Adam from \(W_0\) and from \(QW_0\). Learning rates were picked so both optimizers reach similar held-out loss at the default settings. Held-out accuracy uses 200 fresh episodes and argmax over all value classes, first index on ties.</div>
+  <div class="controls">
+    <label>\(d_k\) <select id="d4-dk"><option>2</option><option selected>3</option><option>4</option></select></label>
+    <label>\(V\) <input type="number" id="d4-V" min="3" max="16" value="8"></label>
+    <label>\(V_b\) <input type="number" id="d4-Vb" min="2" max="8" value="4"></label>
+    <label>\(k\) <input type="number" id="d4-k" min="2" max="8" value="3"></label>
+    <label>steps <input type="number" id="d4-steps" min="50" max="2000" step="50" value="300"></label>
+    <label>\(\eta_{\text{GD}}\) <input type="number" id="d4-lrgd" min="0.01" step="0.5" value="3"></label>
+    <label>\(\eta_{\text{Adam}}\) <input type="number" id="d4-lradam" min="0.0001" step="0.01" value="0.03"></label>
+    <label>seed <input type="number" id="d4-seed" min="0" value="1"></label>
+    <button id="d4-run">Run paired experiment</button>
+  </div>
+  <div class="progress"><div id="d4-prog"></div></div>
+  <div class="row">
+    <div class="col">
+      <div class="aside">Orientation divergence \(\|W_t' - QW_t\|_F / \|W_t\|_F\), log scale</div>
+      <canvas id="d4-div" width="440" height="240"></canvas>
+      <div class="legend"><span style="--c:var(--gd)">GD pair</span><span style="--c:var(--adam)">Adam pair</span></div>
+    </div>
+    <div class="col">
+      <div class="aside">Axis concentration \(A(K_t)\), dashed line is the isotropic value \(3/(d_k+2)\)</div>
+      <canvas id="d4-axis" width="440" height="240"></canvas>
+      <div class="legend"><span style="--c:var(--gd)">GD from \(W_0\)</span><span style="--c:var(--adam)">Adam from \(W_0\)</span><span style="--c:var(--ink-soft)">thin lines, runs from \(QW_0\)</span></div>
+    </div>
+  </div>
+  <div style="overflow-x:auto; margin-top:16px"><table class="results" id="d4-table"></table></div>
+  <div class="aside" style="margin-top:14px">Learned \(|K|\), one column per key, one row per coordinate. Darker is larger. An axis-aligned dictionary would show one dark cell per column.</div>
+  <div class="heat" id="d4-heat"></div>
+  <h4 style="margin-top:22px">Seed sweep</h4>
+  <div class="hint">One seed proves nothing about \(A(K)\). This repeats the experiment at the settings above across several seeds and reports the mean of \(A(K_{\text{learned}}) - A_{\text{baseline}}\), where the baseline is the random-rotation average of the same learned keys. A value near zero means the orientation is no more axis-aligned than chance.</div>
+  <div class="controls">
+    <label>seeds <input type="number" id="d4-nseeds" min="2" max="32" value="8"></label>
+    <button id="d4-sweep" class="secondary">Run seed sweep</button>
+  </div>
+  <div class="progress"><div id="d4-sweep-prog"></div></div>
+  <div class="readout" id="d4-sweep-out"></div>
+</div>
+
+<div class="prose">
+<p>Run it once at the defaults. You should see the GD divergence flat at around \(10^{-15}\) (that is double-precision noise, the proof that the harness respects the symmetry) and the Adam divergence climbing within a few dozen steps to order \(10^{-1}\). That part is a theorem, and the plot just confirms the code. The interesting plots are the Gram divergence column of the table and the \(A(K)\) comparison. At this scale, in my runs, the Adam pair's Gram matrices do split (so the two Adam runs learned different key geometries, not just different orientations), while the axis-concentration excess over baseline is small and swings between seeds. The seed sweep is there so you do not fool yourself with one lucky run.</p>
+<p>Also watch the mean column norm. GD leaves the raw norm of each column growing slowly, since for a scale-invariant parameter the gradient is orthogonal to the parameter. Adam's steps are not orthogonal to anything in particular. The forward pass is blind to these norms, but the effective learning rate on the normalized key is not, which is a confound you must control when comparing optimizers.</p>
+</div>
+</section>
+
+<!-- ============================================================ 6 -->
+<section id="reading">
+<div class="prose">
+<h2>6. Reading results honestly</h2>
+<p>Suppose you run the experiment at real scale and get numbers. Three separate statements govern what they can and cannot mean, and each rules out a tempting but wrong conclusion.</p>
+<p><b>Rotation alone cannot change recall.</b> Section 2 proved it. So if you find that Adam-trained keys are more axis-aligned than GD-trained keys, that fact by itself says nothing about which model remembers better. You have found a fingerprint, not a performance effect.</p>
+<p><b>Orientation can matter for recall only through intrinsic geometry.</b> Adam's basis preference is a statement about dynamics. The dynamics decide where in Gram-matrix space training ends up. If Adam's trajectory lands at a different \(G\) than GD's would (different signed overlaps, different active-set spectra), then recall differs, and the orientation preference was the <i>cause</i> through the path training took. The Gram divergence between the two Adam runs is the simplest witness that the path depends on orientation at all.</p>
+<p><b>Separate speed from representation.</b> Adam usually trains faster in wall-clock steps. If you compare at a fixed step count, every difference you see mixes "Adam got further" with "Adam went somewhere different". Make two comparisons, one at matched training budget and one at matched held-out loss. A difference in \(A(K)\) that survives the matched-loss comparison is a representation effect. One that disappears is probably a speed effect.</p>
+</div>
+<div class="note warn"><b>What this toy is not.</b> The TinyStories result that motivates this whole line of inquiry (Caples and Neuhaus, 2024) is about activation outlier channels in a 12M-parameter transformer with LayerNorm, residual connections, and a deep stack of Adam-trained matrices feeding each other. Our model has one matrix, no normalization layer in the forward pass except key length, and a memory that is written by a fixed rule rather than learned. There is no reason the effect must transfer, and a null result here would not contradict the transformer finding. Treat it as empirical motivation, not as evidence about this model.</div>
+</section>
+
+<!-- ============================================================ 7 -->
+<section id="blindspots">
+<div class="prose">
+<h2>7. Blind spots and the wider map</h2>
+<p>Things adjacent to this question that are worth knowing before you design the real experiment.</p>
+<h3>Where "privileged basis" comes from</h3>
+<p>Anthropic's 2023 interpretability note on privileged bases in the residual stream observed outlier dimensions in a 200M-parameter model, ruled out several architectural causes, and arrived by elimination at Adam's per-coordinate normalization as the likely culprit without proving it. Caples and Neuhaus then trained matched 12M-parameter models with Adam and with SGD plus momentum and found excess kurtosis above 100 under Adam and near zero under SGD. The experiment on this page is the same logic ported to a setting where the symmetry is exact and provable, which is a real advantage. In a transformer, "rotational equivariance of the architecture" is only approximately true (embeddings, unembeddings and the data all have their own structure), and critics of the 2024 post pressed on exactly that point.</p>
+<h3>Adam's sensitivity to rotation is now a research topic in its own right</h3>
+<p>Maes, Zhang and coauthors (2024) measured how Adam's training loss on GPT-2-scale models degrades under random rotations of parameter space, and showed that structured rotations can also help. Their conclusion is that the standard rotation-invariant convergence theory for Adam cannot explain why Adam works, because Adam's advantage lives in the basis. DePavia and coauthors (2025) show the implicit bias of Adam on linear classification can be brittle under small data rotations, and that an orthogonal reparameterization restores rotation equivariance. Both papers give you ready-made language and metrics for the write-up.</p>
+<h3>GD is not the only control</h3>
+<p>Any optimizer that is equivariant under \(W \mapsto QW\) works as a control, and some are much stronger learners than plain GD. Muon, which orthogonalizes the momentum matrix before applying it, is equivariant under orthogonal maps on either side of a matrix parameter, because the polar factor of \(QM\) is \(Q\) times the polar factor of \(M\). Shampoo and SOAP are also natural comparison points, since they adapt in a learned basis rather than the coordinate basis. A three-arm experiment (GD, Adam, Muon) separates "adaptive step sizes" from "coordinatewise adaptive step sizes", which a two-arm one cannot.</p>
+<h3>Adam is only sometimes sign descent</h3>
+<p>The first-step identity in Section 3 is exact. After that, Adam equals sign descent only when gradients are consistent across steps relative to their noise. Balles and Hennig (2018) decompose Adam into a sign part and a variance-adaptation part. Kunstner and coauthors (2023) argue that sign descent, not noise handling, explains most of Adam's advantage over SGD on transformers. If you want a cleaner version of the hypothesis, run plain sign descent as a fourth arm. It has the cube geometry with none of the moving-average machinery.</p>
+<h3>Confounds specific to this model</h3>
+<ul class="plain">
+<li>The forward pass is invariant to each column's raw norm, but the optimizers are not. Equalize or track norms, or the comparison is partly about effective learning rate.</li>
+<li>\(\epsilon\) in Adam interpolates between sign descent (\(\epsilon \to 0\)) and plain momentum SGD (\(\epsilon\) large). Sweep it. If the axis effect fades as \(\epsilon\) grows, that is strong evidence it comes from the normalization.</li>
+<li>Small \(d_k\) makes \(A(K)\) a coarse instrument. The gap between isotropic (\(3/(d_k+2)\)) and fully aligned (\(1\)) is only \(0.4\) at \(d_k = 3\), and chance fluctuations of a few keys fill much of it. Use \(d_k\) of 16 or more for the real run, and report the random-rotation baseline with its spread every time.</li>
+<li>The axis concentration of the <i>keys</i> is a different object from the kurtosis of <i>activations</i> in the transformer result. In this model, the analog of an activation is the memory state \(S\) or the read \(Sk_a\). Measuring axis structure there too would make the bridge to the motivating result explicit.</li>
+</ul>
+</div>
+
+<h2>Sources</h2>
+<ul class="sources">
+<li>Kingma and Ba. <a href="https://arxiv.org/abs/1412.6980">Adam: A Method for Stochastic Optimization</a>, 2014.</li>
+<li>Caples and Neuhaus. <a href="https://www.lesswrong.com/posts/yrhu6MeFddnGRSLtQ/adam-optimizer-causes-privileged-basis-in-transformer-lm">Adam Optimizer Causes Privileged Basis in Transformer LM Residual Stream</a>, LessWrong, September 2024.</li>
+<li>Elhage, Lasenby and Olah. <a href="https://transformer-circuits.pub/2023/privileged-basis/index.html">Privileged Bases in the Transformer Residual Stream</a>, Transformer Circuits Thread, 2023.</li>
+<li>Maes, Zhang, Jolicoeur-Martineau, Mitliagkas, Scieur, Lacoste-Julien and Guille-Escuret. <a href="https://arxiv.org/abs/2410.19964">Understanding Adam Requires Better Rotation Dependent Assumptions</a>, 2024.</li>
+<li>DePavia and coauthors. <a href="https://arxiv.org/abs/2510.23804">How do simple rotations affect the implicit bias of Adam?</a>, 2025.</li>
+<li>Balles and Hennig. <a href="https://arxiv.org/abs/1705.07774">Dissecting Adam: The Sign, Magnitude and Variance of Stochastic Gradients</a>, ICML 2018.</li>
+<li>Kunstner, Chen, Lavington and Schmidt. <a href="https://arxiv.org/abs/2304.13960">Noise Is Not the Main Factor Behind the Gap Between SGD and Adam on Transformers, but Sign Descent Might Be</a>, ICLR 2023.</li>
+<li>Bernstein, Wang, Azizzadenesheli and Anandkumar. <a href="https://arxiv.org/abs/1802.04434">signSGD: Compressed Optimisation for Non-Convex Problems</a>, ICML 2018. Source for sign descent as steepest descent under the max norm.</li>
+</ul>
+</section>
+
+</main>
+
+<script src="core.js"></script>
+<script>
+(function () {
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const TAU = Math.PI * 2;
+  const classColors = ['#d97706', '#0f9d8a', '#7c3aed'];
+  const fmt = (x, d = 3) => (Math.abs(x) < 1e-3 && x !== 0 ? x.toExponential(1) : x.toFixed(d));
+
+  // ---------- shared 2D key state (demo 1 & 2) ----------
+  const keyState = { n: 3, angles: [0.35, 1.25, 2.6], beta: 1 };
+  const unit = th => [Math.cos(th), Math.sin(th)];
+
+  function runMemory(keys, beta) {
+    // keys: list of [x,y]; values: key i -> class i; write all in order, read all after
+    const Vb = keys.length;
+    let S = Array.from({ length: Vb }, () => [0, 0]);
+    keys.forEach((k, i) => {
+      const r = S.map(row => row[0] * k[0] + row[1] * k[1]);
+      for (let c = 0; c < Vb; c++) { const d = (c === i ? 1 : 0) - r[c]; S[c][0] += beta * d * k[0]; S[c][1] += beta * d * k[1]; }
+    });
+    return keys.map(k => S.map(row => row[0] * k[0] + row[1] * k[1]));
+  }
+
+  function drawKeys(cv, keys, faded) {
+    const ctx = cv.getContext('2d'), w = cv.width, h = cv.height, cx = w / 2, cy = h / 2, R = w * 0.4;
+    ctx.clearRect(0, 0, w, h);
+    ctx.strokeStyle = css('--rule'); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(w, cy); ctx.moveTo(cx, 0); ctx.lineTo(cx, h); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, TAU); ctx.stroke();
+    ctx.fillStyle = css('--ink-soft'); ctx.font = '12px ' + css('--font-mono');
+    ctx.fillText('x₁', w - 20, cy - 6); ctx.fillText('x₂', cx + 6, 14);
+    const arrow = (k, color, alpha, label) => {
+      const x = cx + k[0] * R, y = cy - k[1] * R;
+      ctx.globalAlpha = alpha; ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x, y); ctx.stroke();
+      const ang = Math.atan2(cy - y, x - cx);
+      ctx.beginPath(); ctx.moveTo(x, y);
+      ctx.lineTo(x - 11 * Math.cos(ang - 0.4), y + 11 * Math.sin(ang - 0.4));
+      ctx.lineTo(x - 11 * Math.cos(ang + 0.4), y + 11 * Math.sin(ang + 0.4)); ctx.closePath(); ctx.fill();
+      if (label) { ctx.font = '600 13px ' + css('--font-body'); ctx.fillText(label, x + 14 * Math.cos(ang) - 8, y - 14 * Math.sin(ang) + 5); }
+      ctx.globalAlpha = 1;
+    };
+    if (faded) faded.forEach((k, i) => arrow(k, classColors[i], 0.25, null));
+    keys.forEach((k, i) => arrow(k, classColors[i], 1, 'K' + (i + 1)));
+  }
+
+  function gramTable(el, keys) {
+    const n = keys.length; let html = '<tr><th></th>' + keys.map((_, i) => `<th>k${i + 1}</th>`).join('') + '</tr>';
+    for (let a = 0; a < n; a++) {
+      html += `<tr><th>k${a + 1}</th>`;
+      for (let c = 0; c < n; c++) {
+        const g = keys[a][0] * keys[c][0] + keys[a][1] * keys[c][1];
+        const col = a === c ? 'transparent' : (g > 0 ? `rgba(201,66,79,${Math.min(0.7, Math.abs(g))})` : `rgba(42,127,184,${Math.min(0.7, Math.abs(g))})`);
+        html += `<td style="background:${col}">${g.toFixed(2)}</td>`;
+      }
+      html += '</tr>';
+    }
+    el.innerHTML = html;
+  }
+
+  function barsRender(el, reads) {
+    let html = '';
+    reads.forEach((r, i) => {
+      html += `<div style="color:${classColors[i]};font-weight:600;margin-top:${i ? 6 : 0}px">read at K${i + 1} (wants C${i + 1})</div>`;
+      r.forEach((val, c) => {
+        const pct = Math.max(-1.3, Math.min(1.3, val)) / 1.3 * 50;
+        const left = pct >= 0 ? 50 : 50 + pct, width = Math.abs(pct);
+        const outline = c === i ? `box-shadow: inset 0 0 0 2px ${classColors[i]};` : '';
+        html += `<div class="bar-row"><span class="mono">C${c + 1}</span><div class="bar-track" style="${outline}"><div class="bar-zero"></div><div class="bar-fill" style="left:${left}%;width:${width}%;background:${classColors[c]}"></div></div><span class="mono">${val.toFixed(2)}</span></div>`;
+      });
+    });
+    el.innerHTML = html;
+  }
+
+  const d1cv = document.getElementById('d1-canvas');
+  function updateDemo1() {
+    const keys = keyState.angles.slice(0, keyState.n).map(unit);
+    drawKeys(d1cv, keys);
+    gramTable(document.getElementById('d1-gram'), keys);
+    barsRender(document.getElementById('d1-bars'), runMemory(keys, keyState.beta));
+    updateDemo2();
+  }
+  let drag = -1;
+  const canvasPt = (cv, e) => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) * cv.width / r.width, (e.clientY - r.top) * cv.height / r.height]; };
+  d1cv.addEventListener('pointerdown', e => {
+    const [px, py] = canvasPt(d1cv, e); const cx = d1cv.width / 2, cy = d1cv.height / 2, R = d1cv.width * 0.4;
+    let best = -1, bd = 30;
+    keyState.angles.slice(0, keyState.n).forEach((th, i) => { const d = Math.hypot(px - (cx + Math.cos(th) * R), py - (cy - Math.sin(th) * R)); if (d < bd) { bd = d; best = i; } });
+    if (best < 0) { // nearest by angle
+      const a = Math.atan2(cy - py, px - cx); let bda = 9;
+      keyState.angles.slice(0, keyState.n).forEach((th, i) => { let d = Math.abs(((a - th) % TAU + TAU + Math.PI) % TAU - Math.PI); if (d < bda) { bda = d; best = i; } });
+    }
+    drag = best; d1cv.setPointerCapture(e.pointerId);
+  });
+  d1cv.addEventListener('pointermove', e => {
+    if (drag < 0) return; const [px, py] = canvasPt(d1cv, e);
+    keyState.angles[drag] = Math.atan2(d1cv.height / 2 - py, px - d1cv.width / 2); updateDemo1();
+  });
+  d1cv.addEventListener('pointerup', () => drag = -1);
+  d1cv.addEventListener('pointercancel', () => drag = -1);
+  document.getElementById('d1-n').addEventListener('change', e => { keyState.n = +e.target.value; updateDemo1(); });
+  document.getElementById('d1-beta').addEventListener('input', e => { keyState.beta = +e.target.value; document.getElementById('d1-beta-val').textContent = keyState.beta.toFixed(2); updateDemo1(); });
+
+  // ---------- demo 2 ----------
+  const d2cv = document.getElementById('d2-canvas');
+  let theta = 0;
+  function rot(th, k) { return [Math.cos(th) * k[0] - Math.sin(th) * k[1], Math.sin(th) * k[0] + Math.cos(th) * k[1]]; }
+  function axisConc2(keys) { return keys.reduce((s, k) => s + k[0] ** 4 + k[1] ** 4, 0) / keys.length; }
+  function updateDemo2() {
+    const keys = keyState.angles.slice(0, keyState.n).map(unit);
+    const rk = keys.map(k => rot(theta, k));
+    drawKeys(d2cv, rk, keys);
+    gramTable(document.getElementById('d2-gram'), rk);
+    let gd = 0; for (let a = 0; a < keys.length; a++) for (let c = 0; c < keys.length; c++) gd = Math.max(gd, Math.abs((keys[a][0] * keys[c][0] + keys[a][1] * keys[c][1]) - (rk[a][0] * rk[c][0] + rk[a][1] * rk[c][1])));
+    const r0 = runMemory(keys, keyState.beta), r1 = runMemory(rk, keyState.beta);
+    let rd = 0; r0.forEach((r, i) => r.forEach((v, c) => rd = Math.max(rd, Math.abs(v - r1[i][c]))));
+    document.getElementById('d2-gdiff').textContent = gd.toExponential(1);
+    document.getElementById('d2-rdiff').textContent = rd.toExponential(1);
+    document.getElementById('d2-axis').textContent = axisConc2(rk).toFixed(3);
+  }
+  document.getElementById('d2-theta').addEventListener('input', e => { theta = +e.target.value * Math.PI / 180; document.getElementById('d2-theta-val').textContent = e.target.value + '°'; updateDemo2(); });
+
+  // ---------- demo 3 ----------
+  let gAng = 25 * Math.PI / 180, phi = 40 * Math.PI / 180;
+  function drawWorld(cv, g, extra) {
+    const ctx = cv.getContext('2d'), w = cv.width, h = cv.height, cx = w / 2, cy = h / 2, R = w * 0.3;
+    ctx.clearRect(0, 0, w, h);
+    ctx.strokeStyle = css('--rule'); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(w, cy); ctx.moveTo(cx, 0); ctx.lineTo(cx, h); ctx.stroke();
+    ctx.setLineDash([3, 4]); ctx.beginPath(); ctx.arc(cx, cy, R, 0, TAU); ctx.stroke();
+    ctx.strokeRect(cx - R, cy - R, 2 * R, 2 * R); ctx.setLineDash([]);
+    ctx.fillStyle = css('--ink-soft'); ctx.font = '11px ' + css('--font-mono');
+    ctx.fillText('ℓ₂ ball', cx + R * 0.72, cy - R * 0.74); ctx.fillText('ℓ∞ ball', cx - R + 4, cy - R - 5);
+    const arrow = (v, color, dashed, scale) => {
+      const x = cx + v[0] * R * scale, y = cy - v[1] * R * scale;
+      ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 2.5; ctx.setLineDash(dashed ? [6, 5] : []);
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x, y); ctx.stroke(); ctx.setLineDash([]);
+      const ang = Math.atan2(cy - y, x - cx);
+      ctx.beginPath(); ctx.moveTo(x, y);
+      ctx.lineTo(x - 10 * Math.cos(ang - 0.4), y + 10 * Math.sin(ang - 0.4));
+      ctx.lineTo(x - 10 * Math.cos(ang + 0.4), y + 10 * Math.sin(ang + 0.4)); ctx.closePath(); ctx.fill();
+    };
+    arrow(g, css('--ink-soft'), false, 1.25);
+    const gdStep = [-g[0], -g[1]];
+    const signStep = [-Math.sign(g[0]), -Math.sign(g[1])];
+    if (extra) { arrow(extra.gd, css('--gd'), true, 1); arrow(extra.adam, css('--adam'), true, 1); }
+    arrow(gdStep, css('--gd'), false, 1);
+    arrow(signStep, css('--adam'), false, 1);
+    return { gdStep, signStep };
+  }
+  const angleBetween = (a, b) => { const d = (a[0] * b[0] + a[1] * b[1]) / (Math.hypot(...a) * Math.hypot(...b)); return Math.acos(Math.max(-1, Math.min(1, d))) * 180 / Math.PI; };
+  function updateDemo3() {
+    const g = unit(gAng);
+    const L = drawWorld(document.getElementById('d3-left'), g, null);
+    const gq = rot(phi, g);
+    const carried = { gd: rot(phi, L.gdStep), adam: rot(phi, L.signStep) };
+    const Rw = drawWorld(document.getElementById('d3-right'), gq, carried);
+    document.getElementById('d3-gd-ang').textContent = angleBetween(carried.gd, Rw.gdStep).toFixed(1) + '°';
+    document.getElementById('d3-adam-ang').textContent = angleBetween(carried.adam, Rw.signStep).toFixed(1) + '°';
+  }
+  document.getElementById('d3-g').addEventListener('input', e => { gAng = +e.target.value * Math.PI / 180; document.getElementById('d3-g-val').textContent = e.target.value + '°'; updateDemo3(); });
+  document.getElementById('d3-phi').addEventListener('input', e => { phi = +e.target.value * Math.PI / 180; document.getElementById('d3-phi-val').textContent = e.target.value + '°'; updateDemo3(); });
+
+  // ---------- demo 4 ----------
+  const C = window;
+  function readCfg() {
+    const dk = +document.getElementById('d4-dk').value;
+    const V = Math.max(3, Math.min(16, +document.getElementById('d4-V').value || 8));
+    const Vb = Math.max(2, Math.min(8, +document.getElementById('d4-Vb').value || 4));
+    const k = Math.max(2, Math.min(V, +document.getElementById('d4-k').value || 3));
+    const steps = Math.max(50, Math.min(2000, +document.getElementById('d4-steps').value || 300));
+    return { dk, V, Vb, k, steps, batch: 16, lrGD: +document.getElementById('d4-lrgd').value || 3, lrAdam: +document.getElementById('d4-lradam').value || 0.03, seed: +document.getElementById('d4-seed').value || 0, beta: 1, g: 8 };
+  }
+  function lineChart(cv, series, opts) {
+    const ctx = cv.getContext('2d'), w = cv.width, h = cv.height, pl = 56, pr = 12, pt = 12, pb = 30;
+    ctx.clearRect(0, 0, w, h);
+    const xs = series[0].x; const xmax = Math.max(1, xs[xs.length - 1]);
+    let ymin = opts.ymin, ymax = opts.ymax;
+    if (ymin === undefined) { ymin = Infinity; ymax = -Infinity; for (const s of series) for (const v of s.y) { const t = opts.log ? Math.log10(Math.max(v, 1e-17)) : v; ymin = Math.min(ymin, t); ymax = Math.max(ymax, t); } if (opts.hline !== undefined) { ymin = Math.min(ymin, opts.hline); ymax = Math.max(ymax, opts.hline); } const pad = (ymax - ymin) * 0.08 || 0.05; ymin -= pad; ymax += pad; }
+    const X = x => pl + (x / xmax) * (w - pl - pr), Y = v => pt + (1 - (v - ymin) / (ymax - ymin)) * (h - pt - pb);
+    ctx.strokeStyle = css('--rule'); ctx.fillStyle = css('--ink-soft'); ctx.font = '11px ' + css('--font-mono'); ctx.lineWidth = 1;
+    const nt = 5;
+    for (let i = 0; i <= nt; i++) {
+      const v = ymin + (ymax - ymin) * i / nt, y = Y(v);
+      ctx.beginPath(); ctx.moveTo(pl, y); ctx.lineTo(w - pr, y); ctx.stroke();
+      ctx.textAlign = 'right'; ctx.fillText(opts.log ? '1e' + Math.round(v) : v.toFixed(2), pl - 6, y + 4);
+    }
+    for (let i = 0; i <= 4; i++) { const x = xmax * i / 4; ctx.textAlign = 'center'; ctx.fillText(Math.round(x), X(x), h - 10); }
+    ctx.textAlign = 'left'; ctx.fillText('step', w - pr - 30, h - 10);
+    if (opts.hline !== undefined) { ctx.setLineDash([5, 5]); ctx.strokeStyle = css('--ink-soft'); ctx.beginPath(); ctx.moveTo(pl, Y(opts.hline)); ctx.lineTo(w - pr, Y(opts.hline)); ctx.stroke(); ctx.setLineDash([]); }
+    for (const s of series) {
+      ctx.strokeStyle = s.color; ctx.lineWidth = s.width || 2.2; ctx.globalAlpha = s.alpha || 1; ctx.beginPath();
+      s.x.forEach((x, i) => { const v = opts.log ? Math.log10(Math.max(s.y[i], 1e-17)) : s.y[i]; i ? ctx.lineTo(X(x), Y(v)) : ctx.moveTo(X(x), Y(v)); });
+      ctx.stroke(); ctx.globalAlpha = 1;
+    }
+  }
+  function heatmaps(summary, cfg) {
+    const el = document.getElementById('d4-heat'); el.innerHTML = '';
+    const names = { gd: 'GD from W₀', gdQ: 'GD from QW₀', adam: 'Adam from W₀', adamQ: 'Adam from QW₀' };
+    for (const n of ['gd', 'gdQ', 'adam', 'adamQ']) {
+      const fig = document.createElement('figure'); const cv = document.createElement('canvas'); cv.width = cfg.V; cv.height = cfg.dk; cv.style.aspectRatio = cfg.V + '/' + cfg.dk;
+      const ctx = cv.getContext('2d'); const K = summary[n].K;
+      const base = n.startsWith('gd') ? [42, 127, 184] : [201, 66, 79];
+      for (let a = 0; a < cfg.V; a++) for (let j = 0; j < cfg.dk; j++) { const v = Math.abs(K[a][j]); ctx.fillStyle = `rgba(${base.join(',')},${(0.08 + 0.92 * v).toFixed(3)})`; ctx.fillRect(a, j, 1, 1); }
+      const cap = document.createElement('figcaption'); cap.innerHTML = `<span class="tag ${n.startsWith('gd') ? 'gd' : 'adam'}">${names[n]}</span> A = ${summary[n].A.toFixed(3)}`;
+      fig.appendChild(cv); fig.appendChild(cap); el.appendChild(fig);
+    }
+  }
+  let running = false;
+  function drawHist(ex) {
+    const h = ex.hist;
+    lineChart(document.getElementById('d4-div'), [{ x: h.t, y: h.divGD, color: css('--gd') }, { x: h.t, y: h.divAdam, color: css('--adam') }], { log: true, ymin: -16.5, ymax: 0.5 });
+    const iso = 3 / (ex.cfg.dk + 2);
+    lineChart(document.getElementById('d4-axis'), [
+      { x: h.t, y: h.aGDQ, color: css('--gd'), width: 1, alpha: 0.5 }, { x: h.t, y: h.aAdamQ, color: css('--adam'), width: 1, alpha: 0.5 },
+      { x: h.t, y: h.aGD, color: css('--gd') }, { x: h.t, y: h.aAdam, color: css('--adam') }], { hline: iso });
+  }
+  document.getElementById('d4-run').addEventListener('click', () => {
+    if (running) return; running = true;
+    const btn = document.getElementById('d4-run'); btn.disabled = true;
+    const cfg = readCfg(); document.getElementById('d4-k').value = cfg.k;
+    const ex = makeExperiment(cfg);
+    const prog = document.getElementById('d4-prog');
+    function tick() {
+      ex.step(Math.max(1, Math.floor(cfg.steps / 40)));
+      prog.style.width = (100 * ex.t / cfg.steps) + '%'; drawHist(ex);
+      if (!ex.done()) { requestAnimationFrame(tick); return; }
+      const s = ex.summary(); const h = ex.hist;
+      const rows = [['gd', 'GD from W₀'], ['gdQ', 'GD from QW₀'], ['adam', 'Adam from W₀'], ['adamQ', 'Adam from QW₀']];
+      let html = '<tr><th>run</th><th>held-out acc</th><th>held-out loss</th><th>A(K)</th><th>rotation baseline</th><th>mean col norm</th></tr>';
+      for (const [n, label] of rows) html += `<tr><td><span class="tag ${n.startsWith('gd') ? 'gd' : 'adam'}">${label}</span></td><td>${s[n].acc.toFixed(3)}</td><td>${s[n].loss.toFixed(3)}</td><td>${s[n].A.toFixed(3)}</td><td>${s[n].Abase.toFixed(3)} ± ${s[n].Asd.toFixed(3)}</td><td>${s[n].norm.toFixed(2)}</td></tr>`;
+      html += `<tr><td>pair divergence at end</td><td colspan="2">GD orientation ${h.divGD.at(-1).toExponential(1)}, Gram ${h.gramGD.at(-1).toExponential(1)}</td><td colspan="3">Adam orientation ${h.divAdam.at(-1).toExponential(1)}, Gram ${h.gramAdam.at(-1).toExponential(1)}</td></tr>`;
+      document.getElementById('d4-table').innerHTML = html;
+      heatmaps(s, cfg);
+      running = false; btn.disabled = false;
+    }
+    requestAnimationFrame(tick);
+  });
+  document.getElementById('d4-sweep').addEventListener('click', () => {
+    if (running) return; running = true;
+    const btn = document.getElementById('d4-sweep'); btn.disabled = true;
+    const cfg = readCfg(); const n = Math.max(2, Math.min(32, +document.getElementById('d4-nseeds').value || 8));
+    const out = document.getElementById('d4-sweep-out'), prog = document.getElementById('d4-sweep-prog');
+    const ex = { gd: [], adam: [], accGD: [], accAdam: [] }; let i = 0;
+    function one() {
+      const e = makeExperiment({ ...cfg, seed: cfg.seed + 100 * i }); while (!e.done()) e.step(cfg.steps);
+      const s = e.summary(); ex.gd.push(s.gd.A - s.gd.Abase); ex.adam.push(s.adam.A - s.adam.Abase); ex.accGD.push(s.gd.acc); ex.accAdam.push(s.adam.acc);
+      i++; prog.style.width = (100 * i / n) + '%';
+      if (i < n) { setTimeout(one, 0); return; }
+      const stat = xs => { const m = xs.reduce((a, b) => a + b, 0) / xs.length; const se = Math.sqrt(xs.reduce((a, b) => a + (b - m) ** 2, 0) / (xs.length - 1) / xs.length); return `${m >= 0 ? '+' : ''}${m.toFixed(3)} ± ${se.toFixed(3)} (s.e.)`; };
+      const mean = xs => (xs.reduce((a, b) => a + b, 0) / xs.length).toFixed(3);
+      out.innerHTML = `<b>${n} seeds, ${cfg.steps} steps each</b><br><span class="tag gd">GD</span> A − baseline ${stat(ex.gd)}, mean acc ${mean(ex.accGD)}<br><span class="tag adam">Adam</span> A − baseline ${stat(ex.adam)}, mean acc ${mean(ex.accAdam)}<br><b>read it as</b> an effect smaller than two standard errors is not an effect yet. Compare accuracies too, since a difference in A at unequal loss mixes speed with representation.`;
+      running = false; btn.disabled = false;
+    }
+    setTimeout(one, 0);
+  });
+
+  // initial render
+  updateDemo1(); updateDemo3();
+  const d4cfg = readCfg();
+  lineChart(document.getElementById('d4-div'), [{ x: [0, 1], y: [1e-16, 1e-16], color: css('--rule') }], { log: true, ymin: -16.5, ymax: 0.5 });
+  lineChart(document.getElementById('d4-axis'), [{ x: [0, 1], y: [3 / (d4cfg.dk + 2), 3 / (d4cfg.dk + 2)], color: css('--rule') }], { hline: 3 / (d4cfg.dk + 2), ymin: 0.3, ymax: 1 });
+  document.getElementById('d4-table').innerHTML = '<tr><th>run</th><th>held-out acc</th><th>held-out loss</th><th>A(K)</th><th>rotation baseline</th><th>mean col norm</th></tr><tr><td colspan="6" class="aside">Press Run to fill this table.</td></tr>';
+  if (window.matchMedia) { const mq = window.matchMedia('(prefers-color-scheme: dark)'); mq.addEventListener && mq.addEventListener('change', () => { updateDemo1(); updateDemo3(); }); }
+})();
+</script>
+</body>
+</html>
