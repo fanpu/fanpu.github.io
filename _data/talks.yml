@@ -3,58 +3,58 @@
   date: 2025-09-19
   url: /assets/presentations/Average%20Gradient%20Outer%20Product.pdf
   thumb: /assets/img/talks/agop.webp
-  blurb: "How the average gradient outer product lines up with the features a neural net learns, and what that explains about spurious features, lottery tickets and grokking. Also covers recursive feature machines, which bring that kind of feature learning to kernel methods."
+  blurb: "Curse of dimensionality and feature learning. Neural feature matrix (NFM). Average gradient outer product (AGOP). Deep neural feature ansatz: empirical evidence and theoretical results. Applications: spurious features, lottery tickets, grokking. Recursive feature machines. Steering LLMs."
 
 - title: Learning Dynamics of LLM Finetuning
   date: 2025-05-13
   url: /assets/presentations/Learning%20Dynamics%20of%20LLM%20Finetuning.pdf
   thumb: /assets/img/talks/learning-dynamics.webp
-  blurb: "How each gradient step in SFT or DPO changes the model's predictions on other examples. This explains some odd behaviors, like hallucinations after SFT and the squeezing effect, where off-policy DPO piles probability onto the single most likely response."
+  blurb: "SFT and DPO recap. Learning dynamics decomposition, from MNIST to LLMs. Training dynamics of SFT; hallucination explanation. Training dynamics of DPO; the squeezing effect. Off-policy DPO experiments. Remedies. PPO."
 
 - title: "DistiLLM-2: A Contrastive Approach Boosts the Distillation of LLMs"
   date: 2025-05-08
   url: /assets/presentations/DistiLLM-2.pdf
   thumb: /assets/img/talks/distillm-2.webp
-  blurb: "Distilling LLMs with a contrastive loss that raises the likelihood of the teacher's responses and lowers the student's own. Starts with why forward and reverse KL each go wrong for distillation."
+  blurb: "Why distillation. KL primer; forward vs. reverse KL. Prior work: DistiLLM and skew KL. Contrastive approach for LLM distillation (CALD). Curriculum for the interpolation coefficient. Results."
 
 - title: "Convergence and Generalization of Neural Networks: Neural Tangent Kernels and Beyond"
   date: 2025-02-21
   url: /assets/presentations/Neural%20Tangent%20Kernels%20and%20Beyond.pdf
   thumb: /assets/img/talks/ntk.webp
-  blurb: "Why overparameterized networks train and generalize at all. Goes from infinite-width nets as Gaussian processes, to the neural tangent kernel and its limits, to Tensor Programs and zero-shot hyperparameter transfer with muP."
+  blurb: "Overparameterization, double descent, sensitivity to initialization. Infinite-width networks as Gaussian processes (NNGP). Neural tangent kernel: initialization, training, generalization, limitations. Tensor Programs I‑V. Maximal update parametrization (muP); zero-shot hyperparameter transfer."
 
 - title: A Statistical Approach to Language Model Evaluations
   date: 2024-11-18
   url: /assets/presentations/Statistics%20for%20Evals.pdf
   thumb: /assets/img/talks/stats-evals.webp
-  blurb: "The statistics you need to report LLM eval results properly: standard errors (including clustered ones), variance reduction, paired comparisons between models, and power analysis for how many questions you need."
+  blurb: "Challenges with LLM evals. Standard error of the mean; clustered standard errors. Variance reduction; law of total variance. Paired analysis for comparing models. Hypothesis testing crash course; type I and II errors. Power analysis."
 
 - title: Advanced Retrieval Augmented Generation Techniques
   date: 2024-10-08
   url: /assets/presentations/Advanced%20Retrieval%20Augmented%20Generation.pdf
   thumb: /assets/img/talks/advanced-rag.webp
-  blurb: "Techniques for retrieval augmented generation beyond the basic pipeline: chunking, query rewriting and HyDE, hybrid search, long contexts and lost in the middle, re-ranking, multi-step retrieval, and how to evaluate the whole thing."
+  blurb: "Naive RAG. Retrieval: chunking strategies, query rewriting, HyDE, hybrid search (tf-idf, BM25). Generation: long contexts, lost in the middle, re-ranking, repacking. Multi-step retrieval: iterative, CoT-guided, tree of thought. Evaluation: faithfulness, relevance, retrieval metrics (precision@k, MRR, MAP, NDCG)."
 
 - title: Superalignment, or how to train models smarter than us
   date: 2024-07-24
   url: /assets/presentations/Superalignment.pdf
   thumb: /assets/img/talks/superalignment.webp
-  blurb: "OpenAI's weak-to-strong generalization paper. Can a strong model trained on a weak model's labels end up better than its teacher, and which training tricks close more of the gap?"
+  blurb: "Superalignment timeline. Weak-to-strong generalization setup; performance gap recovered. Approaches: naive fine-tuning, bootstrapping, auxiliary confidence loss, generative fine-tuning. Imitating weak supervisor errors; concept saliency. Disanalogies with real superalignment."
 
 - title: Rotary Positional Embeddings (RoPE)
   date: 2024-05-03
   url: /assets/presentations/Rotary%20Positional%20Embeddings.pdf
   thumb: /assets/img/talks/rope.webp
-  blurb: "Starts from attention and sinusoidal positional encodings, then derives rotary positional embeddings step by step and shows why the attention score ends up depending only on relative position."
+  blurb: "Attention, batched attention, self-attention. Sinusoidal positional encodings and their flaws. RoPE: goals, overview, complex-form reinterpretation, full derivation. Relative position property."
 
 - title: Parameter-Efficient Fine-Tuning
   date: 2024-04-30
   url: /assets/presentations/Parameter%20Efficient%20Fine-Tuning.pdf
   thumb: /assets/img/talks/peft.webp
-  blurb: "Ways to fine-tune big models cheaply: adapters, LoRA, quantization (outlier features, QLoRA), prefix tuning and prompt tuning. Also scaling laws for transfer, which say why fine-tuning works so well in the first place."
+  blurb: "Scaling laws for transfer. Memory costs of full fine-tuning. Adapters. LoRA: which matrices to adapt, why it works, serving many adapters. Quantization: absmax, zeropoint, block-wise, vector-wise, outlier features, mixed precision. QLoRA: NF4, double quantization, paged optimizers. Prefix tuning. Prompt tuning."
 
 - title: Understanding Transformers
   date: 2024-03-01
   url: /assets/presentations/Understanding%20Transformers.pdf
   thumb: /assets/img/talks/transformers.webp
-  blurb: "An intro to transformers from scratch. Neural nets, language modeling and sampling, RNNs and the history leading up to attention, then each part of the transformer block one at a time."
+  blurb: "Neural networks, activations, loss functions. Language modeling: autoregressive models, perplexity, sampling (temperature, top-k, beam search). RNNs and LSTMs. Transformers: encoder/decoder variants, embeddings, attention, self-attention, masking, multi-head attention, positional encoding, residual connections, layer normalization, LM head."

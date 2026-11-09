@@ -192,6 +192,9 @@
   line-height: 1.45;
   color: var(--global-text-color-light);
   margin: 0.3rem 0 0;
+}
+// long post descriptions get cut at 3 lines; hand-written blurbs show in full
+.thumb-blurb-clamp {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;

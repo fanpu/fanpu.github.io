@@ -32,7 +32,7 @@
           <div class="thumb-meta">{{ item.date | date: '%b %-d, %Y' }}</div>
         {% endif %}
         {% if blurb != blank %}
-          <p class="thumb-blurb">{{ blurb }}</p>
+          <p class="thumb-blurb{% if item.blurb == blank %} thumb-blurb-clamp{% endif %}">{{ blurb }}</p>
         {% endif %}
       </div>
     </div>
