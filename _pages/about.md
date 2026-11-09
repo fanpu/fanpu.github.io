@@ -48,8 +48,7 @@ GHC 4303.
 I grew up in my hometown Singapore before moving to the US for college and work.
 I try to go back and visit once a year.
 
-Feel free to reach out to me at fzeng[at]alumni[dot]cmu[dot]edu. I am happy to
-chat and provide advice.
+Feel free to reach out to me at fzeng[at]alumni[dot]cmu[dot]edu.
 
 Regrettably, I am unable to provide referrals for people that I have not
 directly collaborated with, as I cannot write you a meaningful recommendation.
