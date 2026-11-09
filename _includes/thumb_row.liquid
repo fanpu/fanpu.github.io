@@ -1,0 +1,33 @@
+{% comment %}
+  One row of a thumb_list. include.item: see thumb_list.liquid.
+{% endcomment %}
+{% assign item = include.item %}
+{% assign href = item.url | relative_url %}
+{% if item.redirect %}
+  {% if item.redirect contains '://' %}
+    {% assign href = item.redirect %}
+  {% else %}
+    {% assign href = item.redirect | relative_url %}
+  {% endif %}
+{% endif %}
+{% assign thumb = null %}
+{% if item.thumb %}
+  {% assign thumb = item.thumb | relative_url %}
+{% elsif item.cover %}
+  {% assign thumb = item.cover | prepend: '/assets/img/posts/' | relative_url %}
+{% endif %}
+{% assign blurb = item.blurb | default: item.description | strip %}
+<div class="thumb-row">
+  <a class="thumb-img" href="{{ href }}" tabindex="-1" aria-hidden="true">
+    {% if thumb %}<img src="{{ thumb }}" alt="" loading="lazy" width="480" height="360">{% endif %}
+  </a>
+  <div class="thumb-body">
+    <a class="thumb-title" href="{{ href }}">{{ item.title }}</a>
+    {% if item.date %}
+      <div class="thumb-meta">{{ item.date | date: '%b %-d, %Y' }}</div>
+    {% endif %}
+    {% if blurb != blank %}
+      <p class="thumb-blurb{% if item.blurb == blank %} thumb-blurb-clamp{% endif %}">{{ blurb }}</p>
+    {% endif %}
+  </div>
+</div>

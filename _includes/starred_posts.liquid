@@ -9,5 +9,5 @@
     {% assign doc = site.posts | where: 'relative_path', path | first %}
     {% if doc %}{% assign docs = docs | push: doc %}{% endif %}
   {% endfor %}
-  {% include thumb_list.liquid items=docs %}
+  {% include thumb_list.liquid items=docs limit=3 %}
 {% endfor %}

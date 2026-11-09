@@ -240,3 +240,56 @@
   color: var(--global-text-color-light);
   margin: 0.4rem 0 0.5rem;
 }
+
+// "Show N more" toggle at the end of long thumbnail lists
+.thumb-more {
+  > summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0.4rem 0 0.2rem;
+    padding: 0.3rem 0.85rem;
+    font-size: 0.85rem;
+    color: var(--global-theme-color);
+    border: 1px solid var(--global-divider-color);
+    border-radius: 999px;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    &::-webkit-details-marker {
+      display: none;
+    }
+    &::after {
+      content: "";
+      width: 0.45em;
+      height: 0.45em;
+      border-right: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      transform: translateY(-0.15em) rotate(45deg);
+      transition: transform 0.15s;
+    }
+    &:hover {
+      border-color: var(--global-theme-color);
+    }
+  }
+  .thumb-more-close {
+    display: none;
+  }
+  &[open] {
+    display: flex;
+    flex-direction: column;
+    > summary {
+      order: 1;
+      align-self: flex-start;
+      &::after {
+        transform: translateY(0.1em) rotate(-135deg);
+      }
+    }
+    .thumb-more-open {
+      display: none;
+    }
+    .thumb-more-close {
+      display: inline;
+    }
+  }
+}

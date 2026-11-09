@@ -64,7 +64,7 @@ forms since then. All banner pictures on the blog are taken by yours truly!
 {% include home_section_head.liquid title="Talks" note="Slides I developed for talks on various LLM-related topics. You are free to share, adapt, and reuse these materials, provided that you give appropriate credit." %}
 </div>
 <div class="home-section-body">
-{% include thumb_list.liquid items=site.data.talks %}
+{% include thumb_list.liquid items=site.data.talks limit=4 %}
 </div>
 </section>
 

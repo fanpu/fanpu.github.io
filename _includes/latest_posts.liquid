@@ -7,7 +7,7 @@
       {% assign latest_posts_limit = latest_posts_size %}
     {% endif %}
     {% assign latest_posts = site.posts | slice: 0, latest_posts_limit %}
-    {% include thumb_list.liquid items=latest_posts %}
+    {% include thumb_list.liquid items=latest_posts limit=4 %}
   {% else %}
     <p>No posts so far...</p>
   {% endif %}
