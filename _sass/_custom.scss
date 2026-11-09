@@ -140,33 +140,30 @@
   content: "Graduate";
 }
 
-// Artifact list: small preview image left of each title/blurb
-.artifact-item {
-  display: flex;
-  gap: 0.9rem;
-  align-items: flex-start;
+// Artifact list: date with a preview image under it, title/blurb on the right
+.artifacts th.artifact-side {
+  width: 26%;
 }
-.artifact-thumb {
-  flex: 0 0 auto;
-  img {
-    display: block;
-    width: 120px;
-    height: 90px;
-    object-fit: cover;
-    border-radius: 6px;
-    border: 1px solid var(--global-divider-color);
-  }
-}
-.artifact-text {
-  min-width: 0;
+.artifact-thumb img {
+  display: block;
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  margin: 0.5rem 0 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--global-divider-color);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
 }
 @media (max-width: 576px) {
-  .artifact-item {
-    flex-direction: column;
-    gap: 0.4rem;
+  .artifacts tr,
+  .artifacts th.artifact-side,
+  .artifacts td {
+    display: block;
+    width: 100%;
   }
-  .artifact-thumb img {
-    width: 160px;
-    height: 120px;
+  .artifacts td {
+    padding-bottom: 1.25rem;
   }
 }
