@@ -25,7 +25,7 @@ ninja.data = [{
           },
         },{id: "nav-artifacts",
           title: "Artifacts",
-          description: "Interactive things I&#39;ve made with LLMs that I think are actually useful for learning.",
+          description: "Interactive things I&#39;ve made with LLMs that I found useful for learning complicated concepts.",
           section: "Navigation",
           handler: () => {
             window.location.href = "/artifacts/";
