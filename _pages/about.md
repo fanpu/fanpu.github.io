@@ -129,7 +129,7 @@ Interactive explainers I made with Claude while trying to understand something. 
 
 Some games that I wish existed but didn't, so I made them with Claude Code
 
-- [Poker trainer](/games/poker/)
+- [FlyJack (a simulated fruit fly brain playing blackjack)](/games/flyjack/)
 - [Blackjack trainer](/games/blackjack/)
 - [Beginner xiangqi (Chinese chess) trainer](/games/xiangqi/)
 - [The Floating Cup (for learning classical Chinese phrases)](/games/the-floating-cup/)
