@@ -1,0 +1,12 @@
+# LLM-made artifacts shown on /artifacts/ and (if selected) the home page.
+#
+# To add one:
+#   1. put the self-contained page at artifacts/<slug>/index.html
+#   2. add an entry below (newest first)
+#
+# - title: Delta rule vs additive memory
+#   url: /artifacts/delta-rule/
+#   date: 2026-09-18
+#   blurb: Add more keys and watch the additive version's recall fall apart while the delta rule holds up.
+#   thumb: /assets/img/artifacts/delta-rule.png   # optional
+#   selected: true                                # show on home page

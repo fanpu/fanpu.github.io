@@ -1,0 +1,28 @@
+{% comment %}
+  Lists entries from _data/artifacts.yml.
+  include.selected=true -> only entries with `selected: true`
+{% endcomment %}
+{% assign items = site.data.artifacts | sort: 'date' | reverse %}
+{% if include.selected %}
+  {% assign items = items | where: 'selected', true %}
+{% endif %}
+<div class="artifacts">
+  <div class="table-responsive">
+    <table class="table table-sm table-borderless">
+      {% for item in items %}
+        <tr>
+          <th scope="row" style="width: 20%">{{ item.date | date: '%b %d, %Y' }}</th>
+          <td>
+            <a class="news-title" href="{{ item.url | relative_url }}">{{ item.title }}</a>
+            {% if item.blurb %}<br><span class="text-muted">{{ item.blurb }}</span>{% endif %}
+            {% if item.thumb and include.selected != true %}
+              <a href="{{ item.url | relative_url }}"
+                ><img src="{{ item.thumb | relative_url }}" alt="{{ item.title }}" loading="lazy" class="img-fluid rounded mt-2" style="max-width: 360px"
+              ></a>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
