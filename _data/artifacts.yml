@@ -10,3 +10,9 @@
 #   blurb: Add more keys and watch the additive version's recall fall apart while the delta rule holds up.
 #   thumb: /assets/img/artifacts/delta-rule.png   # optional
 #   selected: true                                # show on home page
+
+- title: Does Adam favor a basis?
+  url: /artifacts/does-adam-favor-a-basis/
+  date: 2026-11-09
+  blurb: Rotating the keys doesn't change the loss at all, but it does change what Adam does. Hit "Run paired experiment" and watch the GD pair stay stuck at 1e-15 while the Adam pair drifts apart.
+  selected: true
