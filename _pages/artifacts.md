@@ -2,7 +2,7 @@
 layout: page
 permalink: /artifacts/
 title: Artifacts
-description: Interactive things I've made with LLMs that I think are actually useful for learning.
+description: Interactive things I've made with LLMs that I found useful for learning complicated concepts.
 nav: true
 nav_order: 4
 ---
