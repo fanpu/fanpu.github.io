@@ -88,7 +88,7 @@ forms since then. All banner pictures on the blog are taken by yours truly!
 
 <section class="home-section" id="games">
 <div class="home-section-side">
-{% include home_section_head.liquid title="Games" note="Some games that I wish existed but didn't, so I made them with Claude Code." %}
+{% include home_section_head.liquid title="Games" note="Some games that I wish existed but didn't, so I had Claude make them." %}
 </div>
 <div class="home-section-body">
 {% include thumb_list.liquid items=site.data.games %}
