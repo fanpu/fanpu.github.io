@@ -23,6 +23,13 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/courses/";
           },
+        },{id: "nav-artifacts",
+          title: "Artifacts",
+          description: "Interactive things I&#39;ve made with LLMs that I think are actually useful for learning.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/artifacts/";
+          },
         },{id: "nav-cmu-online",
           title: "CMU Online",
           description: "Publicly Accessible CMU Courses",
