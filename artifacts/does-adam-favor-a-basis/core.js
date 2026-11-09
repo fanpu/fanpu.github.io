@@ -1,5 +1,5 @@
 // Delta-rule memory: forward, exact backward, GD/Adam training, paired-run experiment.
-// Plain JS, no dependencies. Shared between the page and the node check.
+// Plain JS, no dependencies.
 
 function mulberry32(seed) {
   let a = seed >>> 0;
