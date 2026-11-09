@@ -1,0 +1,22 @@
+# Starred posts on the home page. Each entry is a post's path under _posts/;
+# the title, cover and description come from the post itself.
+- group: Technical
+  posts:
+    - 2023-06-07-score-based-diffusion-models.markdown
+    - 2025-01-12-bounding-markov-chain-mixing-times-by-spectral-gap.markdown
+    - 2025-01-21-gaussian-processes.markdown
+    - 2023-07-14-high-dimensional-analysis-of-m-estimators.markdown
+    - 2022-06-01-the-delightful-consequences-of-the-graph-minor-theorem.markdown
+    - 2022-01-11-universal-types.markdown
+
+- group: General
+  posts:
+    - 2023-01-02-latex-tips.markdown
+    - 2021-12-24-against-government-scholarships.markdown
+    - 2018-07-31-notes-on-founding-a-startup-to-my-future-self.markdown
+
+- group: CMU
+  posts:
+    - 2023-06-09-advanced-operating-systems-course-review.markdown
+    - 2022-08-15-cmu-computer-networks-review.markdown
+    - 2022-06-22-cmu-scs-ecg-talk.markdown

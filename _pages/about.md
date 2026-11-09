@@ -71,31 +71,7 @@ materials, provided that you give appropriate credit.
 
 Some of my more popular posts:
 
-**Technical Posts**
-
-- [Score-Based Diffusion Models]({% post_url 2023-06-07-score-based-diffusion-models %})
-- [Bounding Mixing Times of Markov Chains via the Spectral Gap]({% post_url 2025-01-12-bounding-markov-chain-mixing-times-by-spectral-gap %})
-- [An Intuitive Introduction to Gaussian Processes]({% post_url 2025-01-21-gaussian-processes %})
-- [(Paper Summary) Zero-shot Image-to-Image Translation]({% link _summaries/2023-10-22-zero-shot-image-to-image-translation.markdown %})
-- [(Paper Summary) The Implicit Bias of Gradient Descent on Separable Data]({% link _summaries/2023-09-09-the-implicit-bias-of-gradient-descent-on-separable-data.markdown %})
-- [A Unified Framework for High-Dimensional Analysis of M-Estimators with Decomposable Regularizers: A Guided Walkthrough]({% post_url 2023-07-14-high-dimensional-analysis-of-m-estimators %})
-- [The Delightful Consequences of the Graph Minor Theorem]({% post_url 2022-06-01-the-delightful-consequences-of-the-graph-minor-theorem %})
-- [Universal types, and your type checker doesn't suck as much as you think]({% post_url 2022-01-11-universal-types %})
-
-**General**
-
-- [The Art of LaTeX: Common Mistakes, and Advice for Typesetting Beautiful, Delightful Proofs]({% post_url 2023-01-02-latex-tips %})
-- [Against Government Scholarships]({% post_url
-  2021-12-24-against-government-scholarships %})
-- [Notes On Founding A Startup To My Future Self]({% post_url
-  2018-07-31-notes-on-founding-a-startup-to-my-future-self %})
-
-**CMU**
-
-- [CMU 15-712 Advanced Operating Systems and Distributed Systems Course Review]({% post_url 2023-06-09-advanced-operating-systems-course-review %})
-- [CMU 15-441/641 Computer Networks Course Review]({% post_url 2022-08-15-cmu-computer-networks-review %})
-- [My Sharing at the Hwa Chong Undergrad Alumni Forum]({% post_url
-    2022-06-22-cmu-scs-ecg-talk %}), i.e. why study Computer Science at CMU
+{% include starred_posts.liquid %}
 
 ### Artifacts
 

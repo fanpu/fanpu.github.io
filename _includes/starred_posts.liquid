@@ -1,0 +1,13 @@
+{% comment %}
+  Renders the groups in _data/starred_posts.yml as thumbnail lists.
+{% endcomment %}
+{% for group in site.data.starred_posts %}
+  <h6 class="thumb-group">{{ group.group }}</h6>
+  {% assign docs = '' | split: '' %}
+  {% for name in group.posts %}
+    {% assign path = name | prepend: '_posts/' %}
+    {% assign doc = site.posts | where: 'relative_path', path | first %}
+    {% if doc %}{% assign docs = docs | push: doc %}{% endif %}
+  {% endfor %}
+  {% include thumb_list.liquid items=docs %}
+{% endfor %}

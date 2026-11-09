@@ -144,6 +144,14 @@
 .thumb-list {
   margin: 0.5rem 0 1rem;
 }
+.thumb-group {
+  margin: 1.25rem 0 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--global-text-color-light);
+}
 .thumb-row {
   display: flex;
   gap: 1.1rem;
