@@ -22,3 +22,25 @@
   date: 2026-11-09
   blurb: How the network in big GPU clusters actually moves data, no networking background needed. Step one packet from GPU to GPU, then keep hitting Send in the credits demo until the buffer fills, and flip to Ethernet to see what happens instead.
   selected: true
+
+- title: Chaos, and why retraining is never the same
+  url: /artifacts/lorenz-lyapunov-chaos/
+  date: 2026-11-09
+  blurb: Two copies of the Lorenz system start 1e-12 apart and still split after a few time units. Shrinking the nudge barely buys you anything. The last section is about why retraining a net with one bit flipped does the same thing.
+  selected: true
+
+- title: Pre-LN vs post-LN gradients
+  url: /artifacts/pre-ln-vs-post-ln-gradients/
+  date: 2026-11-09
+  blurb: Drag the depth slider and watch pre-LN's σ climb like √L while its top-block gradient shrinks by the same factor. Post-LN barely moves. Click a depth on the bottom chart to jump there.
+  selected: true
+
+- title: Why H100 has four NVSwitches
+  url: /artifacts/nvlink-port-budget/
+  date: 2026-11-09
+  blurb: Try wiring 8 GPUs with fewer switches. "3 × 6" looks fine until you tick the external-port box and every switch needs 72 of its 64 ports. Then compare with how B200 gets away with two.
+
+- title: Why do ReLU nets need a bias?
+  url: /artifacts/why-bias-matters/
+  date: 2026-11-09
+  blurb: In step 5, untick "bias on" and hit Reset. The decision regions get stuck as wedges meeting at the origin and held-out accuracy sits around 0.5, however wide you make the net.
