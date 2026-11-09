@@ -1,10 +1,10 @@
 ---
 layout: page
 permalink: /artifacts/
-title: artifacts
+title: Artifacts
 description: Interactive things I've made with LLMs that I think are actually useful for learning.
-nav: false # flip to true once there are a few entries
-nav_order: 6
+nav: true
+nav_order: 4
 ---
 
 {% if site.data.artifacts %}

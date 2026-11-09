@@ -11,7 +11,6 @@ profile:
   more_info: >
 
 news: true # includes a list of news items
-artifacts: true # shows _data/artifacts.yml entries marked selected
 selected_papers: false # includes a list of papers marked as "selected={true}"
 selected_posts: true # includes a list of posts marked as "selected={true}"
 latest_posts: false # includes a list of the newest posts
@@ -117,6 +116,14 @@ Some of my more popular posts:
 - [CMU 15-441/641 Computer Networks Course Review]({% post_url 2022-08-15-cmu-computer-networks-review %})
 - [My Sharing at the Hwa Chong Undergrad Alumni Forum]({% post_url
     2022-06-22-cmu-scs-ecg-talk %}), i.e. why study Computer Science at CMU
+
+### Artifacts
+
+Interactive explainers I made with Claude while trying to understand something. A few favorites are below, and the rest are on the [artifacts page](/artifacts/).
+
+<div class="artifacts-home">
+{% include artifacts.liquid selected=true %}
+</div>
 
 ### Games
 
