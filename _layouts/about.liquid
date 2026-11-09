@@ -48,6 +48,15 @@ layout: default
       {% include news.liquid limit=true %}
     {% endif %}
 
+    <!-- Artifacts -->
+    {% assign selected_artifacts = site.data.artifacts | where: 'selected', true %}
+    {% if page.artifacts and selected_artifacts.size > 0 %}
+      <h2>
+        <a href="{{ '/artifacts/' | relative_url }}" style="color: inherit">artifacts</a>
+      </h2>
+      {% include artifacts.liquid selected=true %}
+    {% endif %}
+
     <!-- Latest posts -->
     {% if site.latest_posts.enabled %}
       <h2>
