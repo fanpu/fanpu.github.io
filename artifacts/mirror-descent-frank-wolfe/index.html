@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="description" content="Two classic variants of projected gradient descent: mirror descent changes how distance is measured, and Frank-Wolfe skips the projection entirely."><link rel="canonical" href="https://fanpu.io/artifacts/mirror-descent-frank-wolfe/"><meta property="og:type" content="article"><meta property="og:title" content="Mirror Descent and Frank-Wolfe"><meta property="og:description" content="Two classic variants of projected gradient descent: mirror descent changes how distance is measured, and Frank-Wolfe skips the projection entirely."><meta property="og:url" content="https://fanpu.io/artifacts/mirror-descent-frank-wolfe/"><meta property="og:site_name" content="Fan Pu Zeng"><meta name="author" content="Fan Pu Zeng">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mirror Descent and Frank-Wolfe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: one reading column of short sections. Each method gets a wide two-column stage, drawing on the left, explanation and controls on the right. */
+:root{
+  --bg:#f2f3f8;
+  --surface:#ffffff;
+  --ink:#1a1d2b;
+  --muted:#5b6178;
+  --line:#d6d9e5;
+  --tint:#e9ecf6;
+  --base:#c2452d;   /* projected gradient descent, the Euclidean baseline */
+  --method:#0e7490; /* the method the section is about */
+  --font-display:"Bricolage Grotesque","IBM Plex Sans",system-ui,sans-serif;
+  --font-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11131b; --surface:#191c28; --ink:#e8eaf3; --muted:#9ba1b8; --line:#2f3447; --tint:#20243380;
+    --base:#f0866e; --method:#4fc4de; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11131b; --surface:#191c28; --ink:#e8eaf3; --muted:#9ba1b8; --line:#2f3447; --tint:#20243380;
+  --base:#f0866e; --method:#4fc4de; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.6}
+main{max-width:1080px;margin:0 auto;padding:48px 20px 72px;display:flex;flex-direction:column;gap:56px}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(2rem,5vw,3rem);font-weight:700;letter-spacing:-0.02em}
+h2{font-size:clamp(1.4rem,3vw,1.85rem);font-weight:700;letter-spacing:-0.01em}
+h3{font-size:1.05rem;font-weight:500}
+p{margin:0}
+.prose{max-width:66ch;display:flex;flex-direction:column;gap:14px}
+.lede{font-size:1.15rem;color:var(--muted)}
+.eyebrow{font-family:var(--font-mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:14px}
+section{display:flex;flex-direction:column;gap:22px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.formula{padding:18px 20px;overflow-x:auto;text-align:center;font-size:1.1rem}
+.swaps{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.swap{padding:16px 18px;border-left:4px solid var(--method);display:flex;flex-direction:column;gap:6px}
+.swap b{font-family:var(--font-display);font-weight:700}
+.stage{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:860px){.stage{grid-template-columns:minmax(0,1fr)}}
+.viz{padding:12px;display:flex;flex-direction:column;gap:10px}
+canvas{display:block;width:100%;touch-action:none;border-radius:6px;cursor:default}
+#cvS{aspect-ratio:100/96}
+#cvF{aspect-ratio:600/460}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.84rem;color:var(--muted);padding:0 4px 2px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:14px;height:4px;border-radius:2px;display:inline-block}
+.sw.base{background:var(--base)} .sw.method{background:var(--method)}
+.sw.ring{width:10px;height:10px;border-radius:50%;border:2px solid var(--ink);background:transparent}
+.sw.cross{width:auto;height:auto;font-family:var(--font-mono);color:var(--ink);font-weight:500}
+.side{display:flex;flex-direction:column;gap:18px}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+button{font:500 .92rem var(--font-body);padding:8px 16px;border-radius:7px;border:1px solid var(--ink);background:var(--ink);color:var(--surface);cursor:pointer}
+button.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+button:hover{opacity:.88}
+button:focus-visible,input:focus-visible{outline:2px solid var(--method);outline-offset:2px}
+.field{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:.92rem}
+.field input[type=range]{flex:1 1 140px;accent-color:var(--method)}
+.field output{font-family:var(--font-mono);font-variant-numeric:tabular-nums;min-width:3.2ch}
+.check{display:flex;align-items:center;gap:8px;font-size:.92rem}
+.check input{accent-color:var(--method);width:16px;height:16px}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.readout.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.readout div{background:var(--surface);padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.readout .k{font-size:.74rem;color:var(--muted);line-height:1.3}
+.readout .v{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-size:1.02rem}
+.readout .v.base{color:var(--base)} .readout .v.method{color:var(--method)}
+.rules{display:flex;flex-direction:column;gap:10px}
+.rule{padding:12px 14px;border-left:4px solid var(--line);overflow-x:auto}
+.rule.base{border-left-color:var(--base)} .rule.method{border-left-color:var(--method)}
+.rule .name{font-size:.8rem;color:var(--muted);margin-bottom:6px}
+.rule math{display:block;text-align:left;font-size:1.12em}
+.note{font-size:.92rem;color:var(--muted)}
+figure{margin:0;display:flex;flex-direction:column;gap:10px}
+.chartwrap{padding:14px;overflow-x:auto}
+.chartwrap svg{display:block;min-width:560px;width:100%;height:auto}
+figcaption{font-size:.88rem;color:var(--muted);max-width:76ch}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:.92rem}
+th,td{text-align:left;vertical-align:top;padding:12px 14px;border-bottom:1px solid var(--line)}
+thead th{font-family:var(--font-display);font-weight:700;font-size:.98rem}
+tbody th{font-weight:500;color:var(--muted);width:19%}
+tbody tr:last-child th,tbody tr:last-child td{border-bottom:0}
+th.c-base{color:var(--base)} th.c-method{color:var(--method)}
+math{font-size:1.06em}
+.tex{white-space:nowrap}
+</style>
+</head>
+<body>
+<main>
+
+<header>
+  <span class="eyebrow">First order optimization, two classic variants</span>
+  <h1>Mirror descent and Frank-Wolfe</h1>
+  <p class="lede prose">Both methods start from projected gradient descent and change one piece of it. Mirror descent changes how distance is measured. Frank-Wolfe changes how the constraint is enforced.</p>
+</header>
+
+<section>
+  <h2>The step they both modify</h2>
+  <div class="prose">
+    <p>A projected gradient step solves a small problem at every iteration. Go downhill along the gradient <span class="tex">g_k</span>, stay close to the current point <span class="tex">x_k</span>, and stay inside the feasible set <span class="tex">C</span>.</p>
+  </div>
+  <div class="card formula"><span class="tex" data-display="1">x_{k+1} = \arg\min_{x \in C} \left\{ \langle g_k, x \rangle + \frac{1}{2\eta}\, \| x - x_k \|_2^2 \right\}</span></div>
+  <div class="swaps">
+    <div class="card swap"><b>Mirror descent</b><span>Replaces the squared Euclidean distance with a distance that fits the shape of the feasible set.</span></div>
+    <div class="card swap"><b>Frank-Wolfe</b><span>Drops the distance term, which leaves a linear problem over the feasible set and no projection.</span></div>
+  </div>
+</section>
+
+<section>
+  <div>
+    <span class="eyebrow">Part one</span>
+    <h2>Mirror descent changes the ruler</h2>
+  </div>
+  <div class="stage">
+    <div class="card viz">
+      <canvas id="cvS" aria-label="Triangle showing the probability simplex with two optimization paths. Projected gradient descent moves in a straight line and is projected back at the edge. Mirror descent curves and stays inside."></canvas>
+      <div class="legend">
+        <span><i class="sw base"></i>Projected gradient descent</span>
+        <span><i class="sw method"></i>Mirror descent with entropy</span>
+        <span><i class="sw cross">+</i>Bottom of the bowl, drag it</span>
+        <span><i class="sw ring"></i>Start, drag it</span>
+      </div>
+    </div>
+    <div class="side">
+      <div class="prose">
+        <p>The feasible set is the probability simplex in three dimensions, drawn as a triangle. Each corner puts all the weight on one coordinate. The loss is a bowl <span class="tex">f(x) = \tfrac12 \|x - t\|_2^2</span> and you can drag its bottom <span class="tex">t</span>.</p>
+        <p>Each outline marks the points that a method treats as equally far from where it stands. The next iterate is the point on that outline that goes furthest downhill according to the current gradient.</p>
+        <p>Projected gradient descent draws a circle. A circle knows nothing about the edges, so the raw step can leave the triangle and must be projected back.</p>
+        <p>Mirror descent with the entropy ruler measures distance with KL divergence. Its outline flattens against nearby edges, because pushing a small coordinate toward zero counts as a long trip. The update multiplies each coordinate by a positive number, so the iterate can never leave.</p>
+      </div>
+      <div class="rules">
+        <div class="card rule base"><div class="name">Projected gradient descent</div><span class="tex">x_{k+1} = \Pi_C\!\left( x_k - \eta\, g_k \right)</span></div>
+        <div class="card rule method"><div class="name">Mirror descent with entropy, also called exponentiated gradient</div><span class="tex">x_{k+1,i} = \dfrac{x_{k,i}\, e^{-\eta g_{k,i}}}{\sum_j x_{k,j}\, e^{-\eta g_{k,j}}}</span></div>
+      </div>
+      <div class="field"><label for="etaS">Step size <span class="tex">\eta</span></label><input type="range" id="etaS" min="0.1" max="1" step="0.05" value="0.4"><output id="etaSv" for="etaS">0.40</output></div>
+      <label class="check" for="ballsS"><input type="checkbox" id="ballsS" checked>Show the outline for the next step</label>
+      <div class="controls">
+        <button id="stepS" type="button">Take one step</button>
+        <button id="playS" type="button" class="ghost">Play</button>
+        <button id="resetS" type="button" class="ghost">Reset</button>
+      </div>
+      <div class="readout" aria-live="off">
+        <div><span class="k">Steps taken</span><span class="v" id="kS">0</span></div>
+        <div><span class="k">Gap to best loss, projected GD</span><span class="v base" id="gapSp">0</span></div>
+        <div><span class="k">Gap to best loss, mirror descent</span><span class="v method" id="gapSe">0</span></div>
+      </div>
+      <p class="note">On a small smooth bowl like this one the circle often arrives in fewer steps. The entropy ruler pays off in high dimension, which the next chart shows.</p>
+    </div>
+  </div>
+
+  <figure>
+    <h3>The payoff appears as the dimension grows</h3>
+    <div class="card chartwrap" id="chart"></div>
+    <figcaption>A simulation run for this page. Every coordinate returns a random loss of 0 or 1. One coordinate has mean 0.3 and the other <span class="tex">d-1</span> have mean 0.5. Both methods start from the uniform vector, take 1,000 steps with their textbook step sizes, and report the averaged iterate. Values are means over 5 seeds. Tuning both step sizes over a grid left the ordering unchanged.</figcaption>
+  </figure>
+  <div class="prose">
+    <p>The Euclidean guarantee scales with the 2-norm of the gradient, which grows like <span class="tex">\sqrt{d}</span> in this problem. The entropy guarantee scales with the largest single coordinate of the gradient and pays only a <span class="tex">\sqrt{\log d}</span> factor for the dimension.</p>
+  </div>
+</section>
+
+<section>
+  <div>
+    <span class="eyebrow">Part two</span>
+    <h2>Frank-Wolfe skips the projection</h2>
+  </div>
+  <div class="stage">
+    <div class="card viz">
+      <canvas id="cvF" aria-label="Polygon feasible set with two optimization paths. Frank-Wolfe moves toward corners of the polygon and zigzags toward the best point on an edge. Projected gradient descent steps outside and is projected back."></canvas>
+      <div class="legend">
+        <span><i class="sw base"></i>Projected gradient descent</span>
+        <span><i class="sw method"></i>Frank-Wolfe</span>
+        <span><i class="sw cross">+</i>Bottom of the bowl, drag it</span>
+        <span><i class="sw ring"></i>Start, drag it</span>
+      </div>
+    </div>
+    <div class="side">
+      <div class="prose">
+        <p>The feasible set is a polygon and the loss is the same kind of bowl. Its bottom sits outside the polygon, so the best feasible point lies on an edge.</p>
+        <p>Each step asks one question. Which point of <span class="tex">C</span> lies furthest in the downhill direction? Picture a line perpendicular to the gradient sliding across the set. The last point it touches is the answer, and for a polygon that point is always a corner. The dashed grey line shows that last contact.</p>
+        <p>Then move part of the way toward that corner. The fraction is <span class="tex">\gamma_k = \frac{2}{k+2}</span>, so the first step jumps all the way and later steps shrink. The new point is a weighted average of two feasible points, which makes it feasible with no projection.</p>
+      </div>
+      <div class="rules">
+        <div class="card rule method"><div class="name">Find the best corner</div><span class="tex">s_k = \arg\min_{s \in C}\ \langle \nabla f(x_k),\, s \rangle</span></div>
+        <div class="card rule method"><div class="name">Move part of the way there</div><span class="tex">x_{k+1} = (1-\gamma_k)\, x_k + \gamma_k\, s_k</span></div>
+      </div>
+      <div class="controls">
+        <button id="stepF" type="button">Take one step</button>
+        <button id="playF" type="button" class="ghost">Play</button>
+        <button id="resetF" type="button" class="ghost">Reset</button>
+      </div>
+      <div class="readout two" aria-live="off">
+        <div><span class="k">Steps taken</span><span class="v" id="kF">0</span></div>
+        <div><span class="k">Fraction for the next step</span><span class="v" id="gamF">1.00</span></div>
+        <div><span class="k">Gap to best loss, projected GD</span><span class="v base" id="gapFp">0</span></div>
+        <div><span class="k">Gap to best loss, Frank-Wolfe</span><span class="v method" id="gapFf">0</span></div>
+      </div>
+      <p class="note">Watch the zigzag. When the best point lies on an edge, the answer alternates between the two corners of that edge, and only the shrinking fraction settles it. The Frank-Wolfe gap bounces instead of falling steadily, and projected gradient descent with step size 0.5 pulls ahead within a few steps on this toy. Frank-Wolfe wins when projecting costs far more than the linear question. Under a nuclear norm constraint, projection needs a full SVD while the linear question needs only the top singular vector pair.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Side by side</h2>
+  <div class="card tablewrap">
+    <table>
+      <thead><tr><th></th><th class="c-base">Projected gradient descent</th><th class="c-method">Mirror descent</th><th class="c-method">Frank-Wolfe</th></tr></thead>
+      <tbody>
+        <tr><th>Work per step</th><td>A gradient and a Euclidean projection onto <span class="tex">C</span></td><td>A gradient and a projection in the chosen geometry, often available in closed form</td><td>A gradient and one linear minimization over <span class="tex">C</span></td></tr>
+        <tr><th>How it stays feasible</th><td>Projects back after each step</td><td>The distance grows steeply near the boundary</td><td>Averages feasible points</td></tr>
+        <tr><th>Worst-case guarantee, convex <span class="tex">f</span></th><td><span class="tex">\dfrac{RG}{\sqrt{K}}</span> with noisy gradients</td><td>The same form, with <span class="tex">R</span> and <span class="tex">G</span> measured in the chosen geometry</td><td><span class="tex">\dfrac{2LD^2}{K+2}</span> for smooth <span class="tex">f</span> with exact gradients, where <span class="tex">L</span> is the smoothness constant and <span class="tex">D</span> is the diameter of <span class="tex">C</span></td></tr>
+        <tr><th>Reach for it when</th><td>The set is simple and Euclidean distance is natural</td><td>The set has its own geometry, such as probability vectors in high dimension</td><td>Projection is expensive, or you want iterates built from few corners</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script>
+(function(){
+"use strict";
+var $ = function(id){ return document.getElementById(id); };
+
+/* ---------- math ---------- */
+document.querySelectorAll(".tex").forEach(function(el){
+  var src = el.textContent;
+  if (window.katex) {
+    try { el.innerHTML = katex.renderToString(src, {output:"mathml", displayMode: el.dataset.display === "1", throwOnError:false}); }
+    catch (e) { /* leave the source text */ }
+  } else {
+    el.style.fontFamily = "var(--font-mono)"; el.style.fontSize = ".88em"; el.style.whiteSpace = "normal";
+  }
+});
+
+/* ---------- helpers ---------- */
+function cssv(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+function colors(){ return {ink:cssv("--ink"), muted:cssv("--muted"), line:cssv("--line"), tint:cssv("--tint"), base:cssv("--base"), method:cssv("--method"), surface:cssv("--surface")}; }
+function fit(cv){
+  var dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
+  var W = Math.round(w*dpr), H = Math.round(h*dpr);
+  if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+  var ctx = cv.getContext("2d"); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h);
+  return {ctx:ctx, w:w, h:h};
+}
+function fmt(v){ v = Math.max(v, 0); return v < 1e-4 ? (v < 1e-12 ? "0" : v.toExponential(1)) : v.toFixed(4); }
+function dotAt(ctx,p,r,fill,stroke,lw){ ctx.beginPath(); ctx.arc(p[0],p[1],r,0,6.2832); if(fill){ctx.fillStyle=fill;ctx.fill();} if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1.5;ctx.stroke();} }
+function seg(ctx,a,b,color,lw,dash){ ctx.save(); ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.strokeStyle=color; ctx.lineWidth=lw||1.5; ctx.setLineDash(dash||[]); ctx.stroke(); ctx.restore(); }
+function cross(ctx,p,color){ ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(p[0]-7,p[1]); ctx.lineTo(p[0]+7,p[1]); ctx.moveTo(p[0],p[1]-7); ctx.lineTo(p[0],p[1]+7); ctx.stroke(); ctx.restore(); }
+function label(ctx,text,x,y,color,align){ ctx.save(); ctx.font='500 12px "IBM Plex Sans", system-ui, sans-serif'; ctx.fillStyle=color; ctx.textAlign=align||"left"; ctx.textBaseline="middle"; ctx.fillText(text,x,y); ctx.restore(); }
+function path(ctx,pts,color,lw){ if(pts.length<2) return; ctx.save(); ctx.beginPath(); ctx.moveTo(pts[0][0],pts[0][1]); for(var i=1;i<pts.length;i++) ctx.lineTo(pts[i][0],pts[i][1]); ctx.strokeStyle=color; ctx.lineWidth=lw||2; ctx.lineJoin="round"; ctx.stroke(); ctx.restore(); }
+function ptr(cv,e){ var r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
+function d2(a,b){ var dx=a[0]-b[0], dy=a[1]-b[1]; return Math.sqrt(dx*dx+dy*dy); }
+
+/* =====================================================================
+   Part one. The simplex.
+   ===================================================================== */
+var S = { eta:0.4, x0:[0.14,0.16,0.70], t:[0.50,0.72,-0.22], pg:[], eg:[], balls:true, timer:null, g:null, drag:null };
+var cvS = $("cvS");
+
+function projSimplex(v){
+  var u = v.slice().sort(function(a,b){return b-a;}), css = 0, th = 0;
+  for (var j=0;j<u.length;j++){ css += u[j]; var t = (css-1)/(j+1); if (u[j]-t > 0) th = t; }
+  return v.map(function(a){ return Math.max(a-th, 0); });
+}
+function fS(x){ var s=0; for (var i=0;i<3;i++){ var d=x[i]-S.t[i]; s+=d*d; } return 0.5*s; }
+function dist3(a,b){ var s=0; for (var i=0;i<3;i++){ var d=a[i]-b[i]; s+=d*d; } return Math.sqrt(s); }
+function nextPG(x){
+  var y = x.map(function(xi,i){ return xi - S.eta*(xi - S.t[i]); });
+  var out = y.some(function(v){ return v < -1e-9; });
+  return {y:y, xn:projSimplex(y), out:out};
+}
+function nextEG(x){
+  var w = x.map(function(xi,i){ return xi*Math.exp(-S.eta*(xi - S.t[i])); });
+  var s = w[0]+w[1]+w[2];
+  return w.map(function(a){ return a/s; });
+}
+function kl(y,x){ var s=0; for (var i=0;i<3;i++){ if (y[i] > 1e-15) s += y[i]*Math.log(y[i]/x[i]); } return s; }
+
+function geomS(w,h){
+  var top = 34, bottom = Math.max(70, h*0.2), side = Math.min(w-56, (h-top-bottom)/0.8660254);
+  var ax = (w-side)/2, ay = top + side*0.8660254;
+  return {side:side, A:[ax,ay], B:[ax+side,ay], C:[ax+side/2, top], w:w, h:h};
+}
+function toScr(g,x){ return [x[0]*g.A[0]+x[1]*g.B[0]+x[2]*g.C[0], x[0]*g.A[1]+x[1]*g.B[1]+x[2]*g.C[1]]; }
+function dirBary(g,u){ var x3 = -u[1]/(g.side*0.8660254), x2 = (u[0] - x3*g.side/2)/g.side; return [-x2-x3, x2, x3]; }
+function toBary(g,p){ var d = dirBary(g,[p[0]-g.A[0], p[1]-g.A[1]]); return [1+d[0], d[1], d[2]]; }
+
+function klOutline(g,x,r){
+  var pts = [], c = toScr(g,x), n = 96;
+  for (var a=0;a<n;a++){
+    var ang = a/n*6.2832, u = [Math.cos(ang), Math.sin(ang)], d = dirBary(g,u), smax = Infinity;
+    for (var i=0;i<3;i++){ if (d[i] < 0) smax = Math.min(smax, x[i]/(-d[i])); }
+    var at = function(s){ return kl([x[0]+s*d[0], x[1]+s*d[1], x[2]+s*d[2]], x); };
+    var s;
+    if (at(smax) <= r) s = smax;
+    else { var lo=0, hi=smax; for (var it=0;it<34;it++){ var mid=(lo+hi)/2; if (at(mid) < r) lo=mid; else hi=mid; } s = (lo+hi)/2; }
+    pts.push([c[0]+s*u[0], c[1]+s*u[1]]);
+  }
+  return pts;
+}
+function subLabel(ctx,letter,sub,x,y,color){
+  ctx.save(); ctx.fillStyle=color; ctx.textBaseline="alphabetic"; ctx.textAlign="left";
+  ctx.font='italic 500 15px "IBM Plex Sans", system-ui, sans-serif'; ctx.fillText(letter,x,y);
+  var w = ctx.measureText(letter).width;
+  ctx.font='500 10px "IBM Plex Sans", system-ui, sans-serif'; ctx.fillText(sub,x+w+1,y+4); ctx.restore();
+}
+
+function drawS(){
+  var f = fit(cvS), ctx = f.ctx, g = geomS(f.w,f.h), c = colors(); S.g = g;
+  var tri = function(){ ctx.beginPath(); ctx.moveTo(g.A[0],g.A[1]); ctx.lineTo(g.B[0],g.B[1]); ctx.lineTo(g.C[0],g.C[1]); ctx.closePath(); };
+  tri(); ctx.fillStyle = c.tint; ctx.fill();
+  // contours of the bowl, inside the feasible set
+  var ts = toScr(g,S.t), unit = g.side/Math.SQRT2;
+  ctx.save(); tri(); ctx.clip(); ctx.strokeStyle = c.line; ctx.lineWidth = 1;
+  for (var r=0.12; r<1.9; r+=0.12){ ctx.beginPath(); ctx.arc(ts[0],ts[1],r*unit,0,6.2832); ctx.stroke(); }
+  ctx.restore();
+  tri(); ctx.strokeStyle = c.ink; ctx.lineWidth = 1.5; ctx.stroke();
+  subLabel(ctx,"e","1",g.A[0]-22,g.A[1]+6,c.muted); subLabel(ctx,"e","2",g.B[0]+8,g.B[1]+6,c.muted); subLabel(ctx,"e","3",g.C[0]-7,g.C[1]-10,c.muted);
+
+  // best feasible point
+  var xs = projSimplex(S.t), ps = toScr(g,xs);
+  dotAt(ctx,ps,7,null,c.ink,1.5); dotAt(ctx,ps,2,c.ink);
+  label(ctx,"best feasible point", ps[0]-13, ps[1]+16, c.muted, "right");
+
+  var xp = S.pg[S.pg.length-1], xe = S.eg[S.eg.length-1];
+  var np = nextPG(xp), ne = nextEG(xe);
+
+  if (S.balls){
+    // Euclidean outline through the next projected-GD iterate
+    var rp = dist3(xp,np.xn)*unit, cp = toScr(g,xp);
+    if (rp > 2){
+      ctx.save(); ctx.beginPath(); ctx.arc(cp[0],cp[1],rp,0,6.2832); ctx.globalAlpha=.10; ctx.fillStyle=c.base; ctx.fill(); ctx.globalAlpha=.75; ctx.strokeStyle=c.base; ctx.lineWidth=1.5; ctx.stroke(); ctx.restore();
+      if (np.out){
+        var ys = toScr(g,np.y), nn = toScr(g,np.xn);
+        seg(ctx,cp,ys,c.base,1.3,[4,4]); seg(ctx,ys,nn,c.base,1.3,[2,3]);
+        dotAt(ctx,ys,4,c.surface,c.base,1.5);
+        label(ctx,"raw step, then projected", ys[0]+9, ys[1]+2, c.base);
+      }
+      dotAt(ctx,toScr(g,np.xn),3.5,c.surface,c.base,1.5);
+    }
+    // KL outline through the next mirror-descent iterate
+    var rk = kl(ne,xe);
+    if (dist3(xe,ne)*unit > 2){
+      var o = klOutline(g,xe,rk);
+      ctx.save(); ctx.beginPath(); ctx.moveTo(o[0][0],o[0][1]); for (var i=1;i<o.length;i++) ctx.lineTo(o[i][0],o[i][1]); ctx.closePath();
+      ctx.globalAlpha=.12; ctx.fillStyle=c.method; ctx.fill(); ctx.globalAlpha=.8; ctx.strokeStyle=c.method; ctx.lineWidth=1.5; ctx.stroke(); ctx.restore();
+      dotAt(ctx,toScr(g,ne),3.5,c.surface,c.method,1.5);
+    }
+  }
+
+  // paths
+  var pp = S.pg.map(function(x){return toScr(g,x);}), pe = S.eg.map(function(x){return toScr(g,x);});
+  path(ctx,pp,c.base,2); path(ctx,pe,c.method,2);
+  pp.forEach(function(p){ dotAt(ctx,p,2.5,c.base); }); pe.forEach(function(p){ dotAt(ctx,p,2.5,c.method); });
+  if (S.pg.length > 1){ dotAt(ctx,pp[pp.length-1],5,c.base,c.surface,1.5); dotAt(ctx,pe[pe.length-1],5,c.method,c.surface,1.5); }
+
+  // handles
+  var p0 = toScr(g,S.x0);
+  dotAt(ctx,p0,7,c.surface,c.ink,2);
+  label(ctx,"start", p0[0]+12, p0[1]-10, c.muted);
+  cross(ctx,ts,c.ink);
+  label(ctx,"bottom of the bowl", Math.min(ts[0]+12, g.w-118), ts[1]+ (ts[1] > g.h-22 ? -14 : 14), c.muted);
+
+  // readouts
+  var fstar = fS(xs);
+  $("kS").textContent = S.pg.length-1;
+  $("gapSp").textContent = fmt(fS(xp)-fstar);
+  $("gapSe").textContent = fmt(fS(xe)-fstar);
+}
+function resetS(){ stopS(); S.pg=[S.x0.slice()]; S.eg=[S.x0.slice()]; drawS(); }
+function stepS(){
+  if (S.pg.length > 200) return false;
+  var xp = S.pg[S.pg.length-1], xe = S.eg[S.eg.length-1], a = nextPG(xp).xn, b = nextEG(xe);
+  var moved = dist3(a,xp) + dist3(b,xe);
+  S.pg.push(a); S.eg.push(b); drawS();
+  return moved > 2e-4;
+}
+function stopS(){ if (S.timer){ clearInterval(S.timer); S.timer=null; } $("playS").textContent = "Play"; }
+$("stepS").addEventListener("click", function(){ stopS(); stepS(); });
+$("resetS").addEventListener("click", resetS);
+$("playS").addEventListener("click", function(){
+  if (S.timer){ stopS(); return; }
+  $("playS").textContent = "Pause";
+  S.timer = setInterval(function(){ if (!stepS() || S.pg.length > 70) stopS(); }, 320);
+});
+$("etaS").addEventListener("input", function(e){ S.eta = parseFloat(e.target.value); $("etaSv").textContent = S.eta.toFixed(2); resetS(); });
+$("ballsS").addEventListener("change", function(e){ S.balls = e.target.checked; drawS(); });
+
+function hitS(p){
+  var g = S.g; if (!g) return null;
+  var dt = d2(p,toScr(g,S.t)), ds = d2(p,toScr(g,S.x0));
+  if (Math.min(dt,ds) > 30) return null;
+  return dt < ds ? "t" : "x0";
+}
+cvS.addEventListener("pointerdown", function(e){ var h = hitS(ptr(cvS,e)); if (!h) return; S.drag = h; cvS.setPointerCapture(e.pointerId); e.preventDefault(); });
+cvS.addEventListener("pointermove", function(e){
+  var p = ptr(cvS,e), g = S.g;
+  if (!S.drag){ cvS.style.cursor = hitS(p) ? "grab" : "default"; return; }
+  cvS.style.cursor = "grabbing";
+  p = [Math.max(12,Math.min(g.w-12,p[0])), Math.max(12,Math.min(g.h-12,p[1]))];
+  var b = toBary(g,p);
+  if (S.drag === "t") S.t = b;
+  else { var q = projSimplex(b); S.x0 = q.map(function(v){ return 0.955*v + 0.015; }); }
+  resetS();
+});
+["pointerup","pointercancel"].forEach(function(n){ cvS.addEventListener(n, function(){ S.drag = null; cvS.style.cursor = "default"; }); });
+
+/* =====================================================================
+   Part two. Frank-Wolfe on a polygon. Geometry lives in a 600 by 460 space.
+   ===================================================================== */
+var LW = 600, LH = 460;
+var POLY = [[0.18,0.70],[0.30,0.30],[0.55,0.16],[0.80,0.36],[0.78,0.74],[0.45,0.86]].map(function(p){ return [p[0]*LW, p[1]*LH]; });
+var F = { x0:[0.34*LW,0.66*LH], t:[0.80*LW,0.13*LH], fw:[], pg:[], eta:0.5, timer:null, sc:1, drag:null };
+var cvF = $("cvF");
+
+function inside(p){
+  for (var i=0;i<POLY.length;i++){ var a=POLY[i], b=POLY[(i+1)%POLY.length]; if ((b[0]-a[0])*(p[1]-a[1]) - (b[1]-a[1])*(p[0]-a[0]) < -1e-9) return false; }
+  return true;
+}
+function projPoly(p){
+  if (inside(p)) return p.slice();
+  var best = null, bd = Infinity;
+  for (var i=0;i<POLY.length;i++){
+    var a=POLY[i], b=POLY[(i+1)%POLY.length], ex=b[0]-a[0], ey=b[1]-a[1];
+    var s = ((p[0]-a[0])*ex + (p[1]-a[1])*ey)/(ex*ex+ey*ey); s = Math.max(0,Math.min(1,s));
+    var q = [a[0]+s*ex, a[1]+s*ey], d = d2(p,q);
+    if (d < bd){ bd = d; best = q; }
+  }
+  return best;
+}
+function fF(x){ var dx=x[0]-F.t[0], dy=x[1]-F.t[1]; return 0.5*(dx*dx+dy*dy)/1e4; }
+function lmo(gr){ var bi=0, bv=Infinity; for (var i=0;i<POLY.length;i++){ var v = gr[0]*POLY[i][0]+gr[1]*POLY[i][1]; if (v < bv){ bv=v; bi=i; } } return POLY[bi]; }
+function gammaAt(k){ return 2/(k+2); }
+function nextFW(x,k){ var gr=[x[0]-F.t[0], x[1]-F.t[1]], s=lmo(gr), gm=gammaAt(k); return {s:s, g:gr, gm:gm, xn:[x[0]+gm*(s[0]-x[0]), x[1]+gm*(s[1]-x[1])]}; }
+function nextPGF(x){ var y=[x[0]-F.eta*(x[0]-F.t[0]), x[1]-F.eta*(x[1]-F.t[1])]; return {y:y, xn:projPoly(y), out:!inside(y)}; }
+
+function drawF(){
+  var f = fit(cvF), ctx = f.ctx, c = colors(), sc = f.w/LW; F.sc = sc;
+  ctx.save(); ctx.scale(sc,sc);
+  var poly = function(){ ctx.beginPath(); ctx.moveTo(POLY[0][0],POLY[0][1]); for (var i=1;i<POLY.length;i++) ctx.lineTo(POLY[i][0],POLY[i][1]); ctx.closePath(); };
+  poly(); ctx.fillStyle = c.tint; ctx.fill();
+  ctx.save(); poly(); ctx.clip(); ctx.strokeStyle = c.line; ctx.lineWidth = 1;
+  for (var r=40; r<900; r+=40){ ctx.beginPath(); ctx.arc(F.t[0],F.t[1],r,0,6.2832); ctx.stroke(); }
+  ctx.restore();
+  poly(); ctx.strokeStyle = c.ink; ctx.lineWidth = 1.5; ctx.stroke();
+  label(ctx,"C", 0.5*LW-4, 0.56*LH, c.muted);
+
+  var xs = projPoly(F.t);
+  dotAt(ctx,xs,7,null,c.ink,1.5); dotAt(ctx,xs,2,c.ink);
+
+  var k = F.fw.length-1, xf = F.fw[k], xp = F.pg[k];
+  var nf = nextFW(xf,k), np = nextPGF(xp);
+  var gn = Math.sqrt(nf.g[0]*nf.g[0]+nf.g[1]*nf.g[1]);
+
+  // upcoming Frank-Wolfe step
+  if (gn > 1e-6 && d2(xf,nf.xn) > 1.5){
+    var ux = -nf.g[0]/gn, uy = -nf.g[1]/gn;           // downhill direction
+    var a = [nf.s[0]+uy*700, nf.s[1]-ux*700], b = [nf.s[0]-uy*700, nf.s[1]+ux*700];
+    seg(ctx,a,b,c.muted,1.2,[6,5]);                    // the sliding line at its last contact
+    seg(ctx,xf,nf.s,c.method,1.4,[4,4]);
+    // downhill arrow
+    var tip = [xf[0]+ux*46, xf[1]+uy*46];
+    seg(ctx,xf,tip,c.ink,1.8);
+    ctx.save(); ctx.fillStyle=c.ink; ctx.beginPath(); ctx.moveTo(tip[0]+ux*8,tip[1]+uy*8); ctx.lineTo(tip[0]-uy*4.5,tip[1]+ux*4.5); ctx.lineTo(tip[0]+uy*4.5,tip[1]-ux*4.5); ctx.closePath(); ctx.fill(); ctx.restore();
+    ctx.save(); ctx.fillStyle=c.method; ctx.fillRect(nf.s[0]-6,nf.s[1]-6,12,12); ctx.strokeStyle=c.surface; ctx.lineWidth=1.5; ctx.strokeRect(nf.s[0]-6,nf.s[1]-6,12,12); ctx.restore();
+    var ox = nf.s[0] < LW/2 ? -12 : 12;
+    label(ctx,"best corner", nf.s[0]+ox, nf.s[1] + (nf.s[1] < LH/2 ? -14 : 16), c.method, ox < 0 ? "right" : "left");
+    dotAt(ctx,nf.xn,3.5,c.surface,c.method,1.5);
+  }
+  // upcoming projected-GD step
+  if (d2(xp,np.xn) > 1.5){
+    if (np.out){ seg(ctx,xp,np.y,c.base,1.3,[4,4]); seg(ctx,np.y,np.xn,c.base,1.3,[2,3]); dotAt(ctx,np.y,4,c.surface,c.base,1.5); }
+    dotAt(ctx,np.xn,3.5,c.surface,c.base,1.5);
+  }
+
+  path(ctx,F.pg,c.base,2); path(ctx,F.fw,c.method,2);
+  F.pg.forEach(function(p){ dotAt(ctx,p,2.5,c.base); }); F.fw.forEach(function(p){ dotAt(ctx,p,2.5,c.method); });
+  if (k > 0){ dotAt(ctx,xp,5,c.base,c.surface,1.5); dotAt(ctx,xf,5,c.method,c.surface,1.5); }
+
+  dotAt(ctx,F.x0,7,c.surface,c.ink,2);
+  label(ctx,"start", F.x0[0]-12, F.x0[1]+14, c.muted, "right");
+  cross(ctx,F.t,c.ink);
+  label(ctx,"bottom of the bowl", Math.min(F.t[0]+12, LW-120), F.t[1] + (F.t[1] < 24 ? 14 : -14), c.muted);
+  ctx.restore();
+
+  var fstar = fF(xs);
+  $("kF").textContent = k;
+  $("gamF").textContent = gammaAt(k).toFixed(2);
+  $("gapFp").textContent = fmt(fF(xp)-fstar);
+  $("gapFf").textContent = fmt(fF(xf)-fstar);
+}
+function resetF(){ stopF(); F.fw=[F.x0.slice()]; F.pg=[F.x0.slice()]; drawF(); }
+function stepF(){
+  var k = F.fw.length-1; if (k >= 120) return false;
+  F.fw.push(nextFW(F.fw[k],k).xn); F.pg.push(nextPGF(F.pg[k]).xn); drawF(); return true;
+}
+function stopF(){ if (F.timer){ clearInterval(F.timer); F.timer=null; } $("playF").textContent = "Play"; }
+$("stepF").addEventListener("click", function(){ stopF(); stepF(); });
+$("resetF").addEventListener("click", resetF);
+$("playF").addEventListener("click", function(){
+  if (F.timer){ stopF(); return; }
+  $("playF").textContent = "Pause";
+  F.timer = setInterval(function(){ if (!stepF() || F.fw.length > 40) stopF(); }, 420);
+});
+function hitF(p){
+  var q = [p[0]/F.sc, p[1]/F.sc], dt = d2(q,F.t), ds = d2(q,F.x0);
+  if (Math.min(dt,ds) > 30/F.sc) return null;
+  return dt < ds ? "t" : "x0";
+}
+cvF.addEventListener("pointerdown", function(e){ var h = hitF(ptr(cvF,e)); if (!h) return; F.drag = h; cvF.setPointerCapture(e.pointerId); e.preventDefault(); });
+cvF.addEventListener("pointermove", function(e){
+  var p = ptr(cvF,e);
+  if (!F.drag){ cvF.style.cursor = hitF(p) ? "grab" : "default"; return; }
+  cvF.style.cursor = "grabbing";
+  var q = [Math.max(10,Math.min(LW-10,p[0]/F.sc)), Math.max(10,Math.min(LH-10,p[1]/F.sc))];
+  if (F.drag === "t") F.t = q; else F.x0 = projPoly(q);
+  resetF();
+});
+["pointerup","pointercancel"].forEach(function(n){ cvF.addEventListener(n, function(){ F.drag = null; cvF.style.cursor = "default"; }); });
+
+/* =====================================================================
+   Dimension chart. Numbers come from the simulation described in the caption.
+   ===================================================================== */
+(function(){
+  var D = [4,16,64,256,1024,4096];
+  var PGD = [0.0268,0.0745,0.1290,0.1722,0.1894,0.1986];
+  var EG  = [0.0263,0.0409,0.0461,0.0591,0.0578,0.0727];
+  var x0 = 64, x1 = 500, yb = 270, yt = 50;
+  var X = function(i){ return x0 + i*(x1-x0)/(D.length-1); };
+  var Y = function(v){ return yb - v/0.2*(yb-yt); };
+  var s = '<svg viewBox="0 0 720 320" role="img" aria-label="Line chart. As the dimension grows from 4 to 4096, the gap to the best loss rises from 0.03 to 0.20 for projected gradient descent and from 0.03 to 0.07 for mirror descent with entropy." font-family="IBM Plex Sans, system-ui, sans-serif">';
+  [0,0.05,0.10,0.15,0.20].forEach(function(v){
+    s += '<line x1="'+x0+'" x2="'+x1+'" y1="'+Y(v)+'" y2="'+Y(v)+'" style="stroke:var(--line)" stroke-width="1"/>';
+    s += '<text x="'+(x0-10)+'" y="'+(Y(v)+4)+'" text-anchor="end" font-size="12" style="fill:var(--muted);font-variant-numeric:tabular-nums">'+v.toFixed(2)+'</text>';
+  });
+  D.forEach(function(d,i){ s += '<text x="'+X(i)+'" y="'+(yb+20)+'" text-anchor="middle" font-size="12" style="fill:var(--muted);font-variant-numeric:tabular-nums">'+d.toLocaleString("en-US")+'</text>'; });
+  s += '<text x="'+((x0+x1)/2)+'" y="'+(yb+42)+'" text-anchor="middle" font-size="12.5" style="fill:var(--muted)">dimension d, log scale</text>';
+  s += '<text x="'+x0+'" y="22" font-size="12.5" style="fill:var(--muted)">gap to the best achievable loss after 1,000 steps</text>';
+  s += '<text x="'+(x0+6)+'" y="'+(Y(0.2)-7)+'" font-size="11.5" style="fill:var(--muted)">0.20 means no progress at all</text>';
+  var line = function(arr,col){
+    var pts = arr.map(function(v,i){ return X(i)+","+Y(v); }).join(" "), o = '<polyline points="'+pts+'" fill="none" style="stroke:var('+col+')" stroke-width="2.5" stroke-linejoin="round"/>';
+    arr.forEach(function(v,i){ o += '<circle cx="'+X(i)+'" cy="'+Y(v)+'" r="'+(i===arr.length-1?5:3.5)+'" style="fill:var('+col+');stroke:var(--surface)" stroke-width="1.5"/>'; });
+    return o;
+  };
+  s += line(PGD,"--base") + line(EG,"--method");
+  s += '<text x="'+(x1+14)+'" y="'+(Y(PGD[5])+4)+'" font-size="13" font-weight="600" style="fill:var(--base)">Projected gradient descent</text>';
+  s += '<text x="'+(x1+14)+'" y="'+(Y(EG[5])+4)+'" font-size="13" font-weight="600" style="fill:var(--method)">Mirror descent with entropy</text>';
+  s += '</svg>';
+  $("chart").innerHTML = s;
+})();
+
+/* ---------- boot and redraw ---------- */
+function redraw(){ drawS(); drawF(); }
+S.pg=[S.x0.slice()]; S.eg=[S.x0.slice()]; F.fw=[F.x0.slice()]; F.pg=[F.x0.slice()];
+// open in a working state, a few steps in
+for (var i=0;i<3;i++){ S.pg.push(nextPG(S.pg[i]).xn); S.eg.push(nextEG(S.eg[i])); }
+for (var j=0;j<3;j++){ F.fw.push(nextFW(F.fw[j],j).xn); F.pg.push(nextPGF(F.pg[j]).xn); }
+redraw();
+window.addEventListener("resize", redraw);
+if (window.ResizeObserver){ var ro = new ResizeObserver(redraw); ro.observe(cvS); ro.observe(cvF); }
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(redraw);
+new MutationObserver(redraw).observe(document.documentElement, {attributes:true, attributeFilter:["data-theme"]});
+if (window.matchMedia){ var mq = window.matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", redraw); }
+})();
+</script>
+</body>
+</html>

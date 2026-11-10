@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="description" content="How close to orthogonal can N unit vectors in d dimensions be? The Welch bound, its short proof, when it is tight, and where it shows up in ML."><link rel="canonical" href="https://fanpu.io/artifacts/welch-bound/"><meta property="og:type" content="article"><meta property="og:title" content="The Welch Bound"><meta property="og:description" content="How close to orthogonal can N unit vectors in d dimensions be? The Welch bound, its short proof, when it is tight, and where it shows up in ML."><meta property="og:url" content="https://fanpu.io/artifacts/welch-bound/"><meta property="og:site_name" content="Fan Pu Zeng"><meta name="author" content="Fan Pu Zeng">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Welch bound</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf8f3; --paper:#ffffff; --ink:#1f2328; --muted:#5c6470; --rule:#e3ded3;
+  --accent:#8a3b12; --accent-soft:#f6e9df; --blue:#1f4e8c; --blue-soft:#e6eef8; --green:#2e6b3a; --green-soft:#e6f1e8;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Source Serif 4',Georgia,serif;font-size:17px;line-height:1.6}
+header{background:var(--paper);border-bottom:1px solid var(--rule);padding:48px 20px 36px}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px}
+h1{font-family:'Inter',sans-serif;font-weight:600;font-size:40px;letter-spacing:-0.02em;margin:0 0 10px}
+.sub{color:var(--muted);font-size:18px;max-width:640px}
+h2{font-family:'Inter',sans-serif;font-weight:600;font-size:24px;letter-spacing:-0.01em;margin:56px 0 14px;padding-top:8px;border-top:1px solid var(--rule)}
+h3{font-family:'Inter',sans-serif;font-weight:600;font-size:17px;margin:28px 0 8px;color:var(--ink)}
+p{margin:0 0 14px}
+nav.toc{font-family:'Inter',sans-serif;font-size:14px;margin:28px auto 0;display:flex;flex-wrap:wrap;gap:8px 18px}
+nav.toc a{color:var(--blue);text-decoration:none}
+nav.toc a:hover{text-decoration:underline}
+.box{background:var(--paper);border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:6px;padding:16px 20px;margin:18px 0}
+.box.thm{border-left-color:var(--blue)}
+.box.def{border-left-color:var(--green)}
+.box .label{font-family:'Inter',sans-serif;font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.proof{border-left:2px solid var(--rule);padding-left:16px;margin:10px 0 18px}
+.proof .label{font-family:'Inter',sans-serif;font-style:italic;font-weight:500;color:var(--muted);font-size:15px}
+.qed{float:right;color:var(--muted)}
+.note{background:var(--accent-soft);border-radius:6px;padding:12px 16px;margin:16px 0;font-size:16px}
+.note b{font-family:'Inter',sans-serif;font-weight:600}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:4px 0}
+code,pre{font-family:var(--mono);font-size:14px}
+pre{background:#f3f1ea;border:1px solid var(--rule);border-radius:6px;padding:14px 16px;overflow-x:auto;line-height:1.5}
+table{border-collapse:collapse;width:100%;margin:12px 0 18px;font-size:16px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:'Inter',sans-serif;font-weight:600;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+details{background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:12px 16px;margin:10px 0}
+summary{cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;font-size:15px}
+details[open] summary{margin-bottom:8px}
+a{color:var(--blue)}
+.src{font-size:15px;color:var(--muted)}
+ol.refs li{margin-bottom:8px;font-size:16px}
+/* lab */
+.lab{background:var(--paper);border:1px solid var(--rule);border-radius:8px;padding:20px;margin:20px 0}
+.lab .controls{display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;font-family:'Inter',sans-serif;font-size:14px}
+.lab label{display:flex;flex-direction:column;gap:4px}
+.lab input[type=range]{width:100%}
+.lab .val{font-family:var(--mono);color:var(--accent)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px}
+button{font-family:'Inter',sans-serif;font-size:14px;font-weight:500;padding:8px 14px;border-radius:6px;border:1px solid var(--rule);background:#fff;color:var(--ink);cursor:pointer}
+button:hover{border-color:var(--blue);color:var(--blue)}
+button.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+button.primary:hover{background:#163a69;color:#fff}
+button.preset{font-size:13px;padding:5px 10px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.stat{background:var(--bg);border-radius:6px;padding:10px 12px;font-family:'Inter',sans-serif}
+.stat .k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.stat .v{font-family:var(--mono);font-size:20px;margin-top:2px}
+.stat.hi .v{color:var(--blue)}
+.canvases{display:grid;grid-template-columns:260px 1fr;gap:18px;align-items:start;margin-top:10px}
+canvas{width:100%;height:auto;background:#fff;border:1px solid var(--rule);border-radius:6px}
+.cap{font-family:'Inter',sans-serif;font-size:13px;color:var(--muted);margin-top:6px}
+.status{font-family:var(--mono);font-size:13px;color:var(--muted);min-height:18px;margin-top:6px}
+@media (max-width:640px){.canvases{grid-template-columns:1fr}.lab .controls{grid-template-columns:1fr}h1{font-size:32px}}
+footer{color:var(--muted);font-size:14px;padding:40px 20px 60px;text-align:center;font-family:'Inter',sans-serif}
+</style>
+</head>
+<body>
+
+<header>
+<div class="wrap">
+<h1>The Welch bound</h1>
+<p class="sub">How many unit vectors can you pack into $d$ dimensions before some pair is forced to overlap, and by how much. Statement, the two-line proof, the equality cases, the higher-order bounds, where the bound stops being tight, and a sandbox to try to beat it.</p>
+<nav class="toc">
+  <a href="#setup">1. Setup</a>
+  <a href="#gram">2. Gram matrix</a>
+  <a href="#fp">3. Frame potential</a>
+  <a href="#welch">4. The bound</a>
+  <a href="#examples">5. Examples</a>
+  <a href="#lab">6. Sandbox</a>
+  <a href="#higher">7. Higher orders</a>
+  <a href="#limits">8. When it is not tight</a>
+  <a href="#random">9. Random vectors</a>
+  <a href="#ml">10. Where it shows up in ML</a>
+  <a href="#exercises">11. Exercises</a>
+  <a href="#refs">12. Reading</a>
+</nav>
+</div>
+</header>
+
+<main class="wrap">
+
+<div class="box thm" style="margin-top:36px">
+<div class="label">Theorem (Welch, 1974)</div>
+Let $x_1,\dots,x_N$ be unit vectors in $\mathbb{R}^d$ or $\mathbb{C}^d$, and let $\mu=\max_{i\ne j}|\langle x_i,x_j\rangle|$. Then
+$$\mu^2 \;\ge\; \frac{N-d}{d\,(N-1)}.$$
+Equality holds exactly when the vectors form an equiangular tight frame, two words that are defined in Sections 3 and 4.
+</div>
+
+<p>Everything below is written for real vectors. The complex case changes only the transpose to a conjugate transpose, and one dimension count in Section 8, and I flag both places.</p>
+
+<h2 id="setup">1. Setup and the question</h2>
+
+<p>Take $N$ unit vectors $x_1,\dots,x_N\in\mathbb{R}^d$. Their pairwise overlaps are the inner products $\langle x_i,x_j\rangle$, and since the vectors have unit length these are cosines of the angles between them. The quantity we care about is the worst overlap,</p>
+$$\mu \;=\; \max_{i\ne j}\,|\langle x_i,x_j\rangle|,$$
+<p>which is called the <em>coherence</em> of the set. Small coherence means every pair is close to orthogonal.</p>
+
+<p>If $N\le d$ you can make $\mu=0$ by picking orthonormal vectors. Once $N \gt d$ that is impossible, because $d$-dimensional space has only $d$ mutually orthogonal directions. The question is quantitative. With $N \gt d$ vectors, how small can $\mu$ be? The Welch bound answers with a floor that depends only on $N$ and $d$.</p>
+
+<p>Plug in two cases to get a feel. With $N=d+1$ the floor is $\mu^2\ge 1/d^2$, so $\mu\ge 1/d$. With $N\to\infty$ the floor tends to $1/d$, so no matter how many vectors you add, you cannot push coherence below roughly $1/\sqrt d$. The whole proof is one identity about a matrix plus one application of the inequality $\|A\|_F^2\ge 0$.</p>
+
+<h2 id="gram">2. The Gram matrix, computed two ways</h2>
+
+<p>Stack the vectors as columns of a matrix $X\in\mathbb{R}^{d\times N}$. Two products of $X$ with itself appear throughout.</p>
+
+<div class="box def">
+<div class="label">Definition</div>
+The <em>Gram matrix</em> is $G = X^\top X \in \mathbb{R}^{N\times N}$, with entries $G_{ij}=\langle x_i,x_j\rangle$. The <em>frame operator</em> is $S = XX^\top\in\mathbb{R}^{d\times d}$, equal to $\sum_{i=1}^N x_i x_i^\top$.
+</div>
+
+<p>Four facts about these, each one line.</p>
+<ul>
+<li>$G$ has ones on the diagonal, because $\|x_i\|=1$. Its off-diagonal entries are exactly the overlaps we want to control.</li>
+<li>$\operatorname{rank}(G)\le d$, since $G=X^\top X$ and $X$ has only $d$ rows. This is the only place the dimension $d$ enters.</li>
+<li>$\operatorname{tr}(S)=\sum_i \|x_i\|^2 = N$.</li>
+<li>The squared Frobenius norms agree, $\|G\|_F^2=\|S\|_F^2$. Both equal $\operatorname{tr}(X^\top X X^\top X)$, using $\|A\|_F^2=\operatorname{tr}(A^\top A)$ and the cyclic property $\operatorname{tr}(ABC)=\operatorname{tr}(CAB)$.</li>
+</ul>
+
+<p>The last fact is the hinge of the proof. The same number $\|G\|_F^2$ can be read off $G$, where it is a sum of squared overlaps, or off $S$, where it is constrained by the small dimension $d$. Comparing the two readings gives the bound.</p>
+
+<h2 id="fp">3. The frame potential inequality</h2>
+
+<p>Reading $\|G\|_F^2$ off $G$ gives a sum over all $N^2$ pairs,</p>
+$$\|G\|_F^2 \;=\; \sum_{i=1}^N\sum_{j=1}^N \langle x_i,x_j\rangle^2 .$$
+<p>Benedetto and Fickus call this the <em>frame potential</em> of the set. Reading it off $S$ gives the following.</p>
+
+<div class="box thm">
+<div class="label">Theorem 1 (frame potential bound)</div>
+For any $N$ unit vectors in $\mathbb{R}^d$,
+$$\sum_{i,j=1}^N \langle x_i,x_j\rangle^2 \;\ge\; \frac{N^2}{d},$$
+with equality if and only if $S = XX^\top = \frac{N}{d}\,I_d$.
+</div>
+
+<div class="proof">
+<div class="label">Proof.</div>
+<p>The squared Frobenius norm of any matrix is nonnegative. Apply this to $S$ minus the scalar matrix with the same trace, which is $\frac{N}{d}I_d$ because $\operatorname{tr}(S)=N$ and $\operatorname{tr}(I_d)=d$.</p>
+$$0 \;\le\; \Big\|S-\tfrac{N}{d}I\Big\|_F^2
+\;=\; \operatorname{tr}(S^2) \;-\; \tfrac{2N}{d}\operatorname{tr}(S) \;+\; \tfrac{N^2}{d^2}\operatorname{tr}(I)
+\;=\; \|S\|_F^2 - \tfrac{2N^2}{d} + \tfrac{N^2}{d}
+\;=\; \|G\|_F^2 - \tfrac{N^2}{d}.$$
+<p>The last step used $\|S\|_F^2=\|G\|_F^2$ from Section 2. Equality holds exactly when the matrix inside the norm is zero. <span class="qed">$\blacksquare$</span></p>
+</div>
+
+<p>Same proof in eigenvalue language, which some people find more transparent. $S$ is symmetric positive semidefinite with eigenvalues $\lambda_1,\dots,\lambda_d\ge 0$ summing to $\operatorname{tr}(S)=N$. Cauchy–Schwarz on the vector $(\lambda_1,\dots,\lambda_d)$ against the all-ones vector gives $(\sum_k\lambda_k)^2\le d\sum_k\lambda_k^2$, that is $N^2\le d\,\|S\|_F^2$, with equality when all $\lambda_k$ are equal to $N/d$. The vectors $x_i$ must then spread their total "energy" $N$ evenly across all $d$ directions.</p>
+
+<div class="box def">
+<div class="label">Definition</div>
+A <em>frame</em> for $\mathbb{R}^d$ is any finite set of vectors that spans it. A frame is <em>tight</em> when $S=XX^\top = c\,I_d$ for a scalar $c$. For unit vectors, $c=N/d$ is forced by the trace. Tightness means that for every $y\in\mathbb{R}^d$,
+$$\sum_{i=1}^N \langle x_i, y\rangle\, x_i \;=\; \frac{N}{d}\,y,$$
+so the frame reconstructs any vector from its inner products the way an orthonormal basis does, up to the constant $N/d$. An orthonormal basis is the case $N=d$, $c=1$.
+</div>
+
+<p>Theorem 1 says tight frames are precisely the minimizers of the frame potential. That is the content of Benedetto and Fickus (2003); the proof above follows their Section 2 in compressed form.</p>
+
+<h2 id="welch">4. From the frame potential to the Welch bound</h2>
+
+<p>Split the frame potential into its $N$ diagonal terms, each equal to $1$, and its $N(N-1)$ off-diagonal terms.</p>
+$$\sum_{i,j}\langle x_i,x_j\rangle^2 \;=\; N \;+\; \sum_{i\ne j}\langle x_i,x_j\rangle^2 .$$
+<p>Each off-diagonal term is at most $\mu^2$, so the sum is at most $N(N-1)\mu^2$. Combine with Theorem 1.</p>
+$$\frac{N^2}{d} \;\le\; N + N(N-1)\,\mu^2
+\quad\Longrightarrow\quad
+\mu^2 \;\ge\; \frac{N^2/d - N}{N(N-1)} \;=\; \frac{N-d}{d\,(N-1)}.$$
+<p>That is the Welch bound. The derivation used two inequalities, and each has its own equality condition.</p>
+
+<table>
+<tr><th>Step</th><th>Inequality</th><th>Equality when</th></tr>
+<tr><td>Theorem 1</td><td>$\|G\|_F^2\ge N^2/d$</td><td>$XX^\top=\frac{N}{d}I$ (tight frame)</td></tr>
+<tr><td>Max over pairs</td><td>$\sum_{i\ne j}G_{ij}^2\le N(N-1)\mu^2$</td><td>all $|G_{ij}|$, $i\ne j$, equal to $\mu$ (equiangular)</td></tr>
+</table>
+
+<div class="box def">
+<div class="label">Definition</div>
+A set of unit vectors is <em>equiangular</em> if $|\langle x_i,x_j\rangle|$ takes a single value for all $i\ne j$. An <em>equiangular tight frame</em> (ETF) is both equiangular and tight. ETFs are exactly the sets that meet the Welch bound with equality.
+</div>
+
+<p>There is a useful intermediate statement. Skipping the max step and keeping the average gives the mean-square version,</p>
+$$\overline{\mu^2} \;:=\; \frac{1}{N(N-1)}\sum_{i\ne j}\langle x_i,x_j\rangle^2 \;\ge\; \frac{N-d}{d\,(N-1)},$$
+<p>with equality for every tight frame, equiangular or not. Since a maximum is at least the mean, $\mu^2\ge\overline{\mu^2}$, and the Welch bound follows again. The mean-square version is the one that matters for associative memories like the delta rule, and Section 10 returns to it.</p>
+
+<div class="note"><b>Sanity checks.</b> $N=d$ gives a floor of $0$, met by an orthonormal basis. $N=d+1$ gives $\mu\ge 1/d$, met by the $d+1$ vertices of a regular simplex centered at the origin, whose pairwise inner products are all $-1/d$. $N\to\infty$ gives $\mu^2\to 1/d$.</div>
+
+<h2 id="examples">5. Three worked examples</h2>
+
+<h3>$d=2$, $N=3$. Three vectors at 120°</h3>
+<p>Welch gives $\mu^2\ge\frac{3-2}{2\cdot 2}=\frac14$, so $\mu\ge\frac12$. Take $x_1=(1,0)$, $x_2=(-\tfrac12,\tfrac{\sqrt3}{2})$, $x_3=(-\tfrac12,-\tfrac{\sqrt3}{2})$. Every pair has inner product $\cos 120^\circ=-\tfrac12$, so $\mu=\tfrac12$ and the bound is met. Check tightness directly,</p>
+$$XX^\top=\begin{pmatrix}1+\tfrac14+\tfrac14 & 0\\ 0 & \tfrac34+\tfrac34\end{pmatrix}=\tfrac32 I_2=\tfrac{N}{d}I_2 .$$
+<p>This set is sometimes called the Mercedes-Benz frame.</p>
+
+<h3>$d=3$, $N=6$. The six diagonals of an icosahedron</h3>
+<p>Welch gives $\mu^2\ge\frac{6-3}{3\cdot 5}=\frac15$, so $\mu\ge 1/\sqrt5\approx 0.447$. The icosahedron has twelve vertices in six antipodal pairs. The six lines through opposite vertices pairwise make the same angle, with $|\cos|=1/\sqrt5$. Choosing one unit vector per line gives an ETF. With $\varphi=(1+\sqrt5)/2$, the vectors $(0,\pm 1,\varphi)$, $(\pm 1,\varphi,0)$, $(\varphi,0,\pm 1)$, each divided by $\sqrt{1+\varphi^2}$, do it. The sandbox below has this as a preset so you can see an optimizer find $0.447$ from a random start.</p>
+
+<h3>$d=2$, $N=4$. The bound is not met</h3>
+<p>Welch gives $\mu^2\ge\frac{4-2}{2\cdot 3}=\frac13$, so $\mu\ge 0.577$. The best you can do is four lines in the plane spaced $45^\circ$ apart, which gives $\mu=\cos 45^\circ\approx 0.707$. The gap exists because equality would need four equiangular lines in the plane, and the plane holds at most three. Section 8 proves the general version of that count.</p>
+
+<h2 id="lab">6. Sandbox</h2>
+
+<p>Pick $N$ and $d$, sample random unit vectors, then let gradient descent try to push the coherence down. The heatmap shows $|G_{ij}|$. The chart shows the Welch floor as a function of $N$ for the current $d$, the asymptote $1/\sqrt d$, and the Gerzon limit beyond which no ETF exists (Section 8).</p>
+
+<div class="lab">
+<div class="controls">
+  <label>Number of vectors $N$ <span class="val" id="Nval">6</span><input type="range" id="N" min="2" max="40" value="6"></label>
+  <label>Dimension $d$ <span class="val" id="dval">3</span><input type="range" id="d" min="2" max="12" value="3"></label>
+</div>
+<div class="btns">
+  <span style="font-family:Inter,sans-serif;font-size:13px;color:var(--muted);align-self:center">Presets</span>
+  <button class="preset" data-n="3" data-d="2">3 in $\mathbb{R}^2$</button>
+  <button class="preset" data-n="4" data-d="3">4 in $\mathbb{R}^3$</button>
+  <button class="preset" data-n="6" data-d="3">6 in $\mathbb{R}^3$</button>
+  <button class="preset" data-n="10" data-d="5">10 in $\mathbb{R}^5$</button>
+  <button class="preset" data-n="4" data-d="2">4 in $\mathbb{R}^2$ (no ETF)</button>
+  <button class="preset" data-n="30" data-d="4">30 in $\mathbb{R}^4$</button>
+</div>
+<div class="btns">
+  <button id="rand">Sample random</button>
+  <button id="optFP">Minimize frame potential</button>
+  <button id="optMu" class="primary">Minimize coherence</button>
+  <button id="stop">Stop</button>
+</div>
+<div class="status" id="status"></div>
+<div class="stats">
+  <div class="stat hi"><div class="k">Welch floor on $\mu$</div><div class="v" id="sWelch">–</div></div>
+  <div class="stat"><div class="k">Achieved $\mu$ (max)</div><div class="v" id="sMu">–</div></div>
+  <div class="stat"><div class="k">RMS overlap $\sqrt{\overline{\mu^2}}$</div><div class="v" id="sRms">–</div></div>
+  <div class="stat"><div class="k">Tightness $\|S-\tfrac{N}{d}I\|_F$</div><div class="v" id="sTight">–</div></div>
+</div>
+<div class="canvases">
+  <div><canvas id="heat" width="520" height="520"></canvas><div class="cap">$|G_{ij}|$, white = 0, dark = 1. Diagonal is 1.</div></div>
+  <div><canvas id="chart" width="1100" height="640"></canvas><div class="cap">Blue curve, Welch floor $\sqrt{(N-d)/(d(N-1))}$. Dashed, $1/\sqrt d$. Grey band, $N \gt d(d+1)/2$, where no real ETF exists and the floor rises to at least $1/\sqrt d$. Dot, current set.</div></div>
+</div>
+<p class="cap" style="margin-top:12px">"Minimize frame potential" runs gradient descent on $\sum_{i\ne j}G_{ij}^2$ with renormalization after each step. It converges to a tight frame, so the RMS overlap hits the floor while the max usually does not. "Minimize coherence" descends on $\sum_{i\ne j}|G_{ij}|^p$ with $p$ growing from 2 to 12, a smooth stand-in for the max. When an ETF exists the max also reaches the floor. Try 4 in $\mathbb{R}^2$ and watch it stall at $0.707$.</p>
+</div>
+
+<h2 id="higher">7. Higher-order Welch bounds</h2>
+
+<p>Welch's paper proves a family of bounds, one for each integer $k\ge 1$,</p>
+$$\mu^{2k} \;\ge\; \frac{1}{N-1}\left(\frac{N}{\binom{d+k-1}{k}} - 1\right),$$
+<p>and $k=1$ is the bound above. The derivation reuses Theorem 1 on a cleverly chosen set of vectors, so nothing new is needed beyond one construction.</p>
+
+<div class="box def">
+<div class="label">Background. Tensor powers and symmetric tensors</div>
+<p>For $x\in\mathbb{R}^d$, the $k$-th <em>tensor power</em> $x^{\otimes k}$ is the vector of length $d^k$ whose entries are all products of $k$ coordinates, indexed by tuples $(i_1,\dots,i_k)$,</p>
+$$\big(x^{\otimes k}\big)_{i_1 i_2\cdots i_k} \;=\; x_{i_1}x_{i_2}\cdots x_{i_k}.$$
+<p>For $d=2$, $k=2$ this is $(x_1x_1,\ x_1x_2,\ x_2x_1,\ x_2x_2)$. Two properties follow by expanding the sum.</p>
+$$\langle x^{\otimes k},y^{\otimes k}\rangle=\sum_{i_1,\dots,i_k} x_{i_1}y_{i_1}\cdots x_{i_k}y_{i_k} = \langle x,y\rangle^k, \qquad \|x^{\otimes k}\|=\|x\|^k .$$
+<p>The entries of $x^{\otimes k}$ do not change when you permute the indices, since $x_{i_1}x_{i_2}=x_{i_2}x_{i_1}$. Vectors with this property are called <em>symmetric tensors</em>, and they form a subspace of $\mathbb{R}^{d^k}$. Its dimension is the number of distinct multisets of size $k$ drawn from $d$ symbols, since a symmetric tensor is determined by one entry per multiset. By the stars-and-bars count that number is $\binom{d+k-1}{k}$. For $d=2$, $k=2$ the multisets are $\{1,1\},\{1,2\},\{2,2\}$, three of them, and indeed $\binom{3}{2}=3$.</p>
+<p class="src">To learn more. Any linear algebra text's section on symmetric tensors, or Waldron, <em>An Introduction to Finite Tight Frames</em> (2018), Section 6.7 and Chapter 9, about 20 minutes for the counting argument.</p>
+</div>
+
+<div class="proof">
+<div class="label">Derivation of the order-$k$ bound.</div>
+<p>Set $D=\binom{d+k-1}{k}$. The $N$ vectors $x_1^{\otimes k},\dots,x_N^{\otimes k}$ are unit vectors living in a $D$-dimensional space (the symmetric tensors). Apply Theorem 1 inside that space, with $D$ in place of $d$,</p>
+$$\sum_{i,j}\langle x_i^{\otimes k},x_j^{\otimes k}\rangle^2 \;=\; \sum_{i,j}\langle x_i,x_j\rangle^{2k} \;\ge\; \frac{N^2}{D}.$$
+<p>Now repeat Section 4. The diagonal contributes $N$, each off-diagonal term is at most $\mu^{2k}$, so $N+N(N-1)\mu^{2k}\ge N^2/D$, which rearranges to the stated bound. <span class="qed">$\blacksquare$</span></p>
+</div>
+
+<p>Which $k$ gives the strongest bound depends on $N$ and $d$. For $N$ a little above $d$ the $k=1$ bound wins. For $N$ large relative to $d$ the higher-order ones take over, and as $N\to\infty$ they force $\mu\to 1$, which is correct since you cannot keep adding lines in a fixed dimension without some pair getting arbitrarily close. In the complex case the same argument works with the Hermitian inner product, $|\langle x^{\otimes k},y^{\otimes k}\rangle|=|\langle x,y\rangle|^k$, and the same $D$.</p>
+
+<h2 id="limits">8. When the bound is not tight</h2>
+
+<p>Equality in the $k=1$ bound needs an ETF, and ETFs cannot have too many vectors. The following count is due to Gerzon and the proof is a Gram-matrix argument one level up, on matrices instead of vectors.</p>
+
+<div class="box thm">
+<div class="label">Theorem 2 (Gerzon bound)</div>
+If $N$ unit vectors in $\mathbb{R}^d$ are equiangular with $\mu \lt 1$, then $N\le \frac{d(d+1)}{2}$. In $\mathbb{C}^d$, $N\le d^2$.
+</div>
+
+<div class="proof">
+<div class="label">Proof.</div>
+<p>Consider the rank-one matrices $P_i=x_ix_i^\top$. They are symmetric $d\times d$ matrices, and the symmetric matrices form a vector space of dimension $d(d+1)/2$ (the upper triangle, diagonal included, determines the matrix). Use the trace inner product $\langle A,B\rangle=\operatorname{tr}(A^\top B)$. Then</p>
+$$\langle P_i,P_j\rangle=\operatorname{tr}(x_ix_i^\top x_jx_j^\top)=(x_i^\top x_j)^2 = \begin{cases}1 & i=j\\ \mu^2 & i\ne j.\end{cases}$$
+<p>So the Gram matrix of $P_1,\dots,P_N$ is $H=(1-\mu^2)I_N+\mu^2\mathbf{1}\mathbf{1}^\top$. Its eigenvalues are $1-\mu^2$ (multiplicity $N-1$) and $1-\mu^2+N\mu^2$, all positive when $\mu \lt 1$. A set of vectors with a nonsingular Gram matrix is linearly independent (if $\sum c_iP_i=0$ then $Hc=0$, so $c=0$). Hence $N$ linearly independent elements sit in a space of dimension $d(d+1)/2$, giving the bound. In $\mathbb{C}^d$ the $P_i$ are Hermitian matrices, which form a <em>real</em> vector space of dimension $d^2$. <span class="qed">$\blacksquare$</span></p>
+</div>
+
+<p>So for $N \gt d(d+1)/2$ real vectors, or $N \gt d^2$ complex ones, the Welch $k=1$ bound is strictly loose. In that range a different bound applies.</p>
+
+<div class="box thm">
+<div class="label">Orthoplex bound (Rankin 1955, in this form Conway, Hardin and Sloane 1996)</div>
+If $N \gt \frac{d(d+1)}{2}$ in $\mathbb{R}^d$, or $N \gt d^2$ in $\mathbb{C}^d$, then $\mu\ge 1/\sqrt d$.
+</div>
+
+<p>This is stated without proof. It is met in some dimensions. In $\mathbb{C}^d$ with $d$ a prime power, $d+1$ mutually unbiased bases (orthonormal bases whose cross inner products all have magnitude $1/\sqrt d$) give $N=d(d+1)$ vectors with $\mu=1/\sqrt d$ exactly. The $d=2$, $N=4$ example from Section 5 is the smallest instance, and $1/\sqrt2\approx 0.707$ is exactly the orthoplex value there.</p>
+
+<p>Even inside the Gerzon range an ETF need not exist for a given $(d,N)$. In $\mathbb{R}^3$ ETFs exist for $N=3,4,6$ but not $N=5$. Deciding existence is a hard combinatorial problem connected to strongly regular graphs and difference sets, and Fickus and Mixon maintain tables of what is known. The practical reading is that the Welch bound is a clean lower bound, tight in a specific list of cases, and the true optimum (the <em>Grassmannian packing</em> problem, after the space of lines through the origin) is only known numerically for most $(d,N)$.</p>
+
+<h2 id="random">9. Random vectors against the bound</h2>
+
+<p>How close do random unit vectors get? Draw $x,y$ independently and uniformly on the unit sphere in $\mathbb{R}^d$. By symmetry $\mathbb{E}\langle x,y\rangle^2 = \mathbb{E}\,x_1^2 = 1/d$ (the expectation of one squared coordinate, since all $d$ coordinates share $\sum_i x_i^2=1$). So the mean-square overlap of $N$ random vectors is about $1/d$, while the Welch floor on the mean square is $\frac{N-d}{d(N-1)} \lt \frac1d$. In the mean-square sense random vectors are nearly optimal, and the gap closes as $N$ grows.</p>
+
+<p>The maximum is a different story. A single overlap $\langle x,y\rangle$ is approximately Gaussian with variance $1/d$ when $d$ is large, and the coherence is the maximum of $\binom N2$ such quantities. The maximum of $M$ roughly independent Gaussians with variance $\sigma^2$ sits near $\sigma\sqrt{2\ln M}$, so</p>
+$$\mu_{\text{random}} \;\approx\; \sqrt{\frac{2\ln\binom{N}{2}}{d}} \;\approx\; \sqrt{\frac{4\ln N}{d}},$$
+<p>compared with the Welch floor of about $1/\sqrt d$. Random packings lose a factor of order $\sqrt{\log N}$ in the worst pair. If your application is governed by the typical pair, randomness is fine. If it is governed by the worst pair, structured constructions earn their place. Run the sandbox with $30$ vectors in $\mathbb{R}^4$ to see both numbers at once, with the RMS near the floor and the max well above it.</p>
+
+<p>One more constraint that Welch does not impose. The frame potential controls squared overlaps, not their signs, so a set can have many negative overlaps. The signed total is still pinned down, since $\sum_{i\ne j}\langle x_i,x_j\rangle = \|\sum_i x_i\|^2 - N \ge -N$. The average signed overlap is therefore at least $-1/(N-1)$, with equality when the vectors sum to zero, as the simplex does.</p>
+
+<h2 id="ml">10. Where it shows up in ML</h2>
+
+<h3>Superposition in a delta-rule memory</h3>
+<p>Linear attention variants like DeltaNet store key-value pairs in a matrix memory $S$ and update it with the delta rule (Schlag, Irie and Schmidhuber, 2021). Say there are $V$ keys, each a unit vector $k_a\in\mathbb{R}^{d_k}$. Writing $(k_a,v_b)$ with step size $\beta$ and residual $\delta=v_b-Sk_a$ changes the read for another key $k_c$ by $\beta\,\delta\,(k_a^\top k_c)$. The interference coefficient is a Gram entry. When $V \gt d_k$ the mean-square version of the bound from Section 4 reads</p>
+$$\frac{1}{V(V-1)}\sum_{a\ne c}(k_a^\top k_c)^2 \;\ge\; \frac{V-d_k}{d_k\,(V-1)},$$
+<p>and the proof is the one in Section 3 with $G=K^\top K$. Three consequences. Training can move interference between pairs and flip its sign, but the total squared interference has a floor of $V^2/d_k - V$ that no key geometry escapes. The floor is on the mean square, so a learned key set can still make a few pairs nearly orthogonal at the cost of others, so the interesting question becomes how training chooses to spread interference it can't avoid. And since the sign is free up to the constraint at the end of Section 9, negative overlaps that suppress competing keys are available to the optimizer without violating anything.</p>
+
+<h3>Superposition in toy models</h3>
+<p>Elhage et al. (2022) study networks that represent more features than they have neurons by assigning features to nearly orthogonal directions. The Welch bound is the exact statement of what "nearly" can mean for $N$ features in $d$ dimensions, and the Gerzon bound caps how many features can share one common interference level.</p>
+
+<h3>Sparse recovery</h3>
+<p>For a dictionary $D\in\mathbb{R}^{d\times N}$ with unit columns and coherence $\mu$, Donoho and Elad (2003) show that any signal with a representation using fewer than $\frac12(1+1/\mu)$ atoms has that representation uniquely. Welch bounds $\mu$ below by about $1/\sqrt d$, so coherence-based guarantees can never certify sparsity beyond about $\sqrt d/2$. Stronger guarantees need the restricted isometry property, which is where the field went next.</p>
+
+<h3>The original setting</h3>
+<p>Welch wrote the paper for spread-spectrum communication, where $N$ users each get a signature sequence of length $d$ and cross-correlation between signatures is interference between users. The bound says how many users a code length can support at a given interference level.</p>
+
+<h2 id="exercises">11. Exercises</h2>
+
+<details><summary>Exercise 1. Prove $\|G\|_F^2=\|S\|_F^2$ for $G=X^\top X$ and $S=XX^\top$.</summary>
+<p>$\|G\|_F^2=\operatorname{tr}(G^\top G)=\operatorname{tr}(X^\top X X^\top X)$. Group as $\operatorname{tr}\big((X^\top X)(X^\top X)\big)$ and apply $\operatorname{tr}(AB)=\operatorname{tr}(BA)$ with $A=X^\top$, $B=XX^\top X$ to get $\operatorname{tr}(XX^\top XX^\top)=\operatorname{tr}(S^2)=\|S\|_F^2$, the last since $S$ is symmetric.</p>
+</details>
+
+<details><summary>Exercise 2. Show that the regular simplex meets the bound at $N=d+1$.</summary>
+<p>Take the $d+1$ standard basis vectors $e_1,\dots,e_{d+1}$ in $\mathbb{R}^{d+1}$, subtract their mean $\bar e=\frac{1}{d+1}\mathbf{1}$, and normalize. The centered vectors $e_i-\bar e$ have squared norm $1-\frac{2}{d+1}+\frac{1}{d+1}=\frac{d}{d+1}$ and pairwise inner product $-\frac{2}{d+1}+\frac{1}{d+1}=-\frac{1}{d+1}$. After normalizing, every pairwise inner product is $-\frac{1}{d+1}\cdot\frac{d+1}{d}=-\frac1d$. These $d+1$ vectors sum to zero, so they live in a $d$-dimensional subspace, and $\mu=1/d$ equals the Welch value $\sqrt{\frac{(d+1)-d}{d\cdot d}}=\frac1d$.</p>
+</details>
+
+<details><summary>Exercise 3. For $x,y$ independent and uniform on the unit sphere in $\mathbb{R}^d$, show $\mathbb{E}\langle x,y\rangle^2=1/d$.</summary>
+<p>Condition on $y$. By rotation invariance of the distribution of $x$, $\mathbb{E}[\langle x,y\rangle^2\mid y]$ is the same for every unit $y$, so take $y=e_1$ and get $\mathbb{E}\,x_1^2$. The coordinates are exchangeable and $\sum_{i=1}^d x_i^2=1$, so $d\,\mathbb{E}\,x_1^2=1$.</p>
+</details>
+
+<details><summary>Exercise 4. Compare the $k=1$ and $k=2$ Welch bounds for $d=3$, $N=6$ and for $d=3$, $N=40$.</summary>
+<p>For $k=2$, $D=\binom{4}{2}=6$. At $N=6$ the $k=2$ bound reads $\mu^4\ge\frac15(\frac66-1)=0$, useless, while $k=1$ gives $\mu\ge 0.447$. At $N=40$, $k=1$ gives $\mu^2\ge\frac{37}{117}$, so $\mu\ge 0.562$. $k=2$ gives $\mu^4\ge\frac{1}{39}(\frac{40}{6}-1)=\frac{17}{117}$, so $\mu\ge 0.618$. The higher-order bound is stronger once $N$ is well past $d^2$.</p>
+</details>
+
+<details><summary>Exercise 5. Show that if $X$ is a tight frame then every unit vector $y$ has $\sum_i\langle x_i,y\rangle^2=N/d$.</summary>
+<p>$\sum_i\langle x_i,y\rangle^2=\sum_i y^\top x_ix_i^\top y=y^\top S y=\frac Nd\,y^\top y=\frac Nd$. This is the sense in which a tight frame treats all directions equally.</p>
+</details>
+
+<h3>Numerical check</h3>
+<pre>import numpy as np
+
+def welch(N, d):
+    return np.sqrt(max(0.0, (N - d) / (d * (N - 1))))
+
+# Mercedes-Benz frame, d=2, N=3
+X = np.array([[1, 0],
+              [-0.5,  np.sqrt(3)/2],
+              [-0.5, -np.sqrt(3)/2]]).T        # shape (d, N)
+G = X.T @ X
+mu = np.abs(G - np.eye(3)).max()
+print(mu, welch(3, 2))                          # 0.5 0.5
+print(np.allclose(X @ X.T, 1.5 * np.eye(2)))    # True, tight
+
+# random vectors: RMS near 1/sqrt(d), max well above the floor
+rng = np.random.default_rng(0)
+d, N = 64, 4000
+R = rng.standard_normal((d, N)); R /= np.linalg.norm(R, axis=0)
+G = R.T @ R; off = G[~np.eye(N, dtype=bool)]
+print(np.sqrt((off**2).mean()), np.abs(off).max(), welch(N, d), 1/np.sqrt(d))</pre>
+
+<h2 id="refs">12. Reading</h2>
+<ol class="refs">
+<li>L. R. Welch, "Lower bounds on the maximum cross correlation of signals," <em>IEEE Transactions on Information Theory</em> 20(3), 1974. The original. Short, and the higher-order bounds are all there.</li>
+<li>J. J. Benedetto and M. Fickus, "Finite normalized tight frames," <em>Advances in Computational Mathematics</em> 18, 2003. Frame potential, Theorem 1 above, and the fact that its local minimizers are tight frames.</li>
+<li>T. Strohmer and R. W. Heath Jr., "Grassmannian frames with applications to coding and communication," <em>Applied and Computational Harmonic Analysis</em> 14, 2003. The clearest short treatment of Welch, Gerzon and orthoplex together, with the communications motivation. Sections 2 and 3, about 40 minutes.</li>
+<li>S. Waldron, <em>An Introduction to Finite Tight Frames</em>, Birkhäuser, 2018. Textbook. Chapter 2 for tight frames and the frame potential, Chapter 12 for equiangular lines.</li>
+<li>J. H. Conway, R. H. Hardin and N. J. A. Sloane, "Packing lines, planes, etc.: packings in Grassmannian spaces," <em>Experimental Mathematics</em> 5, 1996. The orthoplex bound in the form stated here, plus numerical packings.</li>
+<li>M. Fickus and D. G. Mixon, "Tables of the existence of equiangular tight frames," arXiv:1504.00253, 2015. Which $(d,N)$ admit an ETF.</li>
+<li>N. Elhage et al., "Toy Models of Superposition," Anthropic / Transformer Circuits, 2022. The ML superposition picture.</li>
+<li>I. Schlag, K. Irie and J. Schmidhuber, <a href="https://arxiv.org/abs/2102.11174">"Linear Transformers Are Secretly Fast Weight Programmers,"</a> ICML 2021. The delta-rule memory used in Section 10.</li>
+<li>D. L. Donoho and M. Elad, "Optimally sparse representation in general (nonorthogonal) dictionaries via $\ell^1$ minimization," <em>PNAS</em> 100(5), 2003. Coherence-based uniqueness of sparse representations.</li>
+</ol>
+
+</main>
+
+<footer>Welch bound explainer. Math renders with KaTeX. The sandbox runs plain gradient descent in your browser.</footer>
+
+<script>
+(function(){
+  // ---------- state ----------
+  let N = 6, d = 3, X = null, G = null, anim = null;
+  const $ = id => document.getElementById(id);
+
+  function gauss(){ let u=0,v=0; while(u===0)u=Math.random(); while(v===0)v=Math.random(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
+  function normalize(v){ let s=0; for(const a of v)s+=a*a; s=Math.sqrt(s)||1; for(let i=0;i<v.length;i++)v[i]/=s; }
+  function randomX(){ X=[]; for(let i=0;i<N;i++){ const v=new Float64Array(d); for(let k=0;k<d;k++)v[k]=gauss(); normalize(v); X.push(v);} }
+  function dot(a,b){ let s=0; for(let k=0;k<a.length;k++)s+=a[k]*b[k]; return s; }
+  function gram(){ G=[]; for(let i=0;i<N;i++){ G.push(new Float64Array(N)); for(let j=0;j<N;j++)G[i][j]=dot(X[i],X[j]); } }
+  function welch(n,dim){ return Math.sqrt(Math.max(0,(n-dim)/(dim*(n-1)))); }
+  function stats(){
+    let mx=0, ss=0;
+    for(let i=0;i<N;i++)for(let j=0;j<N;j++){ if(i===j)continue; const a=Math.abs(G[i][j]); if(a>mx)mx=a; ss+=a*a; }
+    const rms = N>1 ? Math.sqrt(ss/(N*(N-1))) : 0;
+    // tightness ||S - N/d I||_F
+    let t=0; for(let a=0;a<d;a++)for(let b=0;b<d;b++){ let s=0; for(let i=0;i<N;i++)s+=X[i][a]*X[i][b]; if(a===b)s-=N/d; t+=s*s; }
+    return {mx, rms, tight:Math.sqrt(t)};
+  }
+
+  // ---------- optimizer ----------
+  // gradient of sum_{i != j} |g_ij|^p w.r.t. x_i is sum_{j != i} p sign(g_ij)|g_ij|^(p-1) x_j
+  function step(p, lr){
+    const grads=[];
+    for(let i=0;i<N;i++){
+      const g=new Float64Array(d);
+      for(let j=0;j<N;j++){ if(i===j)continue; const gij=G[i][j]; const c=p*Math.sign(gij)*Math.pow(Math.abs(gij),p-1); for(let k=0;k<d;k++)g[k]+=c*X[j][k]; }
+      grads.push(g);
+    }
+    for(let i=0;i<N;i++){
+      const g=grads[i]; let gn=0; for(let k=0;k<d;k++)gn+=g[k]*g[k]; gn=Math.sqrt(gn)+1e-12;
+      for(let k=0;k<d;k++)X[i][k]-=lr*g[k]/gn;
+      normalize(X[i]);
+    }
+    gram();
+  }
+  function run(mode){
+    stopAnim(); if(!X)randomX(); gram();
+    let it=0; const T = mode==='fp' ? 300 : 900;
+    function frame(){
+      for(let s=0;s<4&&it<T;s++,it++){
+        const frac=it/T;
+        const p = mode==='fp' ? 2 : 2+10*Math.min(1,frac*1.3);
+        const lr = 0.08*Math.pow(0.02,frac);
+        step(p,lr);
+      }
+      render(mode==='fp' ? `frame potential descent, step ${it}/${T}` : `coherence descent, step ${it}/${T}, p = ${(2+10*Math.min(1,(it/T)*1.3)).toFixed(1)}`);
+      if(it<T)anim=requestAnimationFrame(frame); else {anim=null; render(mode==='fp'?'frame potential descent finished':'coherence descent finished');}
+    }
+    anim=requestAnimationFrame(frame);
+  }
+  function stopAnim(){ if(anim){cancelAnimationFrame(anim);anim=null;} }
+
+  // ---------- rendering ----------
+  const heat=$('heat'), hc=heat.getContext('2d');
+  const chart=$('chart'), cc=chart.getContext('2d');
+  function drawHeat(){
+    const W=heat.width; hc.clearRect(0,0,W,W); const cell=W/N;
+    for(let i=0;i<N;i++)for(let j=0;j<N;j++){
+      const a=Math.min(1,Math.abs(G[i][j]));
+      if(i===j){ hc.fillStyle='#d8d4ca'; }
+      else { const v=Math.round(255-200*a); hc.fillStyle=`rgb(${Math.round(255-220*a)},${Math.round(255-200*a)},${v})`; }
+      hc.fillRect(j*cell,i*cell,cell,cell);
+    }
+    if(N<=12){ hc.strokeStyle='rgba(0,0,0,0.08)'; for(let i=1;i<N;i++){hc.beginPath();hc.moveTo(i*cell,0);hc.lineTo(i*cell,W);hc.moveTo(0,i*cell);hc.lineTo(W,i*cell);hc.stroke();} }
+  }
+  function drawChart(st){
+    const W=chart.width,H=chart.height, L=70,R=20,T=20,B=56;
+    cc.clearRect(0,0,W,H);
+    const nmax=Math.max(60, N+10), nmin=2;
+    const xs=n=>L+(n-nmin)/(nmax-nmin)*(W-L-R), ys=m=>T+(1-m)*(H-T-B);
+    const gerzon=d*(d+1)/2;
+    // orthoplex band
+    if(gerzon<nmax){ cc.fillStyle='rgba(120,120,120,0.10)'; cc.fillRect(xs(Math.max(nmin,gerzon)),T,xs(nmax)-xs(Math.max(nmin,gerzon)),H-T-B); }
+    // axes
+    cc.strokeStyle='#999'; cc.lineWidth=1; cc.beginPath(); cc.moveTo(L,T); cc.lineTo(L,H-B); cc.lineTo(W-R,H-B); cc.stroke();
+    cc.fillStyle='#5c6470'; cc.font='15px Inter, sans-serif'; cc.textAlign='center';
+    for(let m=0;m<=1;m+=0.25){ cc.textAlign='right'; cc.fillText(m.toFixed(2),L-8,ys(m)+5); cc.strokeStyle='#eee'; cc.beginPath(); cc.moveTo(L,ys(m)); cc.lineTo(W-R,ys(m)); cc.stroke(); }
+    cc.textAlign='center'; const stepN = nmax>80?20:10;
+    for(let n=10;n<=nmax;n+=stepN){ cc.fillText(n,xs(n),H-B+22); }
+    cc.fillText('N',(L+W-R)/2,H-8);
+    cc.save(); cc.translate(18,(T+H-B)/2); cc.rotate(-Math.PI/2); cc.fillText('coherence μ',0,0); cc.restore();
+    // asymptote
+    const asym=1/Math.sqrt(d); cc.setLineDash([6,6]); cc.strokeStyle='#8a3b12'; cc.beginPath(); cc.moveTo(L,ys(asym)); cc.lineTo(W-R,ys(asym)); cc.stroke(); cc.setLineDash([]);
+    cc.fillStyle='#8a3b12'; cc.textAlign='left'; cc.fillText('1/√d = '+asym.toFixed(3),L+6,ys(asym)-6);
+    // Welch curve
+    cc.strokeStyle='#1f4e8c'; cc.lineWidth=2.5; cc.beginPath(); let first=true;
+    for(let n=nmin;n<=nmax;n+=0.25){ const m=welch(n,d); if(first){cc.moveTo(xs(n),ys(m));first=false;} else cc.lineTo(xs(n),ys(m)); }
+    cc.stroke(); cc.lineWidth=1;
+    // gerzon line
+    if(gerzon<nmax&&gerzon>nmin){ cc.strokeStyle='#777'; cc.setLineDash([3,4]); cc.beginPath(); cc.moveTo(xs(gerzon),T); cc.lineTo(xs(gerzon),H-B); cc.stroke(); cc.setLineDash([]); cc.fillStyle='#555'; cc.textAlign='left'; cc.fillText('Gerzon d(d+1)/2 = '+gerzon,xs(gerzon)+6,T+16); }
+    // current points
+    if(st){
+      cc.fillStyle='#1f2328'; cc.beginPath(); cc.arc(xs(N),ys(Math.min(1,st.mx)),7,0,2*Math.PI); cc.fill();
+      cc.strokeStyle='#1f2328'; cc.lineWidth=2; cc.beginPath(); cc.arc(xs(N),ys(Math.min(1,st.rms)),7,0,2*Math.PI); cc.stroke(); cc.lineWidth=1;
+      cc.fillStyle='#1f2328'; cc.textAlign='left'; cc.fillText('max',xs(N)+11,ys(Math.min(1,st.mx))+5); cc.fillText('rms',xs(N)+11,ys(Math.min(1,st.rms))+5);
+    }
+  }
+  function render(msg){
+    const st=stats();
+    $('sWelch').textContent=welch(N,d).toFixed(4);
+    $('sMu').textContent=st.mx.toFixed(4);
+    $('sRms').textContent=st.rms.toFixed(4);
+    $('sTight').textContent=st.tight.toFixed(4);
+    $('status').textContent=msg||'';
+    drawHeat(); drawChart(st);
+  }
+  function reset(msg){ stopAnim(); randomX(); gram(); render(msg||'random unit vectors'); }
+
+  // ---------- wiring ----------
+  $('N').addEventListener('input',e=>{N=+e.target.value;$('Nval').textContent=N;reset();});
+  $('d').addEventListener('input',e=>{d=+e.target.value;$('dval').textContent=d;reset();});
+  $('rand').addEventListener('click',()=>reset());
+  $('optFP').addEventListener('click',()=>run('fp'));
+  $('optMu').addEventListener('click',()=>run('mu'));
+  $('stop').addEventListener('click',()=>{stopAnim();render('stopped');});
+  document.querySelectorAll('button.preset').forEach(b=>b.addEventListener('click',()=>{
+    N=+b.dataset.n; d=+b.dataset.d; $('N').value=N; $('d').value=d; $('Nval').textContent=N; $('dval').textContent=d; reset(); run('mu');
+  }));
+  reset();
+
+  // ---------- math ----------
+  document.addEventListener('DOMContentLoaded',()=>{
+    if(window.renderMathInElement){
+      renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+    }
+  });
+})();
+</script>
+</body>
+</html>
