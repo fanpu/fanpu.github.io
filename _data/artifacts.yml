@@ -11,6 +11,25 @@
 #   thumb: /assets/img/artifacts/delta-rule.webp  # optional
 #   selected: true                                # show on home page
 
+- title: AdamC, and why gradient norms climb late in training
+  url: /artifacts/adamc/
+  thumb: /assets/img/artifacts/adamc.webp
+  date: 2026-11-11
+  blurb: Why the gradient norm often goes up near the end of LLM training even when nothing is wrong, built up from how normalization layers and weight decay interact. Then AdamC, a one-line fix to weight decay from Defazio's 2025 paper.
+  selected: true
+
+- title: Mirror descent and Frank-Wolfe
+  url: /artifacts/mirror-descent-frank-wolfe/
+  thumb: /assets/img/artifacts/mirror-descent-frank-wolfe.webp
+  date: 2026-11-11
+  blurb: Two classic twists on projected gradient descent. Mirror descent measures distance in a way that fits the constraint set, and Frank-Wolfe avoids projecting at all. When each one is worth it.
+
+- title: The Welch bound
+  url: /artifacts/welch-bound/
+  thumb: /assets/img/artifacts/welch-bound.webp
+  date: 2026-11-09
+  blurb: How close to orthogonal can you make N unit vectors in d dimensions? The Welch bound, its two-line proof, when it's tight, and why it matters for superposition and sparse recovery.
+
 - title: Does Adam favor a basis?
   url: /artifacts/does-adam-favor-a-basis/
   thumb: /assets/img/artifacts/does-adam-favor-a-basis.webp
