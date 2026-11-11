@@ -33,7 +33,7 @@ const problems = [];
 page.on("pageerror", (e) => problems.push("pageerror: " + e.message));
 page.on(
   "console",
-  (m) => m.type() === "error" && !/game-analytics|favicon|404/.test(m.text() + m.location()?.url) && problems.push("console: " + m.text())
+  (m) => m.type() === "error" && !/standalone-analytics|favicon|404/.test(m.text() + m.location()?.url) && problems.push("console: " + m.text())
 );
 // Animations off: the table runs as fast as it can think.
 await page.evaluateOnNewDocument(

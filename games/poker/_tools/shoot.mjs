@@ -47,7 +47,7 @@ for (const pose of poses.length ? poses : ALL)
     page.on("pageerror", (e) => problems.push("pageerror: " + e.message));
     page.on(
       "console",
-      (m) => m.type() === "error" && !/game-analytics|favicon|404/.test(m.text() + m.location()?.url) && problems.push("console: " + m.text())
+      (m) => m.type() === "error" && !/standalone-analytics|favicon|404/.test(m.text() + m.location()?.url) && problems.push("console: " + m.text())
     );
     const query = pose.includes("=") ? pose : `pose=${pose}&seed=1`;
     await page.goto(`${base}?${query}`, { waitUntil: "load" });
