@@ -2,9 +2,9 @@
 layout: null
 ---
 {% if site.enable_google_analytics %}
-// Analytics for the standalone pages under /games/. Those are front-matter-less
-// static files, so they never render _includes/scripts.liquid — they load this
-// instead. The measurement ID stays single-sourced in _config.yml.
+// Analytics for the standalone pages under /games/ and /artifacts/. Those are
+// front-matter-less static files, so they never render _includes/scripts.liquid;
+// they load this instead. The measurement ID stays single-sourced in _config.yml.
 (function () {
   var id = "{{ site.google_analytics }}";
   var s = document.createElement("script");

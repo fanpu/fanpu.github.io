@@ -2,7 +2,8 @@
 #
 # To add one:
 #   1. put the self-contained page at artifacts/<slug>/index.html
-#   2. add an entry below (newest first)
+#   2. load analytics: <script defer src="/assets/js/game-analytics.js"></script> before </head>
+#   3. add an entry below (newest first)
 #
 # - title: Delta rule vs additive memory
 #   url: /artifacts/delta-rule/
