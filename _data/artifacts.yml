@@ -12,6 +12,18 @@
 #   thumb: /assets/img/artifacts/delta-rule.webp  # optional
 #   selected: true                                # show on home page
 
+- title: Singular learning theory
+  url: /artifacts/singular-learning-theory/
+  thumb: /assets/img/artifacts/singular-learning-theory.webp
+  date: 2026-11-14
+  blurb: Why counting parameters overstates how complex a neural net is, and what singular learning theory says to count instead. Also why it predicts sudden jumps during training, and how people estimate it on real networks.
+
+- title: Reproducing kernel Hilbert spaces
+  url: /artifacts/reproducing-kernel-hilbert-spaces/
+  thumb: /assets/img/artifacts/reproducing-kernel-hilbert-spaces.webp
+  date: 2026-11-14
+  blurb: RKHSs from scratch, starting with functions as vectors and ending at the representer theorem and kernel ridge regression. Assumes only linear algebra, and ties back to min-norm linear regression and the NTK.
+
 - title: AdamC, and why gradient norms climb late in training
   url: /artifacts/adamc/
   thumb: /assets/img/artifacts/adamc.webp
