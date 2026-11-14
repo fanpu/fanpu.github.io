@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Singular learning theory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: one reading column, two full-width instrument panels that interrupt it. */
+:root{
+  --bg:#f2f4f1; --surface:#ffffff; --ink:#18211f; --muted:#5d6b67; --rule:#d5dbd6;
+  --regular:#0f6e6a; --singular:#b4541a; --heat:#33423f;
+  --display:"IBM Plex Serif",Georgia,serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121817; --surface:#1a2221; --ink:#e6ece9; --muted:#96a5a0; --rule:#2e3a38;
+    --regular:#4fc4bc; --singular:#f0975a; --heat:#c9d6d2; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121817; --surface:#1a2221; --ink:#e6ece9; --muted:#96a5a0; --rule:#2e3a38;
+  --regular:#4fc4bc; --singular:#f0975a; --heat:#c9d6d2; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.62}
+main{max-width:1040px;margin:0 auto;padding:40px 20px 80px}
+.col{max-width:66ch}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(30px,5vw,44px);line-height:1.12;margin:0 0 14px;text-wrap:balance}
+h2{font-family:var(--display);font-weight:600;font-size:25px;line-height:1.25;margin:52px 0 10px;text-wrap:balance}
+h3{font-size:15px;font-weight:600;margin:0 0 6px}
+p{margin:0 0 15px}
+.lede{font-size:19px;color:var(--muted)}
+a{color:var(--regular)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--singular);outline-offset:2px}
+dfn{font-style:normal;font-weight:600}
+.katex-display{display:block;margin:16px 0;overflow-x:auto;padding:2px 0}
+math{font-size:1.08em}
+.tldr{border-left:3px solid var(--regular);padding:4px 0 4px 16px;margin:22px 0}
+.tldr p{margin:0 0 8px}
+.panel{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:20px;margin:26px 0}
+.panel > p{max-width:70ch;color:var(--muted);font-size:15px}
+.grid{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:720px){.grid{grid-template-columns:1fr}}
+canvas{display:block;width:100%;border-radius:4px}
+#heat{aspect-ratio:1/1;border:1px solid var(--rule);image-rendering:auto}
+#vol,#phase{height:290px}
+#pin{height:230px}
+.col ul{padding-left:20px}
+.col ul li{margin-bottom:7px}
+.choices{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.choices button{font:500 14px var(--body);color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:999px;padding:6px 13px;cursor:pointer}
+.choices button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.ctrl{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;font-size:14px;margin-top:12px}
+.ctrl output{font-family:var(--mono);font-variant-numeric:tabular-nums;min-width:8ch;text-align:right}
+input[type=range]{width:100%;accent-color:var(--regular)}
+.readout{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:14px;font-size:14px}
+.readout div{display:flex;flex-direction:column}
+.readout span{color:var(--muted);font-size:12.5px}
+.readout b{font-family:var(--mono);font-weight:500;font-size:19px;font-variant-numeric:tabular-nums}
+.note{font-size:14px;color:var(--muted);margin-top:12px;min-height:3.2em}
+table{border-collapse:collapse;width:100%;font-size:15px;margin:10px 0 18px}
+.tablewrap{overflow-x:auto}
+th,td{text-align:left;padding:8px 12px 8px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:600;font-size:13px;color:var(--muted)}
+ol.limits{padding-left:20px}
+ol.limits li{margin-bottom:12px}
+ul.reads{padding-left:18px}
+ul.reads li{margin-bottom:9px}
+footer{margin-top:50px;font-size:13.5px;color:var(--muted);border-top:1px solid var(--rule);padding-top:14px}
+</style>
+<script defer src="/assets/js/standalone-analytics.js"></script>
+</head>
+<body>
+<main>
+<div class="col">
+<h1>Singular learning theory</h1>
+<p class="lede">A from-scratch walk through why counting parameters overstates how complex a neural network is, and what to count instead. No statistics background assumed.</p>
+
+<div class="tldr">
+<p><b>The short version.</b> To compare models fairly you have to charge big models for their size. The textbook charge is proportional to the number of parameters. That charge silently assumes every parameter has to be pinned down by data. In a neural network many parameters do not, because lots of different weight settings compute the same function.</p>
+<p>Singular learning theory (SLT), built by Sumio Watanabe, works out the correct charge. It replaces the parameter count with a number \(\lambda\) that measures how much of weight space is close to optimal. For neural networks \(\lambda\) can be far below the parameter count.</p>
+</div>
+
+<h2>Step 1. The question</h2>
+<p>You have some data and two candidate models. Say one is a small network and the other is a big one. Which should you trust?</p>
+<p>Training loss cannot answer this. The bigger model can always fit the training data at least as well as the smaller one, including the noise. You need a score that rewards good fit and also charges for size. The whole story below is about what the right charge is.</p>
+
+<h2>Step 2. Score a model by its average fit</h2>
+<p>Some vocabulary first. It is all we need.</p>
+<ul>
+<li>The <dfn>parameters</dfn> \(w\) are the weights. A model with \(d\) weights has \(w \in \mathbb{R}^d\).</li>
+<li>The <dfn>loss</dfn> \(L_n(w)\) is the average error per data point over \(n\) data points when the weights are \(w\). Think cross-entropy.</li>
+<li>The <dfn>fit</dfn> of \(w\) is \(e^{-n L_n(w)}\). This is the probability the model assigns to the whole dataset, so low loss means high fit. Statisticians call it the likelihood.</li>
+<li>The <dfn>prior</dfn> \(\varphi(w)\) is the range of weight settings you were willing to consider before seeing any data. Picture a uniform spread over a big box.</li>
+</ul>
+<p>The Bayesian way to score a model is to ignore its single best weight setting and instead ask how well it fits on average across every setting in the prior.</p>
+\[ Z_n = \int \varphi(w)\, e^{-n L_n(w)}\, dw \]
+<p>A big model has an enormous weight space, and almost all of it fits the data terribly. That drags its average down. It only wins if its good region fits so much better that it pays for all the wasted space. So a penalty for size appears without anyone adding one by hand.</p>
+<p>People usually work with \(F_n = -\log Z_n\), so that lower is better, like a loss. It is called the <dfn>free energy</dfn>, a name borrowed from physics. Read it as the model's overall score.</p>
+
+<h2>Step 3. Data pins parameters down</h2>
+<p>How big is the penalty? Start with one parameter. As you collect more data, fewer and fewer values of that parameter still fit well. The instrument below shows this.</p>
+</div>
+
+<section class="panel" aria-labelledby="w0h">
+  <h3 id="w0h">Instrument 1. One parameter, more and more data</h3>
+  <p>The horizontal axis is every value of the parameter you considered. The curve is how well each value fits compared with the best one. The average height of the curve is the model's average fit.</p>
+  <div class="choices" id="pinbtns" role="group" aria-label="Shape of the loss">
+    <button type="button" data-shape="bowl" aria-pressed="true">Curved minimum, loss (w − 0.2)²</button>
+    <button type="button" data-shape="flat" aria-pressed="false">Flat minimum, loss (w − 0.2)⁴</button>
+  </div>
+  <canvas id="pin" aria-label="Relative fit of each parameter value"></canvas>
+  <div class="ctrl"><label for="pn">Data points \(n\)</label><input type="range" id="pn" min="1" max="5" step="0.02" value="2"><output id="pnout" for="pn"></output></div>
+  <div class="readout">
+    <div><span>Average fit across the whole range</span><b id="r-avg"></b></div>
+    <div><span>With 100 times more data it shrinks by a factor of</span><b id="r-fac"></b></div>
+  </div>
+</section>
+
+<div class="col">
+<p>With the curved minimum, 100 times more data shrinks the average fit by a factor of 10. That is \(\sqrt{100}\). In general the good region has width about \(1/\sqrt{n}\), so the average fit scales as \(n^{-1/2}\).</p>
+<p>Now take \(d\) parameters and suppose each one behaves this way. The good fraction of weight space is the product over all of them.</p>
+\[ \left(n^{-1/2}\right)^{d} = n^{-d/2} \]
+<p>Taking \(-\log\) turns this into a penalty of \(\tfrac{d}{2}\log n\). Add the loss at the best weights \(\hat w\) and you get the classic approximation to the score.</p>
+\[ F_n \approx n L_n(\hat w) + \frac{d}{2}\log n \]
+<p>This formula is called <dfn>BIC</dfn>, the Bayesian information criterion (Schwarz, 1978). The first term is fit. The second is the charge for size, and it is \(\tfrac{1}{2}\log n\) per parameter. When earlier explanations say a model with \(d\) parameters has complexity \(d/2\), this is all they mean.</p>
+<p>Before moving on, switch Instrument 1 to the flat minimum. Now 100 times more data shrinks the average fit by only about 3.2, which is \(100^{1/4}\). A flatter minimum is harder for data to pin down, so it is charged less. The exponent changed from \(1/2\) to \(1/4\). Hold on to that.</p>
+
+<h2>Step 4. The hidden assumption</h2>
+<p>The \(d/2\) rule assumed that around the best weights, the loss curves upward like a bowl in every one of the \(d\) directions. Models where this is true are called <dfn>regular</dfn>. Models where it fails are called <dfn>singular</dfn>.</p>
+<p>Neural networks are singular. Here is the smallest example. Take a network with one neuron</p>
+\[ f(x) = a \tanh(b x) \]
+<p>with two weights \(a\) and \(b\), and suppose the right answer is \(f(x) = 0\) for every input. Setting \(a = 0\) gives a perfect fit whatever \(b\) is. So does setting \(b = 0\) whatever \(a\) is. The best weights are not a single point. They form two crossing lines, and along those lines the loss is completely flat.</p>
+<p>Real networks are full of this. You can swap two hidden units, or scale one layer up and the next one down, or switch a neuron off in several ways, and the network computes exactly the same function. Every such freedom is a direction the data never has to pin down. Charging \(\tfrac{1}{2}\log n\) for it is overcharging.</p>
+
+<h2>Step 5. Count volume instead of parameters</h2>
+<p>Here is the fix. Define the excess loss \(K(w)\) as the loss at \(w\) minus the best achievable loss, so \(K = 0\) at the best weights. Then ask how much of weight space is within a tolerance \(\varepsilon\) of the best.</p>
+\[ V(\varepsilon) = \text{volume of } \{\, w : K(w) &lt; \varepsilon \,\} \]
+<p>Watanabe proved that for small \(\varepsilon\) this volume always shrinks like a power of \(\varepsilon\).</p>
+\[ V(\varepsilon) \approx c\, \varepsilon^{\lambda} \]
+<p>The exponent \(\lambda\) is the <dfn>learning coefficient</dfn>. You will also see it called the RLCT, short for real log canonical threshold, which is its name in pure mathematics. Small \(\lambda\) means the good region shrinks slowly as you get stricter. Good weights are plentiful.</p>
+<p>For a bowl in \(d\) dimensions the good region is a ball of radius \(\sqrt{\varepsilon}\), whose volume is proportional to \(\varepsilon^{d/2}\). So a regular model has \(\lambda = d/2\) and nothing changes. For other shapes \(\lambda\) is smaller. All five shapes below have two parameters, so the old rule would say \(d/2 = 1\) for each of them.</p>
+</div>
+
+<section class="panel" aria-labelledby="w1h">
+  <h3 id="w1h">Instrument 2. How fast does the good region shrink?</h3>
+  <p>Pick a loss shape, then drag the tolerance. The orange area on the left is the set of weights where \(K(w) &lt; \varepsilon\). The plot on the right shows its size. Both axes are logarithmic, and on such axes a power law \(\varepsilon^{\lambda}\) is a straight line whose slope is \(\lambda\).</p>
+  <div class="choices" id="potbtns" role="group" aria-label="Loss shape"></div>
+  <div class="grid">
+    <div>
+      <canvas id="heat" width="300" height="300" aria-label="Heat map of the loss over two parameters"></canvas>
+      <div class="ctrl"><label for="eps">Tolerance \(\varepsilon\)</label><input type="range" id="eps" min="-3" max="-0.5" step="0.01" value="-1.5"><output id="epsout" for="eps"></output></div>
+    </div>
+    <div>
+      <canvas id="vol" aria-label="Log-log plot of volume against tolerance"></canvas>
+      <div class="readout">
+        <div><span>Loss</span><b id="r-form" style="font-family:inherit;font-size:16px"></b></div>
+        <div><span>Exact \(\lambda\)</span><b id="r-lam"></b></div>
+        <div><span>Multiplicity \(m\)</span><b id="r-m"></b></div>
+        <div><span>Slope measured on this plot</span><b id="r-slope"></b></div>
+        <div><span>Old rule \(d/2\)</span><b>1</b></div>
+      </div>
+      <div class="note" id="potnote"></div>
+    </div>
+  </div>
+</section>
+
+<div class="col">
+<p>One detail for completeness. When several flat sets cross at a point, as in the cross shape, the volume picks up an extra logarithmic factor, \(V(\varepsilon) \approx c\,\varepsilon^{\lambda}(-\log \varepsilon)^{m-1}\). The integer \(m\) is called the multiplicity. It is a small correction and you can ignore it on a first pass.</p>
+
+<h2>Step 6. The corrected score</h2>
+<p>Go back to the average fit \(Z_n\). With \(n\) data points, only weights whose excess loss is below roughly \(1/n\) contribute to the average. So the size of \(Z_n\) is set by \(V(1/n) \approx n^{-\lambda}\). Taking \(-\log\) gives Watanabe's formula.</p>
+\[ F_n \approx n L_n(w_0) + \lambda \log n \]
+<p>Compare it with BIC in Step 3. It is the same formula with \(d/2\) replaced by \(\lambda\). BIC is the special case where every direction is a bowl. (The full statement also has a \(-(m-1)\log\log n\) term from the multiplicity.)</p>
+<p>The same \(\lambda\) controls test performance. If you predict by averaging over all good weights, the expected gap between your test loss and the best possible test loss is about \(\lambda / n\). So \(\lambda\) plays the role that the parameter count was supposed to play, as the model's effective complexity.</p>
+<div class="tablewrap">
+<table>
+<thead><tr><th></th><th>Regular model</th><th>Singular model</th></tr></thead>
+<tbody>
+<tr><td>Best weights</td><td>One point</td><td>Lines, surfaces, crossings</td></tr>
+<tr><td>Loss near the best weights</td><td>A bowl in every direction</td><td>Flat or nearly flat in some directions</td></tr>
+<tr><td>Charge for size</td><td>\(\tfrac{d}{2}\log n\)</td><td>\(\lambda \log n\) with \(\lambda \le \tfrac{d}{2}\)</td></tr>
+<tr><td>Examples</td><td>Linear regression</td><td>Neural networks, mixture models</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Step 7. Why this predicts sudden jumps in learning</h2>
+<p>Read the formula as a price list. Any region of weight space pays \(n\) times its loss, plus \(\lambda \log n\) for its complexity. Suppose there are two candidate solutions. Solution A is simple (small \(\lambda\)) but slightly inaccurate. Solution B is accurate but complex.</p>
+<p>With little data, the complexity charge dominates and A is preferred. The loss charge grows in proportion to \(n\) while the complexity charge only grows like \(\log n\), so beyond some amount of data B becomes cheaper. The switch is abrupt. Physicists call this kind of switch a phase transition.</p>
+</div>
+
+<section class="panel" aria-labelledby="w2h">
+  <h3 id="w2h">Instrument 3. When does the complex solution take over?</h3>
+  <p>The curve shows how much of the total fit comes from solution B. It is computed from the difference in scores, \(F_B - F_A = -n\,\Delta L + \Delta\lambda \log n\). The formula is only accurate for large \(n\), so treat the left edge loosely.</p>
+  <canvas id="phase" aria-label="Posterior weight of the complex solution against sample size"></canvas>
+  <div class="ctrl"><label for="dl">How much lower B's loss is, \(\Delta L\)</label><input type="range" id="dl" min="-3" max="-1" step="0.01" value="-2"><output id="dlout" for="dl"></output></div>
+  <div class="ctrl"><label for="dlam">How much more complex B is, \(\Delta\lambda\)</label><input type="range" id="dlam" min="1" max="60" step="1" value="20"><output id="dlamout" for="dlam"></output></div>
+  <div class="readout">
+    <div><span>Amount of data where B overtakes A</span><b id="r-nstar"></b></div>
+  </div>
+</section>
+
+<div class="col">
+<h2>Step 8. Measuring \(\lambda\) on a real network</h2>
+<p>Working out \(\lambda\) exactly with pen and paper is very hard and has only been done for a handful of small model families. What made SLT usable in deep learning is the <dfn>local learning coefficient</dfn> (LLC), introduced by Lau, Furman, Wang, Murfet and Wei. It asks the volume question in the neighbourhood of one trained checkpoint \(w^*\), and it can be estimated numerically.</p>
+<p>The idea is simple. Jiggle the weights randomly around \(w^*\) and watch how much the loss rises on average. If it barely rises, many nearby weights are just as good, so the good region is large and \(\lambda\) is small. If it rises sharply, \(\lambda\) is large.</p>
+\[ \hat\lambda(w^*) = \frac{n}{\log n} \Big( \text{average loss of jiggled weights} - \text{loss at } w^* \Big) \]
+<p>The jiggling is done with SGLD (stochastic gradient Langevin dynamics). That is ordinary SGD with random noise added at each step, plus a gentle pull back toward \(w^*\) so the weights explore the neighbourhood without wandering off.</p>
+<p>The best-known application is called developmental interpretability. Hoogland and coauthors tracked the LLC during training for a small language model (about 3 million parameters) and for a small transformer trained to do linear regression from examples in its prompt (about 50 thousand parameters). The LLC curve divided training into distinct stages, and most of those stages matched changes in what the model was doing internally. The language model, for example, first learned pairs of adjacent words, then longer word sequences, then a circuit for copying patterns seen earlier in the prompt.</p>
+
+<h2>Where the theory stops</h2>
+<p>These are the places where people most often read too much into SLT.</p>
+<ol class="limits">
+<li><b>The theory is about averaging over all good weights. Training gives you one set of weights.</b> Everything above describes the Bayesian average from Step 2. SGD does not compute that average, and nobody has proved that it behaves as if it did. The link between \(\lambda\) and what SGD does is an experimental finding in small models.</li>
+<li><b>The formulas are for large amounts of data.</b> They become exact as \(n\) grows with the model held fixed. Instrument 2 shows the cost of stopping early. On the cross, the measured slope is about 0.34 when the exact answer is 0.5, because the logarithmic correction has not faded yet.</li>
+<li><b>Curvature does not determine \(\lambda\).</b> A popular way to measure flatness is the Hessian, the matrix of second derivatives of the loss. It only sees bowl-like curvature. Each curved direction contributes \(1/2\) to \(\lambda\). Each direction the Hessian calls flat contributes somewhere between \(0\) and \(1/4\), and the Hessian cannot tell you where in that range. Compare the cross with the flat-bottomed bowl in Instrument 2.</li>
+<li><b>LLC estimates depend on how you jiggle.</b> Step size, noise level and the strength of the pull toward \(w^*\) all shift the number. Most papers therefore compare LLC values across checkpoints of one training run and avoid reading a single value as absolute.</li>
+<li><b>Small \(\lambda\) does not guarantee your trained network tests well.</b> The \(\lambda/n\) result in Step 6 is for predictions averaged over all good weights.</li>
+</ol>
+
+<h2>Glossary</h2>
+<div class="tablewrap">
+<table>
+<thead><tr><th>Term</th><th>Plain meaning</th></tr></thead>
+<tbody>
+<tr><td>Likelihood</td><td>The probability a model assigns to the data at given weights. Called fit on this page.</td></tr>
+<tr><td>Prior</td><td>The spread of weight settings considered before seeing data.</td></tr>
+<tr><td>Posterior</td><td>The spread of weight settings still plausible after seeing data. It is the prior reweighted by fit.</td></tr>
+<tr><td>Marginal likelihood \(Z_n\)</td><td>Average fit over the prior.</td></tr>
+<tr><td>Free energy \(F_n\)</td><td>\(-\log Z_n\). The model's overall score, lower is better.</td></tr>
+<tr><td>BIC</td><td>The approximation \(F_n \approx nL_n + \tfrac{d}{2}\log n\), valid for regular models.</td></tr>
+<tr><td>Regular model</td><td>One best weight setting, with the loss curving up in every direction around it.</td></tr>
+<tr><td>Singular model</td><td>Anything else. Includes neural networks.</td></tr>
+<tr><td>Learning coefficient \(\lambda\), RLCT</td><td>The exponent in \(V(\varepsilon) \approx c\,\varepsilon^{\lambda}\). Effective complexity.</td></tr>
+<tr><td>LLC</td><td>The same exponent measured around one particular trained checkpoint.</td></tr>
+<tr><td>SGLD</td><td>SGD with added noise, used to jiggle weights around a checkpoint.</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>What to read next</h2>
+<ul class="reads">
+<li><a href="https://www.alignmentforum.org/posts/4eZtmwaqhAgdJQDEg/dslt-1-the-rlct-measures-the-effective-dimension-of-neural">Liam Carroll, Distilling Singular Learning Theory</a>. A blog sequence that goes through the volume picture and the free energy formula with small examples. Start here.</li>
+<li><a href="https://arxiv.org/abs/2010.11560">Wei, Murfet and coauthors, Deep learning is singular, and that's good</a>. A paper-length argument for why this matters for neural networks.</li>
+<li><a href="https://arxiv.org/abs/2308.12108">Lau and coauthors, The Local Learning Coefficient</a>. Defines the LLC and how to estimate it.</li>
+<li><a href="https://arxiv.org/abs/2402.02364">Hoogland and coauthors, Loss Landscape Degeneracy and Stagewise Development in Transformers</a>. The training stages result.</li>
+<li>Sumio Watanabe, Algebraic Geometry and Statistical Learning Theory (2009). The original source. It needs a lot of pure mathematics, so read it last.</li>
+</ul>
+<footer>The five loss shapes in Instrument 2 use exact learning coefficients. Volumes there are counted on a 500 by 500 grid over \([-1,1]^2\) and the slope is a least-squares fit for \(\varepsilon\) between \(10^{-3}\) and \(10^{-1}\). Instrument 1 averages over the range \([-1,1]\).</footer>
+</div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script>
+(function(){
+"use strict";
+function renderMath(){
+  if(window.renderMathInElement){
+    try{
+      renderMathInElement(document.body,{output:"mathml",throwOnError:false,
+        delimiters:[{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}]});
+    }catch(e){}
+  }
+}
+renderMath();
+
+var POTS=[
+ {id:"bowl",name:"Bowl",form:"w₁² + w₂²",lam:1,m:1,f:function(x,y){return x*x+y*y;},
+  note:"The regular case. One optimal point, full-rank Hessian, and the slope matches the parameter count rule."},
+ {id:"ring",name:"Ring",form:"(w₁² + w₂² − ¼)²",lam:0.5,m:1,f:function(x,y){var r=x*x+y*y-0.25;return r*r;},
+  note:"A whole circle of equally good parameters, as you get from a symmetry. Moving along the circle is free, so only one of the two directions costs anything."},
+ {id:"cross",name:"Cross",form:"w₁² w₂²",lam:0.5,m:2,f:function(x,y){return x*x*y*y;},
+  note:"The one-neuron tanh example. The two lines meet at a singular point, which gives multiplicity 2. The measured slope sits below 0.5 because the log factor still matters at these tolerances."},
+ {id:"flat",name:"Flat-bottomed bowl",form:"w₁² + w₂⁴",lam:0.75,m:1,f:function(x,y){return x*x+y*y*y*y;},
+  note:"A single optimal point, yet still singular. The Hessian has one zero eigenvalue, and the quartic direction contributes 1/4 instead of 1/2."},
+ {id:"deep",name:"Lopsided cross",form:"w₁⁴ w₂²",lam:0.25,m:1,f:function(x,y){return x*x*x*x*y*y;},
+  note:"Same set of optimal parameters as the cross, but a different learning coefficient. The zero set alone does not determine the answer. How flat the loss is near it does."}
+];
+var N=500, cache={}, cur=POTS[2];
+function sorted(p){
+  if(cache[p.id]) return cache[p.id];
+  var a=new Float32Array(N*N),k=0;
+  for(var i=0;i<N;i++){var y=-1+(2*(i+0.5))/N;for(var j=0;j<N;j++){var x=-1+(2*(j+0.5))/N;a[k++]=p.f(x,y);}}
+  a.sort();
+  cache[p.id]=a; return a;
+}
+function volFrac(p,eps){
+  var a=sorted(p),lo=0,hi=a.length;
+  while(lo<hi){var mid=(lo+hi)>>1; if(a[mid]<eps) lo=mid+1; else hi=mid;}
+  return Math.max(lo,0.5)/a.length;
+}
+function slopeFit(p){
+  var sx=0,sy=0,sxx=0,sxy=0,n=25;
+  for(var i=0;i<n;i++){var lx=-3+2*i/(n-1),ly=Math.log10(volFrac(p,Math.pow(10,lx)));sx+=lx;sy+=ly;sxx+=lx*lx;sxy+=lx*ly;}
+  return (n*sxy-sx*sy)/(n*sxx-sx*sx);
+}
+function tok(name){return getComputedStyle(document.documentElement).getPropertyValue(name).trim();}
+function rgb(hex){hex=hex.replace("#","");if(hex.length===3)hex=hex.replace(/./g,"$&$&");var v=parseInt(hex,16);return [(v>>16)&255,(v>>8)&255,v&255];}
+function fit(c){
+  var dpr=window.devicePixelRatio||1,w=c.clientWidth,h=c.clientHeight;
+  c.width=Math.round(w*dpr);c.height=Math.round(h*dpr);
+  var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h};
+}
+
+var heat=document.getElementById("heat"),vol=document.getElementById("vol"),phase=document.getElementById("phase");
+var epsIn=document.getElementById("eps"),dlIn=document.getElementById("dl"),dlamIn=document.getElementById("dlam");
+var off=document.createElement("canvas");off.width=off.height=220;
+
+function drawHeat(){
+  var eps=Math.pow(10,+epsIn.value),S=off.width,og=off.getContext("2d"),img=og.createImageData(S,S);
+  var c0=rgb(tok("--surface")),c1=rgb(tok("--heat")),ca=rgb(tok("--singular")),d=img.data,k=0;
+  for(var i=0;i<S;i++){var y=1-(2*(i+0.5))/S;for(var j=0;j<S;j++){var x=-1+(2*(j+0.5))/S,K=cur.f(x,y),c;
+    if(K<eps){c=ca;}else{var t=Math.min(1,Math.pow(K,0.3)*0.62);c=[c0[0]+(c1[0]-c0[0])*t,c0[1]+(c1[1]-c0[1])*t,c0[2]+(c1[2]-c0[2])*t];}
+    d[k++]=c[0];d[k++]=c[1];d[k++]=c[2];d[k++]=255;}}
+  og.putImageData(img,0,0);
+  var o=fit(heat);o.g.imageSmoothingEnabled=true;o.g.drawImage(off,0,0,o.w,o.h);
+  o.g.fillStyle=tok("--muted");o.g.font="12px "+tok("--mono");
+  o.g.fillText("w₁ →",o.w-44,o.h-8);o.g.fillText("↑ w₂",8,16);
+}
+function axes(g,w,h,P,xr,yr,xt,yt,xl,yl){
+  var X=function(v){return P.l+(v-xr[0])/(xr[1]-xr[0])*(w-P.l-P.r);},Y=function(v){return h-P.b-(v-yr[0])/(yr[1]-yr[0])*(h-P.t-P.b);};
+  g.clearRect(0,0,w,h);g.font="12px "+tok("--mono");g.lineWidth=1;
+  g.strokeStyle=tok("--rule");g.fillStyle=tok("--muted");
+  g.textAlign="center";g.textBaseline="top";
+  xt.forEach(function(t){g.beginPath();g.moveTo(X(t[0]),P.t);g.lineTo(X(t[0]),h-P.b);g.stroke();g.fillText(t[1],X(t[0]),h-P.b+6);});
+  g.textAlign="right";g.textBaseline="middle";
+  yt.forEach(function(t){g.beginPath();g.moveTo(P.l,Y(t[0]));g.lineTo(w-P.r,Y(t[0]));g.stroke();g.fillText(t[1],P.l-7,Y(t[0]));});
+  g.textAlign="center";g.textBaseline="bottom";g.fillText(xl,(P.l+w-P.r)/2,h-2);
+  g.textAlign="left";g.textBaseline="top";g.fillText(yl,4,2);
+  return {X:X,Y:Y};
+}
+function drawVol(){
+  var o=fit(vol),g=o.g,P={l:48,r:14,t:24,b:44};
+  var s=axes(g,o.w,o.h,P,[-3.1,-0.4],[-3.6,0.1],
+    [[-3,"0.001"],[-2,"0.01"],[-1,"0.1"]],[[-3,"0.1%"],[-2,"1%"],[-1,"10%"],[0,"100%"]],
+    "tolerance ε (log scale)","share of parameter space with K < ε");
+  var yAnchor=Math.log10(volFrac(cur,0.1));
+  g.setLineDash([5,5]);g.strokeStyle=tok("--muted");g.lineWidth=1.5;g.beginPath();
+  g.moveTo(s.X(-3),s.Y(yAnchor-2*cur.lam));g.lineTo(s.X(-0.5),s.Y(yAnchor+0.5*cur.lam));g.stroke();g.setLineDash([]);
+  g.fillStyle=tok("--muted");g.textAlign="left";g.textBaseline="bottom";
+  g.fillText("dashed line has slope λ = "+cur.lam,s.X(-3)+4,o.h-P.b-4);
+  g.strokeStyle=tok("--regular");g.lineWidth=2.5;g.beginPath();
+  for(var i=0;i<=100;i++){var lx=-3+2.5*i/100,ly=Math.log10(volFrac(cur,Math.pow(10,lx)));if(i)g.lineTo(s.X(lx),s.Y(ly));else g.moveTo(s.X(lx),s.Y(ly));}
+  g.stroke();
+  var le=+epsIn.value,v=volFrac(cur,Math.pow(10,le));
+  g.fillStyle=tok("--singular");g.beginPath();g.arc(s.X(le),s.Y(Math.log10(v)),6,0,6.3);g.fill();
+  g.textAlign=le>-1.2?"right":"left";g.textBaseline="bottom";g.fillStyle=tok("--ink");
+  g.fillText((v*100).toFixed(v<0.01?2:1)+"%",s.X(le)+(le>-1.2?-10:10),s.Y(Math.log10(v))-6);
+}
+function nstar(dL,dLam){
+  var n0=dLam/dL; if(Math.log(n0)<=1) return 0;
+  var lo=n0,hi=1e15;
+  for(var i=0;i<200;i++){var mid=Math.sqrt(lo*hi);if(mid*dL-dLam*Math.log(mid)>0)hi=mid;else lo=mid;}
+  return hi;
+}
+function fmtN(n){if(n>=1e6)return (n/1e6).toFixed(n>=1e7?0:1)+" million";if(n>=1e4)return Math.round(n/1e3)+" thousand";return Math.round(n).toLocaleString("en");}
+function drawPhase(){
+  var dL=Math.pow(10,+dlIn.value),dLam=+dlamIn.value;
+  document.getElementById("dlout").textContent=dL.toPrecision(2);
+  document.getElementById("dlamout").textContent=dLam;
+  var ns=nstar(dL,dLam);
+  document.getElementById("r-nstar").textContent=ns?("n ≈ "+fmtN(ns)):"B wins at every n";
+  var o=fit(phase),g=o.g,P={l:48,r:14,t:24,b:44};
+  var s=axes(g,o.w,o.h,P,[1,7],[0,1.02],
+    [[1,"10"],[2,"100"],[3,"1k"],[4,"10k"],[5,"100k"],[6,"1M"],[7,"10M"]],[[0,"0"],[0.5,"0.5"],[1,"1"]],
+    "number of training samples n (log scale)","posterior weight on the complex solution B");
+  if(ns&&Math.log10(ns)<=7){var xs=s.X(Math.log10(ns));g.strokeStyle=tok("--muted");g.setLineDash([5,5]);g.beginPath();g.moveTo(xs,P.t);g.lineTo(xs,o.h-P.b);g.stroke();g.setLineDash([]);
+    g.fillStyle=tok("--ink");g.textBaseline="top";g.textAlign=xs>o.w*0.6?"right":"left";g.fillText("B overtakes A",xs+(xs>o.w*0.6?-6:6),P.t+4);}
+  g.strokeStyle=tok("--singular");g.lineWidth=2.5;g.beginPath();
+  for(var i=0;i<=400;i++){var lx=1+6*i/400,n=Math.pow(10,lx),gg=n*dL-dLam*Math.log(n),p=1/(1+Math.exp(-Math.max(-500,Math.min(500,gg))));
+    if(i)g.lineTo(s.X(lx),s.Y(p));else g.moveTo(s.X(lx),s.Y(p));}
+  g.stroke();
+}
+function updatePot(){
+  document.getElementById("r-form").textContent="K = "+cur.form;
+  document.getElementById("r-lam").textContent=cur.lam;
+  document.getElementById("r-m").textContent=cur.m;
+  document.getElementById("r-slope").textContent=slopeFit(cur).toFixed(2);
+  document.getElementById("potnote").textContent=cur.note;
+  Array.prototype.forEach.call(document.querySelectorAll("#potbtns button"),function(b){b.setAttribute("aria-pressed",b.dataset.id===cur.id?"true":"false");});
+  drawW1();
+}
+function drawW1(){
+  document.getElementById("epsout").textContent=Math.pow(10,+epsIn.value).toPrecision(2);
+  drawHeat();drawVol();
+}
+var box=document.getElementById("potbtns");
+POTS.forEach(function(p){var b=document.createElement("button");b.type="button";b.textContent=p.name;b.dataset.id=p.id;
+  b.addEventListener("click",function(){cur=p;updatePot();});box.appendChild(b);});
+epsIn.addEventListener("input",drawW1);
+dlIn.addEventListener("input",drawPhase);dlamIn.addEventListener("input",drawPhase);
+var pin=document.getElementById("pin"),pnIn=document.getElementById("pn"),pinShape="bowl";
+function pinK(w){var u=w-0.2;return pinShape==="bowl"?u*u:u*u*u*u;}
+function pinAvg(n){var s=0,M=8000;for(var i=0;i<M;i++){s+=Math.exp(-n*pinK(-1+2*(i+0.5)/M));}return s/M;}
+function drawPin(){
+  var n=Math.pow(10,+pnIn.value),a=pinAvg(n);
+  document.getElementById("pnout").textContent=Math.round(n).toLocaleString("en");
+  document.getElementById("r-avg").textContent=(a*100).toFixed(a<0.01?2:1)+"%";
+  document.getElementById("r-fac").textContent=(a/pinAvg(100*n)).toFixed(1);
+  var o=fit(pin),g=o.g,P={l:48,r:14,t:24,b:44};
+  var s=axes(g,o.w,o.h,P,[-1,1],[0,1.05],[[-1,"-1"],[-0.5,"-0.5"],[0,"0"],[0.5,"0.5"],[1,"1"]],[[0,"0"],[0.5,"0.5"],[1,"1"]],
+    "value of the parameter w","fit relative to the best value");
+  g.beginPath();g.moveTo(s.X(-1),s.Y(0));
+  for(var i=0;i<=600;i++){var w=-1+2*i/600;g.lineTo(s.X(w),s.Y(Math.exp(-n*pinK(w))));}
+  g.lineTo(s.X(1),s.Y(0));g.closePath();
+  g.fillStyle=tok("--regular");g.globalAlpha=0.2;g.fill();g.globalAlpha=1;
+  g.strokeStyle=tok("--regular");g.lineWidth=2.5;g.beginPath();
+  for(i=0;i<=600;i++){w=-1+2*i/600;var y=s.Y(Math.exp(-n*pinK(w)));if(i)g.lineTo(s.X(w),y);else g.moveTo(s.X(w),y);}
+  g.stroke();
+  g.strokeStyle=tok("--singular");g.setLineDash([5,5]);g.lineWidth=1.5;g.beginPath();g.moveTo(s.X(-1),s.Y(a));g.lineTo(s.X(1),s.Y(a));g.stroke();g.setLineDash([]);
+  g.fillStyle=tok("--ink");g.textAlign="left";g.textBaseline="bottom";g.fillText("average fit",s.X(-1)+6,s.Y(a)-4);
+}
+Array.prototype.forEach.call(document.querySelectorAll("#pinbtns button"),function(b){b.addEventListener("click",function(){
+  pinShape=b.dataset.shape;
+  Array.prototype.forEach.call(document.querySelectorAll("#pinbtns button"),function(c){c.setAttribute("aria-pressed",c===b?"true":"false");});
+  drawPin();});});
+pnIn.addEventListener("input",drawPin);
+function all(){updatePot();drawPhase();drawPin();}
+var rt;window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(function(){drawW1();drawPhase();drawPin();},120);});
+if(window.matchMedia){var mq=window.matchMedia("(prefers-color-scheme: dark)");if(mq.addEventListener)mq.addEventListener("change",all);}
+new MutationObserver(all).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){drawVol();drawPhase();drawPin();});
+all();
+})();
+</script>
+</body>
+</html>
