@@ -13,3 +13,241 @@ authors:
     url: "https://fanpu.io"
 published: false
 ---
+
+## Day 2 results
+
+**Headline table** — $T{=}1024$, $B{=}32$, bf16 autocast, fused AdamW, FLASH_ATTENTION backend. MFU and BW% are against the *measured* ceilings (93.9 TFLOP/s, 246.8 GB/s), not the derived peaks.
+
+| mixer | size | $d$ | $L$ | body M | tok/s | µs/tok | peak GB | MFU % | impl. GB/s | BW % |
+|---|---|---|---|---|---|---|---|---|---|---|
+| attn | 30M | 512 | 10 | 34.1 | 77,546 | 12.9 | 9.3 | 27.2 | 46.7 | 21.0 |
+| gdn | 30M | 512 | 10 | 39.5 | 51,475 | 19.4 | 12.8 | 18.7 | 24.4 | 11.0 |
+| attn | 60M | 768 | 9 | 63.7 | 59,511 | 16.8 | 11.8 | 35.7 | 49.7 | 22.4 |
+| gdn | 60M | 768 | 9 | 74.5 | 38,155 | 26.2 | 16.7 | 24.4 | 25.5 | 11.5 |
+| attn | 125M | 768 | 18 | 127.4 | 32,926 | 30.4 | 20.6 | 34.4 | 53.4 | 24.0 |
+| gdn | 125M | 768 | 18 | 149.1 | 20,308 | 49.2 | 30.3 | 22.8 | 26.1 | 11.7 |
+| attn | 250M | 1024 | 20 | 256.9 | 20,570 | 48.6 | 30.6 | 40.2 | 50.7 | 22.8 |
+| gdn | 250M | 1024 | 20 | 299.6 | 13,061 | 76.6 | 45.1 | 27.9 | 25.8 | 11.6 |
+
+Every row: drift ≤ 1.002, p10–p90 within 1.4%, event and wall-clock throughput agreeing to under 1%. The measurements are clean.
+
+**Budget, the thing you actually needed:** a 3 h run gives 224M tokens at 60M/GDN, 412M at 60M/attention, 141M at 125M/GDN. Chinchilla-optimal for 60M is ~1.2B, so a compute-optimal 60M GDN run is **about 9 hours**. That's a real constraint on the sprint and belongs in the program doc.
+
+**Ratios** — gdn ÷ attn at each size:
+
+| size | tok/s | FLOPs/tok | params | peak mem | state |
+|---|---|---|---|---|---|
+| 30M | 0.664 | 1.038 | 1.157 | 1.381 | 0.047 |
+| 60M | 0.641 | 1.067 | 1.170 | 1.410 | 0.047 |
+| 125M | 0.617 | 1.077 | 1.170 | 1.471 | 0.047 |
+| 250M | 0.635 | 1.095 | 1.166 | 1.474 | 0.047 |
+
+**GDN is 36% slower at every size, and the ratio is flat.** Not a small-model artifact — it doesn't improve with scale. And the state ratio is 0.047, i.e. attention carries 21× more memory of the past per layer while running 1.6× faster. That's the trade this whole subfield is negotiating, and at $T{=}1024$ on this box, linear attention is losing on both sides of it.
+
+**Predictions graded:**
+
+| | you | me | actual | winner |
+|---|---|---|---|---|
+| P1 MFU vs 104T (30M / 250M) | 20% / 35% | 14% / 32% | **24.9% / 36.9%** | you, clearly |
+| P2 slope (attn / gdn) | 0.5 / 0 | 0.55 / 0.45 | **0.68 / 0.70** | me, narrowly |
+| P3 tok/s gdn÷attn | 2.0 / 5.0 | 0.75 / 0.85 | **0.66 / 0.64** | me |
+| P4 weight+opt byte share | 0.50 | 0.15 | **0.14** (your formula) | me |
+| P5 SDPA backend | CUDNN | FLASH | **FLASH** | me |
+
+P1 is a genuinely good call — you were within 5 points at both ends with a "40–45% is good pretraining MFU" heuristic and an occupancy argument. P3 you had backwards, and the roofline check caught it before the run, which is the process working.
+
+P4 is the instructive one: your `bytes_per_token` function, which you wrote *after* predicting 0.5, returns 14%. So you contradicted your own prediction with your own code within the hour. Worth a sentence in the log about where 0.5 came from — likely a mental model at much smaller batch, since the crossover is around $N \approx 4$k tokens, not 32k.
+
+**The finding: neither ceiling is binding.**
+
+Your modeled arithmetic intensity is 555–1033 FLOP/byte, all comfortably above the ridge of 381. That predicts compute-bound, so MFU should approach 100%. It's 19–40%. Meanwhile BW utilization is 11–24%. **Neither resource is saturated at any size.** For GDN to be bandwidth-bound it would have to move 4.3–17 MB per token against your modeled 0.5–2.0 MB — roughly 9× more.
+
+So the gap is real traffic and real inefficiency your idealized model doesn't capture: unfused elementwise operations round-tripping activations through DRAM, low tile occupancy at $d_h{=}64$, and kernel launch overhead. Recall the standalone FlashAttention kernel hit 20 TFLOP/s, about 22% of matmul peak, all by itself — that alone accounts for much of attention's shortfall.
+
+Two clean diagnoses fall out. **GDN's BW utilization is pinned at 11.5% across a 7.6× parameter range** — flat to within 0.7 points. Something size-independent is throttling it, which is the signature of per-kernel overhead in the chunked scan rather than any roofline limit. And **GDN's modeled intensity is *higher* than attention's at every size, yet it's slower everywhere** — its model is more wrong, which is exactly what many small unfused kernels look like.
+
+**Slope decomposition** — the single fit of 0.68 hides three different mechanisms. The 60M→125M pair is a controlled depth-doubling at fixed $d{=}768$, which lets you solve for a fixed per-token cost:
+
+| mixer | fixed µs/tok | per-layer µs/tok at $d{=}768$ |
+|---|---|---|
+| attn | 3.24 | 1.51 |
+| gdn | 3.18 | 2.56 |
+
+Doubling depth costs 1.81×, not 2×, because ~19% of the 60M step is the LM head and optimizer, which don't scale with $L$. Strip that fixed cost out and the per-layer time grows as $d^{0.84}$ from 512→768, then $d^{1.34}$ from 768→1024 (GDN: 0.96 then 1.20). Compute-bound would be $d^2$.
+
+So the story is: **the sub-linear slope is a width effect, not a depth effect.** Wider layers are disproportionately cheaper because their matmuls have higher intensity and better tile utilization, and the exponent is climbing toward 2 as $d$ grows — which is the same fact as MFU rising from 27% to 40%. At $d{=}512$ you're paying for inefficiency; by $d{=}1024$ you're starting to pay for arithmetic.
+
+**Two things I'd flag as spawned questions, not today's work.** GDN's memory overhead grows with depth (1.38× at $L{=}10$, 1.47× at $L{=}18$) while its parameter overhead stays flat at 1.17× — the chunked scan is saving more per layer than attention does. And FLOPs-per-token from the LM head falls from 29% at 30M to 10% at 250M, so "FLOPs per parameter" isn't constant across your sizes; any compute-matched comparison in D2 needs to account for that.
+
+Want me to draft the Day 2 log entry and ledger row in the template's shape?
+
+
+
+Two different $6$'s float around, so pin down which one you mean.
+
+## The one I think you mean: the recurrent state update
+
+Per head, per token, with state $S \in \mathbb{R}^{d_k \times d_v}$ and $d_k = d_v = d_h$, the gated delta rule is
+
+$$S_t = \alpha_t\left(S_{t-1} - \beta_t\, k_t (S_{t-1}^\top k_t - v_t)^\top\right), \qquad o_t = S_t^\top q_t$$
+
+Three matrix-vector contractions with $S$, each $d_h \times d_h$, each $2d_h^2$ FLOPs (one multiply + one add per element):
+
+| Op | What it is | FLOPs |
+|---|---|---|
+| $S_{t-1}^\top k_t$ | read out what the state currently predicts for $k_t$ | $2d_h^2$ |
+| $k_t(\cdot)^\top$ accumulated into $S$ | the rank-1 write | $2d_h^2$ |
+| $S_t^\top q_t$ | query readout | $2d_h^2$ |
+
+$$\Rightarrow 6d_h^2 \text{ per head per token}$$
+
+The decay $\alpha_t \odot S_{t-1}$ is one FLOP per state element, $d_h^2$, and gets dropped from the count because it isn't a matmul. So $6d_h^2$, not $7d_h^2$, by convention.
+
+**Careful with the symbol.** Summed over $H$ heads with $d_h = d/H$, the layer costs $6 H d_h^2 = 6\,d\,d_h$ per token — linear in $d$, not quadratic. So $6d^2$ is correct only when $d$ means *head* dimension. Writing it as $6d_{\text{model}}^2$ would overcount by $H$. This matters for your roofline table (D1/H1.2), so state which $d$ the header means.
+
+Sanity check against softmax attention: $QK^\top$ and $AV$ cost $4dT$ per token across all heads. Crossover at $6dd_h = 4dT \Rightarrow T = 1.5 d_h$, i.e. around 192 tokens at $d_h = 128$. That's the right shape — linear attention wins on FLOPs almost immediately, which is why the interesting question on your box is bytes, not FLOPs.
+
+## The other $6$, so you don't conflate them
+
+$C \approx 6ND$ (params $\times$ tokens) is the *training* FLOP rule: $2$ forward $+ 4$ backward per parameter per token. Same numeral, unrelated derivation. If someone says "GDN costs $6d^2$" while discussing a training budget, they mean a $d\times d$ projection matrix under that rule, not the recurrence.
+
+## For your Day 2 deliverable
+
+Neither count is your bottleneck. At $d_h=128$, the state is $16{,}384$ elements $\times$ 2 bytes, read and written once per token per head — the recurrence is arithmetic-intensity $O(1)$, so on 273 GB/s you are bandwidth-bound at every size you'll train. That's the H1.2 story: report bytes/token, and let the FLOP count only justify why MFU is uninformative.
+
+
+
+## 2. Embedding parameters
+
+- This is a lookup table. Use non-embedding parameters to exclude it.
+
+## 3. Gated DeltaNet (GDN) internal recurrence from the chunkwise kernel
+
+**GDN update:**
+
+$$
+\begin{aligned}
+S_t &= S_{t-1}\big(\alpha_t (I - \beta_t k_t k_t^{T})\big) + \beta_t v_t k_t^{T} \\
+&= \alpha_t S_{t-1} - \alpha_t \beta_t S_{t-1} k_t k_t^{T} + \beta_t v_t k_t^{T} \\
+&= \alpha_t S_{t-1} + \big(\beta_t v_t - \alpha_t \beta_t S_{t-1} k_t\big) k_t^{T} \quad \text{(fused)}
+\end{aligned}
+$$
+
+**Forward pass:**
+
+- $S_{t-1} k_t$ costs $2 d_k d_v$
+- Outer product costs $2 d_k d_v$
+- $o_t = S_t q_t$ costs $2 d_k d_v$
+- **Total:** $6 d_k d_v$
+
+
+Ceilings confirmed from your rows: $\pi = 95.45$ TFLOP/s, $\beta = 222.37$ GB/s, ridge $I^* = 429$.
+
+**Main table** — MFU and BW% against those measured ceilings. $F$, $B$, and $I$ are all modeled (from your two functions); MFU and BW% are measured.
+
+| mixer | size | $F$ MFLOP/tok | $B$ kB/tok | $I$ = F/B | $I/I^*$ | MFU % | BW % |
+|---|---|---|---|---|---|---|---|
+| attn | 30M | 334 | 602 | 555 | 1.29 | 27.2 | 21.0 |
+| gdn | 30M | 347 | 474 | 731 | 1.70 | 18.7 | 11.0 |
+| attn | 60M | 572 | 836 | 684 | 1.59 | 35.7 | 22.4 |
+| gdn | 60M | 611 | 667 | 915 | 2.13 | 24.4 | 11.5 |
+| attn | 125M | 997 | 1621 | 615 | 1.43 | 34.4 | 24.0 |
+| gdn | 125M | 1074 | 1284 | 836 | 1.95 | 22.8 | 11.7 |
+| attn | 250M | 1864 | 2464 | 756 | 1.76 | 40.2 | 22.8 |
+| gdn | 250M | 2041 | 1976 | 1033 | 2.41 | 27.9 | 11.6 |
+
+**Breakdowns**, since they explain both columns. FLOPs in MFLOP/token, bytes in kB/token.
+
+| mixer | size | mix | MLP | head | core | conv | w+opt | act | mixer |
+|---|---|---|---|---|---|---|---|---|---|
+| attn | 30M | 63 | 142 | 98 | 31.5 | 0 | 69 | 369 | 164 |
+| gdn | 30M | 95 | 142 | 98 | 11.8 | 0.4 | 75 | 369 | 31 |
+| attn | 60M | 127 | 255 | 147 | 42.5 | 0 | 117 | 498 | 221 |
+| gdn | 60M | 192 | 255 | 147 | 15.9 | 0.5 | 128 | 498 | 41 |
+| attn | 125M | 255 | 510 | 147 | 84.9 | 0 | 183 | 995 | 442 |
+| gdn | 125M | 384 | 510 | 147 | 31.9 | 1.0 | 206 | 995 | 83 |
+| attn | 250M | 503 | 1038 | 197 | 125.8 | 0 | 335 | 1475 | 655 |
+| gdn | 250M | 758 | 1038 | 197 | 47.2 | 1.5 | 379 | 1475 | 123 |
+
+("mix" is mixer projections; "core" is attention scores or the GDN scan.)
+
+Three things the extra columns make legible:
+
+**GDN's higher intensity is a real accounting fact, not an error.** It does more FLOPs (mixer projections 95 vs 63 at 30M, 758 vs 503 at 250M — the `expand_v=2` cost) *and* moves fewer bytes (mixer traffic 31 vs 164 kB — no KV materialization). Numerator up, denominator down, so $I$ is 30–35% higher at every size. Which is precisely why its 1.5× worse efficiency is so striking: on paper it's the one that should be further from the bandwidth wall.
+
+**The LM head is flat in absolute terms.** 98 MFLOP/token at both 30M and 60M; 147 at both 60M and 125M. It tracks $Vd$, not the body. So it falls from 29% of the total to 10%, which is the fixed cost driving the sub-linear slope.
+
+**Activations are identical between mixers** (369, 498, 995, 1475 kB) because your model counts residual-stream traffic, which doesn't depend on the mixer. All the byte difference lives in the "mixer" column. That's a modeling choice worth stating explicitly in the write-up — GDN's real activation traffic is probably higher than attention's, since the scan saves more intermediates, and the memory panel supports that. It's a known limitation of the estimate, not a result.
+
+
+
+
+
+Read both docs. Here's the review — major things only, all fixable in the post as written, none requiring new runs.
+
+## 1. You have the day's actual result and didn't report it
+
+H1.2 (D1, directions doc) predicted: *"GDN-family layers will be closer to attention in tok/s than the FLOP ratio suggests."* Your own two tables falsify this, and in the more interesting direction:
+
+| size | FLOP ratio (gdn/attn) | time ratio (µs/tok) |
+|---|---:|---:|
+| 30M | 1.04 | 1.50 |
+| 60M | 1.07 | 1.56 |
+| 125M | 1.08 | 1.62 |
+| 250M | 1.09 | 1.58 |
+
+GDN is **further** from attention in throughput than FLOPs predict, not closer, by roughly a factor of 1.5 in the discrepancy itself. That is the day's belief update and it should be the lead observation, with the ratio table in the post. The second half of H1.2 also fails: there is no "knee" — per-token time rises monotonically (12.9 → 48.6 µs for attention across the ladder), so cost is not flat in model size anywhere on this ladder.
+
+## 2. The stated explanation is contradicted by your own numbers
+
+> *"the crossover point ... is not met at our values of $T$, and hence GDN uses more compute and takes longer per token."*
+
+The crossover analysis is correct, but it cannot carry that "hence." At $T=1024$, $D=512$, $d_v=128$: $T^\star = 4D + 3d_v = 2432$, so yes you're below it — but the resulting FLOP penalty is the 4–9% in the table above. The observed penalty is 50–62%. The analytic result explains about a tenth of the effect, and the post presents it as the cause.
+
+Worse, the post then gives a second, incompatible explanation two paragraphs later (uncompiled elementwise ops) without noticing they conflict. The elementwise story is the one your data supports: near-equal FLOPs, large time gap, ratio roughly constant across sizes. Say that, and demote the crossover to what it actually is — a prediction about where FLOPs cross, which you are nowhere near testing at $T=1024$ and which the "next steps" $T=8192$ run is designed to check.
+
+## 3. "All of them exceed the ridge point, so they are compute-bound" is a roofline misapplication
+
+Two problems.
+
+**Aggregation.** Roofline is a per-kernel model. Total time is $\sum_i t_i$ over kernels, and the operational intensity of a *composite* workload is not a roofline coordinate. If 60% of your time sits in elementwise kernels at $I \approx 0.5$ and 40% in GEMMs at $I \approx 2000$, the aggregate $F/B$ lands well above $I^\star$ while most of your wall clock is memory-bound. That is exactly the shape of a GDN block: L2 norms on q/k, sigmoid, softplus, SiLU×2, RMSNorm, output gating — each a full activation read plus write for a handful of FLOPs.
+
+**Internal inconsistency.** If the workloads really were compute-bound at $I/I^\star \in [1.3, 2.4]$, you would expect MFU near the compute roof. You measure 18.7–40.2% MFU and 11–24% of bandwidth. Being far from *both* roofs is the model telling you its two parameters don't capture the bottleneck — that's the honest conclusion and it's a fine one to publish. The current sentence claims the opposite.
+
+Related, and load-bearing: you report GDN as moving *fewer* bytes per token than attention (474 vs 602 kB/tok at 30M), which is what makes GDN's BW% half of attention's. Since $B$ is an analytic estimate, that number depends entirely on what you counted. If the attention estimate includes the $T \times T$ score matrix, it's wrong for a FlashAttention backend, which never writes scores to HBM. State in the post what $B$ counts (weights, activations, optimizer state, recompute) — otherwise the BW% column is uninterpretable and the attn/GDN comparison in that column may be inverted.
+
+## 4. Parallel lines mean the opposite of what you wrote
+
+> *"they are only a multiplicative factor apart ... Since this is size-independent, it may be some constant overhead that doesn't scale with width or depth."*
+
+A constant *multiplicative* factor is precisely a cost that **does** scale with width and depth, in the same way the rest of the model does. A constant additive overhead would show as lines that converge as size grows (the fixed cost being amortized), which is not what you see. On a log-log throughput plot, "parallel" means equal exponent and different prefactor.
+
+The correct reading: GDN's extra cost is proportional per-layer work — consistent with a per-layer elementwise tail, and inconsistent with a fixed setup/launch overhead. Same evidence, opposite conclusion, and it points at the right next experiment.
+
+## 5. MFU denominator is non-standard and unstated
+
+Reverse-engineering your table: $77{,}546 \times 334\,\text{MFLOP} = 25.9$ TFLOP/s, and $25.9/95.45 = 27.1\%$. So MFU is computed against your **measured** 95.45 TFLOP/s, not theoretical peak; BW% likewise against measured 222.37 GB/s.
+
+That's a defensible choice — arguably a better one — but it's not what "MFU" means to a reader, and it makes your numbers incomparable to every other report, including the nanochat 5.6% reference in your own program doc. Your directions doc lists this as blind spot #5 with an explicit instruction: state the denominator in the table header. Do that, and either label the column "fraction of achieved peak" or report both. Same for the attention-backend microbenchmark — 5.07 ms at $(B{=}32, H{=}8, T{=}1024, d_h{=}64)$ is ~6.8 TFLOP/s if forward-only and ~24 TFLOP/s if forward+backward; the post doesn't say which, and the difference is the whole interpretation.
+
+## 6. The analytic section and the measured section are never connected
+
+Your derivation gives mixer-block FLOPs only: at 30M, $L(24D^2 + 6TD) = 94$ MFLOP/tok for attention. The measured table reports 334 MFLOP/tok — whole model, including MLPs and the output head. A reader who tries to check your work hits a 3.5× discrepancy with nothing in the post explaining it. One sentence fixes it: say the derivation is per-mixer-block and the table is end-to-end, and give the MLP/head share.
+
+Also flag the asymmetry inside the derivation: attention is priced with $e_v = 1$ (QKVO all $D^2$) while GDN gets $e_v = 2$ plus a fourth projection for the output gate. So "the projection cost for GDN dominates, and is double that for attention" is partly a statement about the expansion ratio and the extra gate, not about the mixer's update rule. True as a fact about the blocks you're benchmarking, misleading as a fact about linear attention.
+
+---
+
+**Minor but worth one line:** the Chinchilla table's despair is calibrated against a budget you never committed to. The directions doc sets 300M/600M/1.2B tokens for 30M/60M/125M, which at your measured GDN throughput is 1.6 h / 4.4 h / 16 h. Only 125M is genuinely painful. Worth saying, since "we may have to undertrain it" is already the plan of record rather than a concession.
+
+**For the Day 2 log entry:** the prediction field is mandatory per §4 and there's no prediction anywhere in the post. Write it retroactively only if you can honestly reconstruct it — otherwise record it as missing, since a fabricated prediction poisons the calibration metric, which is the artifact you actually care about on Day 30.
+
+---
+
+**Description (pick one):**
+
+> Benchmarking the GB10's compute and bandwidth roofline, then attention against Gated DeltaNet across a 30M–250M ladder. GDN turns out ~1.5× slower per token despite near-identical FLOPs — a gap the roofline does not explain.
+
+Or shorter:
+
+> Measuring the GB10's roofline and benchmarking attention against Gated DeltaNet from 30M to 250M, where GDN costs 1.5× the time for the same FLOPs.
