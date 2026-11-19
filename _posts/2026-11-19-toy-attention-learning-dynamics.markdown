@@ -8,7 +8,7 @@ caption: Santorini Caldera, Greece
 class: post-template
 author: fanpu
 giscus_comments: true
-description: ""
+description: "Learning dynamics of a scalar linear attention layer on in-context regression"
 authors:
   - name: Fan Pu Zeng
     url: "https://fanpu.io"
