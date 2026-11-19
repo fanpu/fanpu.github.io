@@ -327,7 +327,7 @@ $\mathbb{E}[x^4] = 3$ set how far $p^*$ shrinks below 1 and how high the floor
 is. For a different input distribution with unit variance, only the fourth
 moment changes.
 
-### Gradient flow on the three weights
+### Gradient analysis
 
 Since the loss depends on the weights only through $p = vkq$, the chain rule
 gives $\frac{\partial L}{\partial v} = L'(p)\,kq$, where
