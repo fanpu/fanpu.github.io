@@ -33,7 +33,9 @@ TARGET_SUFFIX = ".webp"
 # JPEG losslessly just preserves its compression artifacts at a much larger
 # size. This also keeps low-colour photographs (a dark night sky, a snowy
 # mountain) out of the line-art branch, which the colour count alone gets wrong.
-PHOTO_EXTS = {".jpg", ".JPG", ".jpeg", ".JPEG", ".tiff", ".TIFF"}
+PHOTO_EXTS = {".jpg", ".JPG", ".jpeg", ".JPEG", ".tiff", ".TIFF", ".heic", ".HEIC"}
+# cwebp can't read these, so they're decoded to a temporary PNG with ImageMagick first.
+NEEDS_DECODE_EXTS = {".heic", ".HEIC"}
 LINE_ART_EXTS = {".png", ".PNG"}
 
 # Plots and diagrams here run from ~60 to ~46,000 unique colours; photographs
@@ -123,6 +125,11 @@ def encode_photo(src, dst):
 
     with tempfile.TemporaryDirectory() as tmp:
         out = pathlib.Path(tmp) / "photo.webp"
+        if src.suffix in NEEDS_DECODE_EXTS:
+            decoded = pathlib.Path(tmp) / "decoded.png"
+            if not run(["magick", str(src), "-auto-orient", str(decoded)]):
+                return False
+            src = decoded
         if not run(cmd + [str(src), "-o", str(out)]):
             return False
         shutil.copyfile(out, dst)
