@@ -51,7 +51,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/reading-list/";
           },
-        },{id: "post-research-sprint-day-3-seed-noise-and-transformer-baselines",
+        },{id: "post-attention-in-the-y-abx-toy-model",
+      
+        title: "Attention in the y = abx Toy Model",
+      
+      description: "",
+      section: "Posts",
+      handler: () => {
+        
+          window.location.href = "/blog/2026/toy-attention-learning-dynamics/";
+        
+      },
+    },{id: "post-research-sprint-day-3-seed-noise-and-transformer-baselines",
       
         title: "Research Sprint Day 3 - Seed Noise and Transformer Baselines",
       
