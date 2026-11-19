@@ -2,9 +2,9 @@
 title: "Attention in the y = abx Toy Model"
 layout: distill
 tags: [machine-learning, learning-dynamics, attention]
-cover: santorini_caldera.webp
-cover_preview: santorini_caldera.webp
-caption: Santorini Caldera, Greece
+cover: kinkakuji.webp
+cover_preview: kinkakuji.webp
+caption: Kinkaku-ji, Kyoto, Japan
 class: post-template
 author: fanpu
 giscus_comments: true
