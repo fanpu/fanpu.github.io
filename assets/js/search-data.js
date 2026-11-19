@@ -55,7 +55,7 @@ ninja.data = [{
       
         title: "Attention in the y = abx Toy Model",
       
-      description: "",
+      description: "Learning dynamics of a scalar linear attention layer on in-context regression",
       section: "Posts",
       handler: () => {
         
