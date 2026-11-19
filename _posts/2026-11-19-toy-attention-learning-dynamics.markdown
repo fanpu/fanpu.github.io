@@ -387,3 +387,154 @@ We can read a few things off these equations.
    the same conserved quantities. Deep linear networks have a matrix version:
    $W_{i+1}^\top W_{i+1} - W_i W_i^\top$ is conserved for adjacent layers, a
    property called balancedness.
+
+### Time to converge from different initializations
+
+The map below shows how long gradient flow takes to converge from each
+starting point, with $n = 4$. The axes are the initial $k$ and $q$, and the
+slider sets the initial $v$. We count a run as converged once $p$ is within 5%
+of $p^*$.
+
+{% raw %}
+<div class="init-fig" id="init-fig" markdown="0">
+  <style>
+    .init-fig { margin: 1.5rem 0; font-size: 0.9rem; color: var(--global-text-color); }
+    .init-fig .init-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.6rem; }
+    .init-fig input[type="range"] { flex: 1; max-width: 320px; accent-color: var(--global-theme-color); }
+    .init-fig .init-val { font-variant-numeric: tabular-nums; min-width: 2.5rem; }
+    .init-fig .legend { display: flex; flex-wrap: wrap; gap: 0.4rem 0.9rem; margin-bottom: 0.6rem; font-size: 12px; color: var(--global-text-color-light); align-items: center; }
+    .init-fig .legend span { display: inline-flex; align-items: center; gap: 0.3rem; }
+    .init-fig .sw { width: 10px; height: 10px; border-radius: 2px; display: inline-block; border: 0.5px solid var(--global-text-color-light); }
+    .init-fig .sw-stuck { width: 18px; height: 0; border-top: 2px dashed #D85A30; display: inline-block; }
+    .init-fig .init-wrap { position: relative; width: 100%; max-width: 520px; aspect-ratio: 1 / 1; margin: 0 auto; }
+    .init-fig canvas { width: 100%; height: 100%; display: block; cursor: crosshair; }
+    .init-fig .readout { margin-top: 0.6rem; min-height: 1.5rem; color: var(--global-text-color-light); font-variant-numeric: tabular-nums; text-align: center; }
+  </style>
+  <div class="init-row">
+    <label for="init-v">Initial <i>v</i></label>
+    <input id="init-v" type="range" min="0.05" max="1.5" step="0.05" value="0.6">
+    <span class="init-val" id="init-v-val">0.60</span>
+  </div>
+  <div class="legend">
+    <span>Time to converge:</span>
+    <span><i class="sw" style="background:#E6F1FB;"></i>under 2</span>
+    <span><i class="sw" style="background:#B5D4F4;"></i>2 to 5</span>
+    <span><i class="sw" style="background:#85B7EB;"></i>5 to 15</span>
+    <span><i class="sw" style="background:#378ADD;"></i>15 to 50</span>
+    <span><i class="sw" style="background:#185FA5;"></i>50 to 200</span>
+    <span><i class="sw" style="background:#042C53;"></i>over 200</span>
+    <span><i class="sw-stuck"></i>never converges</span>
+  </div>
+  <div class="init-wrap" id="init-wrap">
+    <canvas id="init-map" role="img" aria-label="Heatmap of time to converge over the initial key weight and initial query weight, with dashed lines where training never converges."></canvas>
+  </div>
+  <div class="readout" id="init-ro">Hover over the map to read a starting point.</div>
+</div>
+<script>
+(function () {
+  var cv = document.getElementById("init-map"), ctx = cv.getContext("2d");
+  var wrap = document.getElementById("init-wrap"), ro = document.getElementById("init-ro");
+  var A = 1.5, ps = 1 / A, R = 1.5, N = 90, CAP = 200;
+  var cols = ["#E6F1FB", "#B5D4F4", "#85B7EB", "#378ADD", "#185FA5", "#042C53"];
+  var HINT = "Hover over the map to read a starting point.";
+  var v0 = 0.6, grid = new Float32Array(N * N), W = 0, H = 0;
+  // Integrate gradient flow with an adaptive midpoint step until p is within 5% of p*.
+  function run(v, k, q) {
+    var t = 0;
+    for (var i = 0; i < 3000 && t < CAP; i++) {
+      var p = v * k * q;
+      if (Math.abs(p - ps) < 0.05 * ps) return t;
+      var E = 1 - A * p, dv = E * k * q, dk = E * v * q, dq = E * v * k;
+      var sp = Math.max(Math.abs(dv), Math.abs(dk), Math.abs(dq));
+      var dt = Math.min(0.5, Math.max(0.004, 0.03 / (sp + 1e-3)));
+      var v2 = v + dt / 2 * dv, k2 = k + dt / 2 * dk, q2 = q + dt / 2 * dq, E2 = 1 - A * v2 * k2 * q2;
+      v += dt * E2 * k2 * q2; k += dt * E2 * v2 * q2; q += dt * E2 * v2 * k2; t += dt;
+    }
+    return CAP + 1;
+  }
+  function compute() {
+    for (var j = 0; j < N; j++) for (var i = 0; i < N; i++) {
+      var k = -R + (i + 0.5) * 2 * R / N, q = R - (j + 0.5) * 2 * R / N;
+      grid[j * N + i] = run(v0, k, q);
+    }
+  }
+  function bin(t) { return t < 2 ? 0 : t < 5 ? 1 : t < 15 ? 2 : t < 50 ? 3 : t <= CAP ? 4 : 5; }
+  function X(k) { return (k + R) / (2 * R) * W; }
+  function Y(q) { return H - (q + R) / (2 * R) * H; }
+  function halo(s, x, y) {
+    ctx.lineWidth = 3; ctx.strokeStyle = "rgba(255,255,255,0.9)"; ctx.strokeText(s, x, y);
+    ctx.fillStyle = "#111"; ctx.fillText(s, x, y);
+  }
+  function label(s, k, q) {
+    if (Math.abs(k) > R - 0.15 || Math.abs(q) > R - 0.1) return;
+    ctx.font = "12px sans-serif"; ctx.textAlign = "center"; halo(s, X(k), Y(q) + 4);
+  }
+  function draw() {
+    var dpr = window.devicePixelRatio || 1;
+    W = wrap.clientWidth; H = wrap.clientHeight;
+    if (!W || !H) return;
+    cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var cw = W / N, ch = H / N, i, j;
+    for (j = 0; j < N; j++) for (i = 0; i < N; i++) {
+      ctx.fillStyle = cols[bin(grid[j * N + i])];
+      ctx.fillRect(i * cw, j * ch, cw + 0.6, ch + 0.6);
+    }
+    ctx.strokeStyle = "#6b7280"; ctx.lineWidth = 1; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(X(0), 0); ctx.lineTo(X(0), H); ctx.moveTo(0, Y(0)); ctx.lineTo(W, Y(0)); ctx.stroke();
+    ctx.strokeStyle = "#D85A30"; ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
+    var a = Math.min(v0, R), m = (a + R) / 2;
+    [1, -1].forEach(function (s) {
+      ctx.beginPath(); ctx.moveTo(X(0), Y(0)); ctx.lineTo(X(-s * a), Y(s * a)); ctx.stroke();
+      if (v0 < R) {
+        ctx.beginPath(); ctx.moveTo(X(-s * v0), Y(s * v0)); ctx.lineTo(X(-s * v0), Y(s * R)); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(X(-s * v0), Y(s * v0)); ctx.lineTo(X(-s * R), Y(s * v0)); ctx.stroke();
+      }
+    });
+    ctx.setLineDash([]);
+    label("no flip", 0.85, 0.85); label("no flip", -0.85, -0.85);
+    [1, -1].forEach(function (s) {
+      if (v0 < 1.25) {
+        label("v flips", -s * m, s * m);
+        label("k flips", -s * 0.3 * a - s * 0.08, s * m);
+        label("q flips", -s * m, s * 0.3 * a + s * 0.08);
+      } else {
+        label("k flips", -s * 0.35, s * 1.05);
+        label("q flips", -s * 1.05, s * 0.35);
+      }
+    });
+    ctx.font = "12px sans-serif";
+    ctx.textAlign = "right"; halo("initial k", W - 6, Y(0) - 6);
+    ctx.textAlign = "left"; halo("initial q", X(0) + 6, 14);
+  }
+  function outcome(k, q) {
+    if (v0 * k * q > 0) return "The product starts positive, so no weight changes sign.";
+    var ak = Math.abs(k), aq = Math.abs(q), mn = Math.min(v0, ak, aq);
+    return "The product starts negative, and " + (mn === ak ? "k" : mn === aq ? "q" : "v") + " is smallest, so it flips sign.";
+  }
+  cv.addEventListener("mousemove", function (e) {
+    var r = cv.getBoundingClientRect();
+    var i = Math.min(N - 1, Math.max(0, Math.floor((e.clientX - r.left) / r.width * N)));
+    var j = Math.min(N - 1, Math.max(0, Math.floor((e.clientY - r.top) / r.height * N)));
+    var k = -R + (i + 0.5) * 2 * R / N, q = R - (j + 0.5) * 2 * R / N, t = grid[j * N + i];
+    ro.textContent = "k = " + k.toFixed(2) + ", q = " + q.toFixed(2) + ". " + outcome(k, q) +
+      " Time " + (t > CAP ? "over 200" : "about " + t.toFixed(1)) + ".";
+  });
+  cv.addEventListener("mouseleave", function () { ro.textContent = HINT; });
+  document.getElementById("init-v").addEventListener("input", function (e) {
+    v0 = parseFloat(e.target.value);
+    document.getElementById("init-v-val").textContent = v0.toFixed(2);
+    compute(); draw();
+  });
+  window.addEventListener("resize", draw);
+  compute(); draw();
+})();
+</script>
+{% endraw %}
+
+When the product $vkq$ starts positive, no weight has to change sign, and
+convergence is fast unless the weights start near zero. When it starts
+negative, one weight has to cross zero first. By the conservation law the
+three squares shrink at the same rate, so the weight with the smallest
+magnitude gets there first and flips. The dashed lines are the starting points
+where the two smallest weights are tied. There both reach zero together, and
+training stays stuck.
