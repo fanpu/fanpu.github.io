@@ -8,7 +8,7 @@ caption: Kearsarge Pass, Sierra Nevada, California, U.S
 class: post-template
 author: fanpu
 giscus_comments: true
-description: "Training transformer baselines at 30M, 60M, and 125M to measure how much random seed alone moves final validation loss. Pooled seed noise comes out at 0.003 nats, which sets the minimum effect size for every architecture comparison to follow"
+description: "Training transformer baselines at 30M, 60M, and 125M to measure how much random seed alone moves final validation loss. Pooled seed noise is measured to be 3e-3 nats, setting the minimum effect size for future architecture comparisons."
 authors:
   - name: Fan Pu Zeng
     url: "https://fanpu.io"
