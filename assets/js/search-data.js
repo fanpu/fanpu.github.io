@@ -51,7 +51,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/reading-list/";
           },
-        },{id: "post-attention-in-the-y-abx-toy-model",
+        },{id: "post-understanding-how-batch-size-relates-to-gradient-noise-scale",
+      
+        title: "Understanding How Batch Size Relates to Gradient Noise Scale",
+      
+      description: "For a tuned learning rate, the best batch size from a goodput perspective depends on how noisy the minibatch gradients are. If the batch size is small relative to the gradient noise, the standard error of the gradient estimate is larger than the gradient itself, so the learning rate has to be small and convergence takes many steps. On the other hand, if the batch size is already large relative to the gradient noise, FLOPs and datapoints are wasted as the gradient estimates are already accurate. In this post, we derive the optimal learning rate for SGD with minibatch noise, and the gradient noise scale that separates these two regimes.",
+      section: "Posts",
+      handler: () => {
+        
+          window.location.href = "/blog/2026/batch-size-and-gradient-noise-scale/";
+        
+      },
+    },{id: "post-attention-in-the-y-abx-toy-model",
       
         title: "Attention in the y = abx Toy Model",
       
