@@ -1,6 +1,6 @@
 # Unused cover photos
 
-116 photos in `assets/img/posts/` that nothing on the site references yet.
+115 photos in `assets/img/posts/` that nothing on the site references yet.
 Regenerate with `python3 _scripts/unused_cover_photos.py`.
 
 ## Added 2026-11-19
@@ -25,7 +25,6 @@ Regenerate with `python3 _scripts/unused_cover_photos.py`.
 - fuji_yoshida_cloud_sea.webp
 - great_allegheny_passage_pond.webp
 - great_allegheny_passage_red_brush.webp
-- great_allegheny_passage_ridges.webp
 - gyeongbokgung_geunjeongjeon.webp
 - hallstatt_mirror_lake.webp
 - heian_shrine_pond.webp
