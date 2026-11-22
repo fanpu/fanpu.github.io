@@ -19,9 +19,8 @@ toc: true
 These are notes from an investigation into hyperparameter tuning, based on the
 first assignment of
 [Stanford CS 312: Deep Learning Alchemy](https://deep-learning-alchemy.github.io/).
-The first experiment sweeps one hyperparameter at a time. Learning rate matters
-most and batch size comes second. Weight decay is close to flat over an
-$81\times$ range, and warmup only matters when it is too short.
+I sweep learning rate, weight decay, warmup and batch size one at a time, and
+then in pairs.
 
 ## Setup
 
@@ -35,160 +34,156 @@ decay $0.1$ and batch size 64, which gives 9,375 optimizer steps. The learning
 rate warms up linearly from zero over the first 1% of steps, then decays
 linearly to zero. The default run ends at a validation loss of 2.925.
 
+Each point in the plots below is a single run with one seed.
+
 ## Sweeping one hyperparameter at a time
 
 Each sweep changes one hyperparameter and leaves the rest at their defaults.
-Learning rate, weight decay and warmup move in factors of 3 around the default.
-Batch size moves in factors of 2. Each point is a single run with one seed, and
-I have not measured the seed-to-seed noise yet. Gaps of a few thousandths may
-not be real.
 
 {% include figure.liquid
     path="/assets/img/posts/hp_tuning/p1_sweeps.webp"
     class="z-depth-1"
     zoomable=true
     num=1
-    alt="Top row: final validation loss against learning rate, weight decay, warmup fraction and batch size, one panel each. Bottom row: validation loss curves over training for each run."
-    caption="Top: final validation loss for each sweep, on a shared vertical axis. The dashed line is a quadratic fit in $\log_{10}$ of the hyperparameter, and $a$ is its curvature in loss per decade squared. Bottom: the validation loss curves for the same runs. Learning rate and batch size have the largest curvature."
+    alt="Four panels of final validation loss against learning rate, weight decay, warmup fraction and batch size, on a shared vertical axis."
+    caption="Final validation loss for each sweep, on a shared vertical axis. Learning rate moves the loss the most."
 %}
 
-<p class="table-caption"><b>Table 1.</b> Final validation loss for each sweep, with the swept value under each loss. Columns are steps away from the default, in factors of 3 (factors of 2 for batch size). The default is shaded and the best run in each sweep is bold. Hovering over a cell shows its change from the default. Learning rate and batch size change the loss the most.</p>
-<table class="data-table">
-  <thead>
-    <tr><th></th><th>2 below</th><th>1 below</th><th class="default">Default</th><th>1 above</th><th>2 above</th></tr>
-  </thead>
-  <tbody>
-    <tr><td>Learning rate</td><td title="Learning rate 3.33 × 10⁻⁴, +0.202 vs the default">3.127<span class="sub">3.33 × 10⁻⁴</span></td><td title="Learning rate 1.00 × 10⁻³, +0.052 vs the default">2.977<span class="sub">1.00 × 10⁻³</span></td><td class="default best" title="Learning rate 3.00 × 10⁻³, the default">2.925<span class="sub">3.00 × 10⁻³</span></td><td title="Learning rate 9.00 × 10⁻³, +0.023 vs the default">2.948<span class="sub">9.00 × 10⁻³</span></td><td title="Learning rate 2.70 × 10⁻², +0.094 vs the default">3.019<span class="sub">2.70 × 10⁻²</span></td></tr>
-    <tr><td>Weight decay</td><td title="Weight decay 1.11 × 10⁻², +0.023 vs the default">2.948<span class="sub">1.11 × 10⁻²</span></td><td title="Weight decay 3.33 × 10⁻², +0.015 vs the default">2.940<span class="sub">3.33 × 10⁻²</span></td><td class="default" title="Weight decay 1.00 × 10⁻¹, the default">2.925<span class="sub">1.00 × 10⁻¹</span></td><td class="best" title="Weight decay 3.00 × 10⁻¹, −0.007 vs the default">2.918<span class="sub">3.00 × 10⁻¹</span></td><td title="Weight decay 9.00 × 10⁻¹, +0.029 vs the default">2.954<span class="sub">9.00 × 10⁻¹</span></td></tr>
-    <tr><td>Warmup steps</td><td title="Warmup steps 10, +0.067 vs the default">2.992<span class="sub">10</span></td><td title="Warmup steps 31, +0.017 vs the default">2.942<span class="sub">31</span></td><td class="default" title="Warmup steps 93, the default">2.925<span class="sub">93</span></td><td title="Warmup steps 281, +0.001 vs the default">2.926<span class="sub">281</span></td><td class="best" title="Warmup steps 843, −0.003 vs the default">2.922<span class="sub">843</span></td></tr>
-    <tr><td>Batch size</td><td title="Batch size 16, +0.003 vs the default">2.928<span class="sub">16</span></td><td class="best" title="Batch size 32, −0.007 vs the default">2.918<span class="sub">32</span></td><td class="default" title="Batch size 64, the default">2.925<span class="sub">64</span></td><td title="Batch size 128, +0.026 vs the default">2.951<span class="sub">128</span></td><td title="Batch size 256, +0.095 vs the default">3.020<span class="sub">256</span></td></tr>
-  </tbody>
-</table>
+{% include figure.liquid
+    path="/assets/img/posts/hp_tuning/p1_sweep_curves.webp"
+    class="z-depth-1"
+    zoomable=true
+    num=2
+    alt="Four panels of validation loss over training tokens, one line per run, for the learning rate, weight decay, warmup and batch size sweeps."
+    caption="Validation loss during training for the same runs."
+%}
 
-### Learning rate matters most
+1. **Learning rate is the most important hyperparameter to tune.** Its sweep
+   moves the final loss more than any other.
+2. **Weight decay is relatively flat.** An $81\times$ range moves the final loss
+   by about 0.04.
+3. **Too little warmup hurts, and extra warmup costs almost nothing.**
+4. **Larger batches hurt.** Every run sees the same tokens, so a larger batch
+   takes fewer optimizer steps.
 
-The learning rate sweep spans 0.20 in final loss, the widest of the four. The
-sweeps do not all cover the same range, so the fitted curvature $a$ is the
-fairer comparison. It is 0.162 for learning rate, 0.138 for batch size, 0.034
-for warmup and 0.030 for weight decay.
+## Changing two hyperparameters together
 
-My explanation is that Adam divides each gradient coordinate by a running
-estimate of its size. A step can therefore move a weight by at most about the
-learning rate, however large the gradient is. The learning rate caps the size
-of every update, and the number of updates is fixed, so it sets how much the
-weights can change over the run.
+### Batch size and learning rate
 
-The two sides of the sweep fail in different ways. At $3.33 \times 10^{-4}$ the
-curve is still far above the others at the end, and it is slowing down as the
-learning rate decays. The run ends before the weights have moved far enough. At
-$2.7 \times 10^{-2}$ the curve is the worst of the five for most of training,
-then drops quickly near the end.
+**The best learning rate did not clearly move with batch size between 16 and
+256.** The square-root rule scales the learning rate with the square root of
+the batch size, and the linear rule scales it in proportion. Neither is
+supported. A likely explanation is that the gradient
+noise is already small at these batch sizes, but I did not measure it.
 
-That late recovery may make the sweep asymmetric. A learning rate $3\times$
-above the default costs 0.023, and one $3\times$ below costs 0.052. At
-$9\times$ the costs are 0.094 and 0.202. One reading is that the schedule
-forgives a high learning rate. Linear decay takes a run that starts too high
-through every smaller learning rate on its way to zero, so it spends some time
-at a good one. A run that starts too low never sees a higher learning rate.
-Part of the asymmetry is the grid, though. The quadratic fit puts the best
-learning rate near $4.3 \times 10^{-3}$, above the default, so the high side of
-the sweep starts closer to the optimum.
+The test was confounded by warmup, which the next section covers. With warmup
+held at 93 steps, batch size 256 slightly prefers the higher learning rate
+(2.966 at $6 \times 10^{-3}$ against 2.977 at $3 \times 10^{-3}$).
 
-### Weight decay is nearly flat
+{% include figure.liquid
+    path="/assets/img/posts/hp_tuning/p1_pair1_bs_lr.webp"
+    class="z-depth-1"
+    zoomable=true
+    num=3
+    alt="Final validation loss against learning rate for batch sizes 16, 64 and 256, plotted against the raw learning rate and against the learning rate divided by the square root of batch size over 64."
+    caption="Left: final validation loss against learning rate at three batch sizes. Right: the same runs with the learning rate divided by $\sqrt{\text{batch size}/64}$. The square-root rule predicts that the minima line up on the right, and they do not."
+%}
 
-Weight decay moves the final loss by 0.04 across the whole sweep. In a single
-pass over the data there is no memorization for it to prevent, so whatever it
-does here it does by controlling the size of the weights. I have two candidate
-reasons for why that has so little effect.
+### Batch size and warmup
 
-The first is that small values barely act within 9,375 steps. Decay applies to
-the weights of the linear layers. At step $t$, AdamW multiplies each of them by
-$1 - \eta_t \lambda$, where $\eta_t$ is the learning rate at that step and
-$\lambda$ is the weight decay. The gradient updates push the other way. If they
-did not, a weight would end the run scaled by
+**Warmup is needed in steps, not as a percentage of the run.** Warmup is set as
+a percentage of all steps, and a larger batch has fewer steps. At 1% warmup,
+batch size 64 gets 93 warmup steps and batch size 256 gets 23. Giving batch
+size 256 the same 93 steps recovered 0.043 of its 0.095 penalty.
 
-$$
-\prod_t (1 - \eta_t \lambda) \approx \exp\Big(-\lambda \sum_t \eta_t\Big).
-$$
+The usual explanation for why steps matter is that the first updates are
+unreliable. Adam's running gradient statistics are still noisy and the loss
+surface is sharp early on, and both settle over a number of steps whatever the
+batch size. I did not test that explanation.
 
-The sum $\sum_t \eta_t$ is the area under the learning rate schedule. The
-schedule is a triangle with base 9,375 and height $3 \times 10^{-3}$, so its
-area is about 14.06.
+{% include figure.liquid
+    path="/assets/img/posts/hp_tuning/p1_pair2_bs_warmup.webp"
+    class="z-depth-1"
+    zoomable=true
+    num=4
+    alt="Final validation loss for batch sizes 64 and 256, against warmup as a percentage of all steps on the left and against warmup steps on the right."
+    caption="Left: final validation loss against warmup as a percentage of all steps. Right: the same runs against warmup steps. Batch size 256 improves when it gets as many warmup steps as batch size 64."
+%}
 
-<p class="table-caption"><b>Table 2.</b> The factor $\exp(-14.06\lambda)$ by which decay alone would scale a weight over the run. Below the default, decay barely acts.</p>
-<table class="data-table">
-  <thead>
-    <tr><th>Weight decay</th><th>1.11 × 10⁻²</th><th>3.33 × 10⁻²</th><th class="default">1.00 × 10⁻¹</th><th>3.00 × 10⁻¹</th><th>9.00 × 10⁻¹</th></tr>
-  </thead>
-  <tbody>
-    <tr><td>Shrink factor</td><td>0.86</td><td>0.63</td><td class="default">0.25</td><td>1.5 × 10⁻²</td><td>3.2 × 10⁻⁶</td></tr>
-  </tbody>
-</table>
+### Warmup and learning rate
 
-This factor measures how strong decay is over the run. It is the most that
-decay could shrink a weight. At $\lambda = 0.0111$, decay could remove at most
-14% of a weight over the entire run. The left half of the sweep compares almost no decay
-with a little decay.
+**What matters is how fast the learning rate climbs.** Warmup raises the
+learning rate in a straight line from zero to its peak, so the slope of the ramp
+is the peak learning rate divided by the number of warmup steps. A higher peak
+over the same number of steps is a steeper climb, and the steep climb is what
+costs loss. Raising the learning rate $3\times$ needs $3\times$ the warmup
+steps.
 
-The second is that large values fade out with the schedule. The best run,
-$\lambda = 0.3$, has a shrink factor of 0.015, so the gradient updates must be
-rebuilding the weights as decay removes them. The decay applied at each step is
-$\eta_t \lambda$, which falls to zero together with the learning rate. The
-$\lambda = 0.9$ curve sits far above the others for most of training and then
-closes to within 0.029 of the default by the end.
+The default ramp has a slope of about $3 \times 10^{-5}$ per step, and ramps at
+or below that slope cost nothing. A slope near $1 \times 10^{-4}$ costs about
+0.02, and a slope near $3 \times 10^{-4}$ costs about 0.07. The one exception is
+learning rate $1 \times 10^{-3}$ over 10 steps, which has a slope of
+$1 \times 10^{-4}$ and paid nothing.
 
-### Too little warmup hurts, and more costs nothing visible
+The batch size result above is the same effect. Batch size 256 at 1% warmup has
+a slope of $0.003 / 23 = 1.3 \times 10^{-4}$, which is in the costly range.
 
-With 10 warmup steps the final loss is 0.067 worse than the default. Its curve
-falls behind early and stays behind for the whole run. My guess is that this
-comes from Adam's running estimate of gradient size. The recipe uses
-$\beta_2 = 0.95$, so that estimate averages over about $1/(1 - \beta_2) = 20$
-steps. A 10-step warmup reaches the full learning rate while the estimate is
-still built from a handful of gradients, on a freshly initialized network.
+{% include figure.liquid
+    path="/assets/img/posts/hp_tuning/p1_pair3_warmup_lr.webp"
+    class="z-depth-1"
+    zoomable=true
+    num=5
+    alt="Final validation loss at four learning rates, against warmup steps on the left and against peak learning rate divided by warmup steps on the right."
+    caption="Left: final validation loss against warmup steps at four learning rates. Right: the same runs against the ramp slope. Loss rises once the slope passes about $3 \times 10^{-5}$ per step."
+%}
 
-Going from 93 warmup steps to 843 changes the loss by 0.003. I expected longer
-warmup to cost something, since it delays the peak learning rate. It does not
-reduce the area under the schedule, though. A triangle with base 9,375 and
-height $3 \times 10^{-3}$ has the same area wherever its peak sits. The area is
-14.06 for all five warmup settings. Longer warmup only moves learning rate from
-the start of training to later in it.
+### Learning rate and weight decay
 
-### Larger batches hurt at a fixed learning rate
+**Keep learning rate $\times$ weight decay fixed when you change the learning
+rate.** The best product was $9 \times 10^{-4}$ at learning rates
+$1 \times 10^{-3}$, $3 \times 10^{-3}$ and $9 \times 10^{-3}$. This was only
+shown at batch size 64. Across batch sizes, use the rule in the next section.
 
-Every run sees the same tokens, so a batch $4\times$ larger takes $4\times$
-fewer steps.
+{% include figure.liquid
+    path="/assets/img/posts/hp_tuning/p1_pair4_lr_wd.webp"
+    class="z-depth-1"
+    zoomable=true
+    num=6
+    alt="Final validation loss at three learning rates, against weight decay on the left and against learning rate times weight decay on the right."
+    caption="Left: final validation loss against weight decay at three learning rates. Right: the same runs against learning rate $\times$ weight decay. Each learning rate has its lowest loss at the same product."
+%}
 
-<p class="table-caption"><b>Table 3.</b> Steps, warmup steps and area under the learning rate schedule at each batch size. All three fall as the batch grows.</p>
-<table class="data-table">
-  <thead>
-    <tr><th>Batch size</th><th>16</th><th>32</th><th class="default">64</th><th>128</th><th>256</th></tr>
-  </thead>
-  <tbody>
-    <tr><td>Optimizer steps</td><td>37,500</td><td>18,750</td><td class="default">9,375</td><td>4,687</td><td>2,343</td></tr>
-    <tr><td>Warmup steps</td><td>375</td><td>187</td><td class="default">93</td><td>46</td><td>23</td></tr>
-    <tr><td>Area under schedule</td><td>56.3</td><td>28.1</td><td class="default">14.1</td><td>7.03</td><td>3.51</td></tr>
-  </tbody>
-</table>
+### Batch size and weight decay
 
-My hypothesis is that the lost steps are what hurts. A larger batch gives a less
-noisy gradient, but the learning rate still caps each update. With the learning
-rate fixed, $4\times$ fewer updates cannot be made up by cleaner ones.
+**A larger batch wants more weight decay.** Each step shrinks the weights by a
+fraction learning rate $\times$ weight decay, so the total shrinkage over a run
+scales with learning rate $\times$ weight decay $\times$ steps. Batch size 256
+takes $4\times$ fewer steps, so at the same settings it gets $4\times$ less
+total decay.
 
-A rough check is to treat the area under the schedule as the only thing that
-matters. Batch size 256 has the same area as batch size 64 with the learning
-rate cut by $4\times$, to $7.5 \times 10^{-4}$. Interpolating the learning rate
-sweep to that value, linearly in log learning rate, predicts 3.016. Batch size
-256 scored 3.020. The same check for batch size 128 predicts 2.958 against a
-measured 2.951.
+The candidate rule is to keep learning rate $\times$ weight decay $\times$ steps
+fixed. At the best batch size 64 run, which used weight decay 0.3, it is
+$0.003 \times 0.3 \times 9375 \approx 8.4$. For batch size 256, with a quarter
+of the steps, that predicts a best weight decay of about $1.2$.
 
-The check has three weaknesses.
+This fits the runs but is not confirmed. Batch size 256 improved from 3.020 to
+2.991 to 2.973 as weight decay went from 0.1 to 0.3 to 0.9, and the loss was
+still falling at 0.9. One run above 0.9 would show whether it turns up near 1.2.
 
-1. Warmup is a fraction of the run, so batch size 256 also gets only 23 warmup
-   steps. The warmup sweep shows that short warmups cost loss. This sweep cannot
-   separate the two effects.
-2. The check fails in the other direction. It predicts 2.940 and 2.967 for
-   batch sizes 32 and 16, and they scored 2.918 and 2.928. Area is a crude
-   proxy. Many small steps do better than the same area spent on fewer, larger
-   steps.
-3. The learning rate was not retuned. A larger batch may only pay off at a
-   higher learning rate, and this sweep holds it fixed.
+The learning rate and weight decay rule above is the special case where the
+step count does not change.
+
+{% include figure.liquid
+    path="/assets/img/posts/hp_tuning/p1_pair5_bs_wd.webp"
+    class="z-depth-1"
+    zoomable=true
+    num=7
+    alt="Final validation loss for batch sizes 64 and 256, against weight decay on the left and against peak learning rate times weight decay times optimizer steps on the right."
+    caption="Left: final validation loss against weight decay at two batch sizes. Right: the same runs against learning rate $\times$ weight decay $\times$ steps. Batch size 256 is still improving at weight decay 0.9."
+%}
+
+### The pattern across all five
+
+Changing the batch size at a fixed token budget changes the step count. That
+silently changes the number of warmup steps and the total weight decay. Most of
+the apparent penalty for batch size 256 came from those two side effects.
