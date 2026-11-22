@@ -1,6 +1,6 @@
 # Unused cover photos
 
-115 photos in `assets/img/posts/` that nothing on the site references yet.
+114 photos in `assets/img/posts/` that nothing on the site references yet.
 Regenerate with `python3 _scripts/unused_cover_photos.py`.
 
 ## Added 2026-11-19
@@ -46,7 +46,6 @@ Regenerate with `python3 _scripts/unused_cover_photos.py`.
 - mount_marcy_summit.webp
 - muir_snowfield.webp
 - ny_state_capitol.webp
-- olancha_milky_way.webp
 - rainier_skyline_trail.webp
 - reynisfjara_sea_stacks.webp
 - rusutsu_slopes.webp
