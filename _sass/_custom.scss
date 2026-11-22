@@ -299,10 +299,17 @@
 // Sized to content, three horizontal rules, right-aligned tabular numbers.
 table.data-table,
 d-article table.data-table {
+  // A block box so that a table too wide for a phone can still be swiped
+  // sideways. The sizes below are chosen so a six-column table fits without
+  // that, and the scrollbar itself is never drawn.
   display: block;
   width: max-content !important;
   max-width: 100%;
   overflow-x: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   border-collapse: collapse;
   margin: 0.4rem 0 1.6rem;
   font-size: 0.92rem;
@@ -314,7 +321,7 @@ d-article table.data-table {
   th,
   td {
     font-size: inherit;
-    padding: 0.3rem 0.9rem;
+    padding: 0.3em 0.7em;
     border: 0 !important;
     text-align: right;
     white-space: nowrap;
@@ -323,7 +330,12 @@ d-article table.data-table {
   th:first-child,
   td:first-child {
     text-align: left;
-    padding-left: 0.2rem;
+    padding-left: 0.2em;
+  }
+
+  th:last-child,
+  td:last-child {
+    padding-right: 0.3em;
   }
 
   thead th {
@@ -362,6 +374,50 @@ d-article table.data-table {
     font-size: 0.74rem;
     line-height: 1.2;
     color: var(--global-text-color-light);
+  }
+
+  // The text column is 704px on wide screens, 512px below 1180px and 472px
+  // below 1000px. Type and padding step down so a six-column table still fits.
+  @media (max-width: 1180px) {
+    font-size: 0.85rem;
+
+    th,
+    td {
+      padding: 0.3em 0.55em;
+    }
+  }
+
+  @media (max-width: 1000px) {
+    font-size: 0.8rem;
+
+    th,
+    td {
+      padding: 0.3em 0.45em;
+    }
+  }
+
+  @media (max-width: 600px) {
+    font-size: 0.72rem;
+
+    th,
+    td {
+      padding: 0.25em 0.2em;
+    }
+
+    th:first-child,
+    td:first-child {
+      white-space: normal;
+      padding-left: 0;
+    }
+
+    th:last-child,
+    td:last-child {
+      padding-right: 0.1em;
+    }
+
+    .sub {
+      font-size: 0.62rem;
+    }
   }
 }
 

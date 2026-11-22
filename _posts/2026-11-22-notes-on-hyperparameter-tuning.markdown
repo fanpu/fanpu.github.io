@@ -59,7 +59,7 @@ not be real.
   </thead>
   <tbody>
     <tr><td>Learning rate</td><td title="Learning rate 3.33 × 10⁻⁴, +0.202 vs the default">3.127<span class="sub">3.33 × 10⁻⁴</span></td><td title="Learning rate 1.00 × 10⁻³, +0.052 vs the default">2.977<span class="sub">1.00 × 10⁻³</span></td><td class="default best" title="Learning rate 3.00 × 10⁻³, the default">2.925<span class="sub">3.00 × 10⁻³</span></td><td title="Learning rate 9.00 × 10⁻³, +0.023 vs the default">2.948<span class="sub">9.00 × 10⁻³</span></td><td title="Learning rate 2.70 × 10⁻², +0.094 vs the default">3.019<span class="sub">2.70 × 10⁻²</span></td></tr>
-    <tr><td>Weight decay</td><td title="Weight decay 0.0111, +0.023 vs the default">2.948<span class="sub">0.0111</span></td><td title="Weight decay 0.0333, +0.015 vs the default">2.940<span class="sub">0.0333</span></td><td class="default" title="Weight decay 0.100, the default">2.925<span class="sub">0.100</span></td><td class="best" title="Weight decay 0.300, −0.007 vs the default">2.918<span class="sub">0.300</span></td><td title="Weight decay 0.900, +0.029 vs the default">2.954<span class="sub">0.900</span></td></tr>
+    <tr><td>Weight decay</td><td title="Weight decay 1.11 × 10⁻², +0.023 vs the default">2.948<span class="sub">1.11 × 10⁻²</span></td><td title="Weight decay 3.33 × 10⁻², +0.015 vs the default">2.940<span class="sub">3.33 × 10⁻²</span></td><td class="default" title="Weight decay 1.00 × 10⁻¹, the default">2.925<span class="sub">1.00 × 10⁻¹</span></td><td class="best" title="Weight decay 3.00 × 10⁻¹, −0.007 vs the default">2.918<span class="sub">3.00 × 10⁻¹</span></td><td title="Weight decay 9.00 × 10⁻¹, +0.029 vs the default">2.954<span class="sub">9.00 × 10⁻¹</span></td></tr>
     <tr><td>Warmup steps</td><td title="Warmup steps 10, +0.067 vs the default">2.992<span class="sub">10</span></td><td title="Warmup steps 31, +0.017 vs the default">2.942<span class="sub">31</span></td><td class="default" title="Warmup steps 93, the default">2.925<span class="sub">93</span></td><td title="Warmup steps 281, +0.001 vs the default">2.926<span class="sub">281</span></td><td class="best" title="Warmup steps 843, −0.003 vs the default">2.922<span class="sub">843</span></td></tr>
     <tr><td>Batch size</td><td title="Batch size 16, +0.003 vs the default">2.928<span class="sub">16</span></td><td class="best" title="Batch size 32, −0.007 vs the default">2.918<span class="sub">32</span></td><td class="default" title="Batch size 64, the default">2.925<span class="sub">64</span></td><td title="Batch size 128, +0.026 vs the default">2.951<span class="sub">128</span></td><td title="Batch size 256, +0.095 vs the default">3.020<span class="sub">256</span></td></tr>
   </tbody>
@@ -118,10 +118,10 @@ area is about 14.06.
 <p class="table-caption"><b>Table 2.</b> The factor $\exp(-14.06\lambda)$ by which decay alone would scale a weight over the run. Below the default, decay barely acts.</p>
 <table class="data-table">
   <thead>
-    <tr><th>Weight decay</th><th>0.0111</th><th>0.0333</th><th class="default">0.100</th><th>0.300</th><th>0.900</th></tr>
+    <tr><th>Weight decay</th><th>1.11 × 10⁻²</th><th>3.33 × 10⁻²</th><th class="default">1.00 × 10⁻¹</th><th>3.00 × 10⁻¹</th><th>9.00 × 10⁻¹</th></tr>
   </thead>
   <tbody>
-    <tr><td>Shrink factor</td><td>0.86</td><td>0.63</td><td class="default">0.25</td><td>0.015</td><td>3.2 × 10⁻⁶</td></tr>
+    <tr><td>Shrink factor</td><td>0.86</td><td>0.63</td><td class="default">0.25</td><td>1.5 × 10⁻²</td><td>3.2 × 10⁻⁶</td></tr>
   </tbody>
 </table>
 
