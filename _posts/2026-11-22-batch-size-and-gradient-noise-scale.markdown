@@ -1,6 +1,6 @@
 ---
 title: "Understanding How Batch Size Relates to Gradient Noise Scale"
-published: false
+published: true
 layout: distill
 tags: [machine-learning]
 cover: olancha_milky_way.webp
