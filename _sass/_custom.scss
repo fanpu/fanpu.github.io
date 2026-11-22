@@ -293,3 +293,87 @@
     }
   }
 }
+
+// Data tables. Opt in with class="data-table" on a <table>, or `{: .data-table}`
+// after a Markdown table. Put a `.table-caption` paragraph above it.
+// Sized to content, three horizontal rules, right-aligned tabular numbers.
+table.data-table,
+d-article table.data-table {
+  display: block;
+  width: max-content !important;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 0.4rem 0 1.6rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums lining-nums;
+  border-top: 1.5px solid var(--global-text-color);
+  border-bottom: 1.5px solid var(--global-text-color) !important;
+
+  th,
+  td {
+    font-size: inherit;
+    padding: 0.3rem 0.9rem;
+    border: 0 !important;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  th:first-child,
+  td:first-child {
+    text-align: left;
+    padding-left: 0.2rem;
+  }
+
+  thead th {
+    font-weight: 500;
+    border-bottom: 0.75px solid var(--global-text-color) !important;
+  }
+
+  // The default or baseline setting.
+  .default {
+    background: color-mix(in srgb, var(--global-text-color) 7%, transparent);
+  }
+
+  // Hover marks the row, and more strongly the cell under the pointer.
+  // Hover never carries information the table does not already show.
+  tbody tr:hover td {
+    background: color-mix(in srgb, var(--global-text-color) 4%, transparent);
+  }
+
+  tbody tr:hover td.default {
+    background: color-mix(in srgb, var(--global-text-color) 10%, transparent);
+  }
+
+  tbody td:not(:first-child):hover,
+  tbody tr:hover td.default:hover {
+    background: color-mix(in srgb, var(--global-theme-color) 14%, transparent);
+  }
+
+  // The best value in its row or column.
+  .best {
+    font-weight: 700;
+  }
+
+  // Small secondary line under a value, such as the setting that produced it.
+  .sub {
+    display: block;
+    font-size: 0.74rem;
+    line-height: 1.2;
+    color: var(--global-text-color-light);
+  }
+}
+
+.table-caption,
+d-article p.table-caption {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--global-text-color-light);
+  margin: 1.4rem 0 0;
+
+  b,
+  strong {
+    color: var(--global-text-color);
+  }
+}

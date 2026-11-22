@@ -52,22 +52,18 @@ not be real.
     caption="Top: final validation loss for each sweep, on a shared vertical axis. The dashed line is a quadratic fit in $\log_{10}$ of the hyperparameter, and $a$ is its curvature in loss per decade squared. Bottom: the validation loss curves for the same runs. Learning rate and batch size have the largest curvature."
 %}
 
-| Learning rate | $3.33 \times 10^{-4}$ | $10^{-3}$ | $3 \times 10^{-3}$ | $9 \times 10^{-3}$ | $2.7 \times 10^{-2}$ |
-| :-- | --: | --: | --: | --: | --: |
-| Final loss | 3.127 | 2.977 | 2.925 | 2.948 | 3.019 |
-
-| Weight decay | 0.0111 | 0.0333 | 0.1 | 0.3 | 0.9 |
-| :-- | --: | --: | --: | --: | --: |
-| Final loss | 2.948 | 2.940 | 2.925 | 2.918 | 2.954 |
-
-| Warmup fraction | 0.00111 | 0.00333 | 0.01 | 0.03 | 0.09 |
-| :-- | --: | --: | --: | --: | --: |
-| Warmup steps | 10 | 31 | 93 | 281 | 843 |
-| Final loss | 2.992 | 2.942 | 2.925 | 2.926 | 2.922 |
-
-| Batch size | 16 | 32 | 64 | 128 | 256 |
-| :-- | --: | --: | --: | --: | --: |
-| Final loss | 2.928 | 2.918 | 2.925 | 2.951 | 3.020 |
+<p class="table-caption"><b>Table 1.</b> Final validation loss for each sweep, with the swept value under each loss. Columns are steps away from the default, in factors of 3 (factors of 2 for batch size). The default is shaded and the best run in each sweep is bold. Hovering over a cell shows its change from the default. Learning rate and batch size change the loss the most.</p>
+<table class="data-table">
+  <thead>
+    <tr><th></th><th>2 below</th><th>1 below</th><th class="default">Default</th><th>1 above</th><th>2 above</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Learning rate</td><td title="Learning rate 3.33 × 10⁻⁴, +0.202 vs the default">3.127<span class="sub">3.33 × 10⁻⁴</span></td><td title="Learning rate 1.00 × 10⁻³, +0.052 vs the default">2.977<span class="sub">1.00 × 10⁻³</span></td><td class="default best" title="Learning rate 3.00 × 10⁻³, the default">2.925<span class="sub">3.00 × 10⁻³</span></td><td title="Learning rate 9.00 × 10⁻³, +0.023 vs the default">2.948<span class="sub">9.00 × 10⁻³</span></td><td title="Learning rate 2.70 × 10⁻², +0.094 vs the default">3.019<span class="sub">2.70 × 10⁻²</span></td></tr>
+    <tr><td>Weight decay</td><td title="Weight decay 0.0111, +0.023 vs the default">2.948<span class="sub">0.0111</span></td><td title="Weight decay 0.0333, +0.015 vs the default">2.940<span class="sub">0.0333</span></td><td class="default" title="Weight decay 0.100, the default">2.925<span class="sub">0.100</span></td><td class="best" title="Weight decay 0.300, −0.007 vs the default">2.918<span class="sub">0.300</span></td><td title="Weight decay 0.900, +0.029 vs the default">2.954<span class="sub">0.900</span></td></tr>
+    <tr><td>Warmup steps</td><td title="Warmup steps 10, +0.067 vs the default">2.992<span class="sub">10</span></td><td title="Warmup steps 31, +0.017 vs the default">2.942<span class="sub">31</span></td><td class="default" title="Warmup steps 93, the default">2.925<span class="sub">93</span></td><td title="Warmup steps 281, +0.001 vs the default">2.926<span class="sub">281</span></td><td class="best" title="Warmup steps 843, −0.003 vs the default">2.922<span class="sub">843</span></td></tr>
+    <tr><td>Batch size</td><td title="Batch size 16, +0.003 vs the default">2.928<span class="sub">16</span></td><td class="best" title="Batch size 32, −0.007 vs the default">2.918<span class="sub">32</span></td><td class="default" title="Batch size 64, the default">2.925<span class="sub">64</span></td><td title="Batch size 128, +0.026 vs the default">2.951<span class="sub">128</span></td><td title="Batch size 256, +0.095 vs the default">3.020<span class="sub">256</span></td></tr>
+  </tbody>
+</table>
 
 ### Learning rate matters most
 
@@ -119,9 +115,15 @@ The sum $\sum_t \eta_t$ is the area under the learning rate schedule. The
 schedule is a triangle with base 9,375 and height $3 \times 10^{-3}$, so its
 area is about 14.06.
 
-| Weight decay $\lambda$ | 0.0111 | 0.0333 | 0.1 | 0.3 | 0.9 |
-| :-- | --: | --: | --: | --: | --: |
-| Shrink factor $\exp(-14.06\lambda)$ | 0.86 | 0.63 | 0.25 | 0.015 | $3 \times 10^{-6}$ |
+<p class="table-caption"><b>Table 2.</b> The factor $\exp(-14.06\lambda)$ by which decay alone would scale a weight over the run. Below the default, decay barely acts.</p>
+<table class="data-table">
+  <thead>
+    <tr><th>Weight decay</th><th>0.0111</th><th>0.0333</th><th class="default">0.100</th><th>0.300</th><th>0.900</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Shrink factor</td><td>0.86</td><td>0.63</td><td class="default">0.25</td><td>0.015</td><td>3.2 × 10⁻⁶</td></tr>
+  </tbody>
+</table>
 
 This factor measures how strong decay is over the run. It is the most that
 decay could shrink a weight. At $\lambda = 0.0111$, decay could remove at most
@@ -156,11 +158,17 @@ the start of training to later in it.
 Every run sees the same tokens, so a batch $4\times$ larger takes $4\times$
 fewer steps.
 
-| Batch size | 16 | 32 | 64 | 128 | 256 |
-| :-- | --: | --: | --: | --: | --: |
-| Optimizer steps | 37,500 | 18,750 | 9,375 | 4,687 | 2,343 |
-| Warmup steps | 375 | 187 | 93 | 46 | 23 |
-| Area under schedule | 56.3 | 28.1 | 14.1 | 7.0 | 3.5 |
+<p class="table-caption"><b>Table 3.</b> Steps, warmup steps and area under the learning rate schedule at each batch size. All three fall as the batch grows.</p>
+<table class="data-table">
+  <thead>
+    <tr><th>Batch size</th><th>16</th><th>32</th><th class="default">64</th><th>128</th><th>256</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Optimizer steps</td><td>37,500</td><td>18,750</td><td class="default">9,375</td><td>4,687</td><td>2,343</td></tr>
+    <tr><td>Warmup steps</td><td>375</td><td>187</td><td class="default">93</td><td>46</td><td>23</td></tr>
+    <tr><td>Area under schedule</td><td>56.3</td><td>28.1</td><td class="default">14.1</td><td>7.03</td><td>3.51</td></tr>
+  </tbody>
+</table>
 
 My hypothesis is that the lost steps are what hurts. A larger batch gives a less
 noisy gradient, but the learning rate still caps each update. With the learning
