@@ -5,7 +5,7 @@ layout: distill
 tags: [machine-learning]
 cover: great_allegheny_passage_ridges.webp
 cover_preview: great_allegheny_passage_ridges.webp
-caption: Great Allegheny Passage, USA
+caption: Somewhere along the trail of the Great Allegheny Passage, USA
 class: post-template
 author: fanpu
 giscus_comments: true
