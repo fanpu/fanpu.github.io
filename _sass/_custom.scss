@@ -299,24 +299,25 @@
 // Sized to content, three horizontal rules, right-aligned tabular numbers.
 table.data-table,
 d-article table.data-table {
-  // A block box so that a table too wide for a phone can still be swiped
-  // sideways. The sizes below are chosen so a six-column table fits without
-  // that, and the scrollbar itself is never drawn.
+  // The table is as wide as its content and centred on the text column. One
+  // that is too wide pokes out of the column equally on both sides, up to 6rem
+  // a side or the edge of the screen. Past that it can be swiped sideways, and
+  // the scrollbar itself is never drawn.
   display: block;
   width: max-content !important;
-  max-width: 100%;
+  max-width: min(100% + 12rem, 100vw - 2rem);
+  margin: 0.4rem 0 1.6rem 50%;
+  transform: translateX(-50%);
   overflow-x: auto;
   scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
   }
+  border: 0 !important;
   border-collapse: collapse;
-  margin: 0.4rem 0 1.6rem;
   font-size: 0.92rem;
   line-height: 1.5;
   font-variant-numeric: tabular-nums lining-nums;
-  border-top: 1.5px solid var(--global-text-color);
-  border-bottom: 1.5px solid var(--global-text-color) !important;
 
   th,
   td {
@@ -340,7 +341,12 @@ d-article table.data-table {
 
   thead th {
     font-weight: 500;
+    border-top: 1.5px solid var(--global-text-color) !important;
     border-bottom: 0.75px solid var(--global-text-color) !important;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: 1.5px solid var(--global-text-color) !important;
   }
 
   // The default or baseline setting.
@@ -376,26 +382,7 @@ d-article table.data-table {
     color: var(--global-text-color-light);
   }
 
-  // The text column is 704px on wide screens, 512px below 1180px and 472px
-  // below 1000px. Type and padding step down so a six-column table still fits.
-  @media (max-width: 1180px) {
-    font-size: 0.85rem;
-
-    th,
-    td {
-      padding: 0.3em 0.55em;
-    }
-  }
-
-  @media (max-width: 1000px) {
-    font-size: 0.8rem;
-
-    th,
-    td {
-      padding: 0.3em 0.45em;
-    }
-  }
-
+  // Phones have no margin to poke out into, so type and padding step down.
   @media (max-width: 600px) {
     font-size: 0.72rem;
 
@@ -427,6 +414,7 @@ d-article p.table-caption {
   line-height: 1.5;
   color: var(--global-text-color-light);
   margin: 1.4rem 0 0;
+  text-align: center;
 
   b,
   strong {
