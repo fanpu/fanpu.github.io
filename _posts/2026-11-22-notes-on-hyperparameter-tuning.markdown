@@ -16,3 +16,5 @@ authors:
 toc: true
 ---
 
+These are notes from an investigation into hyperparameter tuning. They are based
+on [Stanford CS 312: Deep Learning Alchemy](https://deep-learning-alchemy.github.io/).
