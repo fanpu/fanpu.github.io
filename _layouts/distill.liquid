@@ -7,6 +7,9 @@
     <script src="{{ '/assets/js/distillpub/template.v2.js' | relative_url }}"></script>
     <script src="{{ '/assets/js/distillpub/transforms.v2.js' | relative_url }}"></script>
     <script src="{{ '/assets/js/distillpub/overrides.js' | relative_url }}"></script>
+    {% if page.toc %}
+      <script defer src="{{ '/assets/js/distillpub/toc-spy.js' | relative_url | bust_file_cache }}"></script>
+    {% endif %}
     {% if page._styles %}
       <!-- Page/Post style -->
       <style type="text/css">

@@ -230,6 +230,56 @@ d-appendix {
       max-height: calc(100vh - 166px);
       overflow-x: hidden;
       overflow-y: auto;
+
+      // The section being read, set by assets/js/distillpub/toc-spy.js.
+      // The colors need !important to beat the d-article a rule above.
+      &.toc-spy nav a {
+        color: var(--global-text-color) !important;
+        opacity: 0.6;
+        transition:
+          color 0.15s ease,
+          opacity 0.15s ease;
+
+        &:hover {
+          color: var(--global-theme-color) !important;
+          opacity: 1;
+        }
+
+        &[aria-current="true"] {
+          color: var(--global-theme-color) !important;
+          opacity: 1;
+          // Looks bold without changing the text width, so lines don't rewrap.
+          text-shadow: 0.4px 0 0 currentColor;
+        }
+      }
+
+      // Keep the parent of the active subsection readable.
+      &.toc-spy nav li:has(a[aria-current="true"]) > a {
+        opacity: 1;
+      }
+
+      .toc-marker {
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 2px;
+        border-radius: 1px;
+        background-color: var(--global-theme-color);
+        opacity: 0;
+        transition:
+          transform 0.2s ease,
+          height 0.2s ease,
+          opacity 0.2s ease;
+
+        @media (prefers-reduced-motion: reduce) {
+          transition: none;
+        }
+      }
     }
   }
+}
+
+.toc-marker {
+  display: none;
 }
