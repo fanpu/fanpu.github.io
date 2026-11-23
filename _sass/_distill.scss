@@ -210,3 +210,26 @@ d-appendix {
     }
   }
 }
+
+// On laptop and desktop widths, the contents follow the reader down the post.
+@media (min-width: 1025px) {
+  .post.distill d-article {
+    // Distill sets overflow-x: hidden, which makes the article a scroll
+    // container and stops sticky from tracking the page. clip cuts off the same
+    // overflow without creating a scroll container.
+    overflow-x: clip;
+
+    d-contents {
+      position: sticky;
+      top: 97px; // 81px navbar + 16px gap
+      // A sticky item can't leave its grid area, so the area has to cover the
+      // whole article. Empty rows have no height, so a generous span is free.
+      grid-row: 1 / span 1000;
+      // Long contents scroll on their own on short screens. 166px is the 97px
+      // top offset + 53px fixed footer + 16px gap.
+      max-height: calc(100vh - 166px);
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+  }
+}
