@@ -294,7 +294,7 @@
   course_url: null
   review_anchor: course21329
   pdf: /assets/pdf/course-notes/21-329.pdf
-  pages: 56
+  pages: 69
   lectures_total: 22
   lectures:
     - number: "1"
@@ -418,6 +418,34 @@
         - Last Time
         - Metric Spaces
         - Closed Sets and Trees
+    - number: "19"
+      date: "2023-04-21"
+      url: /assets/pdf/course-notes/21-329.pdf#page=57
+      topics:
+        - Last Time
+        - Perfect Trees and Perfect Sets
+        - The Derivative of a Tree
+        - Closed Sets Are Countable or Contain a Perfect Set
+    - number: "20"
+      date: "2023-04-24"
+      url: /assets/pdf/course-notes/21-329.pdf#page=61
+      topics:
+        - K\"onig's Theorem
+        - Wellfounded Trees and Rank Functions
+    - number: "21"
+      date: "2023-04-26"
+      url: /assets/pdf/course-notes/21-329.pdf#page=64
+      topics:
+        - Recall
+        - Products of the Baire Space
+        - Determinacy (\S 5.4)
+    - number: "22"
+      date: "2023-04-28"
+      url: /assets/pdf/course-notes/21-329.pdf#page=67
+      topics:
+        - Closed Games
+        - Strategies
+        - The Gale--Stewart Theorem
 - slug: 10-716
   number: 10-716
   title: "Advanced Machine Learning: Theory and Methods"
