@@ -857,7 +857,7 @@
   course_url: null
   review_anchor: course21651
   pdf: /assets/pdf/course-notes/21-651.pdf
-  pages: 35
+  pages: 46
   lectures_total: 30
   lectures:
     - number: "1"
@@ -925,6 +925,29 @@
         - Nowhere Dense and Meagre Sets
         - The Baire Category Theorem
         - Proof of the Baire Category Theorem
+    - number: "11"
+      date: "2022-09-23"
+      url: /assets/pdf/course-notes/21-651/lecture11.pdf
+      topics:
+        - The Baire Category Theorem
+        - Normed Spaces
+        - The Banach–Steinhaus Theorem
+        - Equicontinuity
+        - The Arzelà–Ascoli Theorem
+    - number: "12"
+      date: "2022-09-26"
+      url: /assets/pdf/course-notes/21-651/lecture12.pdf
+      topics:
+        - Why Is Arzelà–Ascoli Useful?
+        - Another Consequence of the BCT
+        - Sequences and Filters
+    - number: "13"
+      date: "2022-09-28"
+      url: /assets/pdf/course-notes/21-651/lecture13.pdf
+      topics:
+        - A Sequentially Compact Space That Is Not Compact
+        - Continuity and Sequences
+        - Filters
 - slug: 15-859-OO
   number: 15-859 OO
   title: Randomness in Computation
