@@ -935,7 +935,7 @@
   course_url: null
   review_anchor: course15819
   pdf: /assets/pdf/course-notes/15-819.pdf
-  pages: 19
+  pages: 34
   lectures_total: 24
   lectures:
     - number: "1"
@@ -970,6 +970,33 @@
         - Extending with Sums
         - A Lax Type System with Sums
         - Normalization for the Lax System
+    - number: "5"
+      date: "2022-02-10"
+      url: /assets/pdf/course-notes/15-819/lecture05.pdf
+      topics:
+        - "Recap: the Lax System"
+        - Computability at the New Types
+        - Lemmas
+        - The Fundamental Theorem
+        - Normalization and Equality
+    - number: "6"
+      date: "2022-02-15"
+      url: /assets/pdf/course-notes/15-819/lecture06.pdf
+      topics:
+        - Recap and a Correction
+        - Strong Normalization
+        - Equational Theories
+        - Deciding Equality
+        - Why Are the Computability Conditions Forced?
+    - number: "7"
+      date: "2022-02-17"
+      url: /assets/pdf/course-notes/15-819/lecture07.pdf
+      topics:
+        - Recap
+        - Call-by-Push-Value
+        - Statics
+        - Dynamics and Equations
+        - Dependent CBPV
 - slug: 15-751
   number: 15-751
   title: A Theorist's Toolkit
