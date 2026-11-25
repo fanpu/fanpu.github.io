@@ -857,7 +857,7 @@
   course_url: null
   review_anchor: course21651
   pdf: /assets/pdf/course-notes/21-651.pdf
-  pages: 11
+  pages: 24
   lectures_total: 30
   lectures:
     - number: "1"
@@ -882,6 +882,29 @@
         - Initial Topology
         - Product Topology
         - Connectedness
+    - number: "5"
+      date: "2022-09-09"
+      url: /assets/pdf/course-notes/21-651/lecture05.pdf
+      topics:
+        - Connectedness
+        - Components
+        - Neighborhoods and Local Connectedness
+        - Path-Connectedness
+    - number: "6"
+      date: "2022-09-12"
+      url: /assets/pdf/course-notes/21-651/lecture06.pdf
+      topics:
+        - Path Components
+        - Compactness
+        - Hausdorff Spaces
+        - The Lattice of Topologies
+    - number: "7"
+      date: "2022-09-14"
+      url: /assets/pdf/course-notes/21-651/lecture07.pdf
+      topics:
+        - Compactness and Hausdorffness
+        - Compactness as Topological Finiteness
+        - Compactness in Metric Spaces
 - slug: 15-859-OO
   number: 15-859 OO
   title: Randomness in Computation
