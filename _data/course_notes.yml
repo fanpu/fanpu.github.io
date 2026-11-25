@@ -760,7 +760,7 @@
   course_url: https://www.cs.cmu.edu/~praveshk/randomness.html
   review_anchor: course15859OO
   pdf: /assets/pdf/course-notes/15-859-OO.pdf
-  pages: 27
+  pages: 35
   lectures_total: 11
   lectures:
     - number: "1"
@@ -801,6 +801,16 @@
         - Sampling $\DOTSB \relbar \joinrel \rightarrow $ Markov Chains
         - Markov Chains
         - Sampling from a Distribution with a Markov Chain
+    - number: "5"
+      date: "2022-10-04"
+      url: /assets/pdf/course-notes/15-859-OO/lecture05.pdf
+      topics:
+        - Spectral Gap and Mixing Time
+        - Expander Graphs
+        - Strongly Explicit Constructions
+        - Expander Mixing Lemma
+        - Expander Graphs Have Diameter $O(\log n)$
+        - Randomness-Efficient Error Reduction
 - slug: 15-859-CC
   number: 15-859 CC
   title: Algorithms for Big Data
@@ -861,7 +871,7 @@
   course_url: null
   review_anchor: course21484
   pdf: /assets/pdf/course-notes/21-484.pdf
-  pages: 15
+  pages: 30
   lectures_total: 37
   lectures:
     - number: "1"
@@ -893,6 +903,30 @@
       topics:
         - Bipartite Graphs
         - Matchings
+    - number: "5"
+      date: "2022-01-28"
+      url: /assets/pdf/course-notes/21-484/lecture05.pdf
+      topics:
+        - Hall's Theorem
+        - K\"onig's Theorem
+    - number: "6"
+      date: "2022-01-31"
+      url: /assets/pdf/course-notes/21-484/lecture06.pdf
+      topics:
+        - Matchings in General Graphs
+        - Bridges and 3-Regular Graphs
+    - number: "7"
+      date: "2022-02-02"
+      url: /assets/pdf/course-notes/21-484/lecture07.pdf
+      topics:
+        - Vertex and Edge Connectivity
+        - 2-Connected Graphs
+    - number: "8"
+      date: "2022-02-04"
+      url: /assets/pdf/course-notes/21-484/lecture08.pdf
+      topics:
+        - Menger's Theorem
+        - Flows
 - slug: 15-819
   number: 15-819
   title: Advanced Topics in Programming Language Theory
