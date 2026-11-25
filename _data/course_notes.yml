@@ -88,7 +88,6 @@
       date: "2023-02-21"
       url: /assets/pdf/course-notes/36-709/lecture11.pdf
       topics:
-        - Matrix Recap
         - Covariance Matrix Estimation
     - number: "12"
       date: "2023-02-23"
@@ -133,10 +132,8 @@
       date: "2023-03-23"
       url: /assets/pdf/course-notes/36-709/lecture18.pdf
       topics:
-        - Recap
         - Proof of the Theorem
         - Bounding the Critical Radius with Covering Numbers
-        - Applications
     - number: "19"
       date: "2023-03-28"
       url: /assets/pdf/course-notes/36-709/lecture19.pdf
@@ -165,14 +162,12 @@
       date: "2023-04-11"
       url: /assets/pdf/course-notes/36-709/lecture23.pdf
       topics:
-        - "Fano's Method: Reminder"
         - The Varshamov–Gilbert Bound
         - Local Entropy
     - number: "24"
       date: "2023-04-18"
       url: /assets/pdf/course-notes/36-709/lecture24.pdf
       topics:
-        - "Local Entropy: Reminder"
         - The Algorithm
         - Monotonicity of the Local Entropy
         - Testing Between Two Points
@@ -200,7 +195,6 @@
       date: "2023-01-24"
       url: /assets/pdf/course-notes/36-708/lecture03.pdf
       topics:
-        - Recap
         - The Regression Function Minimizes the MSE
         - $k$-Nearest Neighbors
         - Test Error
@@ -217,7 +211,6 @@
       date: "2023-01-31"
       url: /assets/pdf/course-notes/36-708/lecture05.pdf
       topics:
-        - Recap
         - Predictive Uncertainty Quantification
         - Probabilistic Calibration
         - What Makes a Good Classifier?
@@ -239,7 +232,6 @@
       date: "2023-02-09"
       url: /assets/pdf/course-notes/36-708/lecture08.pdf
       topics:
-        - Outline
         - Decision Trees
         - Decision Trees Are Very Variable
         - Random Forests
@@ -275,7 +267,6 @@
       url: /assets/pdf/course-notes/36-708/lecture14.pdf
       topics:
         - Margin and Boosting
-        - Recap of the First Half of the Course
     - number: "15"
       date: "2023-03-14"
       url: /assets/pdf/course-notes/36-708/lecture15.pdf
@@ -333,7 +324,6 @@
       url: /assets/pdf/course-notes/36-708/lecture27.pdf
       topics:
         - Deep Learning
-        - End-of-Semester Recap
         - Paradigms
 - slug: 21-640
   number: 21-640
@@ -350,7 +340,6 @@
       date: "2023-01-18"
       url: /assets/pdf/course-notes/21-640/lecture01.pdf
       topics:
-        - Overview
         - Inner Product Spaces
     - number: "2"
       date: "2023-01-20"
@@ -390,7 +379,6 @@
       date: "2023-02-01"
       url: /assets/pdf/course-notes/21-640/lecture07.pdf
       topics:
-        - "Recap: Examples of Banach Spaces"
         - Bounded Measurable Functions
         - The Dual of $L^\infty (E)$
         - Bounded Continuous Functions
@@ -399,7 +387,6 @@
       date: "2023-02-03"
       url: /assets/pdf/course-notes/21-640/lecture08.pdf
       topics:
-        - "Recap: Bounded Continuous Functions"
         - More Examples of Banach Spaces
         - The Hahn–Banach Extension Theorem
     - number: "9"
@@ -515,7 +502,6 @@
       date: "2023-03-01"
       url: /assets/pdf/course-notes/21-329/lecture02.pdf
       topics:
-        - Last Time
         - Ordinal Subtraction
         - Ordinal Multiplication
     - number: "3"
@@ -548,14 +534,12 @@
       date: "2023-03-20"
       url: /assets/pdf/course-notes/21-329/lecture07.pdf
       topics:
-        - Recap
         - Proof of the Lemma
         - Sums and Products of Infinite Cardinals
     - number: "8"
       date: "2023-03-22"
       url: /assets/pdf/course-notes/21-329/lecture08.pdf
       topics:
-        - Announcements
         - Countable Unions
         - Cardinal Exponentiation
         - Cofinality
@@ -569,22 +553,16 @@
       date: "2023-03-27"
       url: /assets/pdf/course-notes/21-329/lecture10.pdf
       topics:
-        - Announcements
         - Cofinality
         - König's Theorem
     - number: "11"
       date: "2023-03-29"
       url: /assets/pdf/course-notes/21-329/lecture11.pdf
-      topics:
-        - Problem 1
-        - Problem 2
-        - Problem 3
+      topics: []
     - number: "12"
       date: "2023-04-03"
       url: /assets/pdf/course-notes/21-329/lecture12.pdf
       topics:
-        - Announcements
-        - Review
         - Filters and Ideals
     - number: "13"
       date: "2023-04-05"
@@ -603,14 +581,12 @@
       date: "2023-04-10"
       url: /assets/pdf/course-notes/21-329/lecture15.pdf
       topics:
-        - Recap
         - Normal Filters
         - Stationary Sets and Fodor's Theorem
     - number: "16"
       date: "2023-04-12"
       url: /assets/pdf/course-notes/21-329/lecture16.pdf
       topics:
-        - Recall
         - Splitting $\omega _1$
         - Complete Ultrafilters
     - number: "17"
@@ -624,14 +600,12 @@
       date: "2023-04-19"
       url: /assets/pdf/course-notes/21-329/lecture18.pdf
       topics:
-        - Last Time
         - Metric Spaces
         - Closed Sets and Trees
     - number: "19"
       date: "2023-04-21"
       url: /assets/pdf/course-notes/21-329/lecture19.pdf
       topics:
-        - Last Time
         - Perfect Trees and Perfect Sets
         - The Derivative of a Tree
         - Closed Sets Are Countable or Contain a Perfect Set
@@ -645,7 +619,6 @@
       date: "2023-04-26"
       url: /assets/pdf/course-notes/21-329/lecture21.pdf
       topics:
-        - Recall
         - Products of the Baire Space
         - Determinacy (§ 5.4)
     - number: "22"
@@ -768,7 +741,6 @@
       date: "2023-02-28"
       url: /assets/pdf/course-notes/10-716/lecture13.pdf
       topics:
-        - Midterm Review
         - Optimal Transport
     - number: "14"
       date: "2023-03-14"
@@ -975,7 +947,6 @@
       date: "2022-10-05"
       url: /assets/pdf/course-notes/21-651/lecture16.pdf
       topics:
-        - Midterm Problems
         - Back to Filters
     - number: "17"
       date: "2022-10-07"
@@ -1008,7 +979,6 @@
       date: "2022-10-24"
       url: /assets/pdf/course-notes/21-651/lecture21.pdf
       topics:
-        - Where We Are
         - Urysohn's Lemma
         - The Tietze Extension Theorem
         - Comments About Completely Regular Spaces
@@ -1082,7 +1052,6 @@
       url: /assets/pdf/course-notes/21-651/lecture38.pdf
       topics:
         - The Fundamental Group
-        - Examples
         - Group Cohomology
 - slug: 17-603
   number: 17-603
@@ -1127,7 +1096,6 @@
       url: /assets/pdf/course-notes/15-859-OO/lecture01.pdf
       topics:
         - The Party Problem
-        - Logistics
         - About the Class
         - "Another Application of the Probabilistic Method: Discrepancy"
         - "Randomized Algorithms: Minimum Cut"
@@ -1188,7 +1156,6 @@
       date: "2022-11-01"
       url: /assets/pdf/course-notes/15-859-OO/lecture08.pdf
       topics:
-        - Some Linear Algebra Review
         - Sparsification
         - Chernoff Bounds
         - Toward the Matrix Chernoff Bound
@@ -1240,7 +1207,6 @@
       date: "2022-09-08"
       url: /assets/pdf/course-notes/15-859-CC/lecture01.pdf
       topics:
-        - Overview
         - Regression Analysis
         - Singular Value Decomposition
         - Sketching to Solve Least-Squares Regression
@@ -1248,16 +1214,13 @@
       date: "2022-09-15"
       url: /assets/pdf/course-notes/15-859-CC/lecture02.pdf
       topics:
-        - Recap of the $\varepsilon $-Net Argument
         - Choosing the Sketching Matrix
         - Faster Subspace Embeddings
     - number: "3"
       date: "2022-09-22"
       url: /assets/pdf/course-notes/15-859-CC/lecture03.pdf
       topics:
-        - Recap
         - From Vectors to Matrices (Approximate Matrix Product)
-        - Summary
     - number: "4"
       date: "2022-09-29"
       url: /assets/pdf/course-notes/15-859-CC/lecture04.pdf
@@ -1269,7 +1232,6 @@
       date: "2022-10-13"
       url: /assets/pdf/course-notes/15-859-CC/lecture06.pdf
       topics:
-        - "Recap: Row-Partition Protocol"
         - Coordinator
         - Constructing a Coreset
     - number: "7"
@@ -1292,7 +1254,6 @@
       date: "2022-08-30"
       url: /assets/pdf/course-notes/15-784/lecture01.pdf
       topics:
-        - Introduction
         - Prisoner's Dilemma
         - Improving issues already found in the world
     - number: "2"
@@ -1438,49 +1399,6 @@
       date: "2022-10-27"
       url: /assets/pdf/course-notes/10-708/lecture18.pdf
       topics: []
-- slug: 10-703
-  number: 10-703
-  title: Deep Reinforcement Learning and Control
-  term: Fall 2022
-  instructor: Katerina Fragkiadaki
-  course_url: https://cmudeeprl.github.io/703website_f22/
-  review_anchor: course10703
-  pdf: /assets/pdf/course-notes/10-703.pdf
-  pages: 4
-  lectures_total: 2
-  lectures:
-    - number: "2"
-      date: "2022-08-31"
-      url: /assets/pdf/course-notes/10-703/lecture02.pdf
-      topics:
-        - Multi-Armed Bandits
-        - Thompson Sampling
-    - number: "3"
-      date: "2022-09-07"
-      url: /assets/pdf/course-notes/10-703/lecture03.pdf
-      topics:
-        - Value Functions
-        - Backup Diagrams
-        - Contraction Mapping
-- slug: 10-617
-  number: 10-617
-  title: Intermediate Deep Learning
-  term: Fall 2022
-  instructor: Ruslan Salakhutdinov
-  course_url: https://rsalakhucmu.github.io/10417-22/
-  review_anchor: course10617
-  pdf: /assets/pdf/course-notes/10-617.pdf
-  pages: 2
-  lectures_total: 1
-  lectures:
-    - number: "1"
-      date: ""
-      url: /assets/pdf/course-notes/10-617/lecture01.pdf
-      topics:
-        - Logistics
-        - "In the Old Days: Boltzmann Machines"
-        - Breakthroughs
-        - Learning Sequence Representations
 - slug: 21-484
   number: 21-484
   title: Graph Theory
@@ -1617,7 +1535,6 @@
       date: "2022-03-14"
       url: /assets/pdf/course-notes/21-484/lecture19.pdf
       topics:
-        - Recap
         - List Coloring
         - Planar Graphs are 5-List-Colorable
         - Interval and Circular Colorings
@@ -1634,14 +1551,12 @@
       date: "2022-03-18"
       url: /assets/pdf/course-notes/21-484/lecture21.pdf
       topics:
-        - "Recap: PEO Graphs"
         - Chordal Graphs
         - The Weak Perfect Graph Theorem
     - number: "22"
       date: "2022-03-21"
       url: /assets/pdf/course-notes/21-484/lecture22.pdf
       topics:
-        - Recap
         - Simplicial Vertices in Chordal Graphs
         - The Weak Perfect Graph Theorem
         - The Strong Perfect Graph Theorem
@@ -1664,7 +1579,6 @@
       url: /assets/pdf/course-notes/21-484/lecture25.pdf
       topics:
         - The Erd\H {o}s–Stone Theorem
-        - Consequences
     - number: "26"
       date: "2022-04-01"
       url: /assets/pdf/course-notes/21-484/lecture26.pdf
@@ -1684,9 +1598,7 @@
       date: "2022-04-06"
       url: /assets/pdf/course-notes/21-484/lecture28.pdf
       topics:
-        - Two Questions
         - The Adjacency Matrix
-        - Proof of Question 1
     - number: "29"
       date: "2022-04-11"
       url: /assets/pdf/course-notes/21-484/lecture29.pdf
@@ -1938,7 +1850,6 @@
       date: "2022-04-04"
       url: /assets/pdf/course-notes/21-355/lecture27.pdf
       topics:
-        - Recall
         - Properties of the Integral
         - The Unit Step Function
     - number: "28"
@@ -2022,24 +1933,20 @@
       date: "2022-02-01"
       url: /assets/pdf/course-notes/15-819/lecture02.pdf
       topics:
-        - Recap
         - Normalization of Open Terms
         - "Proving Normalization: Kripke-Style Computability"
     - number: "3"
       date: "2022-02-03"
       url: /assets/pdf/course-notes/15-819/lecture03.pdf
       topics:
-        - Comments About the Homework
         - Normalization of Open Terms
         - The Fundamental Theorem
         - Head Expansion
         - Variables Are Computable
-        - Remarks
     - number: "4"
       date: "2022-02-08"
       url: /assets/pdf/course-notes/15-819/lecture04.pdf
       topics:
-        - Recap
         - Extending with Sums
         - A Lax Type System with Sums
         - Normalization for the Lax System
@@ -2047,16 +1954,13 @@
       date: "2022-02-10"
       url: /assets/pdf/course-notes/15-819/lecture05.pdf
       topics:
-        - "Recap: the Lax System"
         - Computability at the New Types
-        - Lemmas
         - The Fundamental Theorem
         - Normalization and Equality
     - number: "6"
       date: "2022-02-15"
       url: /assets/pdf/course-notes/15-819/lecture06.pdf
       topics:
-        - Recap and a Correction
         - Strong Normalization
         - Equational Theories
         - Deciding Equality
@@ -2065,7 +1969,6 @@
       date: "2022-02-17"
       url: /assets/pdf/course-notes/15-819/lecture07.pdf
       topics:
-        - Recap
         - Call-by-Push-Value
         - Statics
         - Dynamics and Equations
@@ -2074,7 +1977,6 @@
       date: "2022-02-22"
       url: /assets/pdf/course-notes/15-819/lecture08.pdf
       topics:
-        - "Recap: Polarization"
         - Interpreting the Lax Type System into CBPV
         - Checking Definitional Equality
         - An Equivalence Algorithm
@@ -2083,7 +1985,6 @@
       date: "2022-02-24"
       url: /assets/pdf/course-notes/15-819/lecture09.pdf
       topics:
-        - Updates to the CBPV Note
         - Revised Equivalence Algorithm
         - Logical Equivalence
         - The Pas-de-Deux
@@ -2092,7 +1993,6 @@
       date: "2022-03-01"
       url: /assets/pdf/course-notes/15-819/lecture10.pdf
       topics:
-        - Recap
         - Continuations
         - Termination (via Tait)
         - Propositions as Types
@@ -2100,7 +2000,6 @@
       date: "2022-03-03"
       url: /assets/pdf/course-notes/15-819/lecture11.pdf
       topics:
-        - "Recap: Classical Logic and Continuations"
         - How to (Re)invent Girard's Method
         - Trying Tait's Method
         - Girard's Method
@@ -2114,15 +2013,12 @@
       date: "2022-03-17"
       url: /assets/pdf/course-notes/15-819/lecture13.pdf
       topics:
-        - Recap
         - Parametricity
         - Equality
-        - PFPL
     - number: "14"
       date: "2022-03-22"
       url: /assets/pdf/course-notes/15-819/lecture14.pdf
       topics:
-        - "Recap: Existential Types"
         - Step Indexing
         - Step-Indexed Logical Relations
         - The FTLR
@@ -2130,7 +2026,6 @@
       date: "2022-03-24"
       url: /assets/pdf/course-notes/15-819/lecture15.pdf
       topics:
-        - Recap
         - The Step-Indexed Relations
         - The FTLR
         - Recursive Types
@@ -2139,7 +2034,6 @@
       date: "2022-03-29"
       url: /assets/pdf/course-notes/15-819/lecture16.pdf
       topics:
-        - Recap
         - Dependent Types
         - Two Perspectives on Types
         - The $\lambda ^{\Pi }$-Calculus
@@ -2147,7 +2041,6 @@
       date: "2022-03-31"
       url: /assets/pdf/course-notes/15-819/lecture17.pdf
       topics:
-        - Overview
         - "LF: Judgments as Types"
         - Adequacy
         - Decidability of Type Checking
@@ -2155,7 +2048,6 @@
       date: "2022-04-05"
       url: /assets/pdf/course-notes/15-819/lecture18.pdf
       topics:
-        - Overview
         - Adequacy and Canonical Forms
         - Substitution
         - "Judgments as Types: Equality"
@@ -2163,7 +2055,6 @@
       date: "2022-04-12"
       url: /assets/pdf/course-notes/15-819/lecture19.pdf
       topics:
-        - Overview
         - Adequacy of LF Encodings of Formalisms
         - Semantic LF (Martin-Löf's LF)
         - Equational LF
@@ -2184,14 +2075,12 @@
       date: "2022-04-21"
       url: /assets/pdf/course-notes/15-819/lecture22.pdf
       topics:
-        - Last Time
         - Identity Type
         - Universes
     - number: "23"
       date: "2022-04-26"
       url: /assets/pdf/course-notes/15-819/lecture23.pdf
       topics:
-        - Recap
         - Meaning Explanations
         - A Way of Justifying Meaning Explanations
     - number: "24"
