@@ -1210,7 +1210,7 @@
   course_url: null
   review_anchor: course21484
   pdf: /assets/pdf/course-notes/21-484.pdf
-  pages: 74
+  pages: 92
   lectures_total: 37
   lectures:
     - number: "1"
@@ -1342,6 +1342,38 @@
         - List Coloring
         - Planar Graphs are 5-List-Colorable
         - Interval and Circular Colorings
+    - number: "20"
+      date: "2022-03-16"
+      url: /assets/pdf/course-notes/21-484/lecture20.pdf
+      topics:
+        - Perfect Graphs
+        - Line Graphs
+        - Complements of Perfect Graphs
+        - Perfect Elimination Orderings
+        - Chordal Graphs
+    - number: "21"
+      date: "2022-03-18"
+      url: /assets/pdf/course-notes/21-484/lecture21.pdf
+      topics:
+        - "Recap: PEO Graphs"
+        - Chordal Graphs
+        - The Weak Perfect Graph Theorem
+    - number: "22"
+      date: "2022-03-21"
+      url: /assets/pdf/course-notes/21-484/lecture22.pdf
+      topics:
+        - Recap
+        - Simplicial Vertices in Chordal Graphs
+        - The Weak Perfect Graph Theorem
+        - The Strong Perfect Graph Theorem
+    - number: "23"
+      date: "2022-03-23"
+      url: /assets/pdf/course-notes/21-484/lecture23.pdf
+      topics:
+        - Extremal Graph Theory
+        - Triangle-Free Graphs
+        - Turán's Theorem
+        - Other Forbidden Subgraphs
 - slug: 21-355
   number: 21-355
   title: Principles of Real Analysis I
