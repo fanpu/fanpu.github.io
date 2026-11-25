@@ -723,7 +723,7 @@
   course_url: https://www.cs.cmu.edu/~praveshk/randomness.html
   review_anchor: course15859OO
   pdf: /assets/pdf/course-notes/15-859-OO.pdf
-  pages: 16
+  pages: 27
   lectures_total: 11
   lectures:
     - number: "1"
@@ -746,6 +746,24 @@
         - 4-Cliques in Random Graphs
         - Lov\'asz Local Lemma
         - An Algorithmic Proof of the LLL
+    - number: "3"
+      date: "2022-09-20"
+      url: /assets/pdf/course-notes/15-859-OO/lecture03.pdf
+      topics:
+        - Moser's Algorithm (LLL Continued)
+        - Monte Carlo Methods
+        - Rejection Sampling
+        - Sampling Elements Uniformly from a Complicated Set
+        - DNF Formulas
+        - How Hard Is Approximate Counting?
+        - Jerrum--Valiant--Vazirani (1986)
+    - number: "4"
+      date: "2022-09-27"
+      url: /assets/pdf/course-notes/15-859-OO/lecture04.pdf
+      topics:
+        - Sampling $\DOTSB \relbar \joinrel \rightarrow $ Markov Chains
+        - Markov Chains
+        - Sampling from a Distribution with a Markov Chain
 - slug: 15-859-CC
   number: 15-859 CC
   title: Algorithms for Big Data
