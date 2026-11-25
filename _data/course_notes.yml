@@ -343,7 +343,7 @@
   course_url: null
   review_anchor: null
   pdf: /assets/pdf/course-notes/21-640.pdf
-  pages: 71
+  pages: 79
   lectures_total: 23
   lectures:
     - number: "1"
@@ -464,6 +464,37 @@
       url: /assets/pdf/course-notes/21-640/lecture18.pdf
       topics:
         - Weak Star Compactness
+    - number: "19"
+      date: "2023-03-01"
+      url: /assets/pdf/course-notes/21-640/lecture19.pdf
+      topics:
+        - The Product Topology on Subsets of $\mathbb {R}$
+        - Proof of the Banach--Alaoglu Theorem
+        - Examples of Separable Spaces
+        - Metrizability of Weak Star Compact Sets
+    - number: "20"
+      date: "2023-03-03"
+      url: /assets/pdf/course-notes/21-640/lecture20.pdf
+      topics:
+        - Metrizability of Weak Star Compact Sets (continued)
+        - The Bolzano--Weierstrass Theorem for the Weak Star Topology
+    - number: "21"
+      date: "2023-03-15"
+      url: /assets/pdf/course-notes/21-640/lecture21.pdf
+      topics:
+        - Metrizability of Weakly Compact Sets
+        - The Canonical Embedding into the Bidual
+    - number: "22"
+      date: "2023-04-12"
+      url: /assets/pdf/course-notes/21-640/lecture22.pdf
+      topics:
+        - Spectrum and Spectral Radius
+    - number: "23"
+      date: "2023-04-28"
+      url: /assets/pdf/course-notes/21-640/lecture23.pdf
+      topics:
+        - Examples of Linear Operators
+        - More Examples of Linear Operators
 - slug: 21-329
   number: 21-329
   title: Set Theory
@@ -826,7 +857,7 @@
   course_url: https://www.cs.cmu.edu/~praveshk/randomness.html
   review_anchor: course15859OO
   pdf: /assets/pdf/course-notes/15-859-OO.pdf
-  pages: 45
+  pages: 59
   lectures_total: 11
   lectures:
     - number: "1"
@@ -891,6 +922,23 @@
       topics:
         - Compressive Sensing
         - Linear Programming Relaxation
+    - number: "8"
+      date: "2022-11-01"
+      url: /assets/pdf/course-notes/15-859-OO/lecture08.pdf
+      topics:
+        - Some Linear Algebra Review
+        - Sparsification
+        - Chernoff Bounds
+        - Toward the Matrix Chernoff Bound
+    - number: "9"
+      date: "2022-11-15"
+      url: /assets/pdf/course-notes/15-859-OO/lecture09.pdf
+      topics:
+        - Random Constraint Satisfaction
+        - Random 2XOR
+        - From 2XOR to 2SAT
+        - Random 4XOR
+        - Refutation Thresholds
 - slug: 15-859-CC
   number: 15-859 CC
   title: Algorithms for Big Data
