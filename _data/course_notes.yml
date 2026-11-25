@@ -1664,7 +1664,7 @@
   course_url: null
   review_anchor: course21355
   pdf: /assets/pdf/course-notes/21-355.pdf
-  pages: 92
+  pages: 108
   lectures_total: 37
   lectures:
     - number: "1"
@@ -1813,6 +1813,29 @@
         - The Mean Value Theorem
         - Derivatives Have the Intermediate Value Property
         - L'Hôpital's Rule
+    - number: "23"
+      date: "2022-03-23"
+      url: /assets/pdf/course-notes/21-355/lecture23.pdf
+      topics:
+        - Limits Involving Infinity
+        - L'Hôpital's Rule
+        - Taylor's Theorem
+    - number: "24"
+      date: "2022-03-25"
+      url: /assets/pdf/course-notes/21-355/lecture24.pdf
+      topics:
+        - Taylor's Theorem
+        - Integration
+    - number: "25"
+      date: "2022-03-28"
+      url: /assets/pdf/course-notes/21-355/lecture25.pdf
+      topics:
+        - The Riemann–Stieltjes Integral
+    - number: "26"
+      date: "2022-03-30"
+      url: /assets/pdf/course-notes/21-355/lecture26.pdf
+      topics:
+        - Riemann–Stieltjes Integrability
     - number: "27"
       date: "2022-04-04"
       url: /assets/pdf/course-notes/21-355/lecture27.pdf
