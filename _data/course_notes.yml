@@ -677,6 +677,37 @@
         - Mercer Kernels
         - Clustering
         - Online Learning
+- slug: 15-859-OO
+  number: 15-859 OO
+  title: Randomness in Computation
+  term: Fall 2022
+  instructor: Pravesh Kothari
+  course_url: https://www.cs.cmu.edu/~praveshk/randomness.html
+  review_anchor: course15859OO
+  pdf: /assets/pdf/course-notes/15-859-OO.pdf
+  pages: 16
+  lectures_total: 11
+  lectures:
+    - number: "1"
+      date: "2022-09-06"
+      url: /assets/pdf/course-notes/15-859-OO/lecture01.pdf
+      topics:
+        - The Party Problem
+        - Logistics
+        - About the Class
+        - "Another Application of the Probabilistic Method: Discrepancy"
+        - "Randomized Algorithms: Minimum Cut"
+        - Polynomial Identity Testing
+    - number: "2"
+      date: "2022-09-13"
+      url: /assets/pdf/course-notes/15-859-OO/lecture02.pdf
+      topics:
+        - The Probabilistic Method
+        - The Second Moment Method
+        - Random $k$-SAT
+        - 4-Cliques in Random Graphs
+        - Lov\'asz Local Lemma
+        - An Algorithmic Proof of the LLL
 - slug: 15-859-CC
   number: 15-859 CC
   title: Algorithms for Big Data
@@ -729,6 +760,46 @@
       url: /assets/pdf/course-notes/15-859-CC/lecture07.pdf
       topics:
         - $L_1$ Regression
+- slug: 21-484
+  number: 21-484
+  title: Graph Theory
+  term: Spring 2022
+  instructor: Wesley Pegden
+  course_url: null
+  review_anchor: course21484
+  pdf: /assets/pdf/course-notes/21-484.pdf
+  pages: 15
+  lectures_total: 37
+  lectures:
+    - number: "1"
+      date: "2022-01-19"
+      url: /assets/pdf/course-notes/21-484/lecture01.pdf
+      topics:
+        - Graphs and Isomorphism
+        - Basic Definitions
+        - Connected Graphs
+    - number: "2"
+      date: "2022-01-21"
+      url: /assets/pdf/course-notes/21-484/lecture02.pdf
+      topics:
+        - Subgraphs
+        - Incidence and Counting Subgraphs
+        - Regular Graphs
+        - Trees
+    - number: "3"
+      date: "2022-01-24"
+      url: /assets/pdf/course-notes/21-484/lecture03.pdf
+      topics:
+        - Spanning Trees
+        - The Laplacian Matrix
+        - The Matrix-Tree Theorem
+        - Spanning Trees of the Complete Graph
+    - number: "4"
+      date: "2022-01-26"
+      url: /assets/pdf/course-notes/21-484/lecture04.pdf
+      topics:
+        - Bipartite Graphs
+        - Matchings
 - slug: 15-819
   number: 15-819
   title: Advanced Topics in Programming Language Theory
