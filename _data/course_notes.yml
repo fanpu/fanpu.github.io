@@ -1643,7 +1643,7 @@
   course_url: null
   review_anchor: course15312
   pdf: /assets/pdf/course-notes/15-312.pdf
-  pages: 15
+  pages: 23
   lectures_total: 8
   lectures:
     - number: "1"
@@ -1690,3 +1690,13 @@
         - An Affine Type System
         - A Relevant Type System
         - A Programming Language for PTIME
+    - number: "26"
+      date: "2022-04-26"
+      url: /assets/pdf/course-notes/15-312/lecture26.pdf
+      topics:
+        - "LFPL: A Language for PTIME"
+    - number: "27"
+      date: "2022-04-28"
+      url: /assets/pdf/course-notes/15-312/lecture27.pdf
+      topics:
+        - Session Types
