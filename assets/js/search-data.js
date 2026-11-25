@@ -23,6 +23,13 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/courses/";
           },
+        },{id: "nav-course-notes",
+          title: "Course Notes",
+          description: "Lecture notes from courses I took at CMU, typeset in LaTeX from my handwritten notes.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/course-notes/";
+          },
         },{id: "nav-artifacts",
           title: "Artifacts",
           description: "Interactive things I&#39;ve made with LLMs that I found useful for learning complicated concepts.",
