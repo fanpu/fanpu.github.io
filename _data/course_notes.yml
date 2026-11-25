@@ -873,7 +873,7 @@
   course_url: null
   review_anchor: course21651
   pdf: /assets/pdf/course-notes/21-651.pdf
-  pages: 77
+  pages: 91
   lectures_total: 30
   lectures:
     - number: "1"
@@ -1028,6 +1028,25 @@
       url: /assets/pdf/course-notes/21-651/lecture25.pdf
       topics:
         - Adding a Point at Infinity
+    - number: "30"
+      date: "2022-11-16"
+      url: /assets/pdf/course-notes/21-651/lecture30.pdf
+      topics:
+        - Simplicial Complexes
+        - $\mathbb {R}P^2$ Does Not Embed into $\mathbb {R}^3$
+    - number: "32"
+      date: "2022-11-21"
+      url: /assets/pdf/course-notes/21-651/lecture32.pdf
+      topics:
+        - Moving the Vertices of a Labelled Triangulation
+        - Hex
+        - The Brouwer Fixed Point Theorem in Dimensions 1 and 2
+    - number: "33"
+      date: "2022-11-28"
+      url: /assets/pdf/course-notes/21-651/lecture33.pdf
+      topics:
+        - The Jordan Curve Theorem
+        - How to Prove $\mathbb {R}^d \not \cong \mathbb {R}^{d+1}$
 - slug: 17-603
   number: 17-603
   title: Communications for Software Leaders I
