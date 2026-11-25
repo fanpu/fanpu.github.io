@@ -80,7 +80,7 @@
       url: /assets/pdf/course-notes/36-709/lecture10.pdf
       topics:
         - Slepian's Inequality
-        - Sudakov--Fernique Inequality
+        - Sudakov–Fernique Inequality
         - Gaussian Contraction Inequality
         - Sudakov Minoration
         - Principal Component Analysis (PCA)
@@ -95,7 +95,7 @@
       url: /assets/pdf/course-notes/36-709/lecture12.pdf
       topics:
         - Spiked Covariance Model
-        - The Davis--Kahan Theorem
+        - The Davis–Kahan Theorem
     - number: "13"
       date: "2023-02-28"
       url: /assets/pdf/course-notes/36-709/lecture13.pdf
@@ -166,7 +166,7 @@
       url: /assets/pdf/course-notes/36-709/lecture23.pdf
       topics:
         - "Fano's Method: Reminder"
-        - The Varshamov--Gilbert Bound
+        - The Varshamov–Gilbert Bound
         - Local Entropy
     - number: "24"
       date: "2023-04-18"
@@ -293,8 +293,8 @@
       date: "2023-03-21"
       url: /assets/pdf/course-notes/36-708/lecture17.pdf
       topics:
-        - The Moore--Aronszajn Theorem
-        - "``Closure'' of Kernels"
+        - The Moore–Aronszajn Theorem
+        - “Closure” of Kernels
         - Kernel Ridge Regression
         - Representer Theorem
     - number: "18"
@@ -302,7 +302,7 @@
       url: /assets/pdf/course-notes/36-708/lecture18.pdf
       topics:
         - Kernel Ridge Regression
-        - The ``Kernel Trick''
+        - The “Kernel Trick”
     - number: "20"
       date: "2023-03-30"
       url: /assets/pdf/course-notes/36-708/lecture20.pdf
@@ -357,7 +357,7 @@
       url: /assets/pdf/course-notes/21-640/lecture02.pdf
       topics:
         - "Recall: Inner Products"
-        - The Cauchy--Schwarz Inequality
+        - The Cauchy–Schwarz Inequality
         - The Norm Induced by an Inner Product
         - Hilbert Spaces
         - Projection onto Closed Convex Sets
@@ -401,13 +401,13 @@
       topics:
         - "Recap: Bounded Continuous Functions"
         - More Examples of Banach Spaces
-        - The Hahn--Banach Extension Theorem
+        - The Hahn–Banach Extension Theorem
     - number: "9"
       date: "2023-02-06"
       url: /assets/pdf/course-notes/21-640/lecture09.pdf
       topics:
-        - Proof of the Hahn--Banach Extension Theorem (continued)
-        - Corollaries of the Hahn--Banach Theorem
+        - Proof of the Hahn–Banach Extension Theorem (continued)
+        - Corollaries of the Hahn–Banach Theorem
         - Equivalent Norms
         - Compactness
     - number: "10"
@@ -451,14 +451,14 @@
       url: /assets/pdf/course-notes/21-640/lecture16.pdf
       topics:
         - Normability (continued)
-        - The Hahn--Banach Separation Theorem
-        - The Hahn--Banach Theorem, First Geometric Form
+        - The Hahn–Banach Separation Theorem
+        - The Hahn–Banach Theorem, First Geometric Form
     - number: "17"
       date: "2023-02-24"
       url: /assets/pdf/course-notes/21-640/lecture17.pdf
       topics:
-        - The Hahn--Banach Theorem, First Geometric Form (continued)
-        - The Hahn--Banach Theorem, Second Geometric Form
+        - The Hahn–Banach Theorem, First Geometric Form (continued)
+        - The Hahn–Banach Theorem, Second Geometric Form
     - number: "18"
       date: "2023-02-27"
       url: /assets/pdf/course-notes/21-640/lecture18.pdf
@@ -469,7 +469,7 @@
       url: /assets/pdf/course-notes/21-640/lecture19.pdf
       topics:
         - The Product Topology on Subsets of $\mathbb {R}$
-        - Proof of the Banach--Alaoglu Theorem
+        - Proof of the Banach–Alaoglu Theorem
         - Examples of Separable Spaces
         - Metrizability of Weak Star Compact Sets
     - number: "20"
@@ -477,7 +477,7 @@
       url: /assets/pdf/course-notes/21-640/lecture20.pdf
       topics:
         - Metrizability of Weak Star Compact Sets (continued)
-        - The Bolzano--Weierstrass Theorem for the Weak Star Topology
+        - The Bolzano–Weierstrass Theorem for the Weak Star Topology
     - number: "21"
       date: "2023-03-15"
       url: /assets/pdf/course-notes/21-640/lecture21.pdf
@@ -571,7 +571,7 @@
       topics:
         - Announcements
         - Cofinality
-        - K\"onig's Theorem
+        - König's Theorem
     - number: "11"
       date: "2023-03-29"
       url: /assets/pdf/course-notes/21-329/lecture11.pdf
@@ -639,7 +639,7 @@
       date: "2023-04-24"
       url: /assets/pdf/course-notes/21-329/lecture20.pdf
       topics:
-        - K\"onig's Theorem
+        - König's Theorem
         - Wellfounded Trees and Rank Functions
     - number: "21"
       date: "2023-04-26"
@@ -647,14 +647,14 @@
       topics:
         - Recall
         - Products of the Baire Space
-        - Determinacy (\S 5.4)
+        - Determinacy (§ 5.4)
     - number: "22"
       date: "2023-04-28"
       url: /assets/pdf/course-notes/21-329/lecture22.pdf
       topics:
         - Closed Games
         - Strategies
-        - The Gale--Stewart Theorem
+        - The Gale–Stewart Theorem
 - slug: 10-716
   number: 10-716
   title: "Advanced Machine Learning: Theory and Methods"
@@ -797,8 +797,8 @@
         - Dimension Reduction
         - Local Linear Embeddings (LLE)
         - Isomap
-        - Laplacian Eigenmaps (Belkin--Niyogi 2003)
-        - Diffusion Maps (Coifman--Lafon 2006)
+        - Laplacian Eigenmaps (Belkin–Niyogi 2003)
+        - Diffusion Maps (Coifman–Lafon 2006)
         - Random Projections
     - number: "20"
       date: "2023-04-04"
@@ -911,7 +911,7 @@
         - The Second Moment Method
         - Random $k$-SAT
         - 4-Cliques in Random Graphs
-        - Lov\'asz Local Lemma
+        - Lovász Local Lemma
         - An Algorithmic Proof of the LLL
     - number: "3"
       date: "2022-09-20"
@@ -923,12 +923,12 @@
         - Sampling Elements Uniformly from a Complicated Set
         - DNF Formulas
         - How Hard Is Approximate Counting?
-        - Jerrum--Valiant--Vazirani (1986)
+        - Jerrum–Valiant–Vazirani (1986)
     - number: "4"
       date: "2022-09-27"
       url: /assets/pdf/course-notes/15-859-OO/lecture04.pdf
       topics:
-        - Sampling $\DOTSB \relbar \joinrel \rightarrow $ Markov Chains
+        - Sampling $\longrightarrow $ Markov Chains
         - Markov Chains
         - Sampling from a Distribution with a Markov Chain
     - number: "5"
@@ -986,7 +986,7 @@
         - Hardness vs Randomness, Continued
         - A 1-Bit Stretcher
         - Combinatorial Designs
-        - The Nisan--Wigderson Construction
+        - The Nisan–Wigderson Construction
 - slug: 15-859-CC
   number: 15-859 CC
   title: Algorithms for Big Data
@@ -1084,7 +1084,7 @@
       url: /assets/pdf/course-notes/21-484/lecture05.pdf
       topics:
         - Hall's Theorem
-        - K\"onig's Theorem
+        - König's Theorem
     - number: "6"
       date: "2022-01-31"
       url: /assets/pdf/course-notes/21-484/lecture06.pdf
@@ -1114,7 +1114,7 @@
       date: "2022-02-09"
       url: /assets/pdf/course-notes/21-484/lecture10.pdf
       topics:
-        - Menger's Theorem Implies K\"onig's Theorem
+        - Menger's Theorem Implies König's Theorem
         - Planar and Plane Graphs
         - Faces
         - Face Boundaries
@@ -1143,7 +1143,7 @@
       date: "2022-02-18"
       url: /assets/pdf/course-notes/21-484/lecture14.pdf
       topics:
-        - F\'ary's Theorem
+        - Fáry's Theorem
         - The Art Gallery Problem
 - slug: 21-355
   number: 21-355
@@ -1204,7 +1204,7 @@
       url: /assets/pdf/course-notes/15-819/lecture01.pdf
       topics:
         - Deriving Tait's Method
-        - Extending to Nat (G\"odel's T)
+        - Extending to Nat (Gödel's T)
         - Quantifier Complexity
     - number: "2"
       date: "2022-02-01"

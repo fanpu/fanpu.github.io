@@ -14,11 +14,14 @@ published:
   - its metadata and lecture index go into _data/course_notes.yml
 """
 import datetime
+import html
 import json
 import pathlib
+import re
 import shutil
 import subprocess
 import sys
+import unicodedata
 
 import yaml
 
@@ -40,6 +43,37 @@ def lecture_date(text: str) -> str:
     if not text:
         return ""
     return datetime.datetime.strptime(text, "%B %d, %Y").date().isoformat()
+
+
+ACCENTS = {"'": "\u0301", '"': "\u0308", "`": "\u0300", "^": "\u0302",
+           "~": "\u0303", "=": "\u0304", ".": "\u0307", "c": "\u0327", "v": "\u030c"}
+TEXT_MACROS = {r"\S": "§", r"\&": "&amp;", r"\%": "%", "~": "&nbsp;",
+               "``": "“", "''": "”", "---": "—", "--": "–"}
+# LaTeX writes some macros to the .toc in expanded form that MathJax doesn't know.
+MATH_MACROS = {r"\DOTSB \relbar \joinrel \rightarrow": r"\longrightarrow"}
+
+
+def topic_html(title: str) -> str:
+    """Turn a section title from the LaTeX .toc into HTML for the site.
+
+    Accents and text macros become Unicode; $...$ math is kept for MathJax.
+    """
+    parts = re.split(r"(\$[^$]*\$)", title)
+    out = []
+    for i, part in enumerate(parts):
+        if i % 2:  # math
+            for tex, repl in MATH_MACROS.items():
+                part = part.replace(tex, repl)
+            out.append(html.escape(part, quote=False))
+            continue
+        part = html.escape(part, quote=False)
+        part = re.sub(r"""\\([`'"^~=.cv])\s*\{?\\?([A-Za-z])\}?""",
+                      lambda m: unicodedata.normalize("NFC", m.group(2) + ACCENTS[m.group(1)]),
+                      part.replace("&quot;", '"'))
+        for tex, repl in TEXT_MACROS.items():
+            part = part.replace(tex, repl)
+        out.append(part)
+    return "".join(out)
 
 
 def copy_lecture_pdf(src: pathlib.Path, dest: pathlib.Path) -> None:
@@ -92,7 +126,7 @@ def main() -> None:
                     "number": lec["number"],
                     "date": lecture_date(lec["date"]),
                     "url": lecture_url(lec),
-                    "topics": lec["sections"],
+                    "topics": [topic_html(t) for t in lec["sections"]],
                 }
                 for lec in notes["lectures"]
             ],
