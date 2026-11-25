@@ -1085,7 +1085,7 @@
   course_url: null
   review_anchor: course15819
   pdf: /assets/pdf/course-notes/15-819.pdf
-  pages: 46
+  pages: 60
   lectures_total: 24
   lectures:
     - number: "1"
@@ -1173,6 +1173,28 @@
         - Continuations
         - Termination (via Tait)
         - Propositions as Types
+    - number: "11"
+      date: "2022-03-03"
+      url: /assets/pdf/course-notes/15-819/lecture11.pdf
+      topics:
+        - "Recap: Classical Logic and Continuations"
+        - How to (Re)invent Girard's Method
+        - Trying Tait's Method
+        - Girard's Method
+    - number: "12"
+      date: "2022-03-15"
+      url: /assets/pdf/course-notes/15-819/lecture12.pdf
+      topics:
+        - Girard's Method
+        - The Fundamental Theorem
+    - number: "13"
+      date: "2022-03-17"
+      url: /assets/pdf/course-notes/15-819/lecture13.pdf
+      topics:
+        - Recap
+        - Parametricity
+        - Equality
+        - PFPL
 - slug: 15-751
   number: 15-751
   title: A Theorist's Toolkit
