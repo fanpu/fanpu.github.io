@@ -655,6 +655,22 @@
         - Closed Games
         - Strategies
         - The Gale–Stewart Theorem
+- slug: 15-712
+  number: 15-712
+  title: Advanced Operating Systems and Distributed Systems
+  term: Spring 2023
+  instructor: Phil Gibbons
+  course_url: https://www.cs.cmu.edu/~15712/
+  review_anchor: course15712
+  pdf: /assets/pdf/course-notes/15-712.pdf
+  pages: 2
+  lectures_total: 1
+  lectures:
+    - number: "1"
+      date: "2023-01-20"
+      url: /assets/pdf/course-notes/15-712/lecture01.pdf
+      topics:
+        - Why Read Old Papers?
 - slug: 10-716
   number: 10-716
   title: "Advanced Machine Learning: Theory and Methods"
@@ -988,6 +1004,33 @@
         - Compact Hausdorff Spaces Are Normal
         - Metrizable Spaces Are Normal
         - Products of Separated Spaces
+- slug: 17-603
+  number: 17-603
+  title: Communications for Software Leaders I
+  term: Fall 2022
+  instructor: Dominick (Nick) Frollini
+  course_url: null
+  review_anchor: course17603
+  pdf: /assets/pdf/course-notes/17-603.pdf
+  pages: 4
+  lectures_total: 3
+  lectures:
+    - number: "1"
+      date: ""
+      url: /assets/pdf/course-notes/17-603/lecture01.pdf
+      topics:
+        - Giving Effective Feedback
+    - number: "2"
+      date: "2022-09-15"
+      url: /assets/pdf/course-notes/17-603/lecture02.pdf
+      topics:
+        - How to Give a Good Presentation
+    - number: "3"
+      date: "2022-10-27"
+      url: /assets/pdf/course-notes/17-603/lecture03.pdf
+      topics:
+        - Achieving a Positive Ethos
+        - Dear Colleagues
 - slug: 15-859-OO
   number: 15-859 OO
   title: Randomness in Computation
@@ -1306,6 +1349,49 @@
       date: "2022-10-27"
       url: /assets/pdf/course-notes/10-708/lecture18.pdf
       topics: []
+- slug: 10-703
+  number: 10-703
+  title: Deep Reinforcement Learning and Control
+  term: Fall 2022
+  instructor: Katerina Fragkiadaki
+  course_url: https://cmudeeprl.github.io/703website_f22/
+  review_anchor: course10703
+  pdf: /assets/pdf/course-notes/10-703.pdf
+  pages: 4
+  lectures_total: 2
+  lectures:
+    - number: "2"
+      date: "2022-08-31"
+      url: /assets/pdf/course-notes/10-703/lecture02.pdf
+      topics:
+        - Multi-Armed Bandits
+        - Thompson Sampling
+    - number: "3"
+      date: "2022-09-07"
+      url: /assets/pdf/course-notes/10-703/lecture03.pdf
+      topics:
+        - Value Functions
+        - Backup Diagrams
+        - Contraction Mapping
+- slug: 10-617
+  number: 10-617
+  title: Intermediate Deep Learning
+  term: Fall 2022
+  instructor: Ruslan Salakhutdinov
+  course_url: https://rsalakhucmu.github.io/10417-22/
+  review_anchor: course10617
+  pdf: /assets/pdf/course-notes/10-617.pdf
+  pages: 2
+  lectures_total: 1
+  lectures:
+    - number: "1"
+      date: ""
+      url: /assets/pdf/course-notes/10-617/lecture01.pdf
+      topics:
+        - Logistics
+        - "In the Old Days: Boltzmann Machines"
+        - Breakthroughs
+        - Learning Sequence Representations
 - slug: 21-484
   number: 21-484
   title: Graph Theory
