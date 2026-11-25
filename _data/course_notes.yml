@@ -1433,7 +1433,7 @@
   course_url: null
   review_anchor: course21484
   pdf: /assets/pdf/course-notes/21-484.pdf
-  pages: 92
+  pages: 108
   lectures_total: 37
   lectures:
     - number: "1"
@@ -1597,6 +1597,38 @@
         - Triangle-Free Graphs
         - Turán's Theorem
         - Other Forbidden Subgraphs
+    - number: "28"
+      date: "2022-04-06"
+      url: /assets/pdf/course-notes/21-484/lecture28.pdf
+      topics:
+        - Two Questions
+        - The Adjacency Matrix
+        - Proof of Question 1
+    - number: "29"
+      date: "2022-04-11"
+      url: /assets/pdf/course-notes/21-484/lecture29.pdf
+      topics:
+        - Regular Graphs of Diameter 2
+        - An Eigenvalue Argument
+        - The Case $d = 7$
+        - Automorphisms and the Petersen Graph
+    - number: "30"
+      date: "2022-04-13"
+      url: /assets/pdf/course-notes/21-484/lecture30.pdf
+      topics:
+        - Random Graphs
+        - Ramsey Numbers
+        - The Chromatic Number/Girth Theorem
+        - The Chromatic Number of $G_{n,1/2}$
+    - number: "31"
+      date: "2022-04-15"
+      url: /assets/pdf/course-notes/21-484/lecture31.pdf
+      topics:
+        - Primality Testing and Randomized Algorithms
+        - Magic Graphs
+        - Expansion in Graphs
+        - Using a Magic Graph for Primality Testing
+        - Magic Graphs Exist
 - slug: 21-355
   number: 21-355
   title: Principles of Real Analysis I
