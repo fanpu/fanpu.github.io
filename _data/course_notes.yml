@@ -1511,7 +1511,7 @@
   course_url: null
   review_anchor: course15819
   pdf: /assets/pdf/course-notes/15-819.pdf
-  pages: 103
+  pages: 108
   lectures_total: 24
   lectures:
     - number: "1"
@@ -1697,6 +1697,14 @@
         - Recap
         - Meaning Explanations
         - A Way of Justifying Meaning Explanations
+    - number: "24"
+      date: "2022-04-28"
+      url: /assets/pdf/course-notes/15-819/lecture24.pdf
+      topics:
+        - Types for Program Modules
+        - The Phase Distinction
+        - The Nature of Abstraction
+        - The Framework
 - slug: 15-751
   number: 15-751
   title: A Theorist's Toolkit
