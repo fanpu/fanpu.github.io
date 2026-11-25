@@ -873,7 +873,7 @@
   course_url: null
   review_anchor: course21651
   pdf: /assets/pdf/course-notes/21-651.pdf
-  pages: 91
+  pages: 100
   lectures_total: 30
   lectures:
     - number: "1"
@@ -1047,6 +1047,22 @@
       topics:
         - The Jordan Curve Theorem
         - How to Prove $\mathbb {R}^d \not \cong \mathbb {R}^{d+1}$
+    - number: "37"
+      date: "2022-12-07"
+      url: /assets/pdf/course-notes/21-651/lecture37.pdf
+      topics:
+        - Linked Cycles
+        - Homotopy
+        - Contractible Spaces
+        - Higher Connectivity
+        - Loops
+    - number: "38"
+      date: "2022-12-09"
+      url: /assets/pdf/course-notes/21-651/lecture38.pdf
+      topics:
+        - The Fundamental Group
+        - Examples
+        - Group Cohomology
 - slug: 17-603
   number: 17-603
   title: Communications for Software Leaders I
@@ -1725,7 +1741,7 @@
   course_url: null
   review_anchor: course21355
   pdf: /assets/pdf/course-notes/21-355.pdf
-  pages: 123
+  pages: 133
   lectures_total: 37
   lectures:
     - number: "1"
@@ -1948,6 +1964,21 @@
       url: /assets/pdf/course-notes/21-355/lecture34.pdf
       topics:
         - Equicontinuity
+    - number: "35"
+      date: "2022-04-25"
+      url: /assets/pdf/course-notes/21-355/lecture35.pdf
+      topics:
+        - Stone–Weierstrass
+    - number: "36"
+      date: "2022-04-27"
+      url: /assets/pdf/course-notes/21-355/lecture36.pdf
+      topics:
+        - Constructing the Real Numbers
+    - number: "37"
+      date: "2022-04-29"
+      url: /assets/pdf/course-notes/21-355/lecture37.pdf
+      topics:
+        - Constructing the Real Numbers (continued)
 - slug: 15-819
   number: 15-819
   title: Advanced Topics in Programming Language Theory
