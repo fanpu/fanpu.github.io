@@ -8,25 +8,25 @@
   course_url: null
   review_anchor: course36709
   pdf: /assets/pdf/course-notes/36-709.pdf
-  pages: 57
+  pages: 72
   lectures_total: 24
   lectures:
     - number: "1"
       date: "2023-01-17"
-      url: /assets/pdf/course-notes/36-709.pdf#page=3
+      url: /assets/pdf/course-notes/36-709/lecture01.pdf
       topics:
         - Gaussian Sequence Model
         - The MLE Can Be a Terrible Estimator
     - number: "2"
       date: "2023-01-19"
-      url: /assets/pdf/course-notes/36-709.pdf#page=7
+      url: /assets/pdf/course-notes/36-709/lecture02.pdf
       topics:
         - Concentration Inequalities
         - Sub-Gaussian Random Variables
         - Hoeffding's Bound
     - number: "3"
       date: "2023-01-24"
-      url: /assets/pdf/course-notes/36-709.pdf#page=12
+      url: /assets/pdf/course-notes/36-709/lecture03.pdf
       topics:
         - Sums of Sub-Gaussian Random Variables
         - Equivalent Characterizations of Sub-Gaussian Random Variables
@@ -34,7 +34,7 @@
         - Bernstein's Condition
     - number: "4"
       date: "2023-01-26"
-      url: /assets/pdf/course-notes/36-709.pdf#page=17
+      url: /assets/pdf/course-notes/36-709/lecture04.pdf
       topics:
         - Sums of Independent Sub-Exponential Random Variables
         - Equivalent Characterizations of Sub-Exponential Random Variables
@@ -43,41 +43,41 @@
         - Martingales
     - number: "5"
       date: "2023-01-31"
-      url: /assets/pdf/course-notes/36-709.pdf#page=22
+      url: /assets/pdf/course-notes/36-709/lecture05.pdf
       topics:
         - Concentration for Martingale Difference Sequences
         - Bounded Differences Inequality
         - Covering and Packing
     - number: "6"
       date: "2023-02-02"
-      url: /assets/pdf/course-notes/36-709.pdf#page=27
+      url: /assets/pdf/course-notes/36-709/lecture06.pdf
       topics:
         - Packing and Covering Numbers
         - Volumetric Argument
         - "Example: Lipschitz Functions on the Unit Interval"
     - number: "7"
       date: "2023-02-07"
-      url: /assets/pdf/course-notes/36-709.pdf#page=31
+      url: /assets/pdf/course-notes/36-709/lecture07.pdf
       topics:
         - Gaussian and Rademacher Complexity
         - Function Classes
         - Sub-Gaussian Processes
     - number: "8"
       date: "2023-02-09"
-      url: /assets/pdf/course-notes/36-709.pdf#page=36
+      url: /assets/pdf/course-notes/36-709/lecture08.pdf
       topics:
         - One-Step Discretization (continued)
         - The Canonical Gaussian Process
         - Chaining and the Dudley Integral
     - number: "9"
       date: "2023-02-14"
-      url: /assets/pdf/course-notes/36-709.pdf#page=41
+      url: /assets/pdf/course-notes/36-709/lecture09.pdf
       topics:
         - Dudley Entropy Integral
         - Gaussian Comparison Inequalities
     - number: "10"
       date: "2023-02-16"
-      url: /assets/pdf/course-notes/36-709.pdf#page=45
+      url: /assets/pdf/course-notes/36-709/lecture10.pdf
       topics:
         - Slepian's Inequality
         - Sudakov--Fernique Inequality
@@ -86,16 +86,35 @@
         - Principal Component Analysis (PCA)
     - number: "11"
       date: "2023-02-21"
-      url: /assets/pdf/course-notes/36-709.pdf#page=50
+      url: /assets/pdf/course-notes/36-709/lecture11.pdf
       topics:
         - Matrix Recap
         - Covariance Matrix Estimation
     - number: "12"
       date: "2023-02-23"
-      url: /assets/pdf/course-notes/36-709.pdf#page=54
+      url: /assets/pdf/course-notes/36-709/lecture12.pdf
       topics:
         - Spiked Covariance Model
         - The Davis--Kahan Theorem
+    - number: "13"
+      date: "2023-02-28"
+      url: /assets/pdf/course-notes/36-709/lecture13.pdf
+      topics:
+        - Sparse PCA
+        - Lasso
+    - number: "14"
+      date: "2023-03-02"
+      url: /assets/pdf/course-notes/36-709/lecture14.pdf
+      topics:
+        - Lasso Error Bounds (Continued)
+        - Restricted Eigenvalues for Random Designs
+        - Prediction Error
+    - number: "15"
+      date: "2023-03-14"
+      url: /assets/pdf/course-notes/36-709/lecture15.pdf
+      topics:
+        - Variable Selection
+        - Inference after the Lasso
 - slug: 36-708
   number: 36-708
   title: The ABCDE of Statistical Methods in Machine Learning
@@ -109,14 +128,14 @@
   lectures:
     - number: "2"
       date: "2023-01-19"
-      url: /assets/pdf/course-notes/36-708.pdf#page=4
+      url: /assets/pdf/course-notes/36-708/lecture02.pdf
       topics:
         - Setup and Notation
         - Least Squares and Ridge Regression
         - Generalization, Memorization and ERM
     - number: "3"
       date: "2023-01-24"
-      url: /assets/pdf/course-notes/36-708.pdf#page=8
+      url: /assets/pdf/course-notes/36-708/lecture03.pdf
       topics:
         - Recap
         - The Regression Function Minimizes the MSE
@@ -125,7 +144,7 @@
         - Consistency
     - number: "4"
       date: "2023-01-26"
-      url: /assets/pdf/course-notes/36-708.pdf#page=12
+      url: /assets/pdf/course-notes/36-708/lecture04.pdf
       topics:
         - Oracle Regressors and Classifiers
         - $k$-NN as Two Approximations
@@ -133,7 +152,7 @@
         - High Dimensions
     - number: "5"
       date: "2023-01-31"
-      url: /assets/pdf/course-notes/36-708.pdf#page=17
+      url: /assets/pdf/course-notes/36-708/lecture05.pdf
       topics:
         - Recap
         - Predictive Uncertainty Quantification
@@ -141,13 +160,13 @@
         - What Makes a Good Classifier?
     - number: "6"
       date: "2023-02-02"
-      url: /assets/pdf/course-notes/36-708.pdf#page=21
+      url: /assets/pdf/course-notes/36-708/lecture06.pdf
       topics:
         - Histogram Binning
         - Split Conformal Prediction (Regression)
     - number: "7"
       date: "2023-02-07"
-      url: /assets/pdf/course-notes/36-708.pdf#page=24
+      url: /assets/pdf/course-notes/36-708/lecture07.pdf
       topics:
         - Leo Breiman Week
         - Bagging (Bootstrap Aggregation)
@@ -155,7 +174,7 @@
         - Decision Stumps, Lists, Trees and Forests
     - number: "8"
       date: "2023-02-09"
-      url: /assets/pdf/course-notes/36-708.pdf#page=28
+      url: /assets/pdf/course-notes/36-708/lecture08.pdf
       topics:
         - Outline
         - Decision Trees
@@ -163,25 +182,25 @@
         - Random Forests
     - number: "9"
       date: "2023-02-14"
-      url: /assets/pdf/course-notes/36-708.pdf#page=31
+      url: /assets/pdf/course-notes/36-708/lecture09.pdf
       topics:
         - Stacking
     - number: "10"
       date: "2023-02-16"
-      url: /assets/pdf/course-notes/36-708.pdf#page=32
+      url: /assets/pdf/course-notes/36-708/lecture10.pdf
       topics:
         - Model Selection
         - Boosting
     - number: "11"
       date: "2023-02-21"
-      url: /assets/pdf/course-notes/36-708.pdf#page=35
+      url: /assets/pdf/course-notes/36-708/lecture11.pdf
       topics:
         - Edge of a Classifier
         - Weak Learning Hypothesis
         - AdaBoost
     - number: "13"
       date: "2023-02-28"
-      url: /assets/pdf/course-notes/36-708.pdf#page=39
+      url: /assets/pdf/course-notes/36-708/lecture13.pdf
       topics:
         - "Boosting: VC Theory Is Unsatisfactory"
         - Convex Surrogate Loss Minimization by Coordinate Descent
@@ -190,26 +209,26 @@
         - Empirical Rademacher Complexity
     - number: "14"
       date: "2023-03-02"
-      url: /assets/pdf/course-notes/36-708.pdf#page=43
+      url: /assets/pdf/course-notes/36-708/lecture14.pdf
       topics:
         - Margin and Boosting
         - Recap of the First Half of the Course
     - number: "15"
       date: "2023-03-14"
-      url: /assets/pdf/course-notes/36-708.pdf#page=47
+      url: /assets/pdf/course-notes/36-708/lecture15.pdf
       topics:
         - RKHS
         - Banach Spaces
         - Hilbert Spaces
     - number: "16"
       date: "2023-03-16"
-      url: /assets/pdf/course-notes/36-708.pdf#page=51
+      url: /assets/pdf/course-notes/36-708/lecture16.pdf
       topics:
         - RKHS
         - Kernels
     - number: "17"
       date: "2023-03-21"
-      url: /assets/pdf/course-notes/36-708.pdf#page=55
+      url: /assets/pdf/course-notes/36-708/lecture17.pdf
       topics:
         - The Moore--Aronszajn Theorem
         - "``Closure'' of Kernels"
@@ -217,38 +236,38 @@
         - Representer Theorem
     - number: "18"
       date: "2023-03-23"
-      url: /assets/pdf/course-notes/36-708.pdf#page=59
+      url: /assets/pdf/course-notes/36-708/lecture18.pdf
       topics:
         - Kernel Ridge Regression
         - The ``Kernel Trick''
     - number: "20"
       date: "2023-03-30"
-      url: /assets/pdf/course-notes/36-708.pdf#page=62
+      url: /assets/pdf/course-notes/36-708/lecture20.pdf
       topics:
         - "Cooperative Game Theory: Shapley Values"
         - Shapley Values in Machine Learning
     - number: "21"
       date: "2023-04-04"
-      url: /assets/pdf/course-notes/36-708.pdf#page=65
+      url: /assets/pdf/course-notes/36-708/lecture21.pdf
       topics:
         - Unsupervised Learning
         - SVD and PCA
         - PCA
     - number: "22"
       date: "2023-04-06"
-      url: /assets/pdf/course-notes/36-708.pdf#page=70
+      url: /assets/pdf/course-notes/36-708/lecture22.pdf
       topics:
         - Modal Clustering
         - Hierarchical Clustering
     - number: "23"
       date: "2023-04-11"
-      url: /assets/pdf/course-notes/36-708.pdf#page=71
+      url: /assets/pdf/course-notes/36-708/lecture23.pdf
       topics:
         - Graph Laplacians
         - Spectral Clustering
     - number: "27"
       date: "2023-04-27"
-      url: /assets/pdf/course-notes/36-708.pdf#page=74
+      url: /assets/pdf/course-notes/36-708/lecture27.pdf
       topics:
         - Deep Learning
         - End-of-Semester Recap
@@ -266,13 +285,13 @@
   lectures:
     - number: "1"
       date: "2023-01-18"
-      url: /assets/pdf/course-notes/21-640.pdf#page=2
+      url: /assets/pdf/course-notes/21-640/lecture01.pdf
       topics:
         - Overview
         - Inner Product Spaces
     - number: "2"
       date: "2023-01-20"
-      url: /assets/pdf/course-notes/21-640.pdf#page=6
+      url: /assets/pdf/course-notes/21-640/lecture02.pdf
       topics:
         - "Recall: Inner Products"
         - The Cauchy--Schwarz Inequality
@@ -281,26 +300,26 @@
         - Projection onto Closed Convex Sets
     - number: "3"
       date: "2023-01-23"
-      url: /assets/pdf/course-notes/21-640.pdf#page=11
+      url: /assets/pdf/course-notes/21-640/lecture03.pdf
       topics:
         - Orthogonality
         - The Projection Theorem
         - The Dual Space
     - number: "4"
       date: "2023-01-25"
-      url: /assets/pdf/course-notes/21-640.pdf#page=15
+      url: /assets/pdf/course-notes/21-640/lecture04.pdf
       topics:
         - Proof of the Riesz Representation Theorem
         - Fourier Series
     - number: "5"
       date: "2023-01-27"
-      url: /assets/pdf/course-notes/21-640.pdf#page=19
+      url: /assets/pdf/course-notes/21-640/lecture05.pdf
       topics:
         - "Recall: Orthonormal Sets"
         - Fourier Series
     - number: "6"
       date: "2023-01-30"
-      url: /assets/pdf/course-notes/21-640.pdf#page=22
+      url: /assets/pdf/course-notes/21-640/lecture06.pdf
       topics:
         - Existence of Complete Orthonormal Sets
         - Banach Spaces
@@ -317,52 +336,52 @@
   lectures:
     - number: "1"
       date: "2023-02-27"
-      url: /assets/pdf/course-notes/21-329.pdf#page=4
+      url: /assets/pdf/course-notes/21-329/lecture01.pdf
       topics:
         - "Associativity of Ordinal Addition: A Second Proof"
     - number: "2"
       date: "2023-03-01"
-      url: /assets/pdf/course-notes/21-329.pdf#page=6
+      url: /assets/pdf/course-notes/21-329/lecture02.pdf
       topics:
         - Last Time
         - Ordinal Subtraction
         - Ordinal Multiplication
     - number: "3"
       date: "2023-03-03"
-      url: /assets/pdf/course-notes/21-329.pdf#page=10
+      url: /assets/pdf/course-notes/21-329/lecture03.pdf
       topics:
         - Ordinal Multiplication as a Product of Well-Orders
         - Ordinal Exponentiation
         - Cardinals
     - number: "4"
       date: "2023-03-13"
-      url: /assets/pdf/course-notes/21-329.pdf#page=13
+      url: /assets/pdf/course-notes/21-329/lecture04.pdf
       topics:
         - Cardinality
         - Uncountable Ordinals
         - The Continuum Hypothesis
     - number: "5"
       date: "2023-03-15"
-      url: /assets/pdf/course-notes/21-329.pdf#page=16
+      url: /assets/pdf/course-notes/21-329/lecture05.pdf
       topics:
         - Cardinals
         - The Alephs
     - number: "6"
       date: "2023-03-17"
-      url: /assets/pdf/course-notes/21-329.pdf#page=18
+      url: /assets/pdf/course-notes/21-329/lecture06.pdf
       topics:
         - Successor and Limit Cardinals
         - Cardinal Arithmetic
     - number: "7"
       date: "2023-03-20"
-      url: /assets/pdf/course-notes/21-329.pdf#page=21
+      url: /assets/pdf/course-notes/21-329/lecture07.pdf
       topics:
         - Recap
         - Proof of the Lemma
         - Sums and Products of Infinite Cardinals
     - number: "8"
       date: "2023-03-22"
-      url: /assets/pdf/course-notes/21-329.pdf#page=24
+      url: /assets/pdf/course-notes/21-329/lecture08.pdf
       topics:
         - Announcements
         - Countable Unions
@@ -370,75 +389,75 @@
         - Cofinality
     - number: "9"
       date: "2023-03-24"
-      url: /assets/pdf/course-notes/21-329.pdf#page=27
+      url: /assets/pdf/course-notes/21-329/lecture09.pdf
       topics:
         - Exponentiation of Exponents
         - Cofinality
     - number: "10"
       date: "2023-03-27"
-      url: /assets/pdf/course-notes/21-329.pdf#page=29
+      url: /assets/pdf/course-notes/21-329/lecture10.pdf
       topics:
         - Announcements
         - Cofinality
         - K\"onig's Theorem
     - number: "11"
       date: "2023-03-29"
-      url: /assets/pdf/course-notes/21-329.pdf#page=32
+      url: /assets/pdf/course-notes/21-329/lecture11.pdf
       topics:
         - Problem 1
         - Problem 2
         - Problem 3
     - number: "12"
       date: "2023-04-03"
-      url: /assets/pdf/course-notes/21-329.pdf#page=35
+      url: /assets/pdf/course-notes/21-329/lecture12.pdf
       topics:
         - Announcements
         - Review
         - Filters and Ideals
     - number: "13"
       date: "2023-04-05"
-      url: /assets/pdf/course-notes/21-329.pdf#page=38
+      url: /assets/pdf/course-notes/21-329/lecture13.pdf
       topics:
         - Tarski's Theorem (continued)
         - The Club Filter
     - number: "14"
       date: "2023-04-07"
-      url: /assets/pdf/course-notes/21-329.pdf#page=41
+      url: /assets/pdf/course-notes/21-329/lecture14.pdf
       topics:
         - The Club Filter
         - $F_\kappa $ is $\kappa $-complete
         - $F_\kappa $ is not an ultrafilter
     - number: "15"
       date: "2023-04-10"
-      url: /assets/pdf/course-notes/21-329.pdf#page=44
+      url: /assets/pdf/course-notes/21-329/lecture15.pdf
       topics:
         - Recap
         - Normal Filters
         - Stationary Sets and Fodor's Theorem
     - number: "16"
       date: "2023-04-12"
-      url: /assets/pdf/course-notes/21-329.pdf#page=47
+      url: /assets/pdf/course-notes/21-329/lecture16.pdf
       topics:
         - Recall
         - Splitting $\omega _1$
         - Complete Ultrafilters
     - number: "17"
       date: "2023-04-17"
-      url: /assets/pdf/course-notes/21-329.pdf#page=50
+      url: /assets/pdf/course-notes/21-329/lecture17.pdf
       topics:
         - "Chapter 5: Trees"
         - Basics of Topology
         - The Baire Space
     - number: "18"
       date: "2023-04-19"
-      url: /assets/pdf/course-notes/21-329.pdf#page=54
+      url: /assets/pdf/course-notes/21-329/lecture18.pdf
       topics:
         - Last Time
         - Metric Spaces
         - Closed Sets and Trees
     - number: "19"
       date: "2023-04-21"
-      url: /assets/pdf/course-notes/21-329.pdf#page=57
+      url: /assets/pdf/course-notes/21-329/lecture19.pdf
       topics:
         - Last Time
         - Perfect Trees and Perfect Sets
@@ -446,20 +465,20 @@
         - Closed Sets Are Countable or Contain a Perfect Set
     - number: "20"
       date: "2023-04-24"
-      url: /assets/pdf/course-notes/21-329.pdf#page=61
+      url: /assets/pdf/course-notes/21-329/lecture20.pdf
       topics:
         - K\"onig's Theorem
         - Wellfounded Trees and Rank Functions
     - number: "21"
       date: "2023-04-26"
-      url: /assets/pdf/course-notes/21-329.pdf#page=64
+      url: /assets/pdf/course-notes/21-329/lecture21.pdf
       topics:
         - Recall
         - Products of the Baire Space
         - Determinacy (\S 5.4)
     - number: "22"
       date: "2023-04-28"
-      url: /assets/pdf/course-notes/21-329.pdf#page=67
+      url: /assets/pdf/course-notes/21-329/lecture22.pdf
       topics:
         - Closed Games
         - Strategies
@@ -477,12 +496,12 @@
   lectures:
     - number: "1"
       date: "2023-01-17"
-      url: /assets/pdf/course-notes/10-716.pdf#page=5
+      url: /assets/pdf/course-notes/10-716/lecture01.pdf
       topics:
         - Statistical Decision Theory
     - number: "2"
       date: "2023-01-19"
-      url: /assets/pdf/course-notes/10-716.pdf#page=9
+      url: /assets/pdf/course-notes/10-716/lecture02.pdf
       topics:
         - Decomposable Losses
         - Classification
@@ -491,13 +510,13 @@
         - The Empirical CDF
     - number: "3"
       date: "2023-01-24"
-      url: /assets/pdf/course-notes/10-716.pdf#page=13
+      url: /assets/pdf/course-notes/10-716/lecture03.pdf
       topics:
         - Non-parametric Bayes
         - Gaussian Processes
     - number: "4"
       date: "2023-01-26"
-      url: /assets/pdf/course-notes/10-716.pdf#page=18
+      url: /assets/pdf/course-notes/10-716/lecture04.pdf
       topics:
         - Point Masses
         - Gaussian Processes
@@ -505,7 +524,7 @@
         - Frequentist Non-Parametric Methods
     - number: "5"
       date: "2023-01-31"
-      url: /assets/pdf/course-notes/10-716.pdf#page=22
+      url: /assets/pdf/course-notes/10-716/lecture05.pdf
       topics:
         - Non-Parametric Density Estimation
         - Histograms
@@ -513,25 +532,25 @@
         - Orthogonal Basis Expansions
     - number: "6"
       date: "2023-02-02"
-      url: /assets/pdf/course-notes/10-716.pdf#page=28
+      url: /assets/pdf/course-notes/10-716/lecture06.pdf
       topics:
         - Non-Parametric Density Estimation
         - Choosing the Bandwidth
     - number: "7"
       date: "2023-02-07"
-      url: /assets/pdf/course-notes/10-716.pdf#page=33
+      url: /assets/pdf/course-notes/10-716/lecture07.pdf
       topics:
         - Non-Parametric versus Parametric Rates
         - Regression
     - number: "8"
       date: "2023-02-09"
-      url: /assets/pdf/course-notes/10-716.pdf#page=38
+      url: /assets/pdf/course-notes/10-716/lecture08.pdf
       topics:
         - Non-Parametric Regression
         - Hilbert Spaces
     - number: "9"
       date: "2023-02-14"
-      url: /assets/pdf/course-notes/10-716.pdf#page=42
+      url: /assets/pdf/course-notes/10-716/lecture09.pdf
       topics:
         - Reproducing Kernel Hilbert Spaces
         - Linear Smoothers
@@ -539,38 +558,38 @@
         - Classification
     - number: "10"
       date: "2023-02-16"
-      url: /assets/pdf/course-notes/10-716.pdf#page=47
+      url: /assets/pdf/course-notes/10-716/lecture10.pdf
       topics:
         - Non-Parametric Classification
         - Three Key Ideas in Non-Parametric Estimation
         - Greedy Algorithms
     - number: "11"
       date: "2023-02-21"
-      url: /assets/pdf/course-notes/10-716.pdf#page=52
+      url: /assets/pdf/course-notes/10-716/lecture11.pdf
       topics:
         - Greedy Algorithms and Boosting
         - Optimal Transport
     - number: "12"
       date: "2023-02-23"
-      url: /assets/pdf/course-notes/10-716.pdf#page=57
+      url: /assets/pdf/course-notes/10-716/lecture12.pdf
       topics:
         - Optimal Transport
         - Wasserstein Distance
         - Integral Probability Metrics
     - number: "13"
       date: "2023-02-28"
-      url: /assets/pdf/course-notes/10-716.pdf#page=61
+      url: /assets/pdf/course-notes/10-716/lecture13.pdf
       topics:
         - Midterm Review
         - Optimal Transport
     - number: "14"
       date: "2023-03-14"
-      url: /assets/pdf/course-notes/10-716.pdf#page=65
+      url: /assets/pdf/course-notes/10-716/lecture14.pdf
       topics:
         - Deep Density Estimation
     - number: "15"
       date: "2023-03-16"
-      url: /assets/pdf/course-notes/10-716.pdf#page=68
+      url: /assets/pdf/course-notes/10-716/lecture15.pdf
       topics:
         - Generating Data from Noise
         - Normalizing Flows
@@ -578,7 +597,7 @@
         - Gaussianization
     - number: "16"
       date: "2023-03-21"
-      url: /assets/pdf/course-notes/10-716.pdf#page=72
+      url: /assets/pdf/course-notes/10-716/lecture16.pdf
       topics:
         - Kernels and Eigenvalue Decay
         - Choosing a Kernel
@@ -586,14 +605,14 @@
         - Random Features
     - number: "17"
       date: "2023-03-23"
-      url: /assets/pdf/course-notes/10-716.pdf#page=77
+      url: /assets/pdf/course-notes/10-716/lecture17.pdf
       topics:
         - Modern Paradigm Shift
         - Infinitely Wide Networks as Gaussian Processes
         - The Neural Tangent Kernel
     - number: "18"
       date: "2023-03-28"
-      url: /assets/pdf/course-notes/10-716.pdf#page=82
+      url: /assets/pdf/course-notes/10-716/lecture18.pdf
       topics:
         - Dimension Reduction (Guest Lecture)
         - Principal Component Analysis (PCA)
@@ -601,7 +620,7 @@
         - Kernel PCA
     - number: "19"
       date: "2023-03-30"
-      url: /assets/pdf/course-notes/10-716.pdf#page=87
+      url: /assets/pdf/course-notes/10-716/lecture19.pdf
       topics:
         - Dimension Reduction
         - Local Linear Embeddings (LLE)
@@ -611,14 +630,14 @@
         - Random Projections
     - number: "20"
       date: "2023-04-04"
-      url: /assets/pdf/course-notes/10-716.pdf#page=90
+      url: /assets/pdf/course-notes/10-716/lecture20.pdf
       topics:
         - Clustering
         - Mixture Models
         - Score Matching
     - number: "21"
       date: "2023-04-06"
-      url: /assets/pdf/course-notes/10-716.pdf#page=96
+      url: /assets/pdf/course-notes/10-716/lecture21.pdf
       topics:
         - Mixture Models
         - Level Set Clustering
@@ -626,7 +645,7 @@
         - Hierarchical Clustering
     - number: "22"
       date: "2023-04-11"
-      url: /assets/pdf/course-notes/10-716.pdf#page=101
+      url: /assets/pdf/course-notes/10-716/lecture22.pdf
       topics:
         - Online Learning
         - "Restricting the Adversary: Strongly Convex Losses"
@@ -634,26 +653,26 @@
         - Best Response
     - number: "23"
       date: "2023-04-18"
-      url: /assets/pdf/course-notes/10-716.pdf#page=106
+      url: /assets/pdf/course-notes/10-716/lecture23.pdf
       topics:
         - Online Learning with Mixed Strategies
         - Games
         - Online Classification
     - number: "24"
       date: "2023-04-20"
-      url: /assets/pdf/course-notes/10-716.pdf#page=110
+      url: /assets/pdf/course-notes/10-716/lecture24.pdf
       topics:
         - Causal Effects
         - Causal Graphs
     - number: "25"
       date: "2023-04-25"
-      url: /assets/pdf/course-notes/10-716.pdf#page=115
+      url: /assets/pdf/course-notes/10-716/lecture25.pdf
       topics:
         - Aggregation
         - Random Forests
     - number: "26"
       date: "2023-04-27"
-      url: /assets/pdf/course-notes/10-716.pdf#page=119
+      url: /assets/pdf/course-notes/10-716/lecture26.pdf
       topics:
         - Mercer Kernels
         - Clustering
@@ -671,7 +690,7 @@
   lectures:
     - number: "1"
       date: "2022-09-08"
-      url: /assets/pdf/course-notes/15-859-CC.pdf#page=2
+      url: /assets/pdf/course-notes/15-859-CC/lecture01.pdf
       topics:
         - Overview
         - Regression Analysis
@@ -679,35 +698,35 @@
         - Sketching to Solve Least-Squares Regression
     - number: "2"
       date: "2022-09-15"
-      url: /assets/pdf/course-notes/15-859-CC.pdf#page=7
+      url: /assets/pdf/course-notes/15-859-CC/lecture02.pdf
       topics:
         - Recap of the $\varepsilon $-Net Argument
         - Choosing the Sketching Matrix
         - Faster Subspace Embeddings
     - number: "3"
       date: "2022-09-22"
-      url: /assets/pdf/course-notes/15-859-CC.pdf#page=11
+      url: /assets/pdf/course-notes/15-859-CC/lecture03.pdf
       topics:
         - Recap
         - From Vectors to Matrices (Approximate Matrix Product)
         - Summary
     - number: "4"
       date: "2022-09-29"
-      url: /assets/pdf/course-notes/15-859-CC.pdf#page=13
+      url: /assets/pdf/course-notes/15-859-CC/lecture04.pdf
       topics:
         - Affine Embeddings
         - Low Rank Approximation
         - "Part II: High Precision Regression"
     - number: "6"
       date: "2022-10-13"
-      url: /assets/pdf/course-notes/15-859-CC.pdf#page=20
+      url: /assets/pdf/course-notes/15-859-CC/lecture06.pdf
       topics:
         - "Recap: Row-Partition Protocol"
         - Coordinator
         - Constructing a Coreset
     - number: "7"
       date: "2022-10-27"
-      url: /assets/pdf/course-notes/15-859-CC.pdf#page=21
+      url: /assets/pdf/course-notes/15-859-CC/lecture07.pdf
       topics:
         - $L_1$ Regression
 - slug: 15-751
@@ -723,39 +742,39 @@
   lectures:
     - number: "5"
       date: "2022-02-01"
-      url: /assets/pdf/course-notes/15-751.pdf#page=2
+      url: /assets/pdf/course-notes/15-751/lecture05.pdf
       topics:
         - Chernoff Bounds
     - number: "11"
       date: "2022-02-22"
-      url: /assets/pdf/course-notes/15-751.pdf#page=3
+      url: /assets/pdf/course-notes/15-751/lecture11.pdf
       topics:
         - Error-Correcting Codes
         - Linear Codes
     - number: "13"
       date: "2022-03-01"
-      url: /assets/pdf/course-notes/15-751.pdf#page=6
+      url: /assets/pdf/course-notes/15-751/lecture13.pdf
       topics:
         - Spectral Graph Theory I
     - number: "15"
       date: "2022-03-15"
-      url: /assets/pdf/course-notes/15-751.pdf#page=9
+      url: /assets/pdf/course-notes/15-751/lecture15.pdf
       topics:
         - Spectral Graph Theory
     - number: "17"
       date: "2022-03-22"
-      url: /assets/pdf/course-notes/15-751.pdf#page=11
+      url: /assets/pdf/course-notes/15-751/lecture17.pdf
       topics:
         - Linear Programming I
     - number: "24"
       date: "2022-04-19"
-      url: /assets/pdf/course-notes/15-751.pdf#page=14
+      url: /assets/pdf/course-notes/15-751/lecture24.pdf
       topics:
         - Information Theory
         - Entropy
     - number: "26"
       date: "2022-04-26"
-      url: /assets/pdf/course-notes/15-751.pdf#page=16
+      url: /assets/pdf/course-notes/15-751/lecture26.pdf
       topics:
         - Hardness Assumptions
         - "LPN: Learning Parity with Noise"

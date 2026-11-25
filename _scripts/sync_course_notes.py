@@ -8,6 +8,9 @@ The default source is ~/Documents/GoodNotes/transcribed. Every course folder
 there with a notes.json (written by that folder's _guide/build_course.py) is
 published:
   - its combined PDF goes to assets/pdf/course-notes/<slug>.pdf
+  - each lecture's own PDF goes to assets/pdf/course-notes/<slug>/lectureNN.pdf,
+    passed through Ghostscript, which shares the fonts the LaTeX output embeds
+    several times over and so makes the file about a quarter of the size
   - its metadata and lecture index go into _data/course_notes.yml
 """
 import datetime
@@ -39,6 +42,19 @@ def lecture_date(text: str) -> str:
     return datetime.datetime.strptime(text, "%B %d, %Y").date().isoformat()
 
 
+def copy_lecture_pdf(src: pathlib.Path, dest: pathlib.Path) -> None:
+    """Shrink a lecture PDF into the site, unless the copy there is current.
+
+    Ghostscript output differs byte for byte on every run, so an up-to-date
+    copy is left alone to keep git from seeing a change.
+    """
+    if dest.exists() and dest.stat().st_mtime >= src.stat().st_mtime:
+        return
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    subprocess.run(["gs", "-q", "-sDEVICE=pdfwrite", "-dNOPAUSE", "-dBATCH",
+                    "-o", str(dest), str(src)], check=True)
+
+
 def main() -> None:
     PDF_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -50,6 +66,15 @@ def main() -> None:
         shutil.copyfile(src_pdf, PDF_DIR / f"{slug}.pdf")
 
         pdf_url = f"/assets/pdf/course-notes/{slug}.pdf"
+
+        def lecture_url(lec: dict) -> str:
+            # The lecture's own PDF when there is one, else its page in the combined PDF.
+            src = notes_path.parent / f"{lec.get('file', '')}.pdf"
+            if not lec.get("file") or not src.exists():
+                return f"{pdf_url}#page={lec['page']}"
+            copy_lecture_pdf(src, PDF_DIR / slug / src.name)
+            return f"/assets/pdf/course-notes/{slug}/{src.name}"
+
         courses.append({
             "slug": slug,
             "number": notes["number"],
@@ -66,7 +91,7 @@ def main() -> None:
                 {
                     "number": lec["number"],
                     "date": lecture_date(lec["date"]),
-                    "url": f"{pdf_url}#page={lec['page']}",
+                    "url": lecture_url(lec),
                     "topics": lec["sections"],
                 }
                 for lec in notes["lectures"]
