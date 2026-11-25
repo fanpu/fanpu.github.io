@@ -729,6 +729,31 @@
       url: /assets/pdf/course-notes/15-859-CC/lecture07.pdf
       topics:
         - $L_1$ Regression
+- slug: 15-819
+  number: 15-819
+  title: Advanced Topics in Programming Language Theory
+  term: Spring 2022
+  instructor: Robert Harper
+  course_url: null
+  review_anchor: course15819
+  pdf: /assets/pdf/course-notes/15-819.pdf
+  pages: 10
+  lectures_total: 24
+  lectures:
+    - number: "1"
+      date: "2022-01-25"
+      url: /assets/pdf/course-notes/15-819/lecture01.pdf
+      topics:
+        - Deriving Tait's Method
+        - Extending to Nat (G\"odel's T)
+        - Quantifier Complexity
+    - number: "2"
+      date: "2022-02-01"
+      url: /assets/pdf/course-notes/15-819/lecture02.pdf
+      topics:
+        - Recap
+        - Normalization of Open Terms
+        - "Proving Normalization: Kripke-Style Computability"
 - slug: 15-751
   number: 15-751
   title: A Theorist's Toolkit
