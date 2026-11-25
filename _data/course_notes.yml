@@ -873,7 +873,7 @@
   course_url: null
   review_anchor: course21651
   pdf: /assets/pdf/course-notes/21-651.pdf
-  pages: 67
+  pages: 77
   lectures_total: 30
   lectures:
     - number: "1"
@@ -1004,6 +1004,30 @@
         - Compact Hausdorff Spaces Are Normal
         - Metrizable Spaces Are Normal
         - Products of Separated Spaces
+    - number: "21"
+      date: "2022-10-24"
+      url: /assets/pdf/course-notes/21-651/lecture21.pdf
+      topics:
+        - Where We Are
+        - Urysohn's Lemma
+        - The Tietze Extension Theorem
+        - Comments About Completely Regular Spaces
+    - number: "22"
+      date: "2022-10-26"
+      url: /assets/pdf/course-notes/21-651/lecture22.pdf
+      topics:
+        - The Tietze Extension Theorem
+        - Completely Regular Spaces and Initial Topologies
+    - number: "24"
+      date: "2022-10-31"
+      url: /assets/pdf/course-notes/21-651/lecture24.pdf
+      topics:
+        - Second-Countable Spaces
+    - number: "25"
+      date: "2022-11-02"
+      url: /assets/pdf/course-notes/21-651/lecture25.pdf
+      topics:
+        - Adding a Point at Infinity
 - slug: 17-603
   number: 17-603
   title: Communications for Software Leaders I
