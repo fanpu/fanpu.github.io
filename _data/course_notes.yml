@@ -857,7 +857,7 @@
   course_url: null
   review_anchor: course21651
   pdf: /assets/pdf/course-notes/21-651.pdf
-  pages: 24
+  pages: 35
   lectures_total: 30
   lectures:
     - number: "1"
@@ -905,6 +905,26 @@
         - Compactness and Hausdorffness
         - Compactness as Topological Finiteness
         - Compactness in Metric Spaces
+    - number: "8"
+      date: "2022-09-16"
+      url: /assets/pdf/course-notes/21-651/lecture08.pdf
+      topics:
+        - Totally Bounded Metrics and Separability
+        - Compact if and only if Complete and Totally Bounded
+    - number: "9"
+      date: "2022-09-19"
+      url: /assets/pdf/course-notes/21-651/lecture09.pdf
+      topics:
+        - Completions
+        - Uniqueness of Completions
+    - number: "10"
+      date: "2022-09-21"
+      url: /assets/pdf/course-notes/21-651/lecture10.pdf
+      topics:
+        - Uniqueness of Completions
+        - Nowhere Dense and Meagre Sets
+        - The Baire Category Theorem
+        - Proof of the Baire Category Theorem
 - slug: 15-859-OO
   number: 15-859 OO
   title: Randomness in Computation
