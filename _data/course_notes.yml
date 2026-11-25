@@ -1202,6 +1202,90 @@
       date: "2022-10-25"
       url: /assets/pdf/course-notes/15-784/lecture10.pdf
       topics: []
+- slug: 10-708
+  number: 10-708
+  title: Probabilistic Graphical Models
+  term: Fall 2022
+  instructor: Andrej Risteski
+  course_url: https://andrejristeski.github.io/10708-F22/
+  review_anchor: course10708
+  pdf: /assets/pdf/course-notes/10-708.pdf
+  pages: 23
+  lectures_total: 12
+  lectures:
+    - number: "1"
+      date: "2022-08-30"
+      url: /assets/pdf/course-notes/10-708/lecture01.pdf
+      topics:
+        - Shannon Entropy
+        - Conditional Entropy
+        - Mutual Information
+        - Relative Entropy (KL Divergence)
+        - $f$-Divergences
+        - Other Distances
+    - number: "2"
+      date: "2022-09-01"
+      url: /assets/pdf/course-notes/10-708/lecture02.pdf
+      topics:
+        - Motivation for Graphical Models
+        - Directed Graphical Models
+        - Compactness of Representation
+        - "Topic Models: LDA"
+        - Variational Autoencoder
+        - Hidden Markov Models
+    - number: "3"
+      date: "2022-09-06"
+      url: /assets/pdf/course-notes/10-708/lecture03.pdf
+      topics:
+        - Undirected Graphical Models
+        - Restricted Boltzmann Machines
+    - number: "4"
+      date: "2022-09-08"
+      url: /assets/pdf/course-notes/10-708/lecture04.pdf
+      topics:
+        - Directed Graphical Models
+        - Inference
+    - number: "5"
+      date: "2022-09-13"
+      url: /assets/pdf/course-notes/10-708/lecture05.pdf
+      topics:
+        - Exact Inference
+        - Variable Elimination
+        - Belief Propagation
+    - number: "6"
+      date: "2022-09-15"
+      url: /assets/pdf/course-notes/10-708/lecture06.pdf
+      topics:
+        - Graph Neural Networks
+    - number: "7"
+      date: "2022-09-20"
+      url: /assets/pdf/course-notes/10-708/lecture07.pdf
+      topics: []
+    - number: "8"
+      date: "2022-09-22"
+      url: /assets/pdf/course-notes/10-708/lecture08.pdf
+      topics:
+        - Approximate Inference Approaches
+        - Metropolis–Hastings
+    - number: "9"
+      date: "2022-09-27"
+      url: /assets/pdf/course-notes/10-708/lecture09.pdf
+      topics:
+        - Gibbs Sampling
+    - number: "10"
+      date: "2022-09-29"
+      url: /assets/pdf/course-notes/10-708/lecture10.pdf
+      topics:
+        - Bottlenecks
+        - Multimodality and Annealing
+    - number: "11"
+      date: "2022-10-04"
+      url: /assets/pdf/course-notes/10-708/lecture11.pdf
+      topics: []
+    - number: "18"
+      date: "2022-10-27"
+      url: /assets/pdf/course-notes/10-708/lecture18.pdf
+      topics: []
 - slug: 21-484
   number: 21-484
   title: Graph Theory
