@@ -664,3 +664,52 @@
       url: /assets/pdf/course-notes/15-859-CC.pdf#page=21
       topics:
         - $L_1$ Regression
+- slug: 15-751
+  number: 15-751
+  title: A Theorist's Toolkit
+  term: Spring 2022
+  instructor: Ryan O'Donnell
+  course_url: https://www.youtube.com/playlist?list=PLm3J0oaFux3ZYpFLwwrlv_EHH9wtH6pnX
+  review_anchor: course15751
+  pdf: /assets/pdf/course-notes/15-751.pdf
+  pages: 16
+  lectures_total: 7
+  lectures:
+    - number: "5"
+      date: "2022-02-01"
+      url: /assets/pdf/course-notes/15-751.pdf#page=2
+      topics:
+        - Chernoff Bounds
+    - number: "11"
+      date: "2022-02-22"
+      url: /assets/pdf/course-notes/15-751.pdf#page=3
+      topics:
+        - Error-Correcting Codes
+        - Linear Codes
+    - number: "13"
+      date: "2022-03-01"
+      url: /assets/pdf/course-notes/15-751.pdf#page=6
+      topics:
+        - Spectral Graph Theory I
+    - number: "15"
+      date: "2022-03-15"
+      url: /assets/pdf/course-notes/15-751.pdf#page=9
+      topics:
+        - Spectral Graph Theory
+    - number: "17"
+      date: "2022-03-22"
+      url: /assets/pdf/course-notes/15-751.pdf#page=11
+      topics:
+        - Linear Programming I
+    - number: "24"
+      date: "2022-04-19"
+      url: /assets/pdf/course-notes/15-751.pdf#page=14
+      topics:
+        - Information Theory
+        - Entropy
+    - number: "26"
+      date: "2022-04-26"
+      url: /assets/pdf/course-notes/15-751.pdf#page=16
+      topics:
+        - Hardness Assumptions
+        - "LPN: Learning Parity with Noise"
