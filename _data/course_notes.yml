@@ -299,7 +299,7 @@
   course_url: https://www.cs.cmu.edu/~pradeepr/716/
   review_anchor: course10716
   pdf: /assets/pdf/course-notes/10-716.pdf
-  pages: 109
+  pages: 123
   lectures_total: 26
   lectures:
     - number: "1"
@@ -466,6 +466,25 @@
         - Online Learning with Mixed Strategies
         - Games
         - Online Classification
+    - number: "24"
+      date: "2023-04-20"
+      url: /assets/pdf/course-notes/10-716.pdf#page=110
+      topics:
+        - Causal Effects
+        - Causal Graphs
+    - number: "25"
+      date: "2023-04-25"
+      url: /assets/pdf/course-notes/10-716.pdf#page=115
+      topics:
+        - Aggregation
+        - Random Forests
+    - number: "26"
+      date: "2023-04-27"
+      url: /assets/pdf/course-notes/10-716.pdf#page=119
+      topics:
+        - Mercer Kernels
+        - Clustering
+        - Online Learning
 - slug: 15-859-CC
   number: 15-859 CC
   title: Algorithms for Big Data
