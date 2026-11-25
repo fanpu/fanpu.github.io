@@ -76,6 +76,20 @@ def topic_html(title: str) -> str:
     return "".join(out)
 
 
+# Section titles that say nothing about what a lecture covers: recaps, admin,
+# and generic labels. They stay in the PDFs but are left out of the outline.
+UNINFORMATIVE = re.compile(
+    r"^(announcements|logistics|recall|summary|overview|outline|last time|introduction"
+    r"|examples|remarks|lemmas|consequences|applications|where we are|two questions"
+    r"|midterm problems|problem \d+|proof of question \d+|pfpl)$"
+    r"|\b(recap|review|reminder|homework)\b|^updates to ",
+    re.IGNORECASE)
+
+
+def informative(title: str) -> bool:
+    return not UNINFORMATIVE.search(title.strip())
+
+
 def copy_lecture_pdf(src: pathlib.Path, dest: pathlib.Path) -> None:
     """Shrink a lecture PDF into the site, unless the copy there is current.
 
@@ -96,6 +110,9 @@ def main() -> None:
     for notes_path in sorted(SRC.glob("*/notes.json")):
         notes = json.loads(notes_path.read_text())
         slug = notes["slug"]
+        meta = yaml.safe_load((notes_path.parent / "course.yml").read_text())
+        if meta.get("publish") is False:  # kept off the site by choice
+            continue
         src_pdf = notes_path.parent / notes["pdf"]
         shutil.copyfile(src_pdf, PDF_DIR / f"{slug}.pdf")
 
@@ -126,7 +143,7 @@ def main() -> None:
                     "number": lec["number"],
                     "date": lecture_date(lec["date"]),
                     "url": lecture_url(lec),
-                    "topics": [topic_html(t) for t in lec["sections"]],
+                    "topics": [topic_html(t) for t in lec["sections"] if informative(t)],
                 }
                 for lec in notes["lectures"]
             ],
