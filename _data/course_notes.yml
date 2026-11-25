@@ -1427,7 +1427,7 @@
   course_url: null
   review_anchor: course15819
   pdf: /assets/pdf/course-notes/15-819.pdf
-  pages: 88
+  pages: 103
   lectures_total: 24
   lectures:
     - number: "1"
@@ -1586,6 +1586,33 @@
         - Adequacy of LF Encodings of Formalisms
         - Semantic LF (Martin-Löf's LF)
         - Equational LF
+    - number: "20"
+      date: "2022-04-14"
+      url: /assets/pdf/course-notes/15-819/lecture20.pdf
+      topics:
+        - Semantic / Equational Logical Framework
+        - Dependent Type Theory à la Martin-Löf
+    - number: "21"
+      date: "2022-04-19"
+      url: /assets/pdf/course-notes/15-819/lecture21.pdf
+      topics:
+        - Formalizing DTT in an LF
+        - The Signature of Dependent Type Theory
+        - The Vexed Notion of Equality in Type Theory
+    - number: "22"
+      date: "2022-04-21"
+      url: /assets/pdf/course-notes/15-819/lecture22.pdf
+      topics:
+        - Last Time
+        - Identity Type
+        - Universes
+    - number: "23"
+      date: "2022-04-26"
+      url: /assets/pdf/course-notes/15-819/lecture23.pdf
+      topics:
+        - Recap
+        - Meaning Explanations
+        - A Way of Justifying Meaning Explanations
 - slug: 15-751
   number: 15-751
   title: A Theorist's Toolkit
