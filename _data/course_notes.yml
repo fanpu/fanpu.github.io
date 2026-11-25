@@ -1532,3 +1532,58 @@
       topics:
         - Hardness Assumptions
         - "LPN: Learning Parity with Noise"
+- slug: 15-312
+  number: 15-312
+  title: Foundations of Programming Languages
+  term: Spring 2022
+  instructor: Jan Hoffmann
+  course_url: null
+  review_anchor: course15312
+  pdf: /assets/pdf/course-notes/15-312.pdf
+  pages: 15
+  lectures_total: 8
+  lectures:
+    - number: "1"
+      date: ""
+      url: /assets/pdf/course-notes/15-312/lecture01.pdf
+      topics:
+        - The $\lambda $-Calculus
+    - number: "8"
+      date: "2022-02-10"
+      url: /assets/pdf/course-notes/15-312/lecture08.pdf
+      topics:
+        - Blum Size Theorem
+        - Inductive and Co-inductive Types
+        - Inductive Types
+        - Co-inductive Types
+    - number: "9"
+      date: "2022-02-15"
+      url: /assets/pdf/course-notes/15-312/lecture09.pdf
+      topics:
+        - PCF
+    - number: "11"
+      date: "2022-02-22"
+      url: /assets/pdf/course-notes/15-312/lecture11.pdf
+      topics:
+        - Statics
+        - Dynamics (Eager)
+        - Natural Numbers
+        - Lists
+        - Self-Reference in FPC
+    - number: "12"
+      date: "2022-02-24"
+      url: /assets/pdf/course-notes/15-312/lecture12.pdf
+      topics:
+        - Recursive Types Enable Recursive Computation
+        - Diverging Computation
+        - Lazy Fold
+        - Co-natural Numbers
+    - number: "25"
+      date: "2022-04-21"
+      url: /assets/pdf/course-notes/15-312/lecture25.pdf
+      topics:
+        - Substructural Type Systems
+        - A Linear Type System
+        - An Affine Type System
+        - A Relevant Type System
+        - A Programming Language for PTIME
