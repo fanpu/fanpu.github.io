@@ -8,7 +8,7 @@
   course_url: null
   review_anchor: course36709
   pdf: /assets/pdf/course-notes/36-709.pdf
-  pages: 72
+  pages: 82
   lectures_total: 24
   lectures:
     - number: "1"
@@ -115,6 +115,20 @@
       topics:
         - Variable Selection
         - Inference after the Lasso
+    - number: "16"
+      date: "2023-03-16"
+      url: /assets/pdf/course-notes/36-709/lecture16.pdf
+      topics:
+        - Debiasing the Lasso (Continued)
+        - Non-parametric Regression
+        - Local Gaussian Complexity
+    - number: "17"
+      date: "2023-03-21"
+      url: /assets/pdf/course-notes/36-709/lecture17.pdf
+      topics:
+        - Non-parametric Least Squares
+        - Existence of $\delta _n$
+        - A Tail Bound
 - slug: 36-708
   number: 36-708
   title: The ABCDE of Statistical Methods in Machine Learning
