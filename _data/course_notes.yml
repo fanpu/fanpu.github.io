@@ -1253,7 +1253,7 @@
   course_url: null
   review_anchor: course21355
   pdf: /assets/pdf/course-notes/21-355.pdf
-  pages: 15
+  pages: 31
   lectures_total: 37
   lectures:
     - number: "1"
@@ -1288,6 +1288,34 @@
         - Unions and Intersections
         - Countable Unions
         - $\mathbb {R}$ is Uncountable
+    - number: "6"
+      date: "2022-01-31"
+      url: /assets/pdf/course-notes/21-355/lecture06.pdf
+      topics:
+        - Metric Spaces
+        - Neighborhoods
+        - Limit Points, Isolated Points and Interior Points
+        - Closed, Open, Dense and Bounded Sets
+    - number: "7"
+      date: "2022-02-02"
+      url: /assets/pdf/course-notes/21-355/lecture07.pdf
+      topics:
+        - Neighborhoods and Limit Points
+        - Complements
+        - Unions and Intersections of Open and Closed Sets
+    - number: "8"
+      date: "2022-02-04"
+      url: /assets/pdf/course-notes/21-355/lecture08.pdf
+      topics:
+        - Unions and Intersections of Open and Closed Sets
+        - Closure
+        - Compact Sets
+    - number: "9"
+      date: "2022-02-07"
+      url: /assets/pdf/course-notes/21-355/lecture09.pdf
+      topics:
+        - Compact Sets
+        - Compactness in $\mathbb {R}^k$
 - slug: 15-819
   number: 15-819
   title: Advanced Topics in Programming Language Theory
