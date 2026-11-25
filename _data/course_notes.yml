@@ -8,7 +8,7 @@
   course_url: null
   review_anchor: course36709
   pdf: /assets/pdf/course-notes/36-709.pdf
-  pages: 82
+  pages: 96
   lectures_total: 24
   lectures:
     - number: "1"
@@ -129,6 +129,26 @@
         - Non-parametric Least Squares
         - Existence of $\delta _n$
         - A Tail Bound
+    - number: "18"
+      date: "2023-03-23"
+      url: /assets/pdf/course-notes/36-709/lecture18.pdf
+      topics:
+        - Recap
+        - Proof of the Theorem
+        - Bounding the Critical Radius with Covering Numbers
+        - Applications
+    - number: "19"
+      date: "2023-03-28"
+      url: /assets/pdf/course-notes/36-709/lecture19.pdf
+      topics:
+        - Regression on Lipschitz Functions (Continued)
+        - Sharp Oracle Inequalities for Least Squares in Shape-Restricted Regression
+    - number: "20"
+      date: "2023-03-30"
+      url: /assets/pdf/course-notes/36-709/lecture20.pdf
+      topics:
+        - Localized Gaussian Widths
+        - Minimax Lower Bounds
 - slug: 36-708
   number: 36-708
   title: The ABCDE of Statistical Methods in Machine Learning
