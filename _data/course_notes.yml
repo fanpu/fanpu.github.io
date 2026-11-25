@@ -83,19 +83,19 @@
   course_url: https://36708.github.io/
   review_anchor: course36708
   pdf: /assets/pdf/course-notes/36-708.pdf
-  pages: 49
+  pages: 64
   lectures_total: 21
   lectures:
     - number: "2"
       date: "2023-01-19"
-      url: /assets/pdf/course-notes/36-708.pdf#page=3
+      url: /assets/pdf/course-notes/36-708.pdf#page=4
       topics:
         - Setup and Notation
         - Least Squares and Ridge Regression
         - Generalization, Memorization and ERM
     - number: "3"
       date: "2023-01-24"
-      url: /assets/pdf/course-notes/36-708.pdf#page=7
+      url: /assets/pdf/course-notes/36-708.pdf#page=8
       topics:
         - Recap
         - The Regression Function Minimizes the MSE
@@ -104,7 +104,7 @@
         - Consistency
     - number: "4"
       date: "2023-01-26"
-      url: /assets/pdf/course-notes/36-708.pdf#page=11
+      url: /assets/pdf/course-notes/36-708.pdf#page=12
       topics:
         - Oracle Regressors and Classifiers
         - $k$-NN as Two Approximations
@@ -112,7 +112,7 @@
         - High Dimensions
     - number: "5"
       date: "2023-01-31"
-      url: /assets/pdf/course-notes/36-708.pdf#page=16
+      url: /assets/pdf/course-notes/36-708.pdf#page=17
       topics:
         - Recap
         - Predictive Uncertainty Quantification
@@ -120,13 +120,13 @@
         - What Makes a Good Classifier?
     - number: "6"
       date: "2023-02-02"
-      url: /assets/pdf/course-notes/36-708.pdf#page=20
+      url: /assets/pdf/course-notes/36-708.pdf#page=21
       topics:
         - Histogram Binning
         - Split Conformal Prediction (Regression)
     - number: "7"
       date: "2023-02-07"
-      url: /assets/pdf/course-notes/36-708.pdf#page=23
+      url: /assets/pdf/course-notes/36-708.pdf#page=24
       topics:
         - Leo Breiman Week
         - Bagging (Bootstrap Aggregation)
@@ -134,7 +134,7 @@
         - Decision Stumps, Lists, Trees and Forests
     - number: "8"
       date: "2023-02-09"
-      url: /assets/pdf/course-notes/36-708.pdf#page=27
+      url: /assets/pdf/course-notes/36-708.pdf#page=28
       topics:
         - Outline
         - Decision Trees
@@ -142,25 +142,25 @@
         - Random Forests
     - number: "9"
       date: "2023-02-14"
-      url: /assets/pdf/course-notes/36-708.pdf#page=30
+      url: /assets/pdf/course-notes/36-708.pdf#page=31
       topics:
         - Stacking
     - number: "10"
       date: "2023-02-16"
-      url: /assets/pdf/course-notes/36-708.pdf#page=31
+      url: /assets/pdf/course-notes/36-708.pdf#page=32
       topics:
         - Model Selection
         - Boosting
     - number: "11"
       date: "2023-02-21"
-      url: /assets/pdf/course-notes/36-708.pdf#page=34
+      url: /assets/pdf/course-notes/36-708.pdf#page=35
       topics:
         - Edge of a Classifier
         - Weak Learning Hypothesis
         - AdaBoost
     - number: "13"
       date: "2023-02-28"
-      url: /assets/pdf/course-notes/36-708.pdf#page=38
+      url: /assets/pdf/course-notes/36-708.pdf#page=39
       topics:
         - "Boosting: VC Theory Is Unsatisfactory"
         - Convex Surrogate Loss Minimization by Coordinate Descent
@@ -169,17 +169,43 @@
         - Empirical Rademacher Complexity
     - number: "14"
       date: "2023-03-02"
-      url: /assets/pdf/course-notes/36-708.pdf#page=42
+      url: /assets/pdf/course-notes/36-708.pdf#page=43
       topics:
         - Margin and Boosting
         - Recap of the First Half of the Course
     - number: "15"
       date: "2023-03-14"
-      url: /assets/pdf/course-notes/36-708.pdf#page=46
+      url: /assets/pdf/course-notes/36-708.pdf#page=47
       topics:
         - RKHS
         - Banach Spaces
         - Hilbert Spaces
+    - number: "16"
+      date: "2023-03-16"
+      url: /assets/pdf/course-notes/36-708.pdf#page=51
+      topics:
+        - RKHS
+        - Kernels
+    - number: "17"
+      date: "2023-03-21"
+      url: /assets/pdf/course-notes/36-708.pdf#page=55
+      topics:
+        - The Moore--Aronszajn Theorem
+        - "``Closure'' of Kernels"
+        - Kernel Ridge Regression
+        - Representer Theorem
+    - number: "18"
+      date: "2023-03-23"
+      url: /assets/pdf/course-notes/36-708.pdf#page=59
+      topics:
+        - Kernel Ridge Regression
+        - The ``Kernel Trick''
+    - number: "20"
+      date: "2023-03-30"
+      url: /assets/pdf/course-notes/36-708.pdf#page=62
+      topics:
+        - "Cooperative Game Theory: Shapley Values"
+        - Shapley Values in Machine Learning
 - slug: 21-329
   number: 21-329
   title: Set Theory
@@ -188,57 +214,57 @@
   course_url: null
   review_anchor: course21329
   pdf: /assets/pdf/course-notes/21-329.pdf
-  pages: 45
+  pages: 56
   lectures_total: 22
   lectures:
     - number: "1"
       date: "2023-02-27"
-      url: /assets/pdf/course-notes/21-329.pdf#page=3
+      url: /assets/pdf/course-notes/21-329.pdf#page=4
       topics:
         - "Associativity of Ordinal Addition: A Second Proof"
     - number: "2"
       date: "2023-03-01"
-      url: /assets/pdf/course-notes/21-329.pdf#page=5
+      url: /assets/pdf/course-notes/21-329.pdf#page=6
       topics:
         - Last Time
         - Ordinal Subtraction
         - Ordinal Multiplication
     - number: "3"
       date: "2023-03-03"
-      url: /assets/pdf/course-notes/21-329.pdf#page=9
+      url: /assets/pdf/course-notes/21-329.pdf#page=10
       topics:
         - Ordinal Multiplication as a Product of Well-Orders
         - Ordinal Exponentiation
         - Cardinals
     - number: "4"
       date: "2023-03-13"
-      url: /assets/pdf/course-notes/21-329.pdf#page=12
+      url: /assets/pdf/course-notes/21-329.pdf#page=13
       topics:
         - Cardinality
         - Uncountable Ordinals
         - The Continuum Hypothesis
     - number: "5"
       date: "2023-03-15"
-      url: /assets/pdf/course-notes/21-329.pdf#page=15
+      url: /assets/pdf/course-notes/21-329.pdf#page=16
       topics:
         - Cardinals
         - The Alephs
     - number: "6"
       date: "2023-03-17"
-      url: /assets/pdf/course-notes/21-329.pdf#page=17
+      url: /assets/pdf/course-notes/21-329.pdf#page=18
       topics:
         - Successor and Limit Cardinals
         - Cardinal Arithmetic
     - number: "7"
       date: "2023-03-20"
-      url: /assets/pdf/course-notes/21-329.pdf#page=20
+      url: /assets/pdf/course-notes/21-329.pdf#page=21
       topics:
         - Recap
         - Proof of the Lemma
         - Sums and Products of Infinite Cardinals
     - number: "8"
       date: "2023-03-22"
-      url: /assets/pdf/course-notes/21-329.pdf#page=23
+      url: /assets/pdf/course-notes/21-329.pdf#page=24
       topics:
         - Announcements
         - Countable Unions
@@ -246,51 +272,72 @@
         - Cofinality
     - number: "9"
       date: "2023-03-24"
-      url: /assets/pdf/course-notes/21-329.pdf#page=26
+      url: /assets/pdf/course-notes/21-329.pdf#page=27
       topics:
         - Exponentiation of Exponents
         - Cofinality
     - number: "10"
       date: "2023-03-27"
-      url: /assets/pdf/course-notes/21-329.pdf#page=28
+      url: /assets/pdf/course-notes/21-329.pdf#page=29
       topics:
         - Announcements
         - Cofinality
         - K\"onig's Theorem
     - number: "11"
       date: "2023-03-29"
-      url: /assets/pdf/course-notes/21-329.pdf#page=31
+      url: /assets/pdf/course-notes/21-329.pdf#page=32
       topics:
         - Problem 1
         - Problem 2
         - Problem 3
     - number: "12"
       date: "2023-04-03"
-      url: /assets/pdf/course-notes/21-329.pdf#page=34
+      url: /assets/pdf/course-notes/21-329.pdf#page=35
       topics:
         - Announcements
         - Review
         - Filters and Ideals
     - number: "13"
       date: "2023-04-05"
-      url: /assets/pdf/course-notes/21-329.pdf#page=37
+      url: /assets/pdf/course-notes/21-329.pdf#page=38
       topics:
         - Tarski's Theorem (continued)
         - The Club Filter
     - number: "14"
       date: "2023-04-07"
-      url: /assets/pdf/course-notes/21-329.pdf#page=40
+      url: /assets/pdf/course-notes/21-329.pdf#page=41
       topics:
         - The Club Filter
         - $F_\kappa $ is $\kappa $-complete
         - $F_\kappa $ is not an ultrafilter
     - number: "15"
       date: "2023-04-10"
-      url: /assets/pdf/course-notes/21-329.pdf#page=43
+      url: /assets/pdf/course-notes/21-329.pdf#page=44
       topics:
         - Recap
         - Normal Filters
         - Stationary Sets and Fodor's Theorem
+    - number: "16"
+      date: "2023-04-12"
+      url: /assets/pdf/course-notes/21-329.pdf#page=47
+      topics:
+        - Recall
+        - Splitting $\omega _1$
+        - Complete Ultrafilters
+    - number: "17"
+      date: "2023-04-17"
+      url: /assets/pdf/course-notes/21-329.pdf#page=50
+      topics:
+        - "Chapter 5: Trees"
+        - Basics of Topology
+        - The Baire Space
+    - number: "18"
+      date: "2023-04-19"
+      url: /assets/pdf/course-notes/21-329.pdf#page=54
+      topics:
+        - Last Time
+        - Metric Spaces
+        - Closed Sets and Trees
 - slug: 10-716
   number: 10-716
   title: "Advanced Machine Learning: Theory and Methods"
