@@ -314,7 +314,7 @@
   course_url: null
   review_anchor: null
   pdf: /assets/pdf/course-notes/21-640.pdf
-  pages: 50
+  pages: 59
   lectures_total: 23
   lectures:
     - number: "1"
@@ -398,6 +398,25 @@
       topics:
         - Locally Convex Spaces Are Topological Vector Spaces
         - Hausdorff Spaces
+    - number: "13"
+      date: "2023-02-15"
+      url: /assets/pdf/course-notes/21-640/lecture13.pdf
+      topics:
+        - Hausdorff Locally Convex Spaces
+        - Metrizability
+    - number: "14"
+      date: "2023-02-17"
+      url: /assets/pdf/course-notes/21-640/lecture14.pdf
+      topics:
+        - Examples of Metrizable Spaces
+        - Sets and Seminorms
+    - number: "15"
+      date: "2023-02-20"
+      url: /assets/pdf/course-notes/21-640/lecture15.pdf
+      topics:
+        - Minkowski Functionals (continued)
+        - Local Bases and Topological Boundedness
+        - Normability
 - slug: 21-329
   number: 21-329
   title: Set Theory
