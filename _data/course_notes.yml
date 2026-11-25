@@ -857,7 +857,7 @@
   course_url: null
   review_anchor: course21651
   pdf: /assets/pdf/course-notes/21-651.pdf
-  pages: 46
+  pages: 56
   lectures_total: 30
   lectures:
     - number: "1"
@@ -948,6 +948,26 @@
         - A Sequentially Compact Space That Is Not Compact
         - Continuity and Sequences
         - Filters
+    - number: "14"
+      date: "2022-09-30"
+      url: /assets/pdf/course-notes/21-651/lecture14.pdf
+      topics:
+        - Pushforward of Filters
+        - Closure and Continuity via Filters
+        - Compactness via Filters
+    - number: "16"
+      date: "2022-10-05"
+      url: /assets/pdf/course-notes/21-651/lecture16.pdf
+      topics:
+        - Midterm Problems
+        - Back to Filters
+    - number: "17"
+      date: "2022-10-07"
+      url: /assets/pdf/course-notes/21-651/lecture17.pdf
+      topics:
+        - Ultrafilters
+        - Axiom of Choice
+        - Compactness via Ultrafilters
 - slug: 15-859-OO
   number: 15-859 OO
   title: Randomness in Computation
