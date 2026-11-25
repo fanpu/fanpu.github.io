@@ -846,7 +846,7 @@
   course_url: null
   review_anchor: course15819
   pdf: /assets/pdf/course-notes/15-819.pdf
-  pages: 10
+  pages: 19
   lectures_total: 24
   lectures:
     - number: "1"
@@ -863,6 +863,24 @@
         - Recap
         - Normalization of Open Terms
         - "Proving Normalization: Kripke-Style Computability"
+    - number: "3"
+      date: "2022-02-03"
+      url: /assets/pdf/course-notes/15-819/lecture03.pdf
+      topics:
+        - Comments About the Homework
+        - Normalization of Open Terms
+        - The Fundamental Theorem
+        - Head Expansion
+        - Variables Are Computable
+        - Remarks
+    - number: "4"
+      date: "2022-02-08"
+      url: /assets/pdf/course-notes/15-819/lecture04.pdf
+      topics:
+        - Recap
+        - Extending with Sums
+        - A Lax Type System with Sums
+        - Normalization for the Lax System
 - slug: 15-751
   number: 15-751
   title: A Theorist's Toolkit
