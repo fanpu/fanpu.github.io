@@ -8,7 +8,7 @@
   course_url: null
   review_anchor: course36709
   pdf: /assets/pdf/course-notes/36-709.pdf
-  pages: 44
+  pages: 57
   lectures_total: 24
   lectures:
     - number: "1"
@@ -75,6 +75,27 @@
       topics:
         - Dudley Entropy Integral
         - Gaussian Comparison Inequalities
+    - number: "10"
+      date: "2023-02-16"
+      url: /assets/pdf/course-notes/36-709.pdf#page=45
+      topics:
+        - Slepian's Inequality
+        - Sudakov--Fernique Inequality
+        - Gaussian Contraction Inequality
+        - Sudakov Minoration
+        - Principal Component Analysis (PCA)
+    - number: "11"
+      date: "2023-02-21"
+      url: /assets/pdf/course-notes/36-709.pdf#page=50
+      topics:
+        - Matrix Recap
+        - Covariance Matrix Estimation
+    - number: "12"
+      date: "2023-02-23"
+      url: /assets/pdf/course-notes/36-709.pdf#page=54
+      topics:
+        - Spiked Covariance Model
+        - The Davis--Kahan Theorem
 - slug: 36-708
   number: 36-708
   title: The ABCDE of Statistical Methods in Machine Learning
