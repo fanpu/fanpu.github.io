@@ -1125,6 +1125,49 @@
         - Euler's Formula
         - Consequences of Euler's Formula
         - Graphs That Are Not Planar
+- slug: 21-355
+  number: 21-355
+  title: Principles of Real Analysis I
+  term: Spring 2022
+  instructor: Robin Neumayer
+  course_url: null
+  review_anchor: course21355
+  pdf: /assets/pdf/course-notes/21-355.pdf
+  pages: 15
+  lectures_total: 37
+  lectures:
+    - number: "1"
+      date: "2022-01-19"
+      url: /assets/pdf/course-notes/21-355/lecture01.pdf
+      topics:
+        - Rational Numbers
+        - Ordered Sets
+    - number: "2"
+      date: "2022-01-21"
+      url: /assets/pdf/course-notes/21-355/lecture02.pdf
+      topics:
+        - The Least Upper Bound Property
+        - Field Axioms
+    - number: "3"
+      date: "2022-01-24"
+      url: /assets/pdf/course-notes/21-355/lecture03.pdf
+      topics:
+        - The Archimedean Property and Density of $\mathbb {Q}$
+        - $n$-th Roots
+    - number: "4"
+      date: "2022-01-26"
+      url: /assets/pdf/course-notes/21-355/lecture04.pdf
+      topics:
+        - Extended Reals
+        - Euclidean Space
+        - Countability
+    - number: "5"
+      date: "2022-01-28"
+      url: /assets/pdf/course-notes/21-355/lecture05.pdf
+      topics:
+        - Unions and Intersections
+        - Countable Unions
+        - $\mathbb {R}$ is Uncountable
 - slug: 15-819
   number: 15-819
   title: Advanced Topics in Programming Language Theory
