@@ -182,7 +182,7 @@ you might be interested in directly.
 
 {: .first-course-item #course10716 }
 
-- &#11088; 10-716 &nbsp; **[Advanced Machine Learning: Theory and Methods](https://www.cs.cmu.edu/~pradeepr/716/)**, [ Pradeep Ravikumar](http://www.cs.cmu.edu/~pradeepr/)
+- &#11088; 10-716 &nbsp; **[Advanced Machine Learning: Theory and Methods](https://www.cs.cmu.edu/~pradeepr/716/)**, [ Pradeep Ravikumar](http://www.cs.cmu.edu/~pradeepr/) {% include course_notes_link.liquid id="course10716" %}
 
   This was my favorite class this semester. It felt like a natural
   continuation of [10-708 Probabilistic Graphical Models](#course10708),
@@ -268,14 +268,14 @@ you might be interested in directly.
   the hardest class offered in MLD), so try to go in with friends and don't shy away
   from asking questions since it is likely that many people may also be confused.
 
-- &#11088; 15-712 &nbsp; **[Advanced Operating Systems and Distributed Systems](https://www.cs.cmu.edu/~15712/)**, [Phil Gibbons](http://www.cs.cmu.edu/~gibbons/)
+- &#11088; 15-712 &nbsp; **[Advanced Operating Systems and Distributed Systems](https://www.cs.cmu.edu/~15712/)**, [Phil Gibbons](http://www.cs.cmu.edu/~gibbons/) {% include course_notes_link.liquid id="course15712" %}
   {: .course-item #course15712 }
 
   I really liked this class and felt that there wasn't enough information about
   this course online by people who have taken it, so I wrote a dedicated
   post for it: [CMU 15-712 Advanced Operating Systems and Distributed Systems Course Review]({% post_url 2023-06-09-advanced-operating-systems-course-review %})
 
-- &#10084;&#65039; 36-709 &nbsp; **Advanced Statistical Theory I**, [Matey Neykov](https://mateyneykov.com/)
+- &#10084;&#65039; 36-709 &nbsp; **Advanced Statistical Theory I**, [Matey Neykov](https://mateyneykov.com/) {% include course_notes_link.liquid id="course36709" %}
   {: .course-item #course36709 }
 
   This course largely follows [High-Dimensional Statistics: A Non-Asymptotic Viewpoint](https://www.cambridge.org/core/books/highdimensional-statistics/8A91ECEEC38F46DAB53E9FF8757C7A4E) by [Wainwright](https://people.eecs.berkeley.edu/~wainwrig/),
@@ -313,7 +313,7 @@ you might be interested in directly.
   modern statistical analysis, which is really helpful in understanding
   statistical machine learning papers.
 
-- 36-708 &nbsp; **[The ABCDE of Statistical Methods in Machine Learning](https://36708.github.io/)**, [Aaditya Ramdas](https://www.stat.cmu.edu/~aramdas/)
+- 36-708 &nbsp; **[The ABCDE of Statistical Methods in Machine Learning](https://36708.github.io/)**, [Aaditya Ramdas](https://www.stat.cmu.edu/~aramdas/) {% include course_notes_link.liquid id="course36708" %}
   {: .course-item #course36708 }
 
   I initially did not notice this course, as I thought ABCDE meant just the basics.
@@ -353,8 +353,8 @@ you might be interested in directly.
   theoretical derivations, and also experiments on datasets using methods
   learned in class.
 
-- 21-329 &nbsp; **Set Theory**, Benjamin Siskind
-  {: .course-item #course36708 }
+- 21-329 &nbsp; **Set Theory**, Benjamin Siskind {% include course_notes_link.liquid id="course21329" %}
+  {: .course-item #course21329 }
 
   I initially got interested in this class as quite a couple of theorems from my
   other classes appealed to important results from set theory, such as Zorn's
@@ -385,7 +385,7 @@ you might be interested in directly.
   significant time pressure for the exams (similar to [21-301
   Combinatorics](#course21301)), though the homeworks were quite reasonable.
 
-- 17-604 &nbsp; **Communications for Software Leaders II**, [Dominick (Nick) Frollini](https://www.linkedin.com/in/frollini/)
+- 17-604 &nbsp; **Communications for Software Leaders II**, [Dominick (Nick) Frollini](https://www.linkedin.com/in/frollini/) {% include course_notes_link.liquid id="course17604" %}
   {: .course-item #course17604 }
 
   The highlight of this follow-up class to
@@ -482,7 +482,7 @@ time.
 
 {: .first-course-item #course15859CC }
 
-- &#11088; 15-859 CC &nbsp; **[Algorithms for Big Data](https://www.cs.cmu.edu/~dwoodruf/teaching/15859-fall22/index.html)**, [David Woodruff](http://www.cs.cmu.edu/~dwoodruf/)
+- &#11088; 15-859 CC &nbsp; **[Algorithms for Big Data](https://www.cs.cmu.edu/~dwoodruf/teaching/15859-fall22/index.html)**, [David Woodruff](http://www.cs.cmu.edu/~dwoodruf/) {% include course_notes_link.liquid id="course15859CC" %}
 
   Woodruff is one of the giants in sketching and numerical linear algebra, having developed many of its most important algorithms.
   There is even a `sklearn` function called the [Clarkson-Woodruff transform](https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.clarkson_woodruff_transform.html) that is named after him.
@@ -498,7 +498,7 @@ time.
   One caveat is that the weekly lectures are 3-hours with a 10-minute break in the middle. Given how dense the lectures are, this can be quite
   taxing, so bring snacks or caffeine if needed.
 
-- &#10084;&#65039; 15-859 OO &nbsp; **[Randomness in Computation](https://www.cs.cmu.edu/~praveshk/randomness.html)**, [Pravesh Kothari](https://www.cs.cmu.edu/~praveshk/)
+- &#10084;&#65039; 15-859 OO &nbsp; **[Randomness in Computation](https://www.cs.cmu.edu/~praveshk/randomness.html)**, [Pravesh Kothari](https://www.cs.cmu.edu/~praveshk/) {% include course_notes_link.liquid id="course15859OO" %}
   {: .course-item #course15859OO }
 
   I had limited exposure to most of the topics in this course (mostly from
@@ -514,7 +514,7 @@ time.
   than helpful), but overall it is an excellent class. The homework problems
   are reasonable and the workload is on the lighter side.
 
-- &#11088; 10-708 &nbsp; **[Probablistic Graphical Models](https://andrejristeski.github.io/10708-F22/)**, [Andrej Risteski](https://www.andrew.cmu.edu/user/aristesk/)
+- &#11088; 10-708 &nbsp; **[Probablistic Graphical Models](https://andrejristeski.github.io/10708-F22/)**, [Andrej Risteski](https://www.andrew.cmu.edu/user/aristesk/) {% include course_notes_link.liquid id="course10708" %}
   {: .course-item #course10708 }
 
   This class has a reputation of being one of the hardest ML classes, but I
@@ -534,7 +534,7 @@ time.
   mathematical understanding of how they work is essential for keeping up
   to date with the state-of-the-art in this field.
 
-- 15-784 &nbsp; **[Foundations of Cooperative AI](https://www.cs.cmu.edu/~15784/)**, [Vincent Conitzer](https://www.cs.cmu.edu/~conitzer/), [Caspar Oesterheld](https://www.andrew.cmu.edu/user/coesterh/), [Tuomas Sandholm](https://www.cs.cmu.edu/~sandholm/)
+- 15-784 &nbsp; **[Foundations of Cooperative AI](https://www.cs.cmu.edu/~15784/)**, [Vincent Conitzer](https://www.cs.cmu.edu/~conitzer/), [Caspar Oesterheld](https://www.andrew.cmu.edu/user/coesterh/), [Tuomas Sandholm](https://www.cs.cmu.edu/~sandholm/) {% include course_notes_link.liquid id="course15784" %}
   {: .course-item #course15784 }
 
   This course covered many topics in AI which are typically not covered in a
@@ -549,7 +549,7 @@ time.
   being offered for the first time, so it will probably improve in subsequent
   iterations.
 
-- 10-617 &nbsp; **[Intermediate Deep Learning](https://rsalakhucmu.github.io/10417-22/)**, [Ruslan Salakhutdinov](https://www.cs.cmu.edu/~rsalakhu/)
+- 10-617 &nbsp; **[Intermediate Deep Learning](https://rsalakhucmu.github.io/10417-22/)**, [Ruslan Salakhutdinov](https://www.cs.cmu.edu/~rsalakhu/) {% include course_notes_link.liquid id="course10617" %}
   {: .course-item #course10617 }
 
   Ruslan is one of the household names in the machine learning community (he
@@ -577,7 +577,7 @@ time.
   on Kaggle datasets), whereas 10-417/617 is more
   theoretical.
 
-- 10-703 &nbsp; **[Deep Reinforcement Learning and Control](https://cmudeeprl.github.io/703website_f22/)**, [Katerina Fragkiadaki](https://www.cs.cmu.edu/~katef/)
+- 10-703 &nbsp; **[Deep Reinforcement Learning and Control](https://cmudeeprl.github.io/703website_f22/)**, [Katerina Fragkiadaki](https://www.cs.cmu.edu/~katef/) {% include course_notes_link.liquid id="course10703" %}
   {: .course-item #course10703 }
 
   The first half of the course follows the standard Sutton and Barto
@@ -600,7 +600,7 @@ time.
   environments. All assignments are done in groups of up to 3, so remember to
   grab a friend or two if you're taking this class.
 
-- 21-651 &nbsp; **General Topology**, [Florian Frick](https://www.math.cmu.edu/~ffrick/)
+- 21-651 &nbsp; **General Topology**, [Florian Frick](https://www.math.cmu.edu/~ffrick/) {% include course_notes_link.liquid id="course21651" %}
   {: .course-item #course21651 }
 
   This class generalizes many concepts that is taught in an undergraduate
@@ -612,7 +612,7 @@ time.
   have connections and parallels to other deeper areas of mathematics, which
   I found very beautiful.
 
-- 17-603 &nbsp; **Communications for Software Leaders I**, [Dominick (Nick) Frollini](https://www.linkedin.com/in/frollini/)
+- 17-603 &nbsp; **Communications for Software Leaders I**, [Dominick (Nick) Frollini](https://www.linkedin.com/in/frollini/) {% include course_notes_link.liquid id="course17603" %}
   {: .course-item #course17603 }
 
   This course felt like an MBA class. It is a required class for Masters of Software
@@ -707,7 +707,7 @@ on the grounds of increasing my early career exposure to different types of comp
 
 - &#11088; 15-751 **[A Theorist's
   Toolkit](https://www.youtube.com/playlist?list=PLm3J0oaFux3ZYpFLwwrlv_EHH9wtH6pnX)**,
-  [Ryan O'Donnell](http://www.cs.cmu.edu/~odonnell/)
+  [Ryan O'Donnell](http://www.cs.cmu.edu/~odonnell/) {% include course_notes_link.liquid id="course15751" %}
   {: .course-item #course15751 }
 
   This class aims to prepare students for doing theoretical computer science (TCS)
@@ -725,7 +725,7 @@ on the grounds of increasing my early career exposure to different types of comp
   It also includes recitation videos where Ryan goes through homework problems.
 
 - &#10084;&#65039; 15-312 **Foundations of Programming Languages**, [Jan
-  Hoffmann](https://www.cs.cmu.edu/~janh/)
+  Hoffmann](https://www.cs.cmu.edu/~janh/) {% include course_notes_link.liquid id="course15312" %}
   {: .course-item #course15312 }
 
   The programming portion of the homework is the most fun part of this class.
@@ -736,7 +736,7 @@ on the grounds of increasing my early career exposure to different types of comp
   antipatterns that pervades most programming languages used in industry.
 
 - &#10084;&#65039; 21-355 **Principles of Real Analysis I**, [Robin
-  Neumayer](https://www.math.cmu.edu/~rneumaye/)
+  Neumayer](https://www.math.cmu.edu/~rneumaye/) {% include course_notes_link.liquid id="course21355" %}
   {: .course-item #course21355 }
 
   It is true that different sections of math classes taught by different
@@ -758,7 +758,7 @@ on the grounds of increasing my early career exposure to different types of comp
   enough.
 
 - &#10084;&#65039; 21-484 **Graph Theory**, [Wesley
-  Pegden](https://www.math.cmu.edu/~wes/)
+  Pegden](https://www.math.cmu.edu/~wes/) {% include course_notes_link.liquid id="course21484" %}
   {: .course-item #course21484 }
 
   The class was quite fast-paced and many times I felt quite lost during the
@@ -776,7 +776,7 @@ on the grounds of increasing my early career exposure to different types of comp
   as it is intended for a graduate audience, so definitely do not miss lectures!
 
 - 15-819 **Advanced Topics in Programming Language Theory**, [Robert
-  Harper](http://www.cs.cmu.edu/~rwh/)
+  Harper](http://www.cs.cmu.edu/~rwh/) {% include course_notes_link.liquid id="course15819" %}
   {: .course-item #course15819 }
 
   The class covered many advanced topics in PL theory where there isn't much

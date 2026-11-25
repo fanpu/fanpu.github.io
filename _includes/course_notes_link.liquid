@@ -1,0 +1,6 @@
+{% comment %}
+  A "notes" link for a course review on /courses/. It renders only once the
+  course has published notes in _data/course_notes.yml (matched on review_anchor),
+  so it can sit on a review before the notes exist.
+  include.id: the review's anchor, e.g. course15859CC
+{% endcomment %}{% assign notes_course = site.data.course_notes | where: 'review_anchor', include.id | first %}{% if notes_course %} <a class="course-notes-link" href="{{ '/course-notes/' | relative_url }}#notes-{{ notes_course.slug }}">notes</a>{% endif %}

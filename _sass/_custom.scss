@@ -251,6 +251,23 @@
   display: block;
   color: var(--global-text-color-light);
 }
+// "notes" pill after a course review heading on /courses/
+a.course-notes-link {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  vertical-align: 0.1em;
+  border: 1px solid var(--global-theme-color);
+  border-radius: 999px;
+  color: var(--global-theme-color);
+  text-decoration: none;
+  &:hover {
+    background: var(--global-theme-color);
+    color: var(--global-hover-text-color);
+  }
+}
 
 // Home page sections
 .home-section {
