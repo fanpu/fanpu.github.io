@@ -8,7 +8,7 @@
   course_url: null
   review_anchor: course36709
   pdf: /assets/pdf/course-notes/36-709.pdf
-  pages: 96
+  pages: 108
   lectures_total: 24
   lectures:
     - number: "1"
@@ -149,6 +149,25 @@
       topics:
         - Localized Gaussian Widths
         - Minimax Lower Bounds
+    - number: "21"
+      date: "2023-04-04"
+      url: /assets/pdf/course-notes/36-709/lecture21.pdf
+      topics:
+        - Reduction from Estimation to Testing
+        - Divergences Between Distributions
+        - Le Cam's Method
+    - number: "22"
+      date: "2023-04-06"
+      url: /assets/pdf/course-notes/36-709/lecture22.pdf
+      topics:
+        - Fano's Method
+    - number: "23"
+      date: "2023-04-11"
+      url: /assets/pdf/course-notes/36-709/lecture23.pdf
+      topics:
+        - "Fano's Method: Reminder"
+        - The Varshamov--Gilbert Bound
+        - Local Entropy
 - slug: 36-708
   number: 36-708
   title: The ABCDE of Statistical Methods in Machine Learning
@@ -314,7 +333,7 @@
   course_url: null
   review_anchor: null
   pdf: /assets/pdf/course-notes/21-640.pdf
-  pages: 59
+  pages: 71
   lectures_total: 23
   lectures:
     - number: "1"
@@ -417,6 +436,24 @@
         - Minkowski Functionals (continued)
         - Local Bases and Topological Boundedness
         - Normability
+    - number: "16"
+      date: "2023-02-22"
+      url: /assets/pdf/course-notes/21-640/lecture16.pdf
+      topics:
+        - Normability (continued)
+        - The Hahn--Banach Separation Theorem
+        - The Hahn--Banach Theorem, First Geometric Form
+    - number: "17"
+      date: "2023-02-24"
+      url: /assets/pdf/course-notes/21-640/lecture17.pdf
+      topics:
+        - The Hahn--Banach Theorem, First Geometric Form (continued)
+        - The Hahn--Banach Theorem, Second Geometric Form
+    - number: "18"
+      date: "2023-02-27"
+      url: /assets/pdf/course-notes/21-640/lecture18.pdf
+      topics:
+        - Weak Star Compactness
 - slug: 21-329
   number: 21-329
   title: Set Theory
