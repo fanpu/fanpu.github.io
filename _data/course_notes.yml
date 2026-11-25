@@ -1039,6 +1039,83 @@
       url: /assets/pdf/course-notes/15-859-CC/lecture07.pdf
       topics:
         - $L_1$ Regression
+- slug: 15-784
+  number: 15-784
+  title: Foundations of Cooperative AI
+  term: Fall 2022
+  instructor: Vincent Conitzer, Caspar Oesterheld, Tuomas Sandholm
+  course_url: https://www.cs.cmu.edu/~15784/
+  review_anchor: course15784
+  pdf: /assets/pdf/course-notes/15-784.pdf
+  pages: 16
+  lectures_total: 10
+  lectures:
+    - number: "1"
+      date: "2022-08-30"
+      url: /assets/pdf/course-notes/15-784/lecture01.pdf
+      topics:
+        - Introduction
+        - Prisoner's Dilemma
+        - Improving issues already found in the world
+    - number: "2"
+      date: "2022-09-01"
+      url: /assets/pdf/course-notes/15-784/lecture02.pdf
+      topics:
+        - Extensive-form games
+        - Infinitely repeated Prisoner's Dilemma
+        - Repeated games on social networks
+        - Disarmament Game
+        - Cooperating as AI
+        - Newcomb's Demon
+        - Evidential Decision Theory (EDT)
+    - number: "3"
+      date: "2022-09-13"
+      url: /assets/pdf/course-notes/15-784/lecture03.pdf
+      topics:
+        - Auctions
+        - Normal-form games
+    - number: "4"
+      date: "2022-09-15"
+      url: /assets/pdf/course-notes/15-784/lecture04.pdf
+      topics:
+        - Iterated dominance
+        - Two-player zero-sum games revisited
+        - General-sum games
+        - Correlated equilibrium
+    - number: "5"
+      date: "2022-09-20"
+      url: /assets/pdf/course-notes/15-784/lecture05.pdf
+      topics:
+        - Shapley's Game
+        - Correlated equilibrium
+        - Mediated equilibrium and program equilibrium
+    - number: "6"
+      date: "2022-09-22"
+      url: /assets/pdf/course-notes/15-784/lecture06.pdf
+      topics:
+        - Program equilibrium
+        - Game representations and refinements of Nash equilibrium
+    - number: "7"
+      date: "2022-09-27"
+      url: /assets/pdf/course-notes/15-784/lecture07.pdf
+      topics:
+        - Credible threats
+        - Refinements of Nash equilibrium
+    - number: "8"
+      date: "2022-09-29"
+      url: /assets/pdf/course-notes/15-784/lecture08.pdf
+      topics:
+        - Commitment
+        - Repeated games
+        - Folk theorems
+    - number: "9"
+      date: "2022-10-11"
+      url: /assets/pdf/course-notes/15-784/lecture09.pdf
+      topics: []
+    - number: "10"
+      date: "2022-10-25"
+      url: /assets/pdf/course-notes/15-784/lecture10.pdf
+      topics: []
 - slug: 21-484
   number: 21-484
   title: Graph Theory
