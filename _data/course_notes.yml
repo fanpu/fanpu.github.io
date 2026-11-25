@@ -261,7 +261,7 @@
   course_url: null
   review_anchor: null
   pdf: /assets/pdf/course-notes/21-640.pdf
-  pages: 14
+  pages: 25
   lectures_total: 23
   lectures:
     - number: "1"
@@ -286,6 +286,24 @@
         - Orthogonality
         - The Projection Theorem
         - The Dual Space
+    - number: "4"
+      date: "2023-01-25"
+      url: /assets/pdf/course-notes/21-640.pdf#page=15
+      topics:
+        - Proof of the Riesz Representation Theorem
+        - Fourier Series
+    - number: "5"
+      date: "2023-01-27"
+      url: /assets/pdf/course-notes/21-640.pdf#page=19
+      topics:
+        - "Recall: Orthonormal Sets"
+        - Fourier Series
+    - number: "6"
+      date: "2023-01-30"
+      url: /assets/pdf/course-notes/21-640.pdf#page=22
+      topics:
+        - Existence of Complete Orthonormal Sets
+        - Banach Spaces
 - slug: 21-329
   number: 21-329
   title: Set Theory
