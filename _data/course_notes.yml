@@ -1196,7 +1196,7 @@
   course_url: null
   review_anchor: course15819
   pdf: /assets/pdf/course-notes/15-819.pdf
-  pages: 60
+  pages: 73
   lectures_total: 24
   lectures:
     - number: "1"
@@ -1306,6 +1306,31 @@
         - Parametricity
         - Equality
         - PFPL
+    - number: "14"
+      date: "2022-03-22"
+      url: /assets/pdf/course-notes/15-819/lecture14.pdf
+      topics:
+        - "Recap: Existential Types"
+        - Step Indexing
+        - Step-Indexed Logical Relations
+        - The FTLR
+    - number: "15"
+      date: "2022-03-24"
+      url: /assets/pdf/course-notes/15-819/lecture15.pdf
+      topics:
+        - Recap
+        - The Step-Indexed Relations
+        - The FTLR
+        - Recursive Types
+        - Contextual, CIU and Logical Equivalence
+    - number: "16"
+      date: "2022-03-29"
+      url: /assets/pdf/course-notes/15-819/lecture16.pdf
+      topics:
+        - Recap
+        - Dependent Types
+        - Two Perspectives on Types
+        - The $\lambda ^{\Pi }$-Calculus
 - slug: 15-751
   number: 15-751
   title: A Theorist's Toolkit
