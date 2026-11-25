@@ -941,7 +941,7 @@
   course_url: null
   review_anchor: course21484
   pdf: /assets/pdf/course-notes/21-484.pdf
-  pages: 30
+  pages: 44
   lectures_total: 37
   lectures:
     - number: "1"
@@ -997,6 +997,28 @@
       topics:
         - Menger's Theorem
         - Flows
+    - number: "9"
+      date: "2022-02-07"
+      url: /assets/pdf/course-notes/21-484/lecture09.pdf
+      topics:
+        - Menger's Theorem from Flows
+        - Edge Contraction
+        - Contractions and 3-Connected Graphs
+    - number: "10"
+      date: "2022-02-09"
+      url: /assets/pdf/course-notes/21-484/lecture10.pdf
+      topics:
+        - Menger's Theorem Implies K\"onig's Theorem
+        - Planar and Plane Graphs
+        - Faces
+        - Face Boundaries
+    - number: "11"
+      date: "2022-02-11"
+      url: /assets/pdf/course-notes/21-484/lecture11.pdf
+      topics:
+        - Euler's Formula
+        - Consequences of Euler's Formula
+        - Graphs That Are Not Planar
 - slug: 15-819
   number: 15-819
   title: Advanced Topics in Programming Language Theory
