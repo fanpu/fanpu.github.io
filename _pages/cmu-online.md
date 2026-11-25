@@ -10,6 +10,10 @@ toc:
 giscus_comments: true
 ---
 
+> CMU's School of Computer Science is now also listing some of its courses
+> online: [cs.cmu.edu/learn](https://www.cs.cmu.edu/learn/)
+{: .block-tip }
+
 Education and knowledge should be accessible to anyone who is willing to learn.
 There are many great course offerings from the top-ranked Computer Science
 program in Carnegie Mellon University whose lectures are available on the public
