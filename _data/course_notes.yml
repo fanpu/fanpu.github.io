@@ -1005,7 +1005,7 @@
   course_url: null
   review_anchor: course15819
   pdf: /assets/pdf/course-notes/15-819.pdf
-  pages: 34
+  pages: 46
   lectures_total: 24
   lectures:
     - number: "1"
@@ -1067,6 +1067,32 @@
         - Statics
         - Dynamics and Equations
         - Dependent CBPV
+    - number: "8"
+      date: "2022-02-22"
+      url: /assets/pdf/course-notes/15-819/lecture08.pdf
+      topics:
+        - "Recap: Polarization"
+        - Interpreting the Lax Type System into CBPV
+        - Checking Definitional Equality
+        - An Equivalence Algorithm
+        - Completeness
+    - number: "9"
+      date: "2022-02-24"
+      url: /assets/pdf/course-notes/15-819/lecture09.pdf
+      topics:
+        - Updates to the CBPV Note
+        - Revised Equivalence Algorithm
+        - Logical Equivalence
+        - The Pas-de-Deux
+        - Completeness
+    - number: "10"
+      date: "2022-03-01"
+      url: /assets/pdf/course-notes/15-819/lecture10.pdf
+      topics:
+        - Recap
+        - Continuations
+        - Termination (via Tait)
+        - Propositions as Types
 - slug: 15-751
   number: 15-751
   title: A Theorist's Toolkit
