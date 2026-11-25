@@ -294,7 +294,7 @@
   course_url: null
   review_anchor: null
   pdf: /assets/pdf/course-notes/21-640.pdf
-  pages: 38
+  pages: 50
   lectures_total: 23
   lectures:
     - number: "1"
@@ -361,6 +361,23 @@
         - Corollaries of the Hahn--Banach Theorem
         - Equivalent Norms
         - Compactness
+    - number: "10"
+      date: "2023-02-08"
+      url: /assets/pdf/course-notes/21-640/lecture10.pdf
+      topics:
+        - Closed Balls Are Not Compact in Infinite Dimensions
+        - Locally Convex Spaces
+    - number: "11"
+      date: "2023-02-10"
+      url: /assets/pdf/course-notes/21-640/lecture11.pdf
+      topics:
+        - Examples of Locally Convex Spaces
+    - number: "12"
+      date: "2023-02-13"
+      url: /assets/pdf/course-notes/21-640/lecture12.pdf
+      topics:
+        - Locally Convex Spaces Are Topological Vector Spaces
+        - Hausdorff Spaces
 - slug: 21-329
   number: 21-329
   title: Set Theory
