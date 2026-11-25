@@ -857,7 +857,7 @@
   course_url: null
   review_anchor: course21651
   pdf: /assets/pdf/course-notes/21-651.pdf
-  pages: 56
+  pages: 67
   lectures_total: 30
   lectures:
     - number: "1"
@@ -968,6 +968,26 @@
         - Ultrafilters
         - Axiom of Choice
         - Compactness via Ultrafilters
+    - number: "18"
+      date: "2022-10-10"
+      url: /assets/pdf/course-notes/21-651/lecture18.pdf
+      topics:
+        - Tychonoff's Theorem
+        - Compactifications
+    - number: "19"
+      date: "2022-10-12"
+      url: /assets/pdf/course-notes/21-651/lecture19.pdf
+      topics:
+        - Separation Axioms
+        - Induced Maps
+    - number: "20"
+      date: "2022-10-14"
+      url: /assets/pdf/course-notes/21-651/lecture20.pdf
+      topics:
+        - The Universal Property of $\beta X$
+        - Compact Hausdorff Spaces Are Normal
+        - Metrizable Spaces Are Normal
+        - Products of Separated Spaces
 - slug: 15-859-OO
   number: 15-859 OO
   title: Randomness in Computation
