@@ -1350,7 +1350,7 @@
   course_url: null
   review_anchor: course21355
   pdf: /assets/pdf/course-notes/21-355.pdf
-  pages: 45
+  pages: 59
   lectures_total: 37
   lectures:
     - number: "1"
@@ -1439,6 +1439,38 @@
         - Convergent Sequences (continued)
         - Subsequences
         - Cauchy Sequences
+    - number: "14"
+      date: "2022-02-18"
+      url: /assets/pdf/course-notes/21-355/lecture14.pdf
+      topics:
+        - Dense and Connected Sets
+        - Cauchy Sequences (continued)
+        - Monotone Sequences
+    - number: "15"
+      date: "2022-02-21"
+      url: /assets/pdf/course-notes/21-355/lecture15.pdf
+      topics:
+        - Divergence to Infinity
+        - Upper and Lower Limits
+    - number: "16"
+      date: "2022-02-23"
+      url: /assets/pdf/course-notes/21-355/lecture16.pdf
+      topics:
+        - Upper Limits (continued)
+        - Series
+    - number: "17"
+      date: "2022-02-28"
+      url: /assets/pdf/course-notes/21-355/lecture17.pdf
+      topics:
+        - Root Test
+        - Ratio Test
+        - Limits of Functions
+    - number: "18"
+      date: "2022-03-02"
+      url: /assets/pdf/course-notes/21-355/lecture18.pdf
+      topics:
+        - Limits of Functions (continued)
+        - Continuity
 - slug: 15-819
   number: 15-819
   title: Advanced Topics in Programming Language Theory
