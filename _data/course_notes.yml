@@ -1047,7 +1047,7 @@
   course_url: null
   review_anchor: course21484
   pdf: /assets/pdf/course-notes/21-484.pdf
-  pages: 44
+  pages: 57
   lectures_total: 37
   lectures:
     - number: "1"
@@ -1125,6 +1125,26 @@
         - Euler's Formula
         - Consequences of Euler's Formula
         - Graphs That Are Not Planar
+    - number: "12"
+      date: "2022-02-14"
+      url: /assets/pdf/course-notes/21-484/lecture12.pdf
+      topics:
+        - Drawing Graphs on Other Surfaces
+        - Polygonal Drawings
+        - Minors and Planarity
+        - Minors and Topological Minors
+        - Towards Kuratowski's Theorem
+    - number: "13"
+      date: "2022-02-16"
+      url: /assets/pdf/course-notes/21-484/lecture13.pdf
+      topics:
+        - Proof of Kuratowski's Theorem
+    - number: "14"
+      date: "2022-02-18"
+      url: /assets/pdf/course-notes/21-484/lecture14.pdf
+      topics:
+        - F\'ary's Theorem
+        - The Art Gallery Problem
 - slug: 21-355
   number: 21-355
   title: Principles of Real Analysis I
