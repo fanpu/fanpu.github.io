@@ -14,6 +14,7 @@ import datetime
 import json
 import pathlib
 import shutil
+import subprocess
 import sys
 
 import yaml
@@ -76,6 +77,9 @@ def main() -> None:
               "# Don't edit by hand; re-run the script instead.\n")
     DATA.write_text(header + yaml.safe_dump(courses, sort_keys=False, allow_unicode=True,
                                             width=100))
+    # Match the repo's Prettier style so the formatting check in CI passes.
+    subprocess.run([str(REPO / "node_modules/.bin/prettier"), "--write", str(DATA)],
+                   check=True, stdout=subprocess.DEVNULL)
     print(f"wrote {DATA.relative_to(REPO)} ({len(courses)} courses)")
 
 
