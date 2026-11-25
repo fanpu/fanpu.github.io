@@ -1433,7 +1433,7 @@
   course_url: null
   review_anchor: course21484
   pdf: /assets/pdf/course-notes/21-484.pdf
-  pages: 108
+  pages: 126
   lectures_total: 37
   lectures:
     - number: "1"
@@ -1597,6 +1597,33 @@
         - Triangle-Free Graphs
         - Turán's Theorem
         - Other Forbidden Subgraphs
+    - number: "24"
+      date: "2022-03-28"
+      url: /assets/pdf/course-notes/21-484/lecture24.pdf
+      topics:
+        - Forbidding $C_4$
+        - "Applications: Unit Distances"
+    - number: "25"
+      date: "2022-03-30"
+      url: /assets/pdf/course-notes/21-484/lecture25.pdf
+      topics:
+        - The Erd\H {o}s–Stone Theorem
+        - Consequences
+    - number: "26"
+      date: "2022-04-01"
+      url: /assets/pdf/course-notes/21-484/lecture26.pdf
+      topics:
+        - Two Puzzles
+        - Extremal Numbers, Continued
+        - Hamilton Cycles
+        - Euler Trails
+    - number: "27"
+      date: "2022-04-04"
+      url: /assets/pdf/course-notes/21-484/lecture27.pdf
+      topics:
+        - Forbidden Minors
+        - Graphs With No $K_4$ Minor
+        - Consequences and Hadwiger's Conjecture
     - number: "28"
       date: "2022-04-06"
       url: /assets/pdf/course-notes/21-484/lecture28.pdf
