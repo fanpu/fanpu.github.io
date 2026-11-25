@@ -4,7 +4,7 @@ permalink: /summaries/
 title: ML Paper Summaries
 description: >
 nav: true
-nav_order: 5
+nav_order: 6
 ---
 
 Summaries and critiques of papers (mostly in machine learning) I've read in detail. This is not a summary of

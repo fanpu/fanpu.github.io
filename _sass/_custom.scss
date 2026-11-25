@@ -210,6 +210,48 @@
   }
 }
 
+// Course notes (/course-notes/): a thumb-list row plus a collapsible lecture index
+.course-notes .thumb-meta a {
+  color: var(--global-text-color-light);
+  text-decoration: underline;
+  text-decoration-color: var(--global-divider-color);
+  &:hover {
+    color: var(--global-theme-color);
+  }
+}
+.notes-lectures {
+  margin-top: 0.4rem;
+  font-size: 0.9rem;
+  summary {
+    cursor: pointer;
+    color: var(--global-theme-color);
+    font-size: 0.85rem;
+    width: fit-content;
+  }
+  ol {
+    list-style: none;
+    padding: 0;
+    margin: 0.35rem 0 0;
+  }
+  li {
+    line-height: 1.45;
+    padding: 0.2rem 0;
+    border-top: 1px solid var(--global-divider-color);
+  }
+  li > a {
+    font-weight: 500;
+  }
+}
+.notes-date {
+  color: var(--global-text-color-light);
+  font-size: 0.8rem;
+  margin-left: 0.35rem;
+}
+.notes-topics {
+  display: block;
+  color: var(--global-text-color-light);
+}
+
 // Home page sections
 .home-section {
   margin-top: 3.5rem;
