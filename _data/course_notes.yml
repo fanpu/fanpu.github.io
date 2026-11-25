@@ -10,44 +10,44 @@
   pdf: /assets/pdf/course-notes/15-859-CC.pdf
   pages: 21
   lectures:
-  - number: '1'
-    date: '2022-09-08'
-    url: /assets/pdf/course-notes/15-859-CC.pdf#page=2
-    topics:
-    - Overview
-    - Regression Analysis
-    - Singular Value Decomposition
-    - Sketching to Solve Least-Squares Regression
-  - number: '2'
-    date: '2022-09-15'
-    url: /assets/pdf/course-notes/15-859-CC.pdf#page=7
-    topics:
-    - Recap of the $\varepsilon $-Net Argument
-    - Choosing the Sketching Matrix
-    - Faster Subspace Embeddings
-  - number: '3'
-    date: '2022-09-22'
-    url: /assets/pdf/course-notes/15-859-CC.pdf#page=11
-    topics:
-    - Recap
-    - From Vectors to Matrices (Approximate Matrix Product)
-    - Summary
-  - number: '4'
-    date: '2022-09-29'
-    url: /assets/pdf/course-notes/15-859-CC.pdf#page=13
-    topics:
-    - Affine Embeddings
-    - Low Rank Approximation
-    - 'Part II: High Precision Regression'
-  - number: '6'
-    date: '2022-10-13'
-    url: /assets/pdf/course-notes/15-859-CC.pdf#page=20
-    topics:
-    - 'Recap: Row-Partition Protocol'
-    - Coordinator
-    - Constructing a Coreset
-  - number: '7'
-    date: '2022-10-27'
-    url: /assets/pdf/course-notes/15-859-CC.pdf#page=21
-    topics:
-    - $L_1$ Regression
+    - number: "1"
+      date: "2022-09-08"
+      url: /assets/pdf/course-notes/15-859-CC.pdf#page=2
+      topics:
+        - Overview
+        - Regression Analysis
+        - Singular Value Decomposition
+        - Sketching to Solve Least-Squares Regression
+    - number: "2"
+      date: "2022-09-15"
+      url: /assets/pdf/course-notes/15-859-CC.pdf#page=7
+      topics:
+        - Recap of the $\varepsilon $-Net Argument
+        - Choosing the Sketching Matrix
+        - Faster Subspace Embeddings
+    - number: "3"
+      date: "2022-09-22"
+      url: /assets/pdf/course-notes/15-859-CC.pdf#page=11
+      topics:
+        - Recap
+        - From Vectors to Matrices (Approximate Matrix Product)
+        - Summary
+    - number: "4"
+      date: "2022-09-29"
+      url: /assets/pdf/course-notes/15-859-CC.pdf#page=13
+      topics:
+        - Affine Embeddings
+        - Low Rank Approximation
+        - "Part II: High Precision Regression"
+    - number: "6"
+      date: "2022-10-13"
+      url: /assets/pdf/course-notes/15-859-CC.pdf#page=20
+      topics:
+        - "Recap: Row-Partition Protocol"
+        - Coordinator
+        - Constructing a Coreset
+    - number: "7"
+      date: "2022-10-27"
+      url: /assets/pdf/course-notes/15-859-CC.pdf#page=21
+      topics:
+        - $L_1$ Regression
