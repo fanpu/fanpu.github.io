@@ -1167,7 +1167,7 @@
   course_url: null
   review_anchor: course21484
   pdf: /assets/pdf/course-notes/21-484.pdf
-  pages: 57
+  pages: 74
   lectures_total: 37
   lectures:
     - number: "1"
@@ -1265,6 +1265,40 @@
       topics:
         - Fáry's Theorem
         - The Art Gallery Problem
+    - number: "15"
+      date: "2022-02-23"
+      url: /assets/pdf/course-notes/21-484/lecture15.pdf
+      topics:
+        - Coloring Graphs
+        - Bounds on the Chromatic Number
+        - Planar Graphs
+    - number: "16"
+      date: "2022-02-25"
+      url: /assets/pdf/course-notes/21-484/lecture16.pdf
+      topics:
+        - The Five Color Theorem
+        - Brooks' Theorem
+    - number: "17"
+      date: "2022-02-28"
+      url: /assets/pdf/course-notes/21-484/lecture17.pdf
+      topics:
+        - Characterizing Large Chromatic Number
+        - Hajós' Theorem
+    - number: "18"
+      date: "2022-03-02"
+      url: /assets/pdf/course-notes/21-484/lecture18.pdf
+      topics:
+        - Edge Coloring
+        - Bipartite Graphs
+        - Vizing's Theorem
+    - number: "19"
+      date: "2022-03-14"
+      url: /assets/pdf/course-notes/21-484/lecture19.pdf
+      topics:
+        - Recap
+        - List Coloring
+        - Planar Graphs are 5-List-Colorable
+        - Interval and Circular Colorings
 - slug: 21-355
   number: 21-355
   title: Principles of Real Analysis I
