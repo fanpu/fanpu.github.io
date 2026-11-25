@@ -8,7 +8,7 @@
   course_url: null
   review_anchor: course36709
   pdf: /assets/pdf/course-notes/36-709.pdf
-  pages: 108
+  pages: 114
   lectures_total: 24
   lectures:
     - number: "1"
@@ -168,6 +168,16 @@
         - "Fano's Method: Reminder"
         - The Varshamov--Gilbert Bound
         - Local Entropy
+    - number: "24"
+      date: "2023-04-18"
+      url: /assets/pdf/course-notes/36-709/lecture24.pdf
+      topics:
+        - "Local Entropy: Reminder"
+        - The Algorithm
+        - Monotonicity of the Local Entropy
+        - Testing Between Two Points
+        - Upper Bound on the Risk
+        - The Minimax Rate
 - slug: 36-708
   number: 36-708
   title: The ABCDE of Statistical Methods in Machine Learning
