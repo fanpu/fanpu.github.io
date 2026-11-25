@@ -1324,7 +1324,7 @@
   course_url: null
   review_anchor: course15819
   pdf: /assets/pdf/course-notes/15-819.pdf
-  pages: 73
+  pages: 88
   lectures_total: 24
   lectures:
     - number: "1"
@@ -1459,6 +1459,30 @@
         - Dependent Types
         - Two Perspectives on Types
         - The $\lambda ^{\Pi }$-Calculus
+    - number: "17"
+      date: "2022-03-31"
+      url: /assets/pdf/course-notes/15-819/lecture17.pdf
+      topics:
+        - Overview
+        - "LF: Judgments as Types"
+        - Adequacy
+        - Decidability of Type Checking
+    - number: "18"
+      date: "2022-04-05"
+      url: /assets/pdf/course-notes/15-819/lecture18.pdf
+      topics:
+        - Overview
+        - Adequacy and Canonical Forms
+        - Substitution
+        - "Judgments as Types: Equality"
+    - number: "19"
+      date: "2022-04-12"
+      url: /assets/pdf/course-notes/15-819/lecture19.pdf
+      topics:
+        - Overview
+        - Adequacy of LF Encodings of Formalisms
+        - Semantic LF (Martin-Löf's LF)
+        - Equational LF
 - slug: 15-751
   number: 15-751
   title: A Theorist's Toolkit
