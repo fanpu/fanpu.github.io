@@ -60,6 +60,8 @@ def main() -> None:
             "review_anchor": notes.get("review_anchor"),
             "pdf": pdf_url,
             "pages": notes["pages"],
+            # Lectures in the notebook; more than len(lectures) while transcription is ongoing.
+            "lectures_total": notes.get("lectures_total", len(notes["lectures"])),
             "lectures": [
                 {
                     "number": lec["number"],
