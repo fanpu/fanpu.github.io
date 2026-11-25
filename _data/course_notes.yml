@@ -104,7 +104,7 @@
   course_url: https://36708.github.io/
   review_anchor: course36708
   pdf: /assets/pdf/course-notes/36-708.pdf
-  pages: 64
+  pages: 76
   lectures_total: 21
   lectures:
     - number: "2"
@@ -227,6 +227,32 @@
       topics:
         - "Cooperative Game Theory: Shapley Values"
         - Shapley Values in Machine Learning
+    - number: "21"
+      date: "2023-04-04"
+      url: /assets/pdf/course-notes/36-708.pdf#page=65
+      topics:
+        - Unsupervised Learning
+        - SVD and PCA
+        - PCA
+    - number: "22"
+      date: "2023-04-06"
+      url: /assets/pdf/course-notes/36-708.pdf#page=70
+      topics:
+        - Modal Clustering
+        - Hierarchical Clustering
+    - number: "23"
+      date: "2023-04-11"
+      url: /assets/pdf/course-notes/36-708.pdf#page=71
+      topics:
+        - Graph Laplacians
+        - Spectral Clustering
+    - number: "27"
+      date: "2023-04-27"
+      url: /assets/pdf/course-notes/36-708.pdf#page=74
+      topics:
+        - Deep Learning
+        - End-of-Semester Recap
+        - Paradigms
 - slug: 21-640
   number: 21-640
   title: Functional Analysis
