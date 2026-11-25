@@ -1725,7 +1725,7 @@
   course_url: null
   review_anchor: course21355
   pdf: /assets/pdf/course-notes/21-355.pdf
-  pages: 108
+  pages: 123
   lectures_total: 37
   lectures:
     - number: "1"
@@ -1925,6 +1925,29 @@
         - "Pointwise Limits: More Examples"
         - Uniform Convergence
         - The Weierstrass M-Test
+    - number: "31"
+      date: "2022-04-15"
+      url: /assets/pdf/course-notes/21-355/lecture31.pdf
+      topics:
+        - The Weierstrass M-Test
+        - Uniform Convergence and Continuity
+    - number: "32"
+      date: "2022-04-18"
+      url: /assets/pdf/course-notes/21-355/lecture32.pdf
+      topics:
+        - Uniform Convergence and Integration
+        - Uniform Convergence and Differentiation
+    - number: "33"
+      date: "2022-04-20"
+      url: /assets/pdf/course-notes/21-355/lecture33.pdf
+      topics:
+        - A Continuous, Nowhere Differentiable Function
+        - Equicontinuous Families of Functions
+    - number: "34"
+      date: "2022-04-22"
+      url: /assets/pdf/course-notes/21-355/lecture34.pdf
+      topics:
+        - Equicontinuity
 - slug: 15-819
   number: 15-819
   title: Advanced Topics in Programming Language Theory
