@@ -227,6 +227,39 @@
       topics:
         - "Cooperative Game Theory: Shapley Values"
         - Shapley Values in Machine Learning
+- slug: 21-640
+  number: 21-640
+  title: Functional Analysis
+  term: Spring 2023
+  instructor: Giovanni Leoni
+  course_url: null
+  review_anchor: null
+  pdf: /assets/pdf/course-notes/21-640.pdf
+  pages: 14
+  lectures_total: 23
+  lectures:
+    - number: "1"
+      date: "2023-01-18"
+      url: /assets/pdf/course-notes/21-640.pdf#page=2
+      topics:
+        - Overview
+        - Inner Product Spaces
+    - number: "2"
+      date: "2023-01-20"
+      url: /assets/pdf/course-notes/21-640.pdf#page=6
+      topics:
+        - "Recall: Inner Products"
+        - The Cauchy--Schwarz Inequality
+        - The Norm Induced by an Inner Product
+        - Hilbert Spaces
+        - Projection onto Closed Convex Sets
+    - number: "3"
+      date: "2023-01-23"
+      url: /assets/pdf/course-notes/21-640.pdf#page=11
+      topics:
+        - Orthogonality
+        - The Projection Theorem
+        - The Dual Space
 - slug: 21-329
   number: 21-329
   title: Set Theory
