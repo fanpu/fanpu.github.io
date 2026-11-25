@@ -1664,7 +1664,7 @@
   course_url: null
   review_anchor: course21355
   pdf: /assets/pdf/course-notes/21-355.pdf
-  pages: 74
+  pages: 92
   lectures_total: 37
   lectures:
     - number: "1"
@@ -1813,6 +1813,34 @@
         - The Mean Value Theorem
         - Derivatives Have the Intermediate Value Property
         - L'Hôpital's Rule
+    - number: "27"
+      date: "2022-04-04"
+      url: /assets/pdf/course-notes/21-355/lecture27.pdf
+      topics:
+        - Recall
+        - Properties of the Integral
+        - The Unit Step Function
+    - number: "28"
+      date: "2022-04-06"
+      url: /assets/pdf/course-notes/21-355/lecture28.pdf
+      topics:
+        - Sums of Unit Steps as Integrators
+        - Differentiable Integrators
+        - Change of Variables
+    - number: "29"
+      date: "2022-04-11"
+      url: /assets/pdf/course-notes/21-355/lecture29.pdf
+      topics:
+        - Integration and Differentiation
+        - Integration by Parts
+        - Sequences and Series of Functions
+    - number: "30"
+      date: "2022-04-13"
+      url: /assets/pdf/course-notes/21-355/lecture30.pdf
+      topics:
+        - "Pointwise Limits: More Examples"
+        - Uniform Convergence
+        - The Weierstrass M-Test
 - slug: 15-819
   number: 15-819
   title: Advanced Topics in Programming Language Theory
