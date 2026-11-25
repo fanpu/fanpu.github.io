@@ -779,7 +779,7 @@
   course_url: https://www.cs.cmu.edu/~praveshk/randomness.html
   review_anchor: course15859OO
   pdf: /assets/pdf/course-notes/15-859-OO.pdf
-  pages: 35
+  pages: 45
   lectures_total: 11
   lectures:
     - number: "1"
@@ -830,6 +830,20 @@
         - Expander Mixing Lemma
         - Expander Graphs Have Diameter $O(\log n)$
         - Randomness-Efficient Error Reduction
+    - number: "6"
+      date: "2022-10-11"
+      url: /assets/pdf/course-notes/15-859-OO/lecture06.pdf
+      topics:
+        - Randomized Compression Techniques
+        - Graph Sparsification
+        - Dimension Reduction
+        - Approximate Linear Regression
+    - number: "7"
+      date: "2022-10-25"
+      url: /assets/pdf/course-notes/15-859-OO/lecture07.pdf
+      topics:
+        - Compressive Sensing
+        - Linear Programming Relaxation
 - slug: 15-859-CC
   number: 15-859 CC
   title: Algorithms for Big Data
