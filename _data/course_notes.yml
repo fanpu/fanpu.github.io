@@ -873,7 +873,7 @@
   course_url: null
   review_anchor: course21651
   pdf: /assets/pdf/course-notes/21-651.pdf
-  pages: 100
+  pages: 110
   lectures_total: 30
   lectures:
     - number: "1"
@@ -1047,6 +1047,27 @@
       topics:
         - The Jordan Curve Theorem
         - How to Prove $\mathbb {R}^d \not \cong \mathbb {R}^{d+1}$
+    - number: "34"
+      date: "2022-11-30"
+      url: /assets/pdf/course-notes/21-651/lecture34.pdf
+      topics:
+        - The Borsuk–Ulam Theorem
+        - "Toward a Proof: Labellings"
+    - number: "35"
+      date: "2022-12-02"
+      url: /assets/pdf/course-notes/21-651/lecture35.pdf
+      topics:
+        - Alternating Triangles
+        - Proof of the Borsuk–Ulam Theorem for $d = 2$
+        - The Cross-Polytope
+    - number: "36"
+      date: "2022-12-05"
+      url: /assets/pdf/course-notes/21-651/lecture36.pdf
+      topics:
+        - The Borsuk–Ulam Theorem
+        - Vertex-Disjoint Faces
+        - $K_{3,3}$ Is Not Planar
+        - Linking
     - number: "37"
       date: "2022-12-07"
       url: /assets/pdf/course-notes/21-651/lecture37.pdf
