@@ -1307,7 +1307,7 @@
   course_url: null
   review_anchor: course21355
   pdf: /assets/pdf/course-notes/21-355.pdf
-  pages: 31
+  pages: 45
   lectures_total: 37
   lectures:
     - number: "1"
@@ -1370,6 +1370,32 @@
       topics:
         - Compact Sets
         - Compactness in $\mathbb {R}^k$
+    - number: "10"
+      date: "2022-02-09"
+      url: /assets/pdf/course-notes/21-355/lecture10.pdf
+      topics:
+        - Compactness in $\mathbb {R}^k$ (continued)
+        - Nested Intervals and Rectangles
+    - number: "11"
+      date: "2022-02-11"
+      url: /assets/pdf/course-notes/21-355/lecture11.pdf
+      topics:
+        - The Heine–Borel Theorem
+        - Relatively Open Sets
+        - Connected Sets
+    - number: "12"
+      date: "2022-02-14"
+      url: /assets/pdf/course-notes/21-355/lecture12.pdf
+      topics:
+        - Relative Compactness
+        - Sequences
+    - number: "13"
+      date: "2022-02-16"
+      url: /assets/pdf/course-notes/21-355/lecture13.pdf
+      topics:
+        - Convergent Sequences (continued)
+        - Subsequences
+        - Cauchy Sequences
 - slug: 15-819
   number: 15-819
   title: Advanced Topics in Programming Language Theory
