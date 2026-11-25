@@ -1039,8 +1039,8 @@
   course_url: https://www.cs.cmu.edu/~praveshk/randomness.html
   review_anchor: course15859OO
   pdf: /assets/pdf/course-notes/15-859-OO.pdf
-  pages: 67
-  lectures_total: 11
+  pages: 73
+  lectures_total: 12
   lectures:
     - number: "1"
       date: "2022-09-06"
@@ -1122,15 +1122,24 @@
         - Random 4XOR
         - Refutation Thresholds
     - number: "10"
-      date: "2022-11-29"
+      date: "2022-11-22"
       url: /assets/pdf/course-notes/15-859-OO/lecture10.pdf
+      topics:
+        - Random Matrices
+        - "Application 1: Random Sign Matrices"
+        - Planted Clique Problem
+        - Moment Method
+        - "Application 2: Spectral Sparsification"
+    - number: "11"
+      date: "2022-11-29"
+      url: /assets/pdf/course-notes/15-859-OO/lecture11.pdf
       topics:
         - 'Hardness vs Randomness: Is $\mathsf {P}= \mathsf {BPP}$?'
         - Hardness vs Randomness
         - Constructing a PRG from a Hard Function
-    - number: "11"
+    - number: "12"
       date: "2022-12-06"
-      url: /assets/pdf/course-notes/15-859-OO/lecture11.pdf
+      url: /assets/pdf/course-notes/15-859-OO/lecture12.pdf
       topics:
         - Hardness vs Randomness, Continued
         - A 1-Bit Stretcher
