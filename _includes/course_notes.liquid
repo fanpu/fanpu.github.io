@@ -16,7 +16,13 @@
       <div class="thumb-body">
         <a class="thumb-title" href="{{ pdf }}">{{ course.number }} &nbsp;{{ course.title }}</a>
         <div class="thumb-meta">
-          {{ course.instructor }} &middot; {{ n }} lecture{% if n != 1 %}s{% endif %} &middot; {{ course.pages }} pages
+          {{ course.instructor }} &middot;
+          {% if course.lectures_total > n %}
+            {{ n }} of {{ course.lectures_total }} lectures so far
+          {% else %}
+            {{ n }} lecture{% if n != 1 %}s{% endif %}
+          {% endif %}
+          &middot; {{ course.pages }} pages
           {% if course.review_anchor %}
             &middot; <a href="{{ '/courses/' | relative_url }}#{{ course.review_anchor }}">review</a>
           {% endif %}
