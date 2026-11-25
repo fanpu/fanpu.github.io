@@ -1433,7 +1433,7 @@
   course_url: null
   review_anchor: course21484
   pdf: /assets/pdf/course-notes/21-484.pdf
-  pages: 126
+  pages: 132
   lectures_total: 37
   lectures:
     - number: "1"
@@ -1656,6 +1656,17 @@
         - Expansion in Graphs
         - Using a Magic Graph for Primality Testing
         - Magic Graphs Exist
+    - number: "36"
+      date: "2022-04-27"
+      url: /assets/pdf/course-notes/21-484/lecture36.pdf
+      topics:
+        - Random Walks on Graphs
+        - Random Walk on the Hypercube
+    - number: "37"
+      date: "2022-04-29"
+      url: /assets/pdf/course-notes/21-484/lecture37.pdf
+      topics:
+        - Chromatic Number of the Plane
 - slug: 21-355
   number: 21-355
   title: Principles of Real Analysis I
