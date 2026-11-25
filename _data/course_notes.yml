@@ -1572,7 +1572,7 @@
   course_url: null
   review_anchor: course21355
   pdf: /assets/pdf/course-notes/21-355.pdf
-  pages: 59
+  pages: 74
   lectures_total: 37
   lectures:
     - number: "1"
@@ -1693,6 +1693,34 @@
       topics:
         - Limits of Functions (continued)
         - Continuity
+    - number: "19"
+      date: "2022-03-14"
+      url: /assets/pdf/course-notes/21-355/lecture19.pdf
+      topics:
+        - Continuity and Open Sets
+        - Continuity and Compactness
+        - Uniform Continuity
+    - number: "20"
+      date: "2022-03-16"
+      url: /assets/pdf/course-notes/21-355/lecture20.pdf
+      topics:
+        - Uniform Continuity (continued)
+        - Discontinuities
+        - Monotonic Functions
+    - number: "21"
+      date: "2022-03-18"
+      url: /assets/pdf/course-notes/21-355/lecture21.pdf
+      topics:
+        - Monotonic Functions (continued)
+        - Differentiation
+        - Local Extrema and the Mean Value Theorem
+    - number: "22"
+      date: "2022-03-21"
+      url: /assets/pdf/course-notes/21-355/lecture22.pdf
+      topics:
+        - The Mean Value Theorem
+        - Derivatives Have the Intermediate Value Property
+        - L'Hôpital's Rule
 - slug: 15-819
   number: 15-819
   title: Advanced Topics in Programming Language Theory
